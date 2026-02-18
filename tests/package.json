@@ -1,0 +1,26 @@
+{
+  "name": "codecoliseum-api-tests",
+  "version": "1.0.0",
+  "description": "Stress tests for CodeColiseum API endpoints",
+  "main": "stress-test.js",
+  "scripts": {
+    "test": "node functional-test.js",
+    "stress-test": "node stress-test.js",
+    "quick-test": "node stress-test.js --duration=0.5",
+    "setup": "node setup.js",
+    "functional": "node functional-test.js",
+    "endpoint": "node endpoint-test.js",
+    "test-auth": "node endpoint-test.js auth",
+    "test-problems": "node endpoint-test.js problems --show-response",
+    "test-teacher": "node endpoint-test.js teacher --role=TEACHER",
+    "test-admin": "node endpoint-test.js admin --role=ADMIN"
+  },
+  "dependencies": {
+    "axios": "^1.6.0",
+    "faker": "^6.6.6",
+    "node-fetch": "^3.3.2"
+  },
+  "devDependencies": {
+    "@faker-js/faker": "^8.3.1"
+  }
+}

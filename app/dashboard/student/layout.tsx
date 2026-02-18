@@ -1,0 +1,40 @@
+"use client";
+import { useAuth } from "@/context/authcontext";
+import React, { useEffect, useState } from "react";
+import { StudentSidebar } from "@/components/student-sidebar";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import { usePathname } from "next/navigation";
+import Link from "next/link";
+
+export default function StudentLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const { user } = useAuth();
+  const path = usePathname();
+  const [page, setPage] = useState("");
+
+  useEffect(() => {
+    if (path === "/dashboard/student") {
+      setPage("DASHBOARD");
+    } else if (path.startsWith("/dashboard/student/problemlist")) {
+      setPage("PROBLEMS");
+    } else if (path.startsWith("/dashboard/student/contests")) {
+      setPage("CONTESTS");
+    } else if (path.startsWith("/dashboard/student/progress")) {
+      setPage("PROGRESS");
+    } else if (path.startsWith("/dashboard/student/groups")) {
+      setPage("GROUPS");
+    } else {
+      setPage("DASHBOARD");
+    }
+  }, [path]);
+
+  return (
+    <SidebarProvider>
+      <StudentSidebar user={user} variant="inset" page={page} />
+      <SidebarInset>{children}</SidebarInset>
+    </SidebarProvider>
+  );
+}

@@ -1,0 +1,39 @@
+steps:
+  # 1. Build Docker image
+  - name: gcr.io/cloud-builders/docker
+    args:
+      [
+        "build",
+        "-t",
+        "asia-south2-docker.pkg.dev/$PROJECT_ID/containers/nextjs-app:$SHORT_SHA",
+        "."
+      ]
+
+  # 2. Push image to Artifact Registry (asia-south2)
+  - name: gcr.io/cloud-builders/docker
+    args:
+      [
+        "push",
+        "asia-south2-docker.pkg.dev/$PROJECT_ID/containers/nextjs-app:$SHORT_SHA"
+      ]
+
+  # 3. Deploy to Cloud Run (us-central1)
+  - name: gcr.io/google.com/cloudsdktool/cloud-sdk
+    entrypoint: gcloud
+    args:
+      [
+        "run",
+        "deploy",
+        "nextjs-app",
+        "--image",
+        "asia-south2-docker.pkg.dev/$PROJECT_ID/containers/nextjs-app:$SHORT_SHA",
+        "--region",
+        "us-central1",
+        "--platform",
+        "managed",
+        "--allow-unauthenticated",
+        "--quiet"
+      ]
+
+images:
+  - asia-south2-docker.pkg.dev/$PROJECT_ID/containers/nextjs-app:$SHORT_SHA
