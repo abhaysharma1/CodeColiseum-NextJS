@@ -1,5 +1,4 @@
 "use client";
-
 import * as React from "react";
 import {
   ColumnDef,
@@ -38,10 +37,10 @@ import {
 import { Label } from "@/components/ui/label";
 import { useRouter } from "next/navigation";
 import { SiteHeader } from "@/components/site-header";
-import { draftTest } from "@/app/actions/teacher/tests/createdraft";
-import fetchAllExams from "@/app/actions/teacher/tests/fetchAllExams";
 import { Spinner } from "@/components/ui/shadcn-io/spinner";
 import Link from "next/link";
+import axios from "axios";
+import { Exam } from "@/generated/prisma/client";
 
 export interface incomingData {
   id: string;
@@ -56,33 +55,18 @@ export interface incomingData {
 }
 
 const columns: ColumnDef<incomingData>[] = [
-  {
-    id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && "indeterminate")
-        }
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
+
   {
     accessorKey: "title",
-    header: "Title",
+    header: ({ column }) => {
+      return (
+        <div className="ml-3">
+          Title
+        </div>
+      );
+    },
     cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("title")}</div>
+      <div className=" ml-3 capitalize">{row.getValue("title")}</div>
     ),
   },
   {
@@ -213,25 +197,59 @@ export default function DataTable() {
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
-  const [data, setData] = React.useState<incomingData[]>([]);
+  const [data, setData] = React.useState<incomingData[] >([]);
 
-  const [draftingTest, startTransition] = React.useTransition();
+  const [draftingExam, setDraftingExam] = React.useState(false);
 
   const [loading, setLoading] = React.useState(false);
+  const [take,setTake] = React.useState(8);
+  const [skip,setSkip] = React.useState(0);
+  const [searchValue,setSearchValue] = React.useState("");
 
   const router = useRouter();
 
-  // TODO: Fetch data on component mount
   React.useEffect(() => {
     const fetchExams = async () => {
       setLoading(true);
       const allTests = await fetchAllExams();
-      setData(allTests);
+      setData(allTests ?? []);
       setLoading(false);
     };
 
     fetchExams();
-  }, []);
+  }, [skip, take, searchValue]);
+
+  const fetchAllExams = async() => {
+    try {
+        const domain = process.env.NEXT_PUBLIC_BACKEND_DOMAIN
+        const res = await axios.get(`${domain}/teacher/exam/fetchallexams`, {
+          params: {
+            take: take,
+            skip: skip,
+            searchvalue: searchValue
+          },
+          withCredentials: true
+        });
+        console.log(res)
+        return res.data as incomingData[]
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const draftExam = async () => {
+    try {
+      setDraftingExam(true)
+      const domain = process.env.NEXT_PUBLIC_BACKEND_DOMAIN
+      const res = await axios.get(`${domain}/teacher/exam/draftexam`,{withCredentials:true});
+      const exam = res.data as Exam
+      router.push(`/dashboard/teacher/test/edit/${exam.id}`)
+    } catch (error) {
+      console.log(error)
+    }finally{
+      setDraftingExam(false)
+    }
+  }
 
   const table = useReactTable({
     data,
@@ -261,13 +279,12 @@ export default function DataTable() {
             <Label className="text-3xl">Examinations</Label>
             <div className="flex items-center py-4 justify-between">
               <Input
-                placeholder="Filter tests..."
-                value={
-                  (table.getColumn("title")?.getFilterValue() as string) ?? ""
-                }
-                onChange={(event) =>
-                  table.getColumn("title")?.setFilterValue(event.target.value)
-                }
+                placeholder="Search tests..."
+                value={searchValue}
+                onChange={(event) => {
+                  setSearchValue(event.target.value);
+                  setSkip(0);
+                }}
                 className="max-w-sm"
               />
 
@@ -275,10 +292,10 @@ export default function DataTable() {
                 <Button
                   className="mr-4"
                   variant="default"
-                  disabled={draftingTest}
-                  onClick={() => startTransition(() => draftTest())}
+                  disabled={draftingExam}
+                  onClick={draftExam}
                 >
-                  {draftingTest ? "Wait..." : "Create Test"}
+                  {draftingExam ? "Wait..." : "Create Exam"}
                 </Button>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
@@ -368,21 +385,22 @@ export default function DataTable() {
               <div className="text-muted-foreground flex-1 text-sm">
                 {table.getFilteredSelectedRowModel().rows.length} of{" "}
                 {table.getFilteredRowModel().rows.length} row(s) selected.
+                {" "}· Page {Math.floor(skip / take) + 1}
               </div>
               <div className="space-x-2">
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={() => table.previousPage()}
-                  disabled={!table.getCanPreviousPage()}
+                  onClick={() => setSkip((prev) => Math.max(0, prev - take))}
+                  disabled={skip === 0 || loading}
                 >
                   Previous
                 </Button>
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={() => table.nextPage()}
-                  disabled={!table.getCanNextPage()}
+                  onClick={() => setSkip((prev) => prev + take)}
+                  disabled={data.length < take || loading}
                 >
                   Next
                 </Button>

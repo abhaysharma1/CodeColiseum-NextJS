@@ -13,10 +13,17 @@ import { UploadIcon, FileText, X } from "lucide-react";
 import React, { ChangeEvent, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import axios from "axios";
 import CreateCompletion from "./createCompletion";
+import { getBackendURL } from "@/utils/utilities";
 
 interface newgroupdataprops {
   groupName: string;
@@ -112,26 +119,27 @@ function CreateGroup() {
     setLoading(true);
     setDialogOpen(true);
     try {
-      const apiResponse = await axios.post(
-        "/api/teacher/creategroup",
-        newGroupData
+      const res = await axios.post(
+        `${getBackendURL()}/teacher/creategroup`,
+        newGroupData,
+        { withCredentials: true }
       );
-        setResponse(apiResponse as ApiResponse);
-        toast.success("Group created successfully");
-        console.log("Group creation result:", apiResponse.data);
-        
-        // Reset form after successful creation
-        setNewGroupData({
-          groupName: "",
-          description: "",
-          emails: [],
-          allowJoinByLink: true,
-        });
-        setTextEmailField(undefined);
-        setFiles(undefined);
-      }
-    catch (error) {
-     console.log(error);
+
+      setResponse(res as ApiResponse);
+      toast.success("Group created successfully");
+      console.log("Group creation result:", res.data);
+
+      // Reset form after successful creation
+      setNewGroupData({
+        groupName: "",
+        description: "",
+        emails: [],
+        allowJoinByLink: true,
+      });
+      setTextEmailField(undefined);
+      setFiles(undefined);
+    } catch (error) {
+      console.log(error);
       toast.error("Failed to create group");
       setDialogOpen(false);
     } finally {
@@ -172,17 +180,17 @@ function CreateGroup() {
 
   return (
     <div className="min-h-screen">
-      <CreateCompletion 
-        open={dialogOpen} 
-        onOpenChange={setDialogOpen} 
-        creatingGroup={loading} 
-        data={response} 
+      <CreateCompletion
+        open={dialogOpen}
+        onOpenChange={setDialogOpen}
+        creatingGroup={loading}
+        data={response}
       />
-      
+
       <div className="w-full">
         <SiteHeader name={"Create a Group"} />
       </div>
-      
+
       <div className="container mx-auto py-8 px-4 max-w-5xl">
         <Card>
           <CardHeader>
@@ -231,13 +239,19 @@ function CreateGroup() {
                     >
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem value="enable" id="enable" />
-                        <Label htmlFor="enable" className="font-normal cursor-pointer">
+                        <Label
+                          htmlFor="enable"
+                          className="font-normal cursor-pointer"
+                        >
                           Allow joining by link/ID
                         </Label>
                       </div>
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem value="disable" id="disable" />
-                        <Label htmlFor="disable" className="font-normal cursor-pointer">
+                        <Label
+                          htmlFor="disable"
+                          className="font-normal cursor-pointer"
+                        >
                           Invite only
                         </Label>
                       </div>
@@ -260,7 +274,9 @@ function CreateGroup() {
                       disabled={textDisabled}
                       placeholder="Enter emails separated by commas or new lines&#10;example@email.com, another@email.com"
                       value={textEmailField || ""}
-                      onChange={(event) => setTextEmailField(event.target.value)}
+                      onChange={(event) =>
+                        setTextEmailField(event.target.value)
+                      }
                       rows={6}
                     />
                     {textEmailField && (
@@ -275,7 +291,10 @@ function CreateGroup() {
                           onClick={() => {
                             setTextEmailField(undefined);
                             if (!files) {
-                              setNewGroupData(prev => ({ ...prev, emails: [] }));
+                              setNewGroupData((prev) => ({
+                                ...prev,
+                                emails: [],
+                              }));
                             }
                           }}
                         >
@@ -305,7 +324,9 @@ function CreateGroup() {
                               <UploadIcon className="h-6 w-6 text-muted-foreground" />
                             </div>
                             <div className="text-center">
-                              <p className="font-medium text-sm">Upload CSV file</p>
+                              <p className="font-medium text-sm">
+                                Upload CSV file
+                              </p>
                               <p className="text-muted-foreground text-xs mt-1">
                                 Drag and drop or click to browse
                               </p>
@@ -317,7 +338,9 @@ function CreateGroup() {
                               <FileText className="h-6 w-6 text-muted-foreground" />
                             </div>
                             <div className="text-center">
-                              <p className="font-medium text-sm">{files[0].name}</p>
+                              <p className="font-medium text-sm">
+                                {files[0].name}
+                              </p>
                               <Badge variant="secondary" className="mt-2">
                                 {newGroupData.emails.length} emails found
                               </Badge>
@@ -330,7 +353,10 @@ function CreateGroup() {
                                 e.stopPropagation();
                                 setFiles(undefined);
                                 if (!textEmailField) {
-                                  setNewGroupData(prev => ({ ...prev, emails: [] }));
+                                  setNewGroupData((prev) => ({
+                                    ...prev,
+                                    emails: [],
+                                  }));
                                 }
                               }}
                             >

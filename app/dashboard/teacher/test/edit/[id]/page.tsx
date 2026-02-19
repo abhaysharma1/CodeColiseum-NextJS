@@ -1,6 +1,5 @@
 "use client";
 
-import fetchExam from "@/app/actions/teacher/tests/fetchExam";
 import { SiteHeader } from "@/components/site-header";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -26,14 +25,12 @@ import {
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import AutoCompleteSearchBar from "@/components/fuzzySearchBar";
-import fetchAllGroups from "@/app/actions/teacher/group/fetchAllGroups";
-import getAllSelectedGroups from "@/app/actions/teacher/tests/getSelectedGroups";
 import { toast } from "sonner";
 import ProblemsTestTable from "./problemsTestTable";
-import getSelectedProblems from "@/app/actions/teacher/tests/getSelectedProblems";
-import saveDraft from "@/app/actions/teacher/tests/saveDraft";
-import publishTest from "@/app/actions/teacher/tests/publishTest";
 import { Exam } from "@/generated/prisma/client";
+import axios from "axios";
+import { useRouter } from "next/navigation";
+import { getBackendURL } from "@/utils/utilities";
 
 interface Group {
   id: string;
@@ -74,7 +71,7 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
 
   const [startDate, setStartDate] = React.useState<Date | undefined>(undefined);
   const [startTime, setStartTime] = React.useState<string | undefined>(
-    undefined,
+    undefined
   );
 
   const [endDate, setEndDate] = React.useState<Date | undefined>(undefined);
@@ -95,6 +92,8 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
   const [savingDraft, startSavingDraftTransition] = useTransition();
   const [publishingTest, startPublishingTestTransition] = useTransition();
 
+  const router = useRouter();
+
   const changeDetails = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setExamDetails((prev) => (prev ? { ...prev, [name]: value } : prev));
@@ -109,7 +108,9 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
       toast.error("Please Select a Group to add");
       return;
     }
-    const finding = selectedGroups?.find((item) => item.id === searchedGroup.id);
+    const finding = selectedGroups?.find(
+      (item) => item.id === searchedGroup.id
+    );
 
     if (finding) {
       toast.error("Group Already Added");
@@ -117,7 +118,7 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
     }
 
     setSelectedGroups((prev) =>
-      prev ? [...prev, searchedGroup] : [searchedGroup],
+      prev ? [...prev, searchedGroup] : [searchedGroup]
     );
 
     setSearchedGroup(undefined);
@@ -149,11 +150,19 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
 
     if (updatedExamDetails && selectedGroups && selectedProblemsId) {
       try {
-        await saveDraft({
-          updatedExamDetails,
-          selectedGroups,
-          selectedProblemsId,
-        });
+        const domain = process.env.NEXT_PUBLIC_BACKEND_DOMAIN;
+        const res = await axios.post(
+          `${domain}/teacher/exam/savedraft`,
+          {
+            updatedExamDetails,
+            selectedGroups,
+            selectedProblemsId,
+          },
+          {
+            withCredentials: true,
+          }
+        );
+
         toast.success("Draft saved");
       } catch (error) {
         toast.error("Couldn't save the draft");
@@ -190,17 +199,40 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
 
     if (updatedExamDetails && selectedGroups && selectedProblemsId) {
       try {
-        await publishTest({
-          updatedExamDetails,
-          selectedGroups,
-          selectedProblemsId,
-        });
+        const domain = process.env.NEXT_PUBLIC_BACKEND_DOMAIN;
+        const res = await axios.post(
+          `${domain}/teacher/exam/publishexam`,
+          {
+            updatedExamDetails,
+            selectedGroups,
+            selectedProblemsId,
+          },
+          {
+            withCredentials: true,
+          }
+        );
         toast.success("Test Published");
+        router.push("/dashboard");
       } catch (error) {
-        // toast.error("Couldn't publish the test");
+        toast.error("Couldn't publish the test");
       }
     } else {
       toast.error("Please Select Groups, Problems");
+    }
+  };
+
+  const fetchExam = async (examId: string) => {
+    try {
+      const domain = process.env.NEXT_PUBLIC_BACKEND_DOMAIN;
+      const res = await axios.get(`${domain}/teacher/exam/getexam`, {
+        params: {
+          examId: examId,
+        },
+        withCredentials: true,
+      });
+      return res.data as Exam;
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -208,7 +240,13 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
     async function getExamDetails() {
       setLoading(true);
       const data = await fetchExam(examId);
-      setExamDetails(data as Exam);
+      if (!data) return;
+
+      // Convert startDate and endDate to Date objects
+      data.startDate = new Date(data.startDate);
+      data.endDate = new Date(data.endDate);
+
+      setExamDetails(data);
       setStartDate(data.startDate);
       const startHours = String(data.startDate.getHours()).padStart(2, "0");
       const startMinutes = String(data.startDate.getMinutes()).padStart(2, "0");
@@ -222,10 +260,21 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
       setLoading(false);
     }
     async function getGroups() {
-      setLoadingGroups(true);
-      const data = await fetchAllGroups();
-      setGroups(data);
-      setLoadingGroups(false);
+      try {
+        setLoadingGroups(true);
+        const domain = getBackendURL();
+        const res = await axios.get(`${domain}/teacher/exam/getallgroups`, {
+          params: {
+            examId: examId,
+          },
+          withCredentials: true,
+        });
+        setGroups(res.data as Group[]);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoadingGroups(false);
+      }
     }
     getExamDetails();
     getGroups();
@@ -234,17 +283,39 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
   useEffect(() => {
     async function fetchSelectedGroups() {
       if (examDetails && examDetails.id) {
-        const data = await getAllSelectedGroups(examDetails.id);
-        setSelectedGroups(data);
+        const domain = process.env.NEXT_PUBLIC_BACKEND_DOMAIN;
+        const res = await axios.get(`${domain}/teacher/exam/getallexamgroups`, {
+          params: {
+            examId: examId,
+          },
+          withCredentials: true,
+        });
+        setSelectedGroups(res.data as Group[]);
       }
     }
 
     async function fetchSelectedProblems() {
       if (examDetails && examDetails.id) {
-        const data = await getSelectedProblems(examDetails.id);
-        if (data.length > 0) {
-          const onlyIds = data.map((item) => item.problemId);
-          setSelectedProblemsId(onlyIds);
+        try {
+          const domain = process.env.NEXT_PUBLIC_BACKEND_DOMAIN;
+          const res = await axios.get(
+            `${domain}/teacher/exam/getallexamproblem`,
+            {
+              params: {
+                examId: examId,
+              },
+              withCredentials: true,
+            }
+          );
+
+          const data = res.data as ExamProblem[];
+
+          if (data.length > 0) {
+            const onlyIds = data.map((item: any) => item.problemId);
+            setSelectedProblemsId(onlyIds);
+          }
+        } catch (error) {
+          console.log(error);
         }
       }
     }
@@ -289,7 +360,7 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
                     name="description"
                     onChange={(e) =>
                       setExamDetails((prev) =>
-                        prev ? { ...prev, description: e.target.value } : prev,
+                        prev ? { ...prev, description: e.target.value } : prev
                       )
                     }
                     placeholder="Provide a description for this test"
@@ -308,7 +379,7 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
                         checked={examDetails?.sebEnabled === true}
                         onChange={() =>
                           setExamDetails((prev) =>
-                            prev ? { ...prev, sebEnabled: true } : prev,
+                            prev ? { ...prev, sebEnabled: true } : prev
                           )
                         }
                         className="h-4 w-4 text-primary focus:ring-2 focus:ring-primary"
@@ -322,7 +393,7 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
                         checked={examDetails?.sebEnabled === false}
                         onChange={() =>
                           setExamDetails((prev) =>
-                            prev ? { ...prev, sebEnabled: false } : prev,
+                            prev ? { ...prev, sebEnabled: false } : prev
                           )
                         }
                         className="h-4 w-4 text-primary focus:ring-2 focus:ring-primary"
@@ -445,7 +516,7 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
                             setExamDetails((prev) =>
                               prev
                                 ? { ...prev, durationMin: parseInt(value) || 0 }
-                                : prev,
+                                : prev
                             );
                           }
                         }}
@@ -498,8 +569,8 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
                       <div className="h-10 animate-pulse bg-muted rounded-md" />
                     </div>
                   )}
-                  <Button 
-                    variant="secondary" 
+                  <Button
+                    variant="secondary"
                     onClick={addGroupToSelected}
                     disabled={!searchedGroup}
                   >

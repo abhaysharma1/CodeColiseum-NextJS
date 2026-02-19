@@ -29,6 +29,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { toast } from "sonner";
+import { getBackendURL } from "@/utils/utilities";
 
 export interface ProblemTag {
   tag: {
@@ -61,6 +62,8 @@ function ProblemsTestTable({
   const [possibleTags, setPossibleTags] = useState<Tag[] | undefined>();
   const [difficulty, setDifficulty] = useState<string | undefined>(undefined);
 
+  const backendDomain = getBackendURL();
+
   const addToSelectedProblem = (problemId: string) => {
     setSelectedProblemsId((prev = []) => {
       const set = new Set(prev);
@@ -76,13 +79,15 @@ function ProblemsTestTable({
 
   const fetchProblems = async (reset = false) => {
     setLoadingProblems(true);
-
-    const response = await axios.post(`/api/problems/getproblems`, {
-      searchValue,
-      tags,
-      difficulty,
-      take: 10,
-      skip: (page - 1) * 10,
+    const response = await axios.get(`${backendDomain}/problems/getproblems`, {
+      params: {
+        searchValue,
+        tags,
+        difficulty,
+        take: 10,
+        skip: (page - 1) * 10,
+      },
+      withCredentials: true,
     });
 
     const data: problemData[] = response.data as problemData[];
@@ -110,7 +115,9 @@ function ProblemsTestTable({
 
   const fetchTags = async () => {
     try {
-      const response = await axios.get("/api/problems/gettags");
+      const response = await axios.get(`${backendDomain}/problems/gettags`, {
+        withCredentials: true,
+      });
       const data = response.data as Tag[];
 
       setPossibleTags(data);

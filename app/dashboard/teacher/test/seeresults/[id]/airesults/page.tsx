@@ -45,6 +45,7 @@ import { useRouter } from "next/navigation";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeHighlight from "rehype-highlight";
+import { getBackendURL } from "@/utils/utilities";
 
 type SubmissionWithDetails = {
   id: string;
@@ -101,7 +102,7 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
   const [itemsPerPage] = useState(10);
   const [expandedRows, setExpandedRows] = useState<Set<string>>(new Set());
   const [expandedSubmissions, setExpandedSubmissions] = useState<Set<string>>(
-    new Set(),
+    new Set()
   );
   const router = useRouter();
 
@@ -113,11 +114,15 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
   const getAiEvaluations = async () => {
     try {
       setLoading(true);
-      const res = await axios.post("/api/teacher/aiEvaluate/getResults", {
-        examId: examId,
+      const domain = getBackendURL();
+      const res = await axios.get(`${domain}/teacher/exam/getairesult`, {
+        params: {
+          examId: examId,
+        },
+        withCredentials: true,
       });
+
       setData(res.data as SubmissionWithDetails[]);
-      console.log(res.data);
     } catch (error) {
       console.log(error);
     } finally {
@@ -153,7 +158,7 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
 
     // Prepare CSV rows
     const rows: string[][] = [];
-    
+
     studentsArray.forEach((studentData) => {
       studentData.submissions.forEach((submission) => {
         const row = [
@@ -179,9 +184,7 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
           submission.passedTestcases.toString(),
           submission.totalTestcases.toString(),
           submission.executionTime.toString(),
-          submission.memory > 0
-            ? (submission.memory / 1024).toFixed(0)
-            : "N/A",
+          submission.memory > 0 ? (submission.memory / 1024).toFixed(0) : "N/A",
           submission.aiEvaluation?.aiScore.toString() || "N/A",
           submission.aiEvaluation?.qualityScore.toString() || "N/A",
           submission.aiEvaluation?.timeComplexity || "N/A",
@@ -332,7 +335,7 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
           optimalSolutions: number;
         };
       }
-    >,
+    >
   );
 
   // Calculate stats for each student
@@ -340,7 +343,7 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
     const { submissions } = studentData;
     studentData.stats.totalSubmissions = submissions.length;
     studentData.stats.acceptedSubmissions = submissions.filter(
-      (s) => s.status === "ACCEPTED",
+      (s) => s.status === "ACCEPTED"
     ).length;
 
     const aiEvaluations = submissions.filter((s) => s.aiEvaluation);
@@ -351,10 +354,10 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
       studentData.stats.averageQualityScore =
         aiEvaluations.reduce(
           (sum, s) => sum + s.aiEvaluation!.qualityScore,
-          0,
+          0
         ) / aiEvaluations.length;
       studentData.stats.optimalSolutions = aiEvaluations.filter(
-        (s) => s.aiEvaluation!.optimal,
+        (s) => s.aiEvaluation!.optimal
       ).length;
     }
   });
@@ -537,7 +540,7 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
                                 <span className="font-bold text-sm">
                                   {
                                     studentData.submissions.filter(
-                                      (s) => s.aiEvaluation,
+                                      (s) => s.aiEvaluation
                                     ).length
                                   }
                                 </span>
@@ -554,7 +557,7 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
                                 <span className="font-bold text-sm">
                                   {
                                     studentData.submissions.filter(
-                                      (s) => s.isFinal,
+                                      (s) => s.isFinal
                                     ).length
                                   }
                                 </span>
@@ -590,7 +593,7 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
                                       <button
                                         onClick={() =>
                                           toggleSubmissionExpansion(
-                                            submission.id,
+                                            submission.id
                                           )
                                         }
                                         className="w-full px-4 py-2.5 transition-colors flex items-center gap-3"
@@ -598,7 +601,7 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
                                         <ChevronDown
                                           className={`w-4 h-4 text-muted-foreground transition-transform flex-shrink-0 ${
                                             expandedSubmissions.has(
-                                              submission.id,
+                                              submission.id
                                             )
                                               ? "rotate-180"
                                               : ""
@@ -636,7 +639,7 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
 
                                       {/* Submission Details - Collapsible */}
                                       {expandedSubmissions.has(
-                                        submission.id,
+                                        submission.id
                                       ) && (
                                         <div className="border-t p-5 space-y-4">
                                           {/* Inline metadata row */}
@@ -706,7 +709,7 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
                                               <Calendar className="w-3.5 h-3.5" />
                                               <span className="text-xs">
                                                 {formatDate(
-                                                  submission.createdAt,
+                                                  submission.createdAt
                                                 )}
                                               </span>
                                             </div>
@@ -928,7 +931,7 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
                                                   </span>
                                                   <span className="text-xs">
                                                     {formatDate(
-                                                      submission.createdAt,
+                                                      submission.createdAt
                                                     )}
                                                   </span>
                                                 </div>
@@ -937,7 +940,7 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
                                                     AI Status
                                                   </span>
                                                   {getAiStatusBadge(
-                                                    submission.aiStatus,
+                                                    submission.aiStatus
                                                   )}
                                                 </div>
                                                 {submission.problem && (

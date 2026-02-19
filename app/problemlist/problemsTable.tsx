@@ -30,6 +30,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { getBackendURL } from "@/utils/utilities";
 
 export interface ProblemTag {
   tag: {
@@ -62,13 +63,19 @@ function ProblemsTable() {
     try {
       setLoadingProblems(true);
 
-      const response = await axios.post(`/api/problems/getproblems`, {
-        searchValue,
-        tags,
-        difficulty,
-        take: 10,
-        skip: (page - 1) * 10,
-      });
+      const response = await axios.get(
+        `${getBackendURL()}/problems/getproblems`,
+        {
+          params: {
+            searchValue,
+            tags,
+            difficulty,
+            take: 10,
+            skip: (page - 1) * 10,
+          },
+          withCredentials: true,
+        }
+      );
 
       const data: problemData[] = response.data as problemData[];
 
@@ -86,8 +93,6 @@ function ProblemsTable() {
         const newData = data.filter((item) => !existingIds.has(item.id));
         return [...prev, ...newData];
       });
-
-      
     } catch (error: any) {
       if (typeof error == "string") {
         toast.error(error);
@@ -100,7 +105,10 @@ function ProblemsTable() {
 
   const fetchTags = async () => {
     try {
-      const response = await axios.get("/api/problems/gettags");
+      const response = await axios.get(`${getBackendURL()}/problems/gettags`, {
+        withCredentials: true,
+      });
+      
       const data = response.data as Tag[];
 
       setPossibleTags(data);

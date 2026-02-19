@@ -1,6 +1,4 @@
 "use client";
-import { getGroupDetails } from "@/app/actions/teacher/group/getGroupDetails";
-import { getGroupMembers } from "@/app/actions/teacher/group/getGroupMembers";
 import { SiteHeader } from "@/components/site-header";
 import { User } from "@/generated/prisma/client";
 import { Group } from "@/interfaces/DB Schema";
@@ -38,7 +36,7 @@ import {
   AlertCircle,
   Pencil,
 } from "lucide-react";
-import { addMembersToGroup } from "@/app/actions/teacher/group/addMembersToGroup";
+import { getBackendURL } from "@/utils/utilities";
 
 function Page({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
@@ -58,8 +56,16 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
 
   const getData = async () => {
     try {
-      const data = await getGroupDetails(id);
-      setGroupData(data);
+      const res = await axios.get(
+        `${getBackendURL()}/teacher/getgroupdetails`,
+        {
+          params: {
+            groupId: id,
+          },
+          withCredentials: true,
+        }
+      );
+      setGroupData(res.data as Group);
     } catch (error) {
       if (typeof error == "string") {
         toast.error(error);
@@ -70,8 +76,16 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
 
   const getMembers = async () => {
     try {
-      const data = await getGroupMembers(id);
-      setGroupMembers(data);
+      const res = await axios.get(
+        `${getBackendURL()}/teacher/getgroupmembers`,
+        {
+          params: {
+            groupId: id,
+          },
+          withCredentials: true,
+        }
+      );
+      setGroupMembers(res.data as User[]);
     } catch (error) {
       if (typeof error == "string") {
         toast.error(error);
@@ -90,7 +104,19 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
         toast.error("Enter Some Emails");
         return;
       }
-      const result = await addMembersToGroup(newEmails, groupData?.id);
+
+      const res = await axios.post(
+        `${getBackendURL()}/teacher/addmembertogroup`,
+        {
+          newEmails: newEmails,
+          groupId: groupData?.id,
+        },
+        {
+          withCredentials: true,
+        }
+      );
+
+      const result = res.data as string[];
 
       setNotFoundStudents(result || []);
       setDialogOpen(true);
@@ -343,15 +369,10 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
           </div>
 
           <div className="flex justify-end gap-3">
-            <Button
-              variant="outline"
-              onClick={() => setShowEditGroup(false)}
-            >
+            <Button variant="outline" onClick={() => setShowEditGroup(false)}>
               Cancel
             </Button>
-            <Button onClick={handleSaveEdit}>
-              Save Changes
-            </Button>
+            <Button onClick={handleSaveEdit}>Save Changes</Button>
           </div>
         </DialogContent>
       </Dialog>

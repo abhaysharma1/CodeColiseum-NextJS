@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState, use, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { TeacherTestResultsResponse } from "@/app/api/teacher/testresults/route";
 import {
   Card,
   CardContent,
@@ -49,8 +48,68 @@ import {
 } from "@/generated/prisma/enums";
 import { IoReload } from "react-icons/io5";
 import axios from "axios";
+import { getBackendURL } from "@/utils/utilities";
+
+
+export type TeacherTestResultsResponse = {
+  examDetails: {
+    id: string;
+    title: string;
+    description: string | null;
+    durationMin: number;
+    startDate: Date;
+    endDate: Date;
+    isPublished: boolean;
+    status: ExamStatus;
+    sebEnabled: boolean;
+    problems: Array<{
+      order: number;
+      problem: {
+        id: string;
+        number: number;
+        title: string;
+        difficulty: string;
+      };
+    }>;
+  };
+  studentResults: Array<{
+    studentId: string;
+    studentName: string;
+    studentEmail: string;
+    attemptId: string;
+    status: ExamAttemptStatus;
+    startedAt: Date;
+    submittedAt: Date | null;
+    expiresAt: Date;
+    totalScore: number;
+    lastHeartbeatAt: Date;
+    disconnectCount: number;
+    problemScores: Array<{
+      problemId: string;
+      problemTitle: string;
+      problemNumber: number;
+      bestScore: number;
+      attempts: number;
+      latestStatus: SubmissionStatus | null;
+      passedTestcases: number;
+      totalTestcases: number;
+      sourceCode: string | null;
+    }>;
+  }>;
+  statistics: {
+    totalStudents: number;
+    submitted: number;
+    inProgress: number;
+    notStarted: number;
+    averageScore: number;
+    highestScore: number;
+    lowestScore: number;
+    completionRate: number;
+  };
+};
 
 type AiEvalUIStatus = "NOT_STARTED" | "EVALUATING" | "COMPLETED";
+
 
 function TestResultsPage({ params }: { params: Promise<{ id: string }> }) {
   const { id: examId } = use(params);
@@ -68,15 +127,20 @@ function TestResultsPage({ params }: { params: Promise<{ id: string }> }) {
     const fetchResults = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(
-          `/api/teacher/testresults?examId=${examId}`,
-        );
+        const domain = getBackendURL();
+        const res = await axios.get(`${domain}/teacher/exam/getresults`, {
+          params: {
+            examId: examId,
+          },
+          withCredentials: true,
+        });
+ 
 
         const results: TeacherTestResultsResponse =
-          response.data as TeacherTestResultsResponse;
+          res.data as TeacherTestResultsResponse;
         setData(results);
-        if(results.examDetails.status === "finished"){
-          setAiEvaluatingStatus("COMPLETED")
+        if (results.examDetails.status === "finished") {
+          setAiEvaluatingStatus("COMPLETED");
         }
       } catch (err) {
         setError(err instanceof Error ? err.message : "An error occurred");
@@ -101,7 +165,7 @@ function TestResultsPage({ params }: { params: Promise<{ id: string }> }) {
       try {
         const res = await axios.post(
           "/api/teacher/aiEvaluate/getEvaluationStatus",
-          { examId: data.examDetails.id },
+          { examId: data.examDetails.id }
         );
 
         const { total, completed } = res.data as {
@@ -121,7 +185,7 @@ function TestResultsPage({ params }: { params: Promise<{ id: string }> }) {
           setAiEvaluatingStatus("COMPLETED");
 
           const response = await axios.get(
-            `/api/teacher/testresults?examId=${data.examDetails.id}`,
+            `/api/teacher/testresults?examId=${data.examDetails.id}`
           );
 
           if (isMounted) {
@@ -276,10 +340,10 @@ function TestResultsPage({ params }: { params: Promise<{ id: string }> }) {
       "Disconnect Count",
       "Last Heartbeat",
       ...data.examDetails.problems.map(
-        (p) => `Problem ${p.problem.number} Score`,
+        (p) => `Problem ${p.problem.number} Score`
       ),
       ...data.examDetails.problems.map(
-        (p) => `Problem ${p.problem.number} Status`,
+        (p) => `Problem ${p.problem.number} Status`
       ),
     ];
 
@@ -296,13 +360,13 @@ function TestResultsPage({ params }: { params: Promise<{ id: string }> }) {
       new Date(student.lastHeartbeatAt).toLocaleString(),
       ...data.examDetails.problems.map((p) => {
         const problemScore = student.problemScores.find(
-          (ps) => ps.problemId === p.problem.id,
+          (ps) => ps.problemId === p.problem.id
         );
         return problemScore ? problemScore.bestScore.toString() : "0";
       }),
       ...data.examDetails.problems.map((p) => {
         const problemScore = student.problemScores.find(
-          (ps) => ps.problemId === p.problem.id,
+          (ps) => ps.problemId === p.problem.id
         );
         return problemScore?.latestStatus || "No Submission";
       }),
@@ -328,7 +392,7 @@ function TestResultsPage({ params }: { params: Promise<{ id: string }> }) {
     try {
       const res = await axios.post(
         "/api/teacher/aiEvaluate/getEvaluationStatus",
-        { examId: data.examDetails.id },
+        { examId: data.examDetails.id }
       );
 
       const { total, completed } = res.data as {
@@ -346,7 +410,7 @@ function TestResultsPage({ params }: { params: Promise<{ id: string }> }) {
 
         // Refresh results once
         const response = await axios.get(
-          `/api/teacher/testresults?examId=${data.examDetails.id}`,
+          `/api/teacher/testresults?examId=${data.examDetails.id}`
         );
 
         setData(response.data as TeacherTestResultsResponse);
@@ -366,7 +430,7 @@ function TestResultsPage({ params }: { params: Promise<{ id: string }> }) {
 
     if (aiEvaluatingStatus === "COMPLETED") {
       router.push(
-        `/dashboard/teacher/test/seeresults/${data.examDetails.id}/airesults`,
+        `/dashboard/teacher/test/seeresults/${data.examDetails.id}/airesults`
       );
       return;
     }
@@ -557,7 +621,7 @@ function TestResultsPage({ params }: { params: Promise<{ id: string }> }) {
                 <div className="text-2xl font-bold">
                   {data.studentResults.reduce(
                     (total, student) => total + student.disconnectCount,
-                    0,
+                    0
                   )}
                 </div>
                 <p className="text-xs text-muted-foreground">
@@ -633,7 +697,7 @@ function TestResultsPage({ params }: { params: Promise<{ id: string }> }) {
                             </TableCell>
                             <TableCell className="text-sm text-muted-foreground">
                               {new Date(
-                                student.lastHeartbeatAt,
+                                student.lastHeartbeatAt
                               ).toLocaleString()}
                             </TableCell>
                           </TableRow>
@@ -696,7 +760,7 @@ function TestResultsPage({ params }: { params: Promise<{ id: string }> }) {
                                   <div className="text-sm font-semibold">
                                     {
                                       student.problemScores.filter(
-                                        (ps) => ps.attempts > 0,
+                                        (ps) => ps.attempts > 0
                                       ).length
                                     }
                                     /{data.examDetails.problems.length}
@@ -720,7 +784,7 @@ function TestResultsPage({ params }: { params: Promise<{ id: string }> }) {
                                     </div>
                                     <div className="text-sm font-semibold">
                                       {new Date(
-                                        student.startedAt,
+                                        student.startedAt
                                       ).toLocaleString()}
                                     </div>
                                   </div>
@@ -731,7 +795,7 @@ function TestResultsPage({ params }: { params: Promise<{ id: string }> }) {
                                     <div className="text-sm font-semibold">
                                       {student.submittedAt
                                         ? new Date(
-                                            student.submittedAt,
+                                            student.submittedAt
                                           ).toLocaleString()
                                         : "N/A"}
                                     </div>
@@ -756,7 +820,7 @@ function TestResultsPage({ params }: { params: Promise<{ id: string }> }) {
                                     </div>
                                     <div className="text-sm font-semibold">
                                       {new Date(
-                                        student.lastHeartbeatAt,
+                                        student.lastHeartbeatAt
                                       ).toLocaleString()}
                                     </div>
                                   </div>
@@ -776,12 +840,12 @@ function TestResultsPage({ params }: { params: Promise<{ id: string }> }) {
                                     const problemScore =
                                       student.problemScores.find(
                                         (ps) =>
-                                          ps.problemId === problem.problem.id,
+                                          ps.problemId === problem.problem.id
                                       );
                                     const sourceCode =
                                       student.problemScores.find(
                                         (item) =>
-                                          item.problemId === problem.problem.id,
+                                          item.problemId === problem.problem.id
                                       );
                                     return (
                                       <AccordionItem
@@ -816,7 +880,7 @@ function TestResultsPage({ params }: { params: Promise<{ id: string }> }) {
                                               <div className="text-center">
                                                 {problemScore?.latestStatus ? (
                                                   getSubmissionStatusBadge(
-                                                    problemScore.latestStatus,
+                                                    problemScore.latestStatus
                                                   )
                                                 ) : (
                                                   <Badge variant="outline">
@@ -870,7 +934,7 @@ function TestResultsPage({ params }: { params: Promise<{ id: string }> }) {
                                                   </div>
                                                   <div className="mt-1">
                                                     {getSubmissionStatusBadge(
-                                                      problemScore.latestStatus,
+                                                      problemScore.latestStatus
                                                     )}
                                                   </div>
                                                 </div>

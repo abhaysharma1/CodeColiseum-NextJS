@@ -1,19 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@/lib/auth";
-import { headers } from "next/headers";
-import { verifySEB, SEBError } from "@/lib/SEBhelper";
+import { authClient } from "./lib/auth-client";
 
 export async function proxy(req: NextRequest) {
   const pathname = req.nextUrl.pathname;
 
   // Configure CSP to allow GitHub assets, Monaco Editor, and inline scripts
+  const backendDomain = process.env.NEXT_PUBLIC_BACKEND_DOMAIN
   const cspHeader = `
     default-src 'self';
     script-src 'self' 'unsafe-inline' 'unsafe-eval' https://github.githubassets.com https://cdn.jsdelivr.net;
     style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net;
     img-src 'self' blob: data: https:;
     font-src 'self' data: https://cdn.jsdelivr.net;
-    connect-src 'self' https://github.com https://api.github.com;
+    connect-src 'self' https://github.com https://api.github.com ${backendDomain};
     frame-src 'self' https://github.com;
     worker-src 'self' blob:;
   `.replace(/\s{2,}/g, " ");
@@ -22,19 +21,17 @@ export async function proxy(req: NextRequest) {
   const response = NextResponse.next();
   response.headers.set("Content-Security-Policy", cspHeader);
 
-  response.headers.set("Content-Security-Policy", cspHeader);
-
   // If it's not a protected route, return with CSP headers
   if (!pathname.startsWith("/dashboard")) {
     return response;
   }
 
   try {
-    const session = await auth.api.getSession({
-      headers: await headers(),
+    const { data: session } = await authClient.getSession({
+      fetchOptions: { headers: Object.fromEntries(req.headers) },
     });
 
-    if (!session?.user) {
+    if (!session?.user || !session.user.id) {
       return NextResponse.redirect(new URL("/login", req.url));
     }
 
@@ -82,8 +79,19 @@ export async function proxy(req: NextRequest) {
   } catch (error) {
     return NextResponse.redirect(new URL("/login", req.url));
   }
+
 }
 
 export const config = {
-  matcher: ["/:path*"],
+  matcher: [
+    /*
+     * Match all request paths except for the ones starting with:
+     * - api (internal next api)
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     * - YOUR BACKEND PATHS (if you are proxying)
+     */
+    '/((?!api|_next/static|_next/image|favicon.ico).*)',
+  ],
 };

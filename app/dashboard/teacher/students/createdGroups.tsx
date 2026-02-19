@@ -42,46 +42,19 @@ import { Spinner } from "@/components/ui/shadcn-io/spinner";
 import { TbReload } from "react-icons/tb";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { getBackendURL } from "@/utils/utilities";
+import { Group } from "@/generated/prisma/client";
 
-export interface StudentGroup {
-  id: string; // UUID
-  name: string;
-  description: string;
-  noOfMembers: number;
-}
-interface ApiResponse<T> {
-  data: T;
-}
 
-export const columns: ColumnDef<StudentGroup>[] = [
-  {
-    id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && "indeterminate")
-        }
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
+
+export const columns: ColumnDef<Group>[] = [
+
   {
     accessorKey: "id",
     header: ({ column }) => {
-      return <div className="text-left">ID</div>;
+      return <div className="text-left ml-3">ID</div>;
     },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("id")}</div>,
+    cell: ({ row }) => <div className="lowercase truncate ml-3">{row.getValue("id")}</div>,
   },
   {
     accessorKey: "name",
@@ -136,13 +109,13 @@ export const columns: ColumnDef<StudentGroup>[] = [
 function CreatedGroups() {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    [],
+    []
   );
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
 
-  const [data, setData] = React.useState<StudentGroup[]>([]);
+  const [data, setData] = React.useState<Group[]>([]);
   const [loadingGroups, setLoadingGroups] = React.useState(false);
   const router = useRouter();
 
@@ -168,10 +141,13 @@ function CreatedGroups() {
   const fetchGroups = async () => {
     setLoadingGroups(true);
     try {
-      const response = await axios.get<ApiResponse<StudentGroup[]>>(
-        "/api/teacher/fetchGroups",
+      const response = await axios.get(
+        `${getBackendURL()}/teacher/getallgroups`,
+        {
+          withCredentials: true,
+        }
       );
-      setData(response.data.data);
+      setData(response.data as Group[]);
       toast.success("Groups Fetched Successfully");
     } catch (error) {
       console.error("Error fetching groups:", error);
@@ -272,7 +248,7 @@ function CreatedGroups() {
                               ? null
                               : flexRender(
                                   header.column.columnDef.header,
-                                  header.getContext(),
+                                  header.getContext()
                                 )}
                           </TableHead>
                         );
@@ -298,7 +274,7 @@ function CreatedGroups() {
                           >
                             {flexRender(
                               cell.column.columnDef.cell,
-                              cell.getContext(),
+                              cell.getContext()
                             )}
                           </TableCell>
                         ))}

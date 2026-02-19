@@ -27,6 +27,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     refetch,
   } = authClient.useSession();
 
+
   const logout = async () => {
     await authClient.signOut();
   };
