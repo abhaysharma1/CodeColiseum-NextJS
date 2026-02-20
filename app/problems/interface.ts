@@ -41,6 +41,18 @@ export interface runTestCaseType {
   }[];
 }
 
+export type ProblemSubmissionItem = {
+  id: string;
+  language: string;
+  code: string;
+  noOfPassedCases: number;
+  createdAt: Date;
+};
+
+export type GetProblemSubmissionsResponse = {
+  submissions: ProblemSubmissionItem[];
+};
+
 export interface JudgeResponse {
   stdout: string | null;
   time: string;

@@ -67,14 +67,6 @@ export function SignupForm({
     }));
   };
 
-  const githubSignIn = async (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault();
-    event.stopPropagation();
-    const data = await authClient.signIn.social({
-      provider: "github",
-      callbackURL: "/dashboard"
-    });
-  };
 
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     // TODO: Add Submission Logic
@@ -123,12 +115,11 @@ export function SignupForm({
       <Card>
         <CardHeader className="text-center">
           <CardTitle className="text-xl">SignUp on CodeColiseum</CardTitle>
-          <CardDescription>SignIn with your Github account</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={onSubmit}>
             <div className="grid gap-6">
-              <div className="flex flex-col gap-4">
+              {/* <div className="flex flex-col gap-4">
                 <Button variant="outline" className="w-full cursor-pointer" onClick={githubSignIn}>
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                     <path
@@ -138,12 +129,12 @@ export function SignupForm({
                   </svg>
                   Signup with GitHub
                 </Button>
-              </div>
-              <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
+              </div> */}
+              {/* <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
                 <span className="bg-card text-muted-foreground relative z-10 px-2">
                   Or continue with
                 </span>
-              </div>
+              </div> */}
               <div className="grid gap-6">
                 <div className="grid gap-3 w-[40%]">
                   <Label>Role</Label>

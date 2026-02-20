@@ -1,7 +1,6 @@
 "use client";
-import { getGroups } from "@/app/actions/student/groups/getGroups";
-import { Group, User, UserRole } from "@/generated/prisma/client";
-import React, { useEffect, useState } from "react";
+import { Group, UserRole } from "@/generated/prisma/client";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import Fuse from "fuse.js";
 import { Input } from "@/components/ui/input";
@@ -15,15 +14,12 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
-import {
-  Search,
-  Users,
-  Link as LinkIcon,
-  Calendar,
-  Loader2,
-} from "lucide-react";
+import { Search, Users, Link as LinkIcon, Calendar } from "lucide-react";
 import { SiteHeader } from "@/components/site-header";
 import { useRouter } from "next/navigation";
+import axios from "axios";
+import { getBackendURL } from "@/utils/utilities";
+import { Button } from "@/components/ui/button";
 
 interface Creator {
   id: string;
@@ -65,23 +61,33 @@ const options = {
 };
 
 function Page() {
-  const ITEMS_PER_PAGE = 5;
+  const ITEMS_PER_PAGE = 9;
 
   const [currentPage, setCurrentPage] = useState(1);
 
   const [groupsData, setGroupsData] = useState<GroupData | undefined>();
   const [shownGroups, setShowngroups] = useState<GroupData | undefined>();
-  const [searchValue, setSearchValue] = useState("");
   const [isLoading, setIsLoading] = useState(true);
+
+  const [take, setTake] = useState(ITEMS_PER_PAGE);
+  const [skip, setSkip] = useState(0);
+  const [searchValue, setSearchValue] = useState("");
 
   const router = useRouter();
 
   const getGroupsFunc = async () => {
     try {
       setIsLoading(true);
-      const data = await getGroups();
-      console.log(data);
-      setGroupsData(data);
+
+      const res = await axios.get(`${getBackendURL()}/student/getgroups`, {
+        params: {
+          take: take,
+          skip: skip,
+          searchValue: searchValue,
+        },
+        withCredentials: true,
+      });
+      setGroupsData(res.data as GroupData);
     } catch (error: any) {
       if (typeof error.message === "string") {
         toast.error(error.message);
@@ -107,7 +113,7 @@ function Page() {
 
   useEffect(() => {
     getGroupsFunc();
-  }, []);
+  }, [take, skip, searchValue]);
 
   useEffect(() => {
     if (groupsData) {
@@ -118,8 +124,20 @@ function Page() {
 
   const paginatedGroups = shownGroups?.slice(
     (currentPage - 1) * ITEMS_PER_PAGE,
-    currentPage * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
   );
+
+  const handleNextPage = () => {
+    if (groupsData && groupsData.length === take) {
+      setSkip((prevSkip) => prevSkip + take);
+    }
+  };
+
+  const handlePreviousPage = () => {
+    if (skip > 0) {
+      setSkip((prevSkip) => Math.max(prevSkip - take, 0));
+    }
+  };
 
   return (
     <div>
@@ -178,7 +196,8 @@ function Page() {
                 className="hover:shadow-lg transition-shadow hover:bg-accent/60 cursor-pointer"
                 onClick={() =>
                   router.push(`/dashboard/student/group/${group.id}`)
-                }>
+                }
+              >
                 <CardHeader>
                   <div className="flex items-start justify-between">
                     <div className="space-y-1 flex-1">
@@ -221,7 +240,8 @@ function Page() {
                     {group.joinByLink && (
                       <Badge
                         variant="secondary"
-                        className="flex items-center gap-1">
+                        className="flex items-center gap-1"
+                      >
                         <LinkIcon className="h-3 w-3" />
                         <span>Join by link</span>
                       </Badge>
@@ -251,23 +271,25 @@ function Page() {
         )}
         {shownGroups && shownGroups.length > ITEMS_PER_PAGE && (
           <div className="flex items-center justify-center gap-4 pt-6">
-            <button
-              className="px-4 py-2 text-sm rounded-md border disabled:opacity-50"
-              disabled={currentPage === 1}
-              onClick={() => setCurrentPage((p) => p - 1)}>
+            <Button variant={"outline"}
+              className="px-4 py-2 text-sm "
+              disabled={skip === 0}
+              onClick={handlePreviousPage}
+            >
               Previous
-            </button>
+            </Button>
 
             <span className="text-sm text-muted-foreground">
-              Page {currentPage} of {totalPages}
+              Showing {skip + 1} - {Math.min(skip + take, shownGroups.length)} of {shownGroups.length}
             </span>
 
-            <button
-              className="px-4 py-2 text-sm rounded-md border disabled:opacity-50"
-              disabled={currentPage === totalPages}
-              onClick={() => setCurrentPage((p) => p + 1)}>
+            <Button variant={"outline"}
+              className="px-4 py-2 text-sm"
+              disabled={groupsData && groupsData.length < take}
+              onClick={handleNextPage}
+            >
               Next
-            </button>
+            </Button>
           </div>
         )}
       </div>

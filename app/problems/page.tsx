@@ -9,7 +9,8 @@ import { Spinner } from "@/components/ui/shadcn-io/spinner";
 import { Navbar01 } from "@/components/ui/shadcn-io/navbar";
 import { runTestCaseType, submitTestCaseType } from "./interface";
 import { AuthProvider } from "@/context/authcontext";
-import { ProblemSubmissionItem } from "../api/problems/getsubmissions/route";
+import { ProblemSubmissionItem } from "./interface";
+import { getBackendURL } from "@/utils/utilities";
 
 interface descriptionData {
   id: string;
@@ -40,13 +41,19 @@ function QuestionSolvingPageContent({
   >();
 
   const [descriptionData, setDescriptionData] = useState<descriptionData[]>([]);
-  const [submissions, setSubmissions] = useState<ProblemSubmissionItem[] | undefined>(undefined);
+  const [submissions, setSubmissions] = useState<
+    ProblemSubmissionItem[] | undefined
+  >(undefined);
 
   const getProblemDescription = async () => {
     try {
-      const response = await axios.post(`/api/problems/getproblems`, {
-        searchValue: id,
-      });
+      const response = await axios.get(
+        `${getBackendURL()}/problems/getproblems`,
+        {
+          params: { searchValue: id },
+          withCredentials: true,
+        }
+      );
       setDescriptionData(response.data as descriptionData[]);
     } catch (error: any) {
       if (error.status == 400 || error.status == 500) {

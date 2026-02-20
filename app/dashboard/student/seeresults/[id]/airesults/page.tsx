@@ -39,6 +39,7 @@ import { Problem } from "@/generated/prisma/client";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeHighlight from "rehype-highlight";
+import { getBackendURL } from "@/utils/utilities";
 
 type Submission = {
   id: string;
@@ -95,10 +96,15 @@ function Page() {
       setError(null);
 
       try {
-        const res = await axios.post("/api/tests/getairesult", {
-          examId: id,
-        });
-
+        const res = await axios.get(
+          `${getBackendURL()}/student/getexamairesult`,
+          {
+            params: {
+              examId: id,
+            },
+            withCredentials: true,
+          }
+        );
         const incoming = res.data;
         setResults(incoming as AiEvaluation[]);
       } catch (err: any) {
@@ -528,7 +534,7 @@ function Page() {
                               </span>
                               <span className="font-medium text-foreground">
                                 {new Date(
-                                  item.submission.createdAt,
+                                  item.submission.createdAt
                                 ).toLocaleDateString()}
                               </span>
                             </div>

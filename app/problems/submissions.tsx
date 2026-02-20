@@ -10,10 +10,11 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { getBackendURL } from "@/utils/utilities";
 import {
   GetProblemSubmissionsResponse,
   ProblemSubmissionItem,
-} from "@/app/api/problems/getsubmissions/route";
+} from "./interface";
 
 export function Submissions({
   problemId,
@@ -37,10 +38,11 @@ export function Submissions({
     try {
       setLoadingSubmissions(true);
       const response = await axios.post<GetProblemSubmissionsResponse>(
-        "/api/problems/getsubmissions",
+        `${getBackendURL()}/problems/getsubmissions`,
         {
           problemId,
         },
+        { withCredentials: true }
       );
       setSubmissions(response.data.submissions);
     } catch (error) {

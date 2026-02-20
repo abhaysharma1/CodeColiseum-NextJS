@@ -11,7 +11,6 @@ export const languages = [
     id: 62,
     name: "Java (OpenJDK 13.0.1)",
   },
-
   {
     id: 71,
     name: "Python (3.8.1)",

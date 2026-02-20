@@ -3,6 +3,7 @@ import { Separator } from "@/components/ui/separator";
 import { Spinner } from "@/components/ui/shadcn-io/spinner";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { getBackendURL } from "@/utils/utilities";
 
 export interface TestCase {
   input: string;
@@ -26,7 +27,8 @@ function TestCases({ questionId }: { questionId: string }) {
     try {
       setLoading(true);
       const res = await axios.get(
-        `/api/problems/getproblemtestcases?id=${questionId}`,
+        `${getBackendURL()}/problems/gettestcases?id=${questionId}`,
+        { withCredentials: true }
       );
       const { cases } = res.data as RunTestCase;
       const jsonCases = await JSON.parse(JSON.stringify(cases));

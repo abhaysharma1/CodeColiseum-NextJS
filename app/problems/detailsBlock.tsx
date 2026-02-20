@@ -10,7 +10,7 @@ import TestCaseRunBlock from "./testCaseRunBlock";
 import SubmitCode from "./submitCode";
 import { runTestCaseType, submitTestCaseType } from "./interface";
 import { Submissions } from "./submissions";
-import { ProblemSubmissionItem } from "../api/problems/getsubmissions/route";
+import { ProblemSubmissionItem } from "./interface";
 
 interface descriptionData {
   id: string;

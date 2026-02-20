@@ -24,11 +24,10 @@ import {
   DropzoneEmptyState,
 } from "@/components/ui/shadcn-io/dropzone";
 import { UploadIcon } from "lucide-react";
-import uploadComplexityCases from "@/app/actions/admin/uploadComplexityCases";
 import SyntaxHighlighter from "react-syntax-highlighter";
 import { atomDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { Card, CardContent } from "@/components/ui/card";
-import { uploadDriverCode } from "@/app/actions/admin/uploadDriverCode";
+import { getBackendURL } from "@/utils/utilities";
 
 function Page() {
   const [searchValue, setSearchValue] = useState("");
@@ -69,11 +68,13 @@ function Page() {
   const fetchProblems = async () => {
     try {
       setLoadingProblems(true);
-      const problem = await axios.post("/api/problems/getproblems", {
-        searchValue,
-        take: 10,
-        skip: 0,
-      });
+      const problem = await axios.get(
+        `${getBackendURL()}/problems/getproblems`,
+        {
+          params: { searchValue, take: 10, skip: 0 },
+          withCredentials: true,
+        }
+      );
       setFoundProblems(problem.data as Problem[]);
     } catch (error) {
       if (typeof error === "string") {
@@ -114,9 +115,13 @@ function Page() {
         console.log(error);
       }
       console.log("uploading");
-      const data = await uploadDriverCode(problem.id, json);
-      setResponse(data);
-      console.log(data);
+      const res = await axios.post(
+        `${getBackendURL()}/admin/driver-code`,
+        { problemId: problem.id, ...json },
+        { withCredentials: true }
+      );
+      setResponse(res.data as any);
+      console.log(res.data);
     } catch (error: any) {
       if (typeof error.message === "string") {
         toast.error(error.message);
@@ -214,8 +219,8 @@ function Page() {
                     Upload JSON file
                   </p>
                   <p className="mt-1 text-xs text-muted-foreground">
-                    Only one .json file is allowed. It should match the
-                    expected driver format.
+                    Only one .json file is allowed. It should match the expected
+                    driver format.
                   </p>
                 </div>
 
@@ -315,9 +320,7 @@ function Page() {
               </SyntaxHighlighter>
 
               <div className="space-y-1 pt-2">
-                <p className="text-sm font-medium leading-none">
-                  Language IDs
-                </p>
+                <p className="text-sm font-medium leading-none">Language IDs</p>
                 <p className="text-xs text-muted-foreground">
                   Supported language names with their corresponding IDs.
                 </p>

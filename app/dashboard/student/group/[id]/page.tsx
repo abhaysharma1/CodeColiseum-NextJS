@@ -1,11 +1,7 @@
 "use client";
-import { getCreatorData } from "@/app/actions/student/groups/getCreatorData";
-import { getGroupData } from "@/app/actions/student/groups/getGroupData";
-import { getGroupExams } from "@/app/actions/student/groups/getGroupExams";
 import { SiteHeader } from "@/components/site-header";
 import { Exam, Group, User } from "@/generated/prisma/client";
-import Error from "next/error";
-import React, { useEffect, useState, use } from "react";
+import { useEffect, useState, use } from "react";
 import { toast } from "sonner";
 import {
   Card,
@@ -25,9 +21,17 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Calendar, Clock, Users, ChevronLeft, ChevronRight } from "lucide-react";
+import {
+  Calendar,
+  Clock,
+  Users,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import axios from "axios";
+import { getBackendURL } from "@/utils/utilities";
 
 function Page({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
@@ -35,7 +39,11 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
   const [groupExams, setGroupExams] = useState<Exam[] | undefined>();
   const [creatorData, setCreatorData] = useState<User | undefined>();
   const [loadingGroupData, setLoadingGroupData] = useState(false);
-  
+
+  const [take, setTake] = useState(5);
+  const [skip, setSkip] = useState(0);
+  const [searchValue, setSearchValue] = useState("");
+
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
@@ -45,8 +53,13 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
   const getGroupDataFunc = async () => {
     try {
       setLoadingGroupData(true);
-      const data = await getGroupData(id);
-      setGroupData(data);
+      const res = await axios.get(`${getBackendURL()}/student/getgroupdata`, {
+        params: {
+          groupId: id,
+        },
+        withCredentials: true,
+      });
+      setGroupData(res.data as Group);
     } catch (error: any) {
       if (typeof error.message == "string") {
         toast.error(error.message);
@@ -62,8 +75,16 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
       return;
     }
     try {
-      const data = await getGroupExams(groupData.id);
-      setGroupExams(data);
+      const res = await axios.get(`${getBackendURL()}/student/getgroupexams`, {
+        params: {
+          groupId: id,
+          take: take,
+          skip: skip,
+          searchValue: searchValue,
+        },
+        withCredentials: true,
+      });
+      setGroupExams(res.data as Exam[]);
     } catch (error: any) {
       if (typeof error.message == "string") {
         toast.error(error.message);
@@ -77,8 +98,16 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
       return;
     }
     try {
-      const data = await getCreatorData(groupData.id);
-      setCreatorData(data);
+      const res = await axios.get(
+        `${getBackendURL()}/student/getgroupcreator`,
+        {
+          params: {
+            groupId: groupData.id,
+          },
+          withCredentials: true,
+        }
+      );
+      setCreatorData(res.data as User);
     } catch (error: any) {
       if (typeof error.message == "string") {
         toast.error(error.message);
@@ -97,7 +126,9 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
   }, []);
 
   // Pagination logic
-  const totalPages = groupExams ? Math.ceil(groupExams.length / itemsPerPage) : 0;
+  const totalPages = groupExams
+    ? Math.ceil(groupExams.length / itemsPerPage)
+    : 0;
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const currentExams = groupExams ? groupExams.slice(startIndex, endIndex) : [];
@@ -118,6 +149,18 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
   useEffect(() => {
     setCurrentPage(1);
   }, [groupExams]);
+
+  const handleNextPage = () => {
+    setSkip((prevSkip) => prevSkip + take);
+  };
+
+  const handlePreviousPage = () => {
+    setSkip((prevSkip) => Math.max(prevSkip - take, 0));
+  };
+
+  useEffect(() => {
+    getGroupExamsFunc();
+  }, [take, skip, searchValue]);
 
   const formatDate = (date: Date | string | null) => {
     if (!date) return "N/A";
@@ -362,7 +405,7 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
                                 className="h-7 "
                                 onClick={() =>
                                   router.push(
-                                    `/dashboard/student/seeresults/${exam.id}`,
+                                    `/dashboard/student/seeresults/${exam.id}`
                                   )
                                 }
                               >
@@ -389,64 +432,33 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
                 </Table>
               </div>
             )}
-            
+
             {/* Pagination Controls - Bottom */}
-            {groupExams && groupExams.length > itemsPerPage && (
-              <div className="flex items-center justify-between pt-4">
-                <div className="text-sm text-muted-foreground">
-                  Showing {startIndex + 1} to {Math.min(endIndex, groupExams.length)} of{" "}
-                  {groupExams.length} exams
-                </div>
-                <div className="flex items-center gap-1">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={goToPreviousPage}
-                    disabled={currentPage === 1}
-                  >
-                    <ChevronLeft className="h-4 w-4" />
-                  </Button>
-                  
-                  {/* Page Numbers */}
-                  {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNum) => {
-                    if (
-                      pageNum === 1 ||
-                      pageNum === totalPages ||
-                      (pageNum >= currentPage - 1 && pageNum <= currentPage + 1)
-                    ) {
-                      return (
-                        <Button
-                          key={pageNum}
-                          variant={pageNum === currentPage ? "default" : "outline"}
-                          size="sm"
-                          onClick={() => goToPage(pageNum)}
-                          className="w-8"
-                        >
-                          {pageNum}
-                        </Button>
-                      );
-                    } else if (
-                      pageNum === currentPage - 2 ||
-                      pageNum === currentPage + 2
-                    ) {
-                      return (
-                        <span key={pageNum} className="px-2 text-muted-foreground">
-                          ...
-                        </span>
-                      );
-                    }
-                    return null;
-                  })}
-                  
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={goToNextPage}
-                    disabled={currentPage === totalPages}
-                  >
-                    <ChevronRight className="h-4 w-4" />
-                  </Button>
-                </div>
+            {groupExams && groupExams.length > 0 && (
+              <div className="flex items-center justify-end gap-4 pt-6">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  disabled={skip === 0}
+                  onClick={handlePreviousPage}
+                >
+                  Previous
+                </Button>
+
+                <span className="text-sm text-muted-foreground">
+                  Showing {skip + 1} -{" "}
+                  {Math.min(skip + take, groupExams.length)} of{" "}
+                  {groupExams.length}
+                </span>
+
+                <Button
+                  variant="outline"
+                  size="sm"
+                  disabled={groupExams.length < take}
+                  onClick={handleNextPage}
+                >
+                  Next
+                </Button>
               </div>
             )}
           </CardContent>

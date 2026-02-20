@@ -16,13 +16,59 @@ import {
 } from "@/components/ui/card";
 import axios from "axios";
 import { Badge } from "@/components/ui/badge";
-import {
-  GetSubmissionsResponse,
-  SubmissionHistoryItem,
-} from "@/app/api/tests/getsubmissions/route";
-import { SubmitCodeResponse } from "@/app/api/tests/submitcode/route";
 import { toast } from "sonner";
 import TestSubmitCode from "./TestSubmitCode";
+
+export type SubmissionHistoryItem = {
+  id: string;
+  language: string;
+  sourceCode: string;
+  status: string;
+  score: number;
+  result: any;
+  createdAt: Date;
+};
+
+export type GetSubmissionsResponse = {
+  submissions: SubmissionHistoryItem[];
+};
+
+interface SubmitCodeSuccessResponse {
+  success: true;
+  submissionId: string;
+  status:
+    | "ACCEPTED"
+    | "PARTIAL"
+    | "WRONG_ANSWER"
+    | "COMPILE_ERROR"
+    | "RUNTIME_ERROR"
+    | "TIME_LIMIT"
+    | "INTERNAL_ERROR";
+  score: number;
+  passedCount: number;
+  totalCount: number;
+  results: TestCaseResult[];
+  yourTimeComplexity?: string | null;
+  expectedTimeComplexity?: string | null;
+}
+
+interface TestCaseResult {
+  status: string;
+  stdout: string | null;
+  stderr: string | null;
+  compile_output: string | null;
+  time: string;
+  memory: number;
+}
+
+interface SubmitCodeErrorResponse {
+  error: string;
+  details?: string;
+}
+
+export type SubmitCodeResponse =
+  | SubmitCodeSuccessResponse
+  | SubmitCodeErrorResponse;
 
 function Description({
   descriptionData,
@@ -69,12 +115,9 @@ function Description({
 
       try {
         setLoadingSubmissions(true);
-        const response = await axios.post<GetSubmissionsResponse>(
-          "/api/tests/getsubmissions",
-          {
-            attemptId,
-            problemId,
-          },
+        const response = await axios.get<GetSubmissionsResponse>(
+          `/api/student/exam/submissions?attemptId=${attemptId}&problemId=${problemId}`,
+          { withCredentials: true }
         );
         setSubmissions(response.data.submissions);
         console.log(response.data.submissions);
@@ -357,7 +400,7 @@ function Description({
                                     <span className="font-medium">Passed:</span>{" "}
                                     {
                                       submission.result.filter(
-                                        (r: any) => r.status === "ACCEPTED",
+                                        (r: any) => r.status === "ACCEPTED"
                                       ).length
                                     }
                                   </div>
@@ -369,7 +412,7 @@ function Description({
                                       submission.result.reduce(
                                         (acc: number, r: any) =>
                                           acc + Number(r.time || 0),
-                                        0,
+                                        0
                                       ) / submission.result.length
                                     ).toFixed(3)}
                                     s
@@ -382,7 +425,7 @@ function Description({
                                       submission.result.reduce(
                                         (acc: number, r: any) =>
                                           acc + Number(r.memory || 0),
-                                        0,
+                                        0
                                       ) /
                                       submission.result.length /
                                       1024
@@ -392,7 +435,7 @@ function Description({
                                 </div>
 
                                 {submission.result.some(
-                                  (r: any) => r.compile_output,
+                                  (r: any) => r.compile_output
                                 ) && (
                                   <div className="mt-2">
                                     <div className="font-medium text-destructive">
@@ -401,7 +444,7 @@ function Description({
                                     <pre className="mt-1 p-2 bg-background rounded text-xs overflow-x-auto">
                                       {
                                         submission.result.find(
-                                          (r: any) => r.compile_output,
+                                          (r: any) => r.compile_output
                                         )?.compile_output
                                       }
                                     </pre>
@@ -409,7 +452,7 @@ function Description({
                                 )}
 
                                 {submission.result.some(
-                                  (r: any) => r.stderr,
+                                  (r: any) => r.stderr
                                 ) && (
                                   <div className="mt-2">
                                     <div className="font-medium text-destructive">
@@ -418,7 +461,7 @@ function Description({
                                     <pre className="mt-1 p-2 bg-background rounded text-xs overflow-x-auto">
                                       {
                                         submission.result.find(
-                                          (r: any) => r.stderr,
+                                          (r: any) => r.stderr
                                         )?.stderr
                                       }
                                     </pre>

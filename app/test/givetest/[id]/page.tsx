@@ -11,13 +11,12 @@ import handleExamError from "@/utils/examErrorHandler";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState, useRef, use } from "react";
-import Description from "./Description";
+import Description, { SubmitCodeResponse } from "./Description";
 import { toast } from "sonner";
 import CodingEditor from "./codingEditor";
 import { Separator } from "@/components/ui/separator";
 import { getLanguageId } from "@/utils/getLanguageId";
 import { runTestCaseType } from "./interface";
-import { SubmitCodeResponse } from "@/app/api/tests/submitcode/route";
 import { useRemainingTime } from "./getRemainingTime";
 
 function Page({ params }: { params: Promise<{ id: string }> }) {
@@ -58,9 +57,10 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
   useEffect(() => {
     const getTestDetails = async () => {
       try {
-        const res = await axios.post("/api/tests/gettestdetails", {
-          examId,
-        });
+        const res = await axios.get(
+          `/api/student/exam/exam-details?examId=${examId}`,
+          { withCredentials: true }
+        );
         setExamDetails(res.data as Exam);
       } catch (err: any) {
         console.log(err);
@@ -84,15 +84,23 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
 
     const run = async () => {
       try {
-        const attempt = await axios.post("/api/tests/starttest", {
-          examId: examDetails.id,
-        });
+        const attempt = await axios.post(
+          "/api/student/exam/start-test",
+          {
+            examId: examDetails.id,
+          },
+          { withCredentials: true }
+        );
         setExamAttempt(attempt.data as ExamAttempt);
 
         if (attempt.data) {
-          const problems = await axios.post("/api/tests/gettestproblems", {
-            examId: examDetails.id,
-          });
+          const problems = await axios.post(
+            "/api/student/exam/test-problems",
+            {
+              examId: examDetails.id,
+            },
+            { withCredentials: true }
+          );
           setExamProblems(problems.data as ExamProblem[]);
         }
       } catch (err: any) {
@@ -127,9 +135,10 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
 
       const getDescriptionData = async () => {
         try {
-          const res = await axios.post("/api/tests/getproblemdescription", {
-            problemId: problemId,
-          });
+          const res = await axios.get(
+            `/api/student/exam/problem-description?problemId=${problemId}`,
+            { withCredentials: true }
+          );
           setDescriptionData(res.data as Problem);
         } catch (error: any) {
           if (error.status == 400 || error.status == 500) {
@@ -141,9 +150,10 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
       };
       const getTestCases = async () => {
         try {
-          const res = await axios.post("/api/tests/gettestcases", {
-            questionId: problemId,
-          });
+          const res = await axios.get(
+            `/api/student/exam/test-cases?questionId=${problemId}`,
+            { withCredentials: true }
+          );
           setTestCases(res.data as RunTestCase);
         } catch (error: any) {
           console.log(error);
@@ -153,8 +163,8 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
       getDescriptionData();
       getTestCases();
       getTemplateCode();
-      setRunningResults(undefined)
-      setSubmittingResults(undefined)
+      setRunningResults(undefined);
+      setSubmittingResults(undefined);
     }
   }, [currProblem, examProblems, examId]);
 
@@ -187,7 +197,11 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
     const interval = setInterval(() => {
       if (examDetails && examAttempt) {
         console.log(error, sebError);
-        axios.post("/api/tests/heartbeat");
+        axios.post(
+          "/api/student/exam/heartbeat",
+          {},
+          { withCredentials: true }
+        );
       }
     }, 15000); // 15 seconds
 
@@ -198,10 +212,14 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
     if (!currProblem || !examProblems || !examId) return;
 
     const problemId = examProblems[currProblem - 1].problemId;
-    const res = await axios.post("/api/problems/getTemplateCode", {
-      languageId: getLanguageId(language),
-      problemId: problemId,
-    });
+    const res = await axios.post(
+      "/api/problems/getTemplateCode",
+      {
+        languageId: getLanguageId(language),
+        problemId: problemId,
+      },
+      { withCredentials: true }
+    );
 
     const { template, languageId } = res.data as {
       template: string;
@@ -253,7 +271,9 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
       };
 
       try {
-        const response = await axios.post("/api/problems/runcode", sentData);
+        const response = await axios.post("/api/problems/runcode", sentData, {
+          withCredentials: true,
+        });
         setRunningResults(response.data as runTestCaseType);
       } catch (error) {
         console.log(error);
@@ -284,17 +304,18 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
     setSubmittingResults(undefined);
     const languageId = getLanguageId(language);
     const sentData = {
-      languageId: languageId,
-      code: code,
-      examDetails: examDetails,
-      examAttempt: examAttempt,
+      examId: examDetails.id,
       problemId: examProblems[currProblem - 1].problemId,
+      sourceCode: code,
+      languageId: languageId,
     };
     try {
       setCurrentTab("submitcode");
-      const res = await axios.post("/api/tests/submitcode", sentData);
+      const res = await axios.post("/api/student/exam/submit-code", sentData, {
+        withCredentials: true,
+      });
       setSubmittingResults(res.data as SubmitCodeResponse);
-      console.log(res.data)
+      console.log(res.data);
     } catch (error: any) {
       if (error.status == 403) {
         setSebError(true);
@@ -308,9 +329,13 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
   const submitExam = async () => {
     try {
       setSubmittingExam(true);
-      const res = await axios.post("/api/tests/submittest", {
-        examId: examDetails?.id,
-      });
+      const res = await axios.post(
+        "/api/student/exam/submit-test",
+        {
+          examId: examDetails?.id,
+        },
+        { withCredentials: true }
+      );
       if (res.status == 200) {
         // Clear all drafts when exam is submitted
         if (examId) {

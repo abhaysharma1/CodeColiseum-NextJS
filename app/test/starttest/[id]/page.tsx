@@ -23,12 +23,14 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
   useEffect(() => {
     const getTestDetails = async () => {
       try {
-        const res = await axios.post("/api/tests/gettestdetails", {
-          examId,
-        });
-
-        setExamDetails(res.data as Exam);
+        const res = await axios.get(
+          `/api/student/exam/exam-details?examId=${examId}`,
+          { withCredentials: true }
+        );
+        const det = res.data as Exam;
+        setExamDetails(det);
         console.log(res);
+        router.push(`/test/givetest/${det.id}`);
       } catch (err: any) {
         if (err.status >= 400) {
           router.replace("/dashboard");
@@ -119,9 +121,7 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
 
           <div className="mt-6 flex justify-end">
             <Button>
-              <Link href={`/test/givetest/${examDetails?.id}`}>
-                Start Exam
-              </Link>
+              <Link href={`/test/givetest/${examDetails?.id}`}>Start Exam</Link>
             </Button>
           </div>
         </CardContent>

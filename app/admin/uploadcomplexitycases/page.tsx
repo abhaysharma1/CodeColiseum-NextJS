@@ -20,8 +20,8 @@ import {
   DropzoneEmptyState,
 } from "@/components/ui/shadcn-io/dropzone";
 import { UploadIcon } from "lucide-react";
-import uploadComplexityCases from "@/app/actions/admin/uploadComplexityCases";
 import SyntaxHighlighter from "react-syntax-highlighter";
+import { getBackendURL } from "@/utils/utilities";
 import { atomDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { Card, CardContent, CardDescription } from "@/components/ui/card";
 
@@ -61,11 +61,13 @@ function Page() {
   const fetchProblems = async () => {
     try {
       setLoadingProblems(true);
-      const problem = await axios.post("/api/problems/getproblems", {
-        searchValue,
-        take: 10,
-        skip: 0,
-      });
+      const problem = await axios.get(
+        `${getBackendURL()}/problems/getproblems`,
+        {
+          params: { searchValue, take: 10, skip: 0 },
+          withCredentials: true,
+        }
+      );
       setFoundProblems(problem.data as Problem[]);
     } catch (error) {
       if (typeof error === "string") {
@@ -99,7 +101,7 @@ function Page() {
 
     if (!didPassValidation) {
       toast.error(
-        "Please Make sure that all the test cases pass before you upload them",
+        "Please Make sure that all the test cases pass before you upload them"
       );
       return;
     }
@@ -124,9 +126,13 @@ function Page() {
         console.log(error);
       }
 
-      const data = await uploadComplexityCases(problem.id, json);
-      console.log(data);
-      setResponse(data);
+      const res = await axios.post(
+        `${getBackendURL()}/admin/complexity-cases`,
+        { problemId: problem.id, ...json },
+        { withCredentials: true }
+      );
+      console.log(res.data);
+      setResponse(res.data as any);
     } catch (error: any) {
       if (typeof error.message === "string") {
         toast.error(error.message);
@@ -180,7 +186,11 @@ function Page() {
         casesData: json,
       };
 
-      const res = await axios.post("/api/admin/validateComplexityCases", data);
+      const res = await axios.post(
+        `${getBackendURL()}/admin/validate-complexity-cases`,
+        data,
+        { withCredentials: true }
+      );
       const valRes = res.data as validationResponse;
       setValidationResponse(valRes);
 

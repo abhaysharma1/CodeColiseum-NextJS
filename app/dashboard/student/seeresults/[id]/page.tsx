@@ -1,6 +1,4 @@
 "use client";
-import { ExamResultResponse } from "@/app/api/tests/getresult/route";
-import { Navbar01 } from "@/components/ui/shadcn-io/navbar";
 import axios from "axios";
 import React, { useEffect, useState, use } from "react";
 import { toast } from "sonner";
@@ -43,6 +41,76 @@ import { SiteHeader } from "@/components/site-header";
 import { Spinner } from "@/components/ui/shadcn-io/spinner";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
+import { getBackendURL } from "@/utils/utilities";
+import { ExamAttemptStatus } from "@/generated/prisma/enums";
+
+export type ExamResultResponse = {
+  examDetails: {
+    id: string;
+    examStatus: string;
+    title: string;
+    description: string | null;
+    durationMin: number;
+    startDate: Date;
+    endDate: Date;
+    creator: {
+      id: string;
+      name: string;
+      email: string;
+    };
+    problems: Array<{
+      order: number;
+      problem: {
+        id: string;
+        number: number;
+        title: string;
+        difficulty: string;
+      };
+    }>;
+  };
+  examAttempt: {
+    id: string;
+    status: ExamAttemptStatus;
+    startedAt: Date;
+    expiresAt: Date;
+    submittedAt: Date | null;
+    totalScore: number;
+  };
+  finalScore: number;
+  submissionReports: Array<{
+    problemId: string;
+    submissionId: string;
+    code: string;
+    language: string;
+    passedTestcases: number;
+    totalTestcases: number;
+    executionTime: number | null;
+    memory: number | null;
+    createdAt: Date;
+    isSuccessful: boolean;
+    status: string;
+  }>;
+  ranking: {
+    currentStudent:
+      | {
+          rank: number;
+          studentId: string;
+          studentName: string;
+          studentEmail: string;
+          totalScore: number;
+          submittedAt: Date | null;
+        }
+      | undefined;
+    allRankings: Array<{
+      rank: number;
+      studentId: string;
+      studentName: string;
+      studentEmail: string;
+      totalScore: number;
+      submittedAt: Date | null;
+    }>;
+  };
+};
 
 function Page({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
@@ -53,12 +121,16 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
   useEffect(() => {
     const getResults = async (): Promise<void> => {
       try {
-        const res = await axios.post<ExamResultResponse>(
-          "/api/tests/getresult",
-          { examId: id },
+        const res = await axios.get(
+          `${getBackendURL()}/student/getexamresult`,
+          {
+            params: {
+              examId: id,
+            },
+            withCredentials: true,
+          }
         );
-        setResult(res.data);
-        console.log(res.data);
+        setResult(res.data as ExamResultResponse);
       } catch (error: unknown) {
         console.log(error);
         if (error && typeof error === "object" && "response" in error) {
@@ -125,12 +197,15 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
 
   if (!result) {
     return (
-      <div className="min-h-screen bg-background">
+      <div className="min-h-screen ">
         <div className="container mx-auto py-8 px-4">
           <Card className="max-w-md mx-auto mt-20">
             <CardHeader>
               <CardTitle className="text-destructive">Error</CardTitle>
               <CardDescription>Failed to load exam results</CardDescription>
+              <CardDescription>
+                Either The Exam Doesn't exists or you haven't attempted it
+              </CardDescription>
             </CardHeader>
           </Card>
         </div>
@@ -142,7 +217,7 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
     result;
   const totalProblems: number = examDetails.problems.length;
   const solvedProblems: number = submissionReports.filter(
-    (s) => s.isSuccessful,
+    (s) => s.isSuccessful
   ).length;
   const scorePercentage: number = (finalScore / examAttempt.totalScore) * 100;
 
@@ -234,7 +309,7 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
                       variant={"secondary"}
                       onClick={() =>
                         router.push(
-                          `/dashboard/student/seeresults/${examDetails.id}/airesults`,
+                          `/dashboard/student/seeresults/${examDetails.id}/airesults`
                         )
                       }
                     >
@@ -330,7 +405,7 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
                     {examAttempt.submittedAt
                       ? formatDuration(
                           examAttempt.startedAt,
-                          examAttempt.submittedAt,
+                          examAttempt.submittedAt
                         )
                       : "N/A"}
                   </div>
@@ -359,7 +434,7 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
             <Accordion type="multiple" className="w-full">
               {examDetails.problems.map((prob) => {
                 const submission = submissionReports.find(
-                  (s) => s.problemId === prob.problem.id,
+                  (s) => s.problemId === prob.problem.id
                 );
                 return (
                   <AccordionItem key={prob.problem.id} value={prob.problem.id}>
@@ -378,7 +453,7 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
                               </span>
                               <Badge
                                 className={getDifficultyColor(
-                                  prob.problem.difficulty,
+                                  prob.problem.difficulty
                                 )}
                                 variant="outline"
                               >

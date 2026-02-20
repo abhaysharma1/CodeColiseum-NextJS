@@ -71,6 +71,7 @@ import VibrantInkTheme from "@/utils/themes/Vibrant Ink.json";
 import { Palette } from "lucide-react";
 import { ThemeName, THEMES } from "@/themes";
 import { useCustomTheme } from "@/hooks/use-custom-theme";
+import { getBackendURL } from "@/utils/utilities";
 
 interface sentCode {
   questionId: string;
@@ -257,7 +258,11 @@ function CodingBlock({
     };
 
     try {
-      const response = await axios.post("/api/problems/runcode", sentData);
+      const response = await axios.post(
+        `${getBackendURL()}/problems/runcode`,
+        sentData,
+        { withCredentials: true }
+      );
       setRunTestCaseResults(response.data as runTestCaseType);
       console.log(response);
     } catch (error: any) {
@@ -290,8 +295,9 @@ function CodingBlock({
       };
 
       const submitCodeResponse = await axios.post(
-        "/api/problems/submitcode",
+        `${getBackendURL()}/problems/submitcode`,
         submitCode,
+        { withCredentials: true }
       );
 
       setSubmitTestCaseResults(submitCodeResponse.data as submitTestCaseType);
@@ -305,10 +311,14 @@ function CodingBlock({
   };
 
   const getTemplateCode = async () => {
-    const res = await axios.post("/api/problems/getTemplateCode", {
-      languageId: getLanguageId(language),
-      problemId: questionId,
-    });
+    const res = await axios.post(
+      `${getBackendURL()}/problems/gettemplatecode`,
+      {
+        languageId: getLanguageId(language),
+        problemId: questionId,
+      },
+      { withCredentials: true }
+    );
 
     const { template, languageId } = res.data as {
       template: string;
@@ -339,9 +349,7 @@ function CodingBlock({
 
   return (
     <div>
-      <div
-        className="w-[calc(60vw-2.5rem)] h-[calc(100vh-6.5rem)] outline-1 m-5 outline-offset-8 rounded-md py-3 px-5 shadow-2xl"
-      >
+      <div className="w-[calc(60vw-2.5rem)] h-[calc(100vh-6.5rem)] outline-1 m-5 outline-offset-8 rounded-md py-3 px-5 shadow-2xl">
         <div
           className={`rounded-md overflow-hidden border-2 h-full flex flex-col min-h-[300px] ${
             editorInFocus && "border-1 border-foreground/15"
@@ -446,8 +454,6 @@ function CodingBlock({
                       ))}
                     </DropdownMenuSubContent>
                   </DropdownMenuSub>
-
-                 
                 </DropdownMenuContent>
               </DropdownMenu>
 

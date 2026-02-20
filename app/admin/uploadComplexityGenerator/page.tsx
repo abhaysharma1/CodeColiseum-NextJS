@@ -24,13 +24,7 @@ import {
 
 type GeneratorPatternOption = "RANDOM" | "SORTED" | "REVERSE" | "CONSTANT";
 
-type ExpectedComplexityOption =
-  | "LOGN"
-  | "N"
-  | "NLOGN"
-  | "N2"
-  | "N3"
-  | "EXP";
+type ExpectedComplexityOption = "LOGN" | "N" | "NLOGN" | "N2" | "N3" | "EXP";
 
 type GeneratorData = {
   pattern: GeneratorPatternOption;
@@ -49,23 +43,31 @@ type FieldErrors = {
   form?: string;
 };
 
+import { getBackendURL } from "@/utils/utilities";
+
 async function fetchProblems(searchValue: string): Promise<Problem[]> {
-  const res = await axios.post<Problem[]>("/api/problems/getproblems", {
-    searchValue,
-    take: 10,
-    skip: 0,
-  });
+  const res = await axios.get<Problem[]>(
+    `${getBackendURL()}/problems/getproblems`,
+    {
+      params: { searchValue, take: 10, skip: 0 },
+      withCredentials: true,
+    }
+  );
 
   return res.data;
 }
 
 async function fetchGenerator(
-  problemId: string,
+  problemId: string
 ): Promise<GeneratorData | null> {
   try {
-    const res = await axios.get("/api/admin/problem-test-generator", {
-      params: { problemId },
-    });
+    const res = await axios.get(
+      `${getBackendURL()}/admin/problem-test-generator`,
+      {
+        params: { problemId },
+        withCredentials: true,
+      }
+    );
 
     const data = res.data as {
       generator: {
@@ -99,15 +101,19 @@ async function saveGenerator(payload: {
   expectedComplexity: ExpectedComplexityOption;
 }) {
   try {
-    const res = await axios.post("/api/admin/problem-test-generator", {
-      problemId: payload.problemId,
-      type: "ARRAY",
-      pattern: payload.pattern,
-      minValue: payload.minValue,
-      maxValue: payload.maxValue,
-      sizes: payload.sizes,
-      expectedComplexity: payload.expectedComplexity,
-    });
+    const res = await axios.post(
+      `${getBackendURL()}/admin/problem-test-generator`,
+      {
+        problemId: payload.problemId,
+        type: "ARRAY",
+        pattern: payload.pattern,
+        minValue: payload.minValue,
+        maxValue: payload.maxValue,
+        sizes: payload.sizes,
+        expectedComplexity: payload.expectedComplexity,
+      },
+      { withCredentials: true }
+    );
 
     return res.data;
   } catch (error: any) {
@@ -441,7 +447,6 @@ function Page() {
                     onValueChange={(value) =>
                       setPattern(value as GeneratorPatternOption)
                     }
-                
                   >
                     <SelectTrigger className="w-full">
                       <SelectValue placeholder="Select pattern" />
@@ -466,9 +471,7 @@ function Page() {
                 <Select
                   value={expectedComplexity}
                   onValueChange={(value) =>
-                    setExpectedComplexity(
-                      value as ExpectedComplexityOption,
-                    )
+                    setExpectedComplexity(value as ExpectedComplexityOption)
                   }
                 >
                   <SelectTrigger className="w-full">
@@ -484,8 +487,8 @@ function Page() {
                   </SelectContent>
                 </Select>
                 <p className="mt-1 text-xs text-gray-500">
-                  Used when checking if the observed scaling of the
-                  user&apos;s solution matches this expected complexity.
+                  Used when checking if the observed scaling of the user&apos;s
+                  solution matches this expected complexity.
                 </p>
                 {fieldErrors.expectedComplexity && (
                   <p className="mt-1 text-xs text-red-600">

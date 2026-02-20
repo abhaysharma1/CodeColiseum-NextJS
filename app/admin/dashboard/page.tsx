@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/shadcn-io/dropzone";
 import { useAuth } from "@/context/authcontext";
 import axios from "axios";
+import { getBackendURL } from "@/utils/utilities";
 import { UploadIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
@@ -73,7 +74,7 @@ function Page() {
 
     if (!didPassValidation) {
       toast.error(
-        "Please Make sure that all the test cases pass before you upload them",
+        "Please Make sure that all the test cases pass before you upload them"
       );
       return;
     }
@@ -99,9 +100,14 @@ function Page() {
 
     try {
       setLoading(true);
-      const res = await axios.post("/api/admin/uploadproblems", json, {
-        headers: { "Content-Type": "application/json" },
-      });
+      const res = await axios.post(
+        `${getBackendURL()}/admin/upload-problems`,
+        json,
+        {
+          headers: { "Content-Type": "application/json" },
+          withCredentials: true,
+        }
+      );
       console.log(res);
       setResponse(res.data as responseType);
     } catch (error: any) {
@@ -142,9 +148,14 @@ function Page() {
     try {
       setValidating(true);
 
-      const res = await axios.post("/api/admin/validateProblem", json, {
-        headers: { "Content-Type": "application/json" },
-      });
+      const res = await axios.post(
+        `${getBackendURL()}/admin/validate-problem`,
+        json,
+        {
+          headers: { "Content-Type": "application/json" },
+          withCredentials: true,
+        }
+      );
 
       setValidationResponse(res.data as FinalResponse);
       const result = res.data as FinalResponse;

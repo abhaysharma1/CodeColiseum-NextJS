@@ -1,5 +1,4 @@
 "use client";
-import getDashboardData from "@/app/actions/student/dashboard/getDashBoardData";
 import { Exam, ExamResult, Group } from "@/generated/prisma/client";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -13,7 +12,6 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
-import { Separator } from "@/components/ui/separator";
 import {
   BookOpen,
   Trophy,
@@ -27,6 +25,8 @@ import {
 import { SiteHeader } from "@/components/site-header";
 import { useAuth } from "@/context/authcontext";
 import { useRouter } from "next/navigation";
+import axios from "axios";
+import { getBackendURL } from "@/utils/utilities";
 
 type dashboardData = {
   groups: Group[];
@@ -52,9 +52,13 @@ function Page() {
   const getDashboardDataFunc = async () => {
     try {
       setLoading(true);
-      const data = (await getDashboardData()) as dashboardData;
-      setDashboardData(data);
-      console.log(data);
+      const res = await axios.get(
+        `${getBackendURL()}/student/getdashboarddata`,
+        {
+          withCredentials: true,
+        }
+      );
+      setDashboardData(res.data as dashboardData);
     } catch (error: any) {
       if (typeof error.message == "string") {
         toast.error(error.message);
@@ -100,7 +104,7 @@ function Page() {
       ? Math.round(
           (problemDetails.totalSolvedProblems /
             problemDetails.totalNoOfQuestions) *
-            100,
+            100
         )
       : 0;
 
@@ -297,7 +301,7 @@ function Page() {
                 {exams.ongoingExams.map((exam) => (
                   <Card
                     key={exam.id}
-                    className="hover:shadow-lg transition-shadow cursor-pointer" 
+                    className="hover:shadow-lg transition-shadow cursor-pointer"
                     onClick={() => router.push(`/test/starttest/${exam.id}`)}
                   >
                     <CardHeader>

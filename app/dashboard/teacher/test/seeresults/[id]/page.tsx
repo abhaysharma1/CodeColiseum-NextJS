@@ -50,7 +50,6 @@ import { IoReload } from "react-icons/io5";
 import axios from "axios";
 import { getBackendURL } from "@/utils/utilities";
 
-
 export type TeacherTestResultsResponse = {
   examDetails: {
     id: string;
@@ -110,7 +109,6 @@ export type TeacherTestResultsResponse = {
 
 type AiEvalUIStatus = "NOT_STARTED" | "EVALUATING" | "COMPLETED";
 
-
 function TestResultsPage({ params }: { params: Promise<{ id: string }> }) {
   const { id: examId } = use(params);
   const router = useRouter();
@@ -134,7 +132,6 @@ function TestResultsPage({ params }: { params: Promise<{ id: string }> }) {
           },
           withCredentials: true,
         });
- 
 
         const results: TeacherTestResultsResponse =
           res.data as TeacherTestResultsResponse;
@@ -185,7 +182,13 @@ function TestResultsPage({ params }: { params: Promise<{ id: string }> }) {
           setAiEvaluatingStatus("COMPLETED");
 
           const response = await axios.get(
-            `/api/teacher/testresults?examId=${data.examDetails.id}`
+            `${getBackendURL}/teacher/getresults`,
+            {
+              params: {
+                examId: data.examDetails.id,
+              },
+              withCredentials: true,
+            }
           );
 
           if (isMounted) {
@@ -390,9 +393,12 @@ function TestResultsPage({ params }: { params: Promise<{ id: string }> }) {
     pollingRef.current = true;
 
     try {
-      const res = await axios.post(
-        "/api/teacher/aiEvaluate/getEvaluationStatus",
-        { examId: data.examDetails.id }
+      const res = await axios.get(
+        `${getBackendURL}/teacher/get-ai-evaluation-status`,
+        {
+          params: { examId: data.examDetails.id },
+          withCredentials: true,
+        }
       );
 
       const { total, completed } = res.data as {
@@ -408,9 +414,14 @@ function TestResultsPage({ params }: { params: Promise<{ id: string }> }) {
       if (completed >= total) {
         setAiEvaluatingStatus("COMPLETED");
 
-        // Refresh results once
         const response = await axios.get(
-          `/api/teacher/testresults?examId=${data.examDetails.id}`
+          `${getBackendURL}/teacher/getresults`,
+          {
+            params: {
+              examId: data.examDetails.id,
+            },
+            withCredentials: true,
+          }
         );
 
         setData(response.data as TeacherTestResultsResponse);
@@ -436,9 +447,12 @@ function TestResultsPage({ params }: { params: Promise<{ id: string }> }) {
     }
 
     try {
-      const res = await axios.post("/api/teacher/aiEvaluate/startEvaluation", {
-        examId: data.examDetails.id,
-      });
+      const res = await axios.post(
+        `${getBackendURL()}/teacher/start-ai-evaluation`,
+        {
+          examId: data.examDetails.id,
+        }
+      );
 
       const { total } = res.data as { total: number };
 
