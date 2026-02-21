@@ -1,11 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { authClient } from "./lib/auth-client";
+import { getBackendURL } from "./utils/utilities";
 
 export async function proxy(req: NextRequest) {
   const pathname = req.nextUrl.pathname;
 
   // Configure CSP to allow GitHub assets, Monaco Editor, and inline scripts
-  const backendDomain = process.env.NEXT_PUBLIC_BACKEND_DOMAIN
+  const backendDomain = getBackendURL();
+  console.log(backendDomain);
   const cspHeader = `
     default-src 'self';
     script-src 'self' 'unsafe-inline' 'unsafe-eval' https://github.githubassets.com https://cdn.jsdelivr.net;
@@ -62,7 +64,7 @@ export async function proxy(req: NextRequest) {
       session.user.role != "STUDENT"
     ) {
       return NextResponse.redirect(
-        new URL(`/dashboard/${session.user.role}`, req.url),
+        new URL(`/dashboard/${session.user.role}`, req.url)
       );
     }
 
@@ -71,7 +73,7 @@ export async function proxy(req: NextRequest) {
       session.user.role != "TEACHER"
     ) {
       return NextResponse.redirect(
-        new URL(`/dashboard/${session.user.role}`, req.url),
+        new URL(`/dashboard/${session.user.role}`, req.url)
       );
     }
 
@@ -79,7 +81,6 @@ export async function proxy(req: NextRequest) {
   } catch (error) {
     return NextResponse.redirect(new URL("/login", req.url));
   }
-
 }
 
 export const config = {
@@ -92,6 +93,6 @@ export const config = {
      * - favicon.ico (favicon file)
      * - YOUR BACKEND PATHS (if you are proxying)
      */
-    '/((?!api|_next/static|_next/image|favicon.ico).*)',
+    "/((?!api|_next/static|_next/image|favicon.ico).*)",
   ],
 };
