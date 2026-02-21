@@ -7,7 +7,6 @@ export async function proxy(req: NextRequest) {
 
   // Configure CSP to allow GitHub assets, Monaco Editor, and inline scripts
   const backendDomain = getBackendURL();
-  console.log(backendDomain);
   const cspHeader = `
     default-src 'self';
     script-src 'self' 'unsafe-inline' 'unsafe-eval' https://github.githubassets.com https://cdn.jsdelivr.net;
