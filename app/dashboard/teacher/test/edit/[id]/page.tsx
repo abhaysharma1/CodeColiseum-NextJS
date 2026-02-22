@@ -150,7 +150,7 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
 
     if (updatedExamDetails && selectedGroups && selectedProblemsId) {
       try {
-        const domain = process.env.NEXT_PUBLIC_BACKEND_DOMAIN;
+        const domain = getBackendURL();
         const res = await axios.post(
           `${domain}/teacher/exam/savedraft`,
           {
@@ -199,7 +199,7 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
 
     if (updatedExamDetails && selectedGroups && selectedProblemsId) {
       try {
-        const domain = process.env.NEXT_PUBLIC_BACKEND_DOMAIN;
+        const domain = getBackendURL();
         const res = await axios.post(
           `${domain}/teacher/exam/publishexam`,
           {
@@ -223,7 +223,7 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
 
   const fetchExam = async (examId: string) => {
     try {
-      const domain = process.env.NEXT_PUBLIC_BACKEND_DOMAIN;
+      const domain = getBackendURL();
       const res = await axios.get(`${domain}/teacher/exam/getexam`, {
         params: {
           examId: examId,
@@ -283,7 +283,7 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
   useEffect(() => {
     async function fetchSelectedGroups() {
       if (examDetails && examDetails.id) {
-        const domain = process.env.NEXT_PUBLIC_BACKEND_DOMAIN;
+        const domain = getBackendURL();
         const res = await axios.get(`${domain}/teacher/exam/getallexamgroups`, {
           params: {
             examId: examId,
@@ -297,7 +297,7 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
     async function fetchSelectedProblems() {
       if (examDetails && examDetails.id) {
         try {
-          const domain = process.env.NEXT_PUBLIC_BACKEND_DOMAIN;
+          const domain = getBackendURL();
           const res = await axios.get(
             `${domain}/teacher/exam/getallexamproblem`,
             {

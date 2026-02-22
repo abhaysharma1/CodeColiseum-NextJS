@@ -41,6 +41,7 @@ import { Spinner } from "@/components/ui/shadcn-io/spinner";
 import Link from "next/link";
 import axios from "axios";
 import { Exam } from "@/generated/prisma/client";
+import { getBackendURL } from "@/utils/utilities";
 
 export interface incomingData {
   id: string;
@@ -221,7 +222,7 @@ export default function DataTable() {
 
   const fetchAllExams = async() => {
     try {
-        const domain = process.env.NEXT_PUBLIC_BACKEND_DOMAIN
+        const domain = getBackendURL()
         const res = await axios.get(`${domain}/teacher/exam/fetchallexams`, {
           params: {
             take: take,
@@ -240,7 +241,7 @@ export default function DataTable() {
   const draftExam = async () => {
     try {
       setDraftingExam(true)
-      const domain = process.env.NEXT_PUBLIC_BACKEND_DOMAIN
+      const domain = getBackendURL()
       const res = await axios.get(`${domain}/teacher/exam/draftexam`,{withCredentials:true});
       const exam = res.data as Exam
       router.push(`/dashboard/teacher/test/edit/${exam.id}`)
