@@ -5,7 +5,6 @@ import { getBackendURL } from "./utils/utilities";
 export async function proxy(req: NextRequest) {
   const pathname = req.nextUrl.pathname;
 
-  // Configure CSP to allow GitHub assets, Monaco Editor, and inline scripts
   const backendDomain = getBackendURL();
   const cspHeader = `
     default-src 'self';
@@ -18,12 +17,14 @@ export async function proxy(req: NextRequest) {
     worker-src 'self' blob:;
   `.replace(/\s{2,}/g, " ");
 
-  // Add CSP headers for all routes to allow GitHub OAuth and Monaco Editor
   const response = NextResponse.next();
   response.headers.set("Content-Security-Policy", cspHeader);
 
-  // If it's not a protected route, return with CSP headers
-  if (!pathname.startsWith("/dashboard")) {
+  // Protect both /dashboard and /admin routes
+  const isProtected =
+    pathname.startsWith("/dashboard") || pathname.startsWith("/admin");
+
+  if (!isProtected) {
     return response;
   }
 
@@ -36,18 +37,16 @@ export async function proxy(req: NextRequest) {
       return NextResponse.redirect(new URL("/login", req.url));
     }
 
-    if (session.user.id && (pathname === "/login" || pathname === "/signup")) {
-      return NextResponse.redirect(new URL("/dashboard", req.url));
-    }
-
-    if (pathname.startsWith("/admin") && !(session.user.role === "ADMIN")) {
-      return NextResponse.redirect(new URL("/dashboard", req.url));
-    }
-
     if (!session.user.isOnboarded) {
       return NextResponse.redirect(new URL("/onboarding", req.url));
     }
 
+    // Admin route protection
+    if (pathname.startsWith("/admin") && session.user.role !== "ADMIN") {
+      return NextResponse.redirect(new URL("/dashboard", req.url));
+    }
+
+    // Root dashboard redirect by role
     if (pathname === "/dashboard") {
       if (session.user.role === "TEACHER") {
         return NextResponse.redirect(new URL("/dashboard/teacher", req.url));
@@ -57,22 +56,24 @@ export async function proxy(req: NextRequest) {
         return NextResponse.redirect(new URL("/admin/dashboard", req.url));
       }
     }
-    // ROLE BASED ACCESS
+
+    // Role-based access for /dashboard/student
     if (
       pathname.startsWith("/dashboard/student") &&
-      session.user.role != "STUDENT"
+      session.user.role !== "STUDENT"
     ) {
       return NextResponse.redirect(
-        new URL(`/dashboard/${session.user.role}`, req.url)
+        new URL(`/dashboard/${session.user.role.toLowerCase()}`, req.url)
       );
     }
 
+    // Role-based access for /dashboard/teacher
     if (
       pathname.startsWith("/dashboard/teacher") &&
-      session.user.role != "TEACHER"
+      session.user.role !== "TEACHER"
     ) {
       return NextResponse.redirect(
-        new URL(`/dashboard/${session.user.role}`, req.url)
+        new URL(`/dashboard/${session.user.role.toLowerCase()}`, req.url)
       );
     }
 
