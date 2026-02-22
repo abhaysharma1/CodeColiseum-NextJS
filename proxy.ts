@@ -30,17 +30,18 @@ export async function proxy(req: NextRequest) {
     return response;
   }
 
-  const token = req.cookies.get("better-auth.session_data")?.value;
+  const token =
+    req.cookies.get("__Secure-better-auth.session_data")?.value ||
+    req.cookies.get("better-auth.session_data")?.value;
+    
   if (!token) {
     return NextResponse.redirect(new URL("/login", req.url));
   }
 
   try {
-    
     const { payload }: any = await jwtVerify(token, secret);
 
     const user = payload.user;
-
 
     if (!user || !user.id) {
       return NextResponse.redirect(new URL("/login", req.url));
