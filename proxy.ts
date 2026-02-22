@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import { authClient } from "./lib/auth-client";
 import { getBackendURL } from "./utils/utilities";
+import { jwtVerify } from "jose";
+
+const secret = new TextEncoder().encode(process.env.BETTER_AUTH_SECRET);
 
 export async function proxy(req: NextRequest) {
   const pathname = req.nextUrl.pathname;
@@ -28,52 +30,53 @@ export async function proxy(req: NextRequest) {
     return response;
   }
 
-  try {
-    const { data: session } = await authClient.getSession({
-      fetchOptions: { headers: Object.fromEntries(req.headers) },
-    });
+  const token = req.cookies.get("better-auth.session_data")?.value;
+  if (!token) {
+    return NextResponse.redirect(new URL("/login", req.url));
+  }
 
-    if (!session?.user || !session.user.id) {
+  try {
+    
+    const { payload }: any = await jwtVerify(token, secret);
+
+    const user = payload.user;
+
+
+    if (!user || !user.id) {
       return NextResponse.redirect(new URL("/login", req.url));
     }
 
-    if (!session.user.isOnboarded) {
+    if (!user.isOnboarded) {
       return NextResponse.redirect(new URL("/onboarding", req.url));
     }
 
     // Admin route protection
-    if (pathname.startsWith("/admin") && session.user.role !== "ADMIN") {
+    if (pathname.startsWith("/admin") && user.role !== "ADMIN") {
       return NextResponse.redirect(new URL("/dashboard", req.url));
     }
 
     // Root dashboard redirect by role
     if (pathname === "/dashboard") {
-      if (session.user.role === "TEACHER") {
+      if (user.role === "TEACHER") {
         return NextResponse.redirect(new URL("/dashboard/teacher", req.url));
-      } else if (session.user.role === "STUDENT") {
+      } else if (user.role === "STUDENT") {
         return NextResponse.redirect(new URL("/dashboard/student", req.url));
-      } else if (session.user.role === "ADMIN") {
+      } else if (user.role === "ADMIN") {
         return NextResponse.redirect(new URL("/admin/dashboard", req.url));
       }
     }
 
     // Role-based access for /dashboard/student
-    if (
-      pathname.startsWith("/dashboard/student") &&
-      session.user.role !== "STUDENT"
-    ) {
+    if (pathname.startsWith("/dashboard/student") && user.role !== "STUDENT") {
       return NextResponse.redirect(
-        new URL(`/dashboard/${session.user.role.toLowerCase()}`, req.url)
+        new URL(`/dashboard/${user.role.toLowerCase()}`, req.url)
       );
     }
 
     // Role-based access for /dashboard/teacher
-    if (
-      pathname.startsWith("/dashboard/teacher") &&
-      session.user.role !== "TEACHER"
-    ) {
+    if (pathname.startsWith("/dashboard/teacher") && user.role !== "TEACHER") {
       return NextResponse.redirect(
-        new URL(`/dashboard/${session.user.role.toLowerCase()}`, req.url)
+        new URL(`/dashboard/${user.role.toLowerCase()}`, req.url)
       );
     }
 
