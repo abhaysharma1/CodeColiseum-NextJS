@@ -119,7 +119,8 @@ function TestResultsPage({ params }: { params: Promise<{ id: string }> }) {
   const [aiEvaluatingStatus, setAiEvaluatingStatus] =
     useState<AiEvalUIStatus>("NOT_STARTED");
 
-  const pollingRef = useRef(false);
+  const [aiEvaluationCompletionStatus, setAiEvaluationCompletionStatus] =
+    useState<{ completed: number; total: number } | undefined>();
 
   useEffect(() => {
     const fetchResults = async () => {
@@ -138,6 +139,8 @@ function TestResultsPage({ params }: { params: Promise<{ id: string }> }) {
         setData(results);
         if (results.examDetails.status === "finished") {
           setAiEvaluatingStatus("COMPLETED");
+        } else if (results.examDetails.status === "ai_processing") {
+          setAiEvaluatingStatus("EVALUATING");
         }
       } catch (err) {
         setError(err instanceof Error ? err.message : "An error occurred");
@@ -156,13 +159,17 @@ function TestResultsPage({ params }: { params: Promise<{ id: string }> }) {
     if (aiEvaluatingStatus !== "EVALUATING") return;
     if (!data?.examDetails.id) return;
 
-    let isMounted = true;
+    const examId = data.examDetails.id;
+    let interval: NodeJS.Timeout;
 
-    const interval = setInterval(async () => {
+    const fetchStatus = async () => {
       try {
-        const res = await axios.post(
-          "/api/teacher/aiEvaluate/getEvaluationStatus",
-          { examId: data.examDetails.id }
+        const res = await axios.get(
+          `${getBackendURL()}/teacher/exam/get-ai-evaluation-status`,
+          {
+            params: { examId },
+            withCredentials: true,
+          }
         );
 
         const { total, completed } = res.data as {
@@ -170,40 +177,39 @@ function TestResultsPage({ params }: { params: Promise<{ id: string }> }) {
           completed: number;
         };
 
-        if (!isMounted) return;
+        setAiEvaluationCompletionStatus({ total: total, completed: completed });
 
-        if (data.examDetails.status === "finished") {
-          setAiEvaluatingStatus("COMPLETED");
+        if (total === 0) {
+          clearInterval(interval);
+          setAiEvaluatingStatus("NOT_STARTED");
           return;
         }
 
         if (completed >= total) {
-          clearInterval(interval);
+          clearInterval(interval); // 🔥 IMPORTANT
           setAiEvaluatingStatus("COMPLETED");
 
           const response = await axios.get(
-            `${getBackendURL}/teacher/getresults`,
+            `${getBackendURL()}/teacher/exam/getresults`,
             {
-              params: {
-                examId: data.examDetails.id,
-              },
+              params: { examId },
               withCredentials: true,
             }
           );
 
-          if (isMounted) {
-            setData(response.data as TeacherTestResultsResponse);
-          }
+          setData(response.data as TeacherTestResultsResponse);
+          return;
         }
       } catch (error) {
         console.error("Polling error:", error);
       }
-    }, 5000);
-
-    return () => {
-      isMounted = false;
-      clearInterval(interval);
     };
+
+    fetchStatus(); // run immediately
+
+    interval = setInterval(fetchStatus, 5000);
+
+    return () => clearInterval(interval);
   }, [aiEvaluatingStatus, data?.examDetails.id]);
 
   const getStatusBadge = (status: ExamAttemptStatus) => {
@@ -386,56 +392,6 @@ function TestResultsPage({ params }: { params: Promise<{ id: string }> }) {
     toast.success("Results exported successfully");
   };
 
-  const getEvaluateUsingAIStatus = async () => {
-    if (!data?.examDetails.id) return;
-    if (pollingRef.current) return;
-
-    pollingRef.current = true;
-
-    try {
-      const res = await axios.get(
-        `${getBackendURL}/teacher/get-ai-evaluation-status`,
-        {
-          params: { examId: data.examDetails.id },
-          withCredentials: true,
-        }
-      );
-
-      const { total, completed } = res.data as {
-        total: number;
-        completed: number;
-      };
-
-      if (total === 0) {
-        setAiEvaluatingStatus("NOT_STARTED");
-        return;
-      }
-
-      if (completed >= total) {
-        setAiEvaluatingStatus("COMPLETED");
-
-        const response = await axios.get(
-          `${getBackendURL}/teacher/getresults`,
-          {
-            params: {
-              examId: data.examDetails.id,
-            },
-            withCredentials: true,
-          }
-        );
-
-        setData(response.data as TeacherTestResultsResponse);
-        return;
-      }
-
-      setAiEvaluatingStatus("EVALUATING");
-    } catch (error) {
-      console.error("Failed to get AI evaluation status:", error);
-    } finally {
-      pollingRef.current = false;
-    }
-  };
-
   const evaluateUsingAI = async () => {
     if (!data?.examDetails.id) return;
 
@@ -447,12 +403,18 @@ function TestResultsPage({ params }: { params: Promise<{ id: string }> }) {
     }
 
     try {
+      console.log("hello");
       const res = await axios.post(
-        `${getBackendURL()}/teacher/start-ai-evaluation`,
+        `${getBackendURL()}/teacher/exam/start-ai-evaluation`,
         {
           examId: data.examDetails.id,
+        },
+        {
+          withCredentials: true,
         }
       );
+
+      console.log(res.data);
 
       const { total } = res.data as { total: number };
 
@@ -538,17 +500,24 @@ function TestResultsPage({ params }: { params: Promise<{ id: string }> }) {
                 }
               >
                 <Sparkles />
-                {aiEvaluatingStatus === "NOT_STARTED"
-                  ? "Evaluate Using AI"
-                  : aiEvaluatingStatus === "EVALUATING"
-                    ? "Evaluating..."
-                    : "See AI Evaluation Results"}
+
+                {aiEvaluatingStatus === "NOT_STARTED" && "Evaluate Using AI"}
+
+                {aiEvaluatingStatus === "EVALUATING" && (
+                  <>
+                    Evaluating...
+                    {aiEvaluationCompletionStatus && (
+                      <span className="ml-2">
+                        {aiEvaluationCompletionStatus.completed} /{" "}
+                        {aiEvaluationCompletionStatus.total}
+                      </span>
+                    )}
+                  </>
+                )}
+
+                {aiEvaluatingStatus === "COMPLETED" &&
+                  "See AI Evaluation Results"}
               </Button>
-              {aiEvaluatingStatus === "EVALUATING" && (
-                <Button variant={"outline"} onClick={getEvaluateUsingAIStatus}>
-                  <IoReload />{" "}
-                </Button>
-              )}
               <Button onClick={exportToCSV} variant="outline">
                 <Download className="mr-2 h-4 w-4" />
                 Export CSV
