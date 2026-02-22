@@ -9,6 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { getBackendURL } from "@/utils/utilities";
 
 function Page({ params }: { params: Promise<{ id: string }> }) {
   const { id: examId } = use(params);
@@ -24,7 +25,7 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
     const getTestDetails = async () => {
       try {
         const res = await axios.get(
-          `/api/student/exam/exam-details?examId=${examId}`,
+          `${getBackendURL()}/student/exam/exam-details?examId=${examId}`,
           { withCredentials: true }
         );
         const det = res.data as Exam;

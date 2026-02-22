@@ -51,8 +51,6 @@ export function LoginForm({ className, setShowVerifyBox, ...props }: props) {
       {
         email: formData.email,
         password: formData.password,
-
-        callbackURL: "/dashboard",
         rememberMe: true,
       },
       {
@@ -68,20 +66,18 @@ export function LoginForm({ className, setShowVerifyBox, ...props }: props) {
 
     toast.dismiss();
 
-    if (data?.token) {
-      setLoading(false);
-      toast.success("Logged In Successfully Redirecting...");
-    }
-
     if (error) {
       setLoading(false);
       console.log(error);
       toast.error("Couldn't log In");
       toast.error(error.message);
+      return;
     }
+
+    await new Promise((r) => setTimeout(r, 50));
+
+    router.push("/dashboard");
   };
-
-
 
   const verifybox = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();

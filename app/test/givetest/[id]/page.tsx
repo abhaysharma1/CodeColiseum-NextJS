@@ -8,6 +8,7 @@ import {
   RunTestCase,
 } from "@/interfaces/DB Schema";
 import handleExamError from "@/utils/examErrorHandler";
+import { getBackendURL } from "@/utils/utilities";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState, useRef, use } from "react";
@@ -58,7 +59,7 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
     const getTestDetails = async () => {
       try {
         const res = await axios.get(
-          `/api/student/exam/exam-details?examId=${examId}`,
+          `${getBackendURL()}/student/exam/exam-details?examId=${examId}`,
           { withCredentials: true }
         );
         setExamDetails(res.data as Exam);
@@ -85,7 +86,7 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
     const run = async () => {
       try {
         const attempt = await axios.post(
-          "/api/student/exam/start-test",
+          `${getBackendURL()}/student/exam/start-test`,
           {
             examId: examDetails.id,
           },
@@ -95,7 +96,7 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
 
         if (attempt.data) {
           const problems = await axios.post(
-            "/api/student/exam/test-problems",
+            `${getBackendURL()}/student/exam/test-problems`,
             {
               examId: examDetails.id,
             },
@@ -136,7 +137,7 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
       const getDescriptionData = async () => {
         try {
           const res = await axios.get(
-            `/api/student/exam/problem-description?problemId=${problemId}`,
+            `${getBackendURL()}/student/exam/problem-description?problemId=${problemId}`,
             { withCredentials: true }
           );
           setDescriptionData(res.data as Problem);
@@ -151,7 +152,7 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
       const getTestCases = async () => {
         try {
           const res = await axios.get(
-            `/api/student/exam/test-cases?questionId=${problemId}`,
+            `${getBackendURL()}/student/exam/test-cases?questionId=${problemId}`,
             { withCredentials: true }
           );
           setTestCases(res.data as RunTestCase);
@@ -198,7 +199,7 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
       if (examDetails && examAttempt) {
         console.log(error, sebError);
         axios.post(
-          "/api/student/exam/heartbeat",
+          `${getBackendURL()}/student/exam/heartbeat`,
           {},
           { withCredentials: true }
         );
@@ -213,7 +214,7 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
 
     const problemId = examProblems[currProblem - 1].problemId;
     const res = await axios.post(
-      "/api/problems/getTemplateCode",
+      `${getBackendURL()}/problems/gettemplatecode`,
       {
         languageId: getLanguageId(language),
         problemId: problemId,
@@ -271,7 +272,7 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
       };
 
       try {
-        const response = await axios.post("/api/problems/runcode", sentData, {
+        const response = await axios.post(`${getBackendURL()}/problems/runcode`, sentData, {
           withCredentials: true,
         });
         setRunningResults(response.data as runTestCaseType);
@@ -311,9 +312,13 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
     };
     try {
       setCurrentTab("submitcode");
-      const res = await axios.post("/api/student/exam/submit-code", sentData, {
-        withCredentials: true,
-      });
+      const res = await axios.post(
+        `${getBackendURL()}/student/exam/submit-code`,
+        sentData,
+        {
+          withCredentials: true,
+        }
+      );
       setSubmittingResults(res.data as SubmitCodeResponse);
       console.log(res.data);
     } catch (error: any) {
@@ -330,7 +335,7 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
     try {
       setSubmittingExam(true);
       const res = await axios.post(
-        "/api/student/exam/submit-test",
+        `${getBackendURL()}/student/exam/submit-test`,
         {
           examId: examDetails?.id,
         },

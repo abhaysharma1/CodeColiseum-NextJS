@@ -3,6 +3,14 @@ import { prismaAdapter } from "better-auth/adapters/prisma";
 import transporter from "./nodemailer";
 
 export const auth = betterAuth({
+  advanced: {
+    defaultCookieAttributes: {
+      domain: ".codecoliseum.in", // ← THIS FIXES EVERYTHING
+      secure: true,
+      sameSite: "none", // recommended for cross-subdomain
+      path: "/",
+    },
+  },
   session: {
     cookieCache: {
       enabled: true,

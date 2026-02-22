@@ -15,6 +15,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import axios from "axios";
+import { getBackendURL } from "@/utils/utilities";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import TestSubmitCode from "./TestSubmitCode";
@@ -116,7 +117,7 @@ function Description({
       try {
         setLoadingSubmissions(true);
         const response = await axios.get<GetSubmissionsResponse>(
-          `/api/student/exam/submissions?attemptId=${attemptId}&problemId=${problemId}`,
+          `${getBackendURL()}/student/exam/submissions?attemptId=${attemptId}&problemId=${problemId}`,
           { withCredentials: true }
         );
         setSubmissions(response.data.submissions);
