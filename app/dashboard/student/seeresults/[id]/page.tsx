@@ -304,7 +304,7 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
               <div>
                 <div className="text-2xl font-bold mb-1 flex justify-between">
                   {examDetails.title}
-                  {examDetails.examStatus === "FINISHED" && (
+                  {examDetails.examStatus === "finished" && (
                     <Button
                       variant={"secondary"}
                       onClick={() =>

@@ -1,7 +1,7 @@
 "use client";
 
 import axios from "axios";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import React, { useEffect, useMemo, useState } from "react";
 import {
   CheckCircle2,
@@ -15,6 +15,9 @@ import {
   FileCode,
   Target,
   Zap,
+  ArrowBigLeft,
+  ArrowBigLeftIcon,
+  ArrowLeft,
 } from "lucide-react";
 
 import {
@@ -40,6 +43,7 @@ import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeHighlight from "rehype-highlight";
 import { getBackendURL } from "@/utils/utilities";
+import { Button } from "@/components/ui/button";
 
 type Submission = {
   id: string;
@@ -86,6 +90,8 @@ function Page() {
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const router = useRouter();
 
   useEffect(() => {
     if (!id) return;
@@ -169,6 +175,9 @@ function Page() {
         {/* Header Section */}
         <div className="space-y-4">
           <div className="flex items-center gap-2">
+            <Button variant="outline" onClick={() => router.back()} className="mr-2">
+              <ArrowLeft className="h-4 w-4" />
+            </Button>
             <Sparkles className="h-6 w-6 text-primary" />
             <h1 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
               AI Evaluation Results
