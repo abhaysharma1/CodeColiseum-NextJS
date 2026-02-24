@@ -79,7 +79,8 @@ function AiReviewResult({
 
   if (
     aiReviewResult.status === "PENDING" ||
-    aiReviewResult.data?.status === "PENDING"
+    aiReviewResult.data?.status === "PENDING" ||
+    performingAiReview
   ) {
     return (
       <div className="flex flex-col items-center justify-center gap-3 py-16 text-muted-foreground">
@@ -92,7 +93,8 @@ function AiReviewResult({
   const review = aiReviewResult.data?.data;
   if (!review) return null;
 
-  const score = review.overall_score ?? 0;
+  const offsetScore = review.overall_score * 10;
+  const score = offsetScore ?? 0;
   const scoreColor =
     score >= 80 ? "bg-green-400" : score >= 50 ? "bg-yellow-400" : "bg-red-400";
 
