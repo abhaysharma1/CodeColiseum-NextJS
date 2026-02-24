@@ -105,7 +105,7 @@ function QuestionSolvingPageContent({
       setTabPage("aireviewresult");
       setPerformingAiReview(true);
       const res = await axios.post(
-        `${getBackendURL()}/problems/problems/start-ai-review`,
+        `${getBackendURL()}/problems/start-ai-review`,
         {
           problemId: id,
           code: code,
@@ -211,6 +211,7 @@ function QuestionSolvingPageContent({
             setLanguage={setLanguage}
             language={language}
             startAiReview={startAiReview}
+            performingAiReview={performingAiReview}
           />
         </div>
       </div>

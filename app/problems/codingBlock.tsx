@@ -145,6 +145,7 @@ interface CodingBlockProps {
   setLanguage: (data: string) => void;
   language: string;
   startAiReview: () => void;
+  performingAiReview: boolean;
 }
 
 function CodingBlock({
@@ -158,6 +159,7 @@ function CodingBlock({
   setLanguage,
   language,
   startAiReview,
+  performingAiReview,
 }: CodingBlockProps) {
   const [editorTheme, setEditorTheme] = useState("Sunburst");
   const [editorInFocus, setEditorInFocus] = useState(false);
@@ -497,7 +499,7 @@ function CodingBlock({
               </Button>
               <ButtonGroup className="h-[70%]">
                 <Button
-                  disabled={running}
+                  disabled={running || running || performingAiReview}
                   variant="outline"
                   className="h-[100%]"
                   onClick={onRun}
@@ -506,7 +508,7 @@ function CodingBlock({
                 </Button>
 
                 <Button
-                  disabled={submitting}
+                  disabled={submitting || running || performingAiReview}
                   variant="default"
                   className="h-[100%]"
                   onClick={onSubmit}
