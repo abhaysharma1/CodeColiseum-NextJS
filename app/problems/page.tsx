@@ -11,6 +11,7 @@ import { runTestCaseType, submitTestCaseType } from "./interface";
 import { AuthProvider } from "@/context/authcontext";
 import { ProblemSubmissionItem } from "./interface";
 import { getBackendURL } from "@/utils/utilities";
+import { Eraser } from "lucide-react";
 
 interface descriptionData {
   id: string;
@@ -19,6 +20,22 @@ interface descriptionData {
   description: string;
   title: string;
 }
+
+export type aiReviewResult = {
+  status: "COMPLETED" | "PENDING";
+  data: {
+    status: "COMPLETED" | "PENDING";
+    data: {
+      correctness: String;
+      time_complexity: String;
+      space_complexity: String;
+      edge_cases_missing: String[];
+      code_quality: String;
+      optimization_suggestions: String[];
+      overall_score: number;
+    };
+  };
+};
 
 function QuestionSolvingPageContent({
   searchParams,
@@ -45,6 +62,20 @@ function QuestionSolvingPageContent({
     ProblemSubmissionItem[] | undefined
   >(undefined);
 
+  const [performingAiReview, setPerformingAiReview] = useState(false);
+  const [aiReviewResult, setAiReviewResult] = useState<
+    aiReviewResult | undefined
+  >();
+  const [startAiReviewResponse, setStartAiReviewResponse] = useState<
+    | {
+        success: boolean;
+        jobId: string;
+      }
+    | undefined
+  >();
+  const [code, setCode] = useState<string>("");
+  const [language, setLanguage] = useState("cpp");
+
   const getProblemDescription = async () => {
     try {
       const response = await axios.get(
@@ -65,6 +96,75 @@ function QuestionSolvingPageContent({
     }
   };
 
+  const startAiReview = async () => {
+    if (!code || !id || !language) {
+      toast.error("Please Write some code");
+      return;
+    }
+    try {
+      setTabPage("aireviewresult");
+      setPerformingAiReview(true);
+      const res = await axios.post(
+        `${getBackendURL()}/problems/problems/start-ai-review`,
+        {
+          problemId: id,
+          code: code,
+          language: language,
+        },
+        { withCredentials: true }
+      );
+      const data = res.data as {
+        success: boolean;
+        jobId: string;
+      };
+
+      if (data.success) {
+        setStartAiReviewResponse(data);
+      } else {
+        toast.error("Cannot Review at this time");
+      }
+    } catch (error) {
+      console.log(error);
+      setPerformingAiReview(false);
+    }
+  };
+
+  const getAiReview = async () => {
+    if (!startAiReviewResponse) {
+      return;
+    }
+    try {
+      const res = await axios.get(
+        `${getBackendURL()}/problems/practice-ai-review-status`,
+        {
+          params: {
+            jobId: startAiReviewResponse.jobId,
+          },
+          withCredentials: true,
+        }
+      );
+      const data = res.data as aiReviewResult;
+
+      setAiReviewResult(data);
+      if (data.status === "COMPLETED") {
+        setPerformingAiReview(false);
+      }
+    } catch (error) {
+      toast.error("Cannot fetch Review Status");
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    if (!performingAiReview || !startAiReviewResponse) return;
+
+    const intervalId = setInterval(async () => {
+      await getAiReview();
+    }, 3000);
+
+    return () => clearInterval(intervalId);
+  }, [performingAiReview, startAiReviewResponse]);
+
   useEffect(() => {
     if (descriptionData[0]?.id) {
       setLoadingDetails(false);
@@ -74,11 +174,6 @@ function QuestionSolvingPageContent({
   useEffect(() => {
     getProblemDescription();
   }, []);
-
-  useEffect(() => {
-    console.log(submissionRefetch);
-    console.log(submissions);
-  }, [submissions]);
 
   return (
     <div>
@@ -100,6 +195,8 @@ function QuestionSolvingPageContent({
             setSubmissionRefetch={setSubmissionRefetch}
             setSubmissions={setSubmissions}
             submissions={submissions}
+            aiReviewResult={aiReviewResult}
+            performingAiReview={performingAiReview}
           />
         </div>
         <div>
@@ -109,6 +206,11 @@ function QuestionSolvingPageContent({
             setSubmitTestCaseResults={setSubmitTestCaseResults}
             setTabPage={setTabPage}
             setSubmissionRefetch={setSubmissionRefetch}
+            setCode={setCode}
+            code={code}
+            setLanguage={setLanguage}
+            language={language}
+            startAiReview={startAiReview}
           />
         </div>
       </div>

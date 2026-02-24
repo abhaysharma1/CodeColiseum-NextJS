@@ -11,6 +11,8 @@ import SubmitCode from "./submitCode";
 import { runTestCaseType, submitTestCaseType } from "./interface";
 import { Submissions } from "./submissions";
 import { ProblemSubmissionItem } from "./interface";
+import { aiReviewResult } from "./page";
+import AiReviewResult from "./aiReviewResult";
 
 interface descriptionData {
   id: string;
@@ -31,6 +33,8 @@ function DetailsBlock({
   setSubmissionRefetch,
   submissions,
   setSubmissions,
+  aiReviewResult,
+  performingAiReview,
 }: {
   data: descriptionData[];
   loadingDetails: boolean;
@@ -42,6 +46,8 @@ function DetailsBlock({
   setSubmissionRefetch: (data: boolean) => void;
   submissions: ProblemSubmissionItem[] | undefined;
   setSubmissions: (data: ProblemSubmissionItem[] | undefined) => void;
+  aiReviewResult: aiReviewResult | undefined;
+  performingAiReview: boolean;
 }) {
   return (
     <div>
@@ -89,6 +95,13 @@ function DetailsBlock({
               className="cursor-pointer"
             >
               Submissions
+            </TabsTrigger>
+            <TabsTrigger
+              value="aireviewresult"
+              onClick={() => setTabPage("aireviewresult")}
+              className="cursor-pointer"
+            >
+              AI Review Result
             </TabsTrigger>
           </TabsList>
           <TabsContent value="description" className="my-4 mx-1">
@@ -147,6 +160,9 @@ function DetailsBlock({
               submissions={submissions}
               setSubmissions={setSubmissions}
             />
+          </TabsContent>
+          <TabsContent value="aireviewresult">
+            <AiReviewResult aiReviewResult={aiReviewResult} performingAiReview={performingAiReview}/>
           </TabsContent>
         </Tabs>
       </div>

@@ -68,7 +68,7 @@ import TomorrowTheme from "@/utils/themes/Tomorrow.json";
 import TwilightTheme from "@/utils/themes/Twilight.json";
 import UpstreamSunburstTheme from "@/utils/themes/Upstream Sunburst.json";
 import VibrantInkTheme from "@/utils/themes/Vibrant Ink.json";
-import { Palette } from "lucide-react";
+import { Palette, Sparkles } from "lucide-react";
 import { ThemeName, THEMES } from "@/themes";
 import { useCustomTheme } from "@/hooks/use-custom-theme";
 import { getBackendURL } from "@/utils/utilities";
@@ -140,6 +140,11 @@ interface CodingBlockProps {
   setSubmitTestCaseResults: (data: submitTestCaseType | undefined) => void;
   setTabPage: (data: string) => void;
   setSubmissionRefetch: (data: boolean) => void;
+  setCode: (data: string) => void;
+  code: string;
+  setLanguage: (data: string) => void;
+  language: string;
+  startAiReview: () => void;
 }
 
 function CodingBlock({
@@ -148,10 +153,13 @@ function CodingBlock({
   setSubmitTestCaseResults,
   setTabPage,
   setSubmissionRefetch,
+  setCode,
+  code,
+  setLanguage,
+  language,
+  startAiReview,
 }: CodingBlockProps) {
   const [editorTheme, setEditorTheme] = useState("Sunburst");
-  const [code, setCode] = useState<string>("");
-  const [language, setLanguage] = useState("cpp");
   const [editorInFocus, setEditorInFocus] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [running, setRunning] = useState(false);
@@ -481,50 +489,32 @@ function CodingBlock({
               <Button variant={"outline"} className="h-8.5" onClick={resetCode}>
                 Clear
               </Button>
-              {(language === "javascript" || language === "typescript") && (
-                <Button
-                  className="ml-2 h-[70%] animate-fade-right animate-once"
-                  onClick={() => {
-                    if (editorInstance) {
-                      try {
-                        editorInstance
-                          .getAction("editor.action.formatDocument")
-                          ?.run();
-                      } catch (error) {
-                        console.error("Format error:", error);
-                        toast.error("Failed to format code");
-                      }
-                    } else {
-                      toast.error("Editor not ready");
-                    }
-                  }}
-                  variant="outline"
-                  title="Format Code (Shift+Alt+F)"
-                >
-                  <MdFormatAlignLeft />
-                </Button>
-              )}
             </div>
-
-            <ButtonGroup className="h-[70%]">
-              <Button
-                disabled={running}
-                variant="outline"
-                className="h-[100%]"
-                onClick={onRun}
-              >
-                {running ? "Running" : "Run"}
+            <div className="flex gap-3">
+              <Button onClick={startAiReview} variant={"outline"}>
+                <Sparkles />
+                Start AI Review
               </Button>
+              <ButtonGroup className="h-[70%]">
+                <Button
+                  disabled={running}
+                  variant="outline"
+                  className="h-[100%]"
+                  onClick={onRun}
+                >
+                  {running ? "Running" : "Run"}
+                </Button>
 
-              <Button
-                disabled={submitting}
-                variant="default"
-                className="h-[100%]"
-                onClick={onSubmit}
-              >
-                {submitting ? "Submitting" : "Submit"}
-              </Button>
-            </ButtonGroup>
+                <Button
+                  disabled={submitting}
+                  variant="default"
+                  className="h-[100%]"
+                  onClick={onSubmit}
+                >
+                  {submitting ? "Submitting" : "Submit"}
+                </Button>
+              </ButtonGroup>
+            </div>
           </div>
         </div>
       </div>
