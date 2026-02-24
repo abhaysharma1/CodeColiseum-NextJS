@@ -4,6 +4,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import {
   CheckCircle2,
   Clock,
@@ -14,6 +16,8 @@ import {
   Star,
   Loader2,
 } from "lucide-react";
+import Markdown from "react-markdown";
+import rehypeHighlight from "rehype-highlight";
 
 function ScoreRing({ score }: { score: number }) {
   const color =
@@ -37,6 +41,43 @@ function ScoreRing({ score }: { score: number }) {
   );
 }
 
+// const mdComponents: React.ComponentProps<typeof ReactMarkdown>["components"] = {
+//   p: ({ children }) => (
+//     <p className="text-sm text-foreground leading-relaxed">{children}</p>
+//   ),
+//   strong: ({ children }) => (
+//     <strong className="font-semibold">{children}</strong>
+//   ),
+//   em: ({ children }) => <em className="italic">{children}</em>,
+//   ul: ({ children }) => (
+//     <ul className="list-disc list-inside text-sm space-y-0.5">{children}</ul>
+//   ),
+//   ol: ({ children }) => (
+//     <ol className="list-decimal list-inside text-sm space-y-0.5">{children}</ol>
+//   ),
+//   li: ({ children }) => <li className="text-foreground/90">{children}</li>,
+//   code: ({ children }) => (
+//     <code className="bg-muted text-xs px-1 py-0.5 rounded font-mono">
+//       {children}
+//     </code>
+//   ),
+//   pre: ({ children }) => (
+//     <pre className="bg-muted text-xs p-2 rounded overflow-x-auto font-mono">
+//       {children}
+//     </pre>
+//   ),
+// };
+
+function Md({ value }: { value: string }) {
+  return (
+    <div className="markdown-wrapper text-foreground mb-6">
+      <Markdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeHighlight]}>
+        {value}
+      </Markdown>
+    </div>
+  );
+}
+
 function InfoRow({
   icon,
   label,
@@ -53,9 +94,9 @@ function InfoRow({
         <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
           {label}
         </span>
-        <span className="text-sm text-foreground leading-relaxed">
-          {String(value)}
-        </span>
+        <div className="leading-relaxed">
+          <Md value={String(value)} />
+        </div>
       </div>
     </div>
   );
@@ -182,7 +223,9 @@ function AiReviewResult({
             {review.edge_cases_missing.map((ec, i) => (
               <div key={i} className="flex items-start gap-2">
                 <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-yellow-400 shrink-0" />
-                <span className="text-sm text-foreground/90">{String(ec)}</span>
+                <div className="text-foreground/90">
+                  <Md value={String(ec)} />
+                </div>
               </div>
             ))}
           </CardContent>
@@ -204,7 +247,9 @@ function AiReviewResult({
                 <span className="text-blue-400 font-bold text-xs mt-0.5 shrink-0">
                   {i + 1}.
                 </span>
-                <span className="text-sm text-foreground/90">{String(s)}</span>
+                <div className="text-foreground/90">
+                  <Md value={String(s)} />
+                </div>
               </div>
             ))}
           </CardContent>
