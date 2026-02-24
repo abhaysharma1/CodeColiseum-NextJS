@@ -22,6 +22,11 @@ const navigation = [
     href: "/admin/uploadComplexityGenerator",
     icon: IconSparkles,
   },
+  {
+    name: "Bulk Sign Up",
+    href: "/admin/bulkSignUp",
+    icon: IconSparkles,
+  },
 ];
 
 export default function Layout({ children }: { children: ReactNode }) {
@@ -56,7 +61,7 @@ export default function Layout({ children }: { children: ReactNode }) {
                   variant="ghost"
                   className={cn(
                     "flex w-full justify-start gap-2 px-2 py-2 text-sm font-normal",
-                    isActive && "bg-muted text-foreground",
+                    isActive && "bg-muted text-foreground"
                   )}
                 >
                   <Icon className="h-4 w-4 text-muted-foreground" />
