@@ -630,7 +630,7 @@ function TestResultsPage({ params }: { params: Promise<{ id: string }> }) {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <ScrollArea className="h-fit max-h-[600px]">
+                  <ScrollArea className="h-fit max-h-[600px] overflow-y-scroll">
                     <Table>
                       <TableHeader>
                         <TableRow>
@@ -645,7 +645,7 @@ function TestResultsPage({ params }: { params: Promise<{ id: string }> }) {
                           <TableHead>Last Activity</TableHead>
                         </TableRow>
                       </TableHeader>
-                      <TableBody>
+                      <TableBody >
                         {data.studentResults.map((student, index) => (
                           <TableRow key={student.attemptId}>
                             <TableCell className="font-medium">
