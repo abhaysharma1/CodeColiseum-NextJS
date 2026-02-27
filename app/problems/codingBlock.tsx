@@ -493,17 +493,17 @@ function CodingBlock({
               </Button>
             </div>
             <div className="flex gap-3">
-              <Button
+              {/* <Button
                 onClick={startAiReview}
                 variant={"outline"}
                 disabled={running || running || performingAiReview}
               >
                 <Sparkles />
                 Start AI Review
-              </Button>
+              </Button> */}
               <ButtonGroup className="h-[70%]">
                 <Button
-                  disabled={running || running || performingAiReview}
+                  disabled={submitting || running || performingAiReview}
                   variant="outline"
                   className="h-[100%]"
                   onClick={onRun}

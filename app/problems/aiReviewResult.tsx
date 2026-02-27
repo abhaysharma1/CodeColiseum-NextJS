@@ -109,6 +109,7 @@ function AiReviewResult({
   aiReviewResult: aiReviewResult | undefined;
   performingAiReview: boolean;
 }) {
+
   if (!aiReviewResult) {
     return (
       <div className="flex flex-col items-center justify-center gap-3 py-16 text-muted-foreground">

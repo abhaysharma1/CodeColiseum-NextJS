@@ -55,12 +55,20 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
 
   const [templateCode, setTemplateCode] = useState("");
 
+  const [isAiEnabled, setIsAiEnabled] = useState(false);
+  const [groupId, setGroupId] = useState<string>("");
+
   useEffect(() => {
     const getTestDetails = async () => {
       try {
         const res = await axios.get(
-          `${getBackendURL()}/student/exam/exam-details?examId=${examId}`,
-          { withCredentials: true }
+          `${getBackendURL()}/student/exam/exam-details`,
+          {
+            params: {
+              examId: examId,
+            },
+            withCredentials: true,
+          }
         );
         setExamDetails(res.data as Exam);
       } catch (err: any) {
@@ -83,7 +91,7 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
   useEffect(() => {
     if (!examDetails?.id) return;
 
-    const run = async () => {
+    const startTest = async () => {
       try {
         const attempt = await axios.post(
           `${getBackendURL()}/student/exam/start-test`,
@@ -112,7 +120,28 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
       }
     };
 
-    run();
+    const getAiEnabledStatusAndGroupId = async () => {
+      try {
+        const res = await axios.get(
+          `${getBackendURL()}/student/exam/ai/isenabledandgetgroupid`,
+          {
+            params: {
+              examId: examDetails.id,
+            },
+            withCredentials: true,
+          }
+        );
+
+        const data = res.data as { enabled: boolean; groupId?: string };
+        setGroupId(data.groupId ?? "");
+        setIsAiEnabled(data.enabled);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    startTest();
+    getAiEnabledStatusAndGroupId();
   }, [examDetails?.id]);
 
   useEffect(() => {
@@ -164,6 +193,7 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
       getDescriptionData();
       getTestCases();
       getTemplateCode();
+
       setRunningResults(undefined);
       setSubmittingResults(undefined);
     }
@@ -272,9 +302,13 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
       };
 
       try {
-        const response = await axios.post(`${getBackendURL()}/problems/runcode`, sentData, {
-          withCredentials: true,
-        });
+        const response = await axios.post(
+          `${getBackendURL()}/problems/runcode`,
+          sentData,
+          {
+            withCredentials: true,
+          }
+        );
         setRunningResults(response.data as runTestCaseType);
       } catch (error) {
         console.log(error);
@@ -436,6 +470,11 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
             submittingResults={submittingResults}
             currentTab={currentTab}
             setCurrentTab={setCurrentTab}
+            isAiEnabled={isAiEnabled}
+            groupId={groupId}
+            examId={examId}
+            code={code}
+            language={language}
           />
         </div>
         <div className="flex-1">

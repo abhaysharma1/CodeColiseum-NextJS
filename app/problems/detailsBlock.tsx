@@ -96,13 +96,13 @@ function DetailsBlock({
             >
               Submissions
             </TabsTrigger>
-            <TabsTrigger
+            {/* <TabsTrigger
               value="aireviewresult"
               onClick={() => setTabPage("aireviewresult")}
               className="cursor-pointer"
             >
               AI Review Result
-            </TabsTrigger>
+            </TabsTrigger> */}
           </TabsList>
           <TabsContent value="description" className="my-4 mx-1">
             {loadingDetails ? (
@@ -161,9 +161,9 @@ function DetailsBlock({
               setSubmissions={setSubmissions}
             />
           </TabsContent>
-          <TabsContent value="aireviewresult">
+          {/* <TabsContent value="aireviewresult">
             <AiReviewResult aiReviewResult={aiReviewResult} performingAiReview={performingAiReview}/>
-          </TabsContent>
+          </TabsContent> */}
         </Tabs>
       </div>
     </div>

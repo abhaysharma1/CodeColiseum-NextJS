@@ -19,6 +19,7 @@ import { getBackendURL } from "@/utils/utilities";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import TestSubmitCode from "./TestSubmitCode";
+import AiChatBot from "./aiChatbot";
 
 export type SubmissionHistoryItem = {
   id: string;
@@ -80,6 +81,11 @@ function Description({
   submittingResults,
   currentTab,
   setCurrentTab,
+  isAiEnabled,
+  groupId,
+  examId,
+  code,
+  language,
 }: {
   descriptionData: Problem | undefined;
   testcases: RunTestCase | undefined;
@@ -89,6 +95,11 @@ function Description({
   submittingResults: any;
   currentTab: string;
   setCurrentTab: (data: string) => void;
+  isAiEnabled: boolean;
+  groupId: string;
+  examId: string;
+  code: string;
+  language: string;
 }) {
   const [jsonCases, setJsonCases] = useState<TestCaseItem[] | undefined>();
   const [submissions, setSubmissions] = useState<SubmissionHistoryItem[]>([]);
@@ -191,6 +202,14 @@ function Description({
             >
               Test Cases
             </TabsTrigger>
+            {isAiEnabled && (
+              <TabsTrigger
+                value="aichat"
+                onClick={() => setCurrentTab("aichat")}
+              >
+                AI Assist
+              </TabsTrigger>
+            )}
             <TabsTrigger
               value="runresults"
               onClick={() => setCurrentTab("runresults")}
@@ -487,6 +506,17 @@ function Description({
               )}
             </div>
           </TabsContent>
+          {isAiEnabled && (
+            <TabsContent value="aichat" className="my-4 mx-1">
+              <AiChatBot
+                groupId={groupId}
+                examId={examId}
+                problemId={problemId ?? ""}
+                code={code}
+                language={language}
+              />
+            </TabsContent>
+          )}
         </Tabs>
       </div>
     </div>
