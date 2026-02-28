@@ -96,7 +96,7 @@ function AiChatBot({
 
         try {
           const res = await axios.get(
-            `${getBackendURL()}/student/exam/ai/chat`,
+            `${getBackendURL()}/student/exam/ai/chat/status`,
             {
               params: { examId: msgExamId, problemId: msgProblemId },
               withCredentials: true,
@@ -105,7 +105,12 @@ function AiChatBot({
 
           const data = res.data as {
             status: string;
-            message?: { id: string; content: string; createdAt: string };
+            message?: {
+              id: string;
+              content: string;
+              createdAt: string;
+              role: string;
+            };
           };
 
           if (data.status === "COMPLETED" && data.message) {
