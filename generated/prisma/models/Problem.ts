@@ -234,6 +234,7 @@ export type ProblemWhereInput = {
   driverCode?: Prisma.DriverCodeListRelationFilter
   referenceSolutions?: Prisma.ReferenceSolutionListRelationFilter
   problemTestGenerators?: Prisma.XOR<Prisma.ProblemTestGeneratorNullableScalarRelationFilter, Prisma.ProblemTestGeneratorWhereInput> | null
+  aiconversations?: Prisma.AIConversationListRelationFilter
 }
 
 export type ProblemOrderByWithRelationInput = {
@@ -253,6 +254,7 @@ export type ProblemOrderByWithRelationInput = {
   driverCode?: Prisma.driverCodeOrderByRelationAggregateInput
   referenceSolutions?: Prisma.referenceSolutionOrderByRelationAggregateInput
   problemTestGenerators?: Prisma.ProblemTestGeneratorOrderByWithRelationInput
+  aiconversations?: Prisma.AIConversationOrderByRelationAggregateInput
 }
 
 export type ProblemWhereUniqueInput = Prisma.AtLeast<{
@@ -275,6 +277,7 @@ export type ProblemWhereUniqueInput = Prisma.AtLeast<{
   driverCode?: Prisma.DriverCodeListRelationFilter
   referenceSolutions?: Prisma.ReferenceSolutionListRelationFilter
   problemTestGenerators?: Prisma.XOR<Prisma.ProblemTestGeneratorNullableScalarRelationFilter, Prisma.ProblemTestGeneratorWhereInput> | null
+  aiconversations?: Prisma.AIConversationListRelationFilter
 }, "id" | "number">
 
 export type ProblemOrderByWithAggregationInput = {
@@ -320,6 +323,7 @@ export type ProblemCreateInput = {
   driverCode?: Prisma.driverCodeCreateNestedManyWithoutProblemInput
   referenceSolutions?: Prisma.referenceSolutionCreateNestedManyWithoutProblemInput
   problemTestGenerators?: Prisma.ProblemTestGeneratorCreateNestedOneWithoutProblemInput
+  aiconversations?: Prisma.AIConversationCreateNestedManyWithoutProblemInput
 }
 
 export type ProblemUncheckedCreateInput = {
@@ -339,6 +343,7 @@ export type ProblemUncheckedCreateInput = {
   driverCode?: Prisma.driverCodeUncheckedCreateNestedManyWithoutProblemInput
   referenceSolutions?: Prisma.referenceSolutionUncheckedCreateNestedManyWithoutProblemInput
   problemTestGenerators?: Prisma.ProblemTestGeneratorUncheckedCreateNestedOneWithoutProblemInput
+  aiconversations?: Prisma.AIConversationUncheckedCreateNestedManyWithoutProblemInput
 }
 
 export type ProblemUpdateInput = {
@@ -358,6 +363,7 @@ export type ProblemUpdateInput = {
   driverCode?: Prisma.driverCodeUpdateManyWithoutProblemNestedInput
   referenceSolutions?: Prisma.referenceSolutionUpdateManyWithoutProblemNestedInput
   problemTestGenerators?: Prisma.ProblemTestGeneratorUpdateOneWithoutProblemNestedInput
+  aiconversations?: Prisma.AIConversationUpdateManyWithoutProblemNestedInput
 }
 
 export type ProblemUncheckedUpdateInput = {
@@ -377,6 +383,7 @@ export type ProblemUncheckedUpdateInput = {
   driverCode?: Prisma.driverCodeUncheckedUpdateManyWithoutProblemNestedInput
   referenceSolutions?: Prisma.referenceSolutionUncheckedUpdateManyWithoutProblemNestedInput
   problemTestGenerators?: Prisma.ProblemTestGeneratorUncheckedUpdateOneWithoutProblemNestedInput
+  aiconversations?: Prisma.AIConversationUncheckedUpdateManyWithoutProblemNestedInput
 }
 
 export type ProblemCreateManyInput = {
@@ -598,6 +605,20 @@ export type ProblemUpdateOneRequiredWithoutTagsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.ProblemUpdateToOneWithWhereWithoutTagsInput, Prisma.ProblemUpdateWithoutTagsInput>, Prisma.ProblemUncheckedUpdateWithoutTagsInput>
 }
 
+export type ProblemCreateNestedOneWithoutAiconversationsInput = {
+  create?: Prisma.XOR<Prisma.ProblemCreateWithoutAiconversationsInput, Prisma.ProblemUncheckedCreateWithoutAiconversationsInput>
+  connectOrCreate?: Prisma.ProblemCreateOrConnectWithoutAiconversationsInput
+  connect?: Prisma.ProblemWhereUniqueInput
+}
+
+export type ProblemUpdateOneRequiredWithoutAiconversationsNestedInput = {
+  create?: Prisma.XOR<Prisma.ProblemCreateWithoutAiconversationsInput, Prisma.ProblemUncheckedCreateWithoutAiconversationsInput>
+  connectOrCreate?: Prisma.ProblemCreateOrConnectWithoutAiconversationsInput
+  upsert?: Prisma.ProblemUpsertWithoutAiconversationsInput
+  connect?: Prisma.ProblemWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ProblemUpdateToOneWithWhereWithoutAiconversationsInput, Prisma.ProblemUpdateWithoutAiconversationsInput>, Prisma.ProblemUncheckedUpdateWithoutAiconversationsInput>
+}
+
 export type ProblemCreateWithoutTestCaseInput = {
   id?: string
   number: number
@@ -614,6 +635,7 @@ export type ProblemCreateWithoutTestCaseInput = {
   driverCode?: Prisma.driverCodeCreateNestedManyWithoutProblemInput
   referenceSolutions?: Prisma.referenceSolutionCreateNestedManyWithoutProblemInput
   problemTestGenerators?: Prisma.ProblemTestGeneratorCreateNestedOneWithoutProblemInput
+  aiconversations?: Prisma.AIConversationCreateNestedManyWithoutProblemInput
 }
 
 export type ProblemUncheckedCreateWithoutTestCaseInput = {
@@ -632,6 +654,7 @@ export type ProblemUncheckedCreateWithoutTestCaseInput = {
   driverCode?: Prisma.driverCodeUncheckedCreateNestedManyWithoutProblemInput
   referenceSolutions?: Prisma.referenceSolutionUncheckedCreateNestedManyWithoutProblemInput
   problemTestGenerators?: Prisma.ProblemTestGeneratorUncheckedCreateNestedOneWithoutProblemInput
+  aiconversations?: Prisma.AIConversationUncheckedCreateNestedManyWithoutProblemInput
 }
 
 export type ProblemCreateOrConnectWithoutTestCaseInput = {
@@ -666,6 +689,7 @@ export type ProblemUpdateWithoutTestCaseInput = {
   driverCode?: Prisma.driverCodeUpdateManyWithoutProblemNestedInput
   referenceSolutions?: Prisma.referenceSolutionUpdateManyWithoutProblemNestedInput
   problemTestGenerators?: Prisma.ProblemTestGeneratorUpdateOneWithoutProblemNestedInput
+  aiconversations?: Prisma.AIConversationUpdateManyWithoutProblemNestedInput
 }
 
 export type ProblemUncheckedUpdateWithoutTestCaseInput = {
@@ -684,6 +708,7 @@ export type ProblemUncheckedUpdateWithoutTestCaseInput = {
   driverCode?: Prisma.driverCodeUncheckedUpdateManyWithoutProblemNestedInput
   referenceSolutions?: Prisma.referenceSolutionUncheckedUpdateManyWithoutProblemNestedInput
   problemTestGenerators?: Prisma.ProblemTestGeneratorUncheckedUpdateOneWithoutProblemNestedInput
+  aiconversations?: Prisma.AIConversationUncheckedUpdateManyWithoutProblemNestedInput
 }
 
 export type ProblemCreateWithoutComplexityTestingCasesInput = {
@@ -702,6 +727,7 @@ export type ProblemCreateWithoutComplexityTestingCasesInput = {
   driverCode?: Prisma.driverCodeCreateNestedManyWithoutProblemInput
   referenceSolutions?: Prisma.referenceSolutionCreateNestedManyWithoutProblemInput
   problemTestGenerators?: Prisma.ProblemTestGeneratorCreateNestedOneWithoutProblemInput
+  aiconversations?: Prisma.AIConversationCreateNestedManyWithoutProblemInput
 }
 
 export type ProblemUncheckedCreateWithoutComplexityTestingCasesInput = {
@@ -720,6 +746,7 @@ export type ProblemUncheckedCreateWithoutComplexityTestingCasesInput = {
   driverCode?: Prisma.driverCodeUncheckedCreateNestedManyWithoutProblemInput
   referenceSolutions?: Prisma.referenceSolutionUncheckedCreateNestedManyWithoutProblemInput
   problemTestGenerators?: Prisma.ProblemTestGeneratorUncheckedCreateNestedOneWithoutProblemInput
+  aiconversations?: Prisma.AIConversationUncheckedCreateNestedManyWithoutProblemInput
 }
 
 export type ProblemCreateOrConnectWithoutComplexityTestingCasesInput = {
@@ -754,6 +781,7 @@ export type ProblemUpdateWithoutComplexityTestingCasesInput = {
   driverCode?: Prisma.driverCodeUpdateManyWithoutProblemNestedInput
   referenceSolutions?: Prisma.referenceSolutionUpdateManyWithoutProblemNestedInput
   problemTestGenerators?: Prisma.ProblemTestGeneratorUpdateOneWithoutProblemNestedInput
+  aiconversations?: Prisma.AIConversationUpdateManyWithoutProblemNestedInput
 }
 
 export type ProblemUncheckedUpdateWithoutComplexityTestingCasesInput = {
@@ -772,6 +800,7 @@ export type ProblemUncheckedUpdateWithoutComplexityTestingCasesInput = {
   driverCode?: Prisma.driverCodeUncheckedUpdateManyWithoutProblemNestedInput
   referenceSolutions?: Prisma.referenceSolutionUncheckedUpdateManyWithoutProblemNestedInput
   problemTestGenerators?: Prisma.ProblemTestGeneratorUncheckedUpdateOneWithoutProblemNestedInput
+  aiconversations?: Prisma.AIConversationUncheckedUpdateManyWithoutProblemNestedInput
 }
 
 export type ProblemCreateWithoutDriverCodeInput = {
@@ -790,6 +819,7 @@ export type ProblemCreateWithoutDriverCodeInput = {
   complexityTestingCases?: Prisma.complexityTestingCasesCreateNestedOneWithoutProblemInput
   referenceSolutions?: Prisma.referenceSolutionCreateNestedManyWithoutProblemInput
   problemTestGenerators?: Prisma.ProblemTestGeneratorCreateNestedOneWithoutProblemInput
+  aiconversations?: Prisma.AIConversationCreateNestedManyWithoutProblemInput
 }
 
 export type ProblemUncheckedCreateWithoutDriverCodeInput = {
@@ -808,6 +838,7 @@ export type ProblemUncheckedCreateWithoutDriverCodeInput = {
   complexityTestingCases?: Prisma.complexityTestingCasesUncheckedCreateNestedOneWithoutProblemInput
   referenceSolutions?: Prisma.referenceSolutionUncheckedCreateNestedManyWithoutProblemInput
   problemTestGenerators?: Prisma.ProblemTestGeneratorUncheckedCreateNestedOneWithoutProblemInput
+  aiconversations?: Prisma.AIConversationUncheckedCreateNestedManyWithoutProblemInput
 }
 
 export type ProblemCreateOrConnectWithoutDriverCodeInput = {
@@ -842,6 +873,7 @@ export type ProblemUpdateWithoutDriverCodeInput = {
   complexityTestingCases?: Prisma.complexityTestingCasesUpdateOneWithoutProblemNestedInput
   referenceSolutions?: Prisma.referenceSolutionUpdateManyWithoutProblemNestedInput
   problemTestGenerators?: Prisma.ProblemTestGeneratorUpdateOneWithoutProblemNestedInput
+  aiconversations?: Prisma.AIConversationUpdateManyWithoutProblemNestedInput
 }
 
 export type ProblemUncheckedUpdateWithoutDriverCodeInput = {
@@ -860,6 +892,7 @@ export type ProblemUncheckedUpdateWithoutDriverCodeInput = {
   complexityTestingCases?: Prisma.complexityTestingCasesUncheckedUpdateOneWithoutProblemNestedInput
   referenceSolutions?: Prisma.referenceSolutionUncheckedUpdateManyWithoutProblemNestedInput
   problemTestGenerators?: Prisma.ProblemTestGeneratorUncheckedUpdateOneWithoutProblemNestedInput
+  aiconversations?: Prisma.AIConversationUncheckedUpdateManyWithoutProblemNestedInput
 }
 
 export type ProblemCreateWithoutReferenceSolutionsInput = {
@@ -878,6 +911,7 @@ export type ProblemCreateWithoutReferenceSolutionsInput = {
   complexityTestingCases?: Prisma.complexityTestingCasesCreateNestedOneWithoutProblemInput
   driverCode?: Prisma.driverCodeCreateNestedManyWithoutProblemInput
   problemTestGenerators?: Prisma.ProblemTestGeneratorCreateNestedOneWithoutProblemInput
+  aiconversations?: Prisma.AIConversationCreateNestedManyWithoutProblemInput
 }
 
 export type ProblemUncheckedCreateWithoutReferenceSolutionsInput = {
@@ -896,6 +930,7 @@ export type ProblemUncheckedCreateWithoutReferenceSolutionsInput = {
   complexityTestingCases?: Prisma.complexityTestingCasesUncheckedCreateNestedOneWithoutProblemInput
   driverCode?: Prisma.driverCodeUncheckedCreateNestedManyWithoutProblemInput
   problemTestGenerators?: Prisma.ProblemTestGeneratorUncheckedCreateNestedOneWithoutProblemInput
+  aiconversations?: Prisma.AIConversationUncheckedCreateNestedManyWithoutProblemInput
 }
 
 export type ProblemCreateOrConnectWithoutReferenceSolutionsInput = {
@@ -930,6 +965,7 @@ export type ProblemUpdateWithoutReferenceSolutionsInput = {
   complexityTestingCases?: Prisma.complexityTestingCasesUpdateOneWithoutProblemNestedInput
   driverCode?: Prisma.driverCodeUpdateManyWithoutProblemNestedInput
   problemTestGenerators?: Prisma.ProblemTestGeneratorUpdateOneWithoutProblemNestedInput
+  aiconversations?: Prisma.AIConversationUpdateManyWithoutProblemNestedInput
 }
 
 export type ProblemUncheckedUpdateWithoutReferenceSolutionsInput = {
@@ -948,6 +984,7 @@ export type ProblemUncheckedUpdateWithoutReferenceSolutionsInput = {
   complexityTestingCases?: Prisma.complexityTestingCasesUncheckedUpdateOneWithoutProblemNestedInput
   driverCode?: Prisma.driverCodeUncheckedUpdateManyWithoutProblemNestedInput
   problemTestGenerators?: Prisma.ProblemTestGeneratorUncheckedUpdateOneWithoutProblemNestedInput
+  aiconversations?: Prisma.AIConversationUncheckedUpdateManyWithoutProblemNestedInput
 }
 
 export type ProblemCreateWithoutRunTestCaseInput = {
@@ -966,6 +1003,7 @@ export type ProblemCreateWithoutRunTestCaseInput = {
   driverCode?: Prisma.driverCodeCreateNestedManyWithoutProblemInput
   referenceSolutions?: Prisma.referenceSolutionCreateNestedManyWithoutProblemInput
   problemTestGenerators?: Prisma.ProblemTestGeneratorCreateNestedOneWithoutProblemInput
+  aiconversations?: Prisma.AIConversationCreateNestedManyWithoutProblemInput
 }
 
 export type ProblemUncheckedCreateWithoutRunTestCaseInput = {
@@ -984,6 +1022,7 @@ export type ProblemUncheckedCreateWithoutRunTestCaseInput = {
   driverCode?: Prisma.driverCodeUncheckedCreateNestedManyWithoutProblemInput
   referenceSolutions?: Prisma.referenceSolutionUncheckedCreateNestedManyWithoutProblemInput
   problemTestGenerators?: Prisma.ProblemTestGeneratorUncheckedCreateNestedOneWithoutProblemInput
+  aiconversations?: Prisma.AIConversationUncheckedCreateNestedManyWithoutProblemInput
 }
 
 export type ProblemCreateOrConnectWithoutRunTestCaseInput = {
@@ -1018,6 +1057,7 @@ export type ProblemUpdateWithoutRunTestCaseInput = {
   driverCode?: Prisma.driverCodeUpdateManyWithoutProblemNestedInput
   referenceSolutions?: Prisma.referenceSolutionUpdateManyWithoutProblemNestedInput
   problemTestGenerators?: Prisma.ProblemTestGeneratorUpdateOneWithoutProblemNestedInput
+  aiconversations?: Prisma.AIConversationUpdateManyWithoutProblemNestedInput
 }
 
 export type ProblemUncheckedUpdateWithoutRunTestCaseInput = {
@@ -1036,6 +1076,7 @@ export type ProblemUncheckedUpdateWithoutRunTestCaseInput = {
   driverCode?: Prisma.driverCodeUncheckedUpdateManyWithoutProblemNestedInput
   referenceSolutions?: Prisma.referenceSolutionUncheckedUpdateManyWithoutProblemNestedInput
   problemTestGenerators?: Prisma.ProblemTestGeneratorUncheckedUpdateOneWithoutProblemNestedInput
+  aiconversations?: Prisma.AIConversationUncheckedUpdateManyWithoutProblemNestedInput
 }
 
 export type ProblemCreateWithoutSelfSubmissionsInput = {
@@ -1054,6 +1095,7 @@ export type ProblemCreateWithoutSelfSubmissionsInput = {
   driverCode?: Prisma.driverCodeCreateNestedManyWithoutProblemInput
   referenceSolutions?: Prisma.referenceSolutionCreateNestedManyWithoutProblemInput
   problemTestGenerators?: Prisma.ProblemTestGeneratorCreateNestedOneWithoutProblemInput
+  aiconversations?: Prisma.AIConversationCreateNestedManyWithoutProblemInput
 }
 
 export type ProblemUncheckedCreateWithoutSelfSubmissionsInput = {
@@ -1072,6 +1114,7 @@ export type ProblemUncheckedCreateWithoutSelfSubmissionsInput = {
   driverCode?: Prisma.driverCodeUncheckedCreateNestedManyWithoutProblemInput
   referenceSolutions?: Prisma.referenceSolutionUncheckedCreateNestedManyWithoutProblemInput
   problemTestGenerators?: Prisma.ProblemTestGeneratorUncheckedCreateNestedOneWithoutProblemInput
+  aiconversations?: Prisma.AIConversationUncheckedCreateNestedManyWithoutProblemInput
 }
 
 export type ProblemCreateOrConnectWithoutSelfSubmissionsInput = {
@@ -1106,6 +1149,7 @@ export type ProblemUpdateWithoutSelfSubmissionsInput = {
   driverCode?: Prisma.driverCodeUpdateManyWithoutProblemNestedInput
   referenceSolutions?: Prisma.referenceSolutionUpdateManyWithoutProblemNestedInput
   problemTestGenerators?: Prisma.ProblemTestGeneratorUpdateOneWithoutProblemNestedInput
+  aiconversations?: Prisma.AIConversationUpdateManyWithoutProblemNestedInput
 }
 
 export type ProblemUncheckedUpdateWithoutSelfSubmissionsInput = {
@@ -1124,6 +1168,7 @@ export type ProblemUncheckedUpdateWithoutSelfSubmissionsInput = {
   driverCode?: Prisma.driverCodeUncheckedUpdateManyWithoutProblemNestedInput
   referenceSolutions?: Prisma.referenceSolutionUncheckedUpdateManyWithoutProblemNestedInput
   problemTestGenerators?: Prisma.ProblemTestGeneratorUncheckedUpdateOneWithoutProblemNestedInput
+  aiconversations?: Prisma.AIConversationUncheckedUpdateManyWithoutProblemNestedInput
 }
 
 export type ProblemCreateWithoutProblemTestGeneratorsInput = {
@@ -1142,6 +1187,7 @@ export type ProblemCreateWithoutProblemTestGeneratorsInput = {
   complexityTestingCases?: Prisma.complexityTestingCasesCreateNestedOneWithoutProblemInput
   driverCode?: Prisma.driverCodeCreateNestedManyWithoutProblemInput
   referenceSolutions?: Prisma.referenceSolutionCreateNestedManyWithoutProblemInput
+  aiconversations?: Prisma.AIConversationCreateNestedManyWithoutProblemInput
 }
 
 export type ProblemUncheckedCreateWithoutProblemTestGeneratorsInput = {
@@ -1160,6 +1206,7 @@ export type ProblemUncheckedCreateWithoutProblemTestGeneratorsInput = {
   complexityTestingCases?: Prisma.complexityTestingCasesUncheckedCreateNestedOneWithoutProblemInput
   driverCode?: Prisma.driverCodeUncheckedCreateNestedManyWithoutProblemInput
   referenceSolutions?: Prisma.referenceSolutionUncheckedCreateNestedManyWithoutProblemInput
+  aiconversations?: Prisma.AIConversationUncheckedCreateNestedManyWithoutProblemInput
 }
 
 export type ProblemCreateOrConnectWithoutProblemTestGeneratorsInput = {
@@ -1194,6 +1241,7 @@ export type ProblemUpdateWithoutProblemTestGeneratorsInput = {
   complexityTestingCases?: Prisma.complexityTestingCasesUpdateOneWithoutProblemNestedInput
   driverCode?: Prisma.driverCodeUpdateManyWithoutProblemNestedInput
   referenceSolutions?: Prisma.referenceSolutionUpdateManyWithoutProblemNestedInput
+  aiconversations?: Prisma.AIConversationUpdateManyWithoutProblemNestedInput
 }
 
 export type ProblemUncheckedUpdateWithoutProblemTestGeneratorsInput = {
@@ -1212,6 +1260,7 @@ export type ProblemUncheckedUpdateWithoutProblemTestGeneratorsInput = {
   complexityTestingCases?: Prisma.complexityTestingCasesUncheckedUpdateOneWithoutProblemNestedInput
   driverCode?: Prisma.driverCodeUncheckedUpdateManyWithoutProblemNestedInput
   referenceSolutions?: Prisma.referenceSolutionUncheckedUpdateManyWithoutProblemNestedInput
+  aiconversations?: Prisma.AIConversationUncheckedUpdateManyWithoutProblemNestedInput
 }
 
 export type ProblemCreateWithoutExamProblemsInput = {
@@ -1230,6 +1279,7 @@ export type ProblemCreateWithoutExamProblemsInput = {
   driverCode?: Prisma.driverCodeCreateNestedManyWithoutProblemInput
   referenceSolutions?: Prisma.referenceSolutionCreateNestedManyWithoutProblemInput
   problemTestGenerators?: Prisma.ProblemTestGeneratorCreateNestedOneWithoutProblemInput
+  aiconversations?: Prisma.AIConversationCreateNestedManyWithoutProblemInput
 }
 
 export type ProblemUncheckedCreateWithoutExamProblemsInput = {
@@ -1248,6 +1298,7 @@ export type ProblemUncheckedCreateWithoutExamProblemsInput = {
   driverCode?: Prisma.driverCodeUncheckedCreateNestedManyWithoutProblemInput
   referenceSolutions?: Prisma.referenceSolutionUncheckedCreateNestedManyWithoutProblemInput
   problemTestGenerators?: Prisma.ProblemTestGeneratorUncheckedCreateNestedOneWithoutProblemInput
+  aiconversations?: Prisma.AIConversationUncheckedCreateNestedManyWithoutProblemInput
 }
 
 export type ProblemCreateOrConnectWithoutExamProblemsInput = {
@@ -1282,6 +1333,7 @@ export type ProblemUpdateWithoutExamProblemsInput = {
   driverCode?: Prisma.driverCodeUpdateManyWithoutProblemNestedInput
   referenceSolutions?: Prisma.referenceSolutionUpdateManyWithoutProblemNestedInput
   problemTestGenerators?: Prisma.ProblemTestGeneratorUpdateOneWithoutProblemNestedInput
+  aiconversations?: Prisma.AIConversationUpdateManyWithoutProblemNestedInput
 }
 
 export type ProblemUncheckedUpdateWithoutExamProblemsInput = {
@@ -1300,6 +1352,7 @@ export type ProblemUncheckedUpdateWithoutExamProblemsInput = {
   driverCode?: Prisma.driverCodeUncheckedUpdateManyWithoutProblemNestedInput
   referenceSolutions?: Prisma.referenceSolutionUncheckedUpdateManyWithoutProblemNestedInput
   problemTestGenerators?: Prisma.ProblemTestGeneratorUncheckedUpdateOneWithoutProblemNestedInput
+  aiconversations?: Prisma.AIConversationUncheckedUpdateManyWithoutProblemNestedInput
 }
 
 export type ProblemCreateWithoutSubmissionsInput = {
@@ -1318,6 +1371,7 @@ export type ProblemCreateWithoutSubmissionsInput = {
   driverCode?: Prisma.driverCodeCreateNestedManyWithoutProblemInput
   referenceSolutions?: Prisma.referenceSolutionCreateNestedManyWithoutProblemInput
   problemTestGenerators?: Prisma.ProblemTestGeneratorCreateNestedOneWithoutProblemInput
+  aiconversations?: Prisma.AIConversationCreateNestedManyWithoutProblemInput
 }
 
 export type ProblemUncheckedCreateWithoutSubmissionsInput = {
@@ -1336,6 +1390,7 @@ export type ProblemUncheckedCreateWithoutSubmissionsInput = {
   driverCode?: Prisma.driverCodeUncheckedCreateNestedManyWithoutProblemInput
   referenceSolutions?: Prisma.referenceSolutionUncheckedCreateNestedManyWithoutProblemInput
   problemTestGenerators?: Prisma.ProblemTestGeneratorUncheckedCreateNestedOneWithoutProblemInput
+  aiconversations?: Prisma.AIConversationUncheckedCreateNestedManyWithoutProblemInput
 }
 
 export type ProblemCreateOrConnectWithoutSubmissionsInput = {
@@ -1370,6 +1425,7 @@ export type ProblemUpdateWithoutSubmissionsInput = {
   driverCode?: Prisma.driverCodeUpdateManyWithoutProblemNestedInput
   referenceSolutions?: Prisma.referenceSolutionUpdateManyWithoutProblemNestedInput
   problemTestGenerators?: Prisma.ProblemTestGeneratorUpdateOneWithoutProblemNestedInput
+  aiconversations?: Prisma.AIConversationUpdateManyWithoutProblemNestedInput
 }
 
 export type ProblemUncheckedUpdateWithoutSubmissionsInput = {
@@ -1388,6 +1444,7 @@ export type ProblemUncheckedUpdateWithoutSubmissionsInput = {
   driverCode?: Prisma.driverCodeUncheckedUpdateManyWithoutProblemNestedInput
   referenceSolutions?: Prisma.referenceSolutionUncheckedUpdateManyWithoutProblemNestedInput
   problemTestGenerators?: Prisma.ProblemTestGeneratorUncheckedUpdateOneWithoutProblemNestedInput
+  aiconversations?: Prisma.AIConversationUncheckedUpdateManyWithoutProblemNestedInput
 }
 
 export type ProblemCreateWithoutTagsInput = {
@@ -1406,6 +1463,7 @@ export type ProblemCreateWithoutTagsInput = {
   driverCode?: Prisma.driverCodeCreateNestedManyWithoutProblemInput
   referenceSolutions?: Prisma.referenceSolutionCreateNestedManyWithoutProblemInput
   problemTestGenerators?: Prisma.ProblemTestGeneratorCreateNestedOneWithoutProblemInput
+  aiconversations?: Prisma.AIConversationCreateNestedManyWithoutProblemInput
 }
 
 export type ProblemUncheckedCreateWithoutTagsInput = {
@@ -1424,6 +1482,7 @@ export type ProblemUncheckedCreateWithoutTagsInput = {
   driverCode?: Prisma.driverCodeUncheckedCreateNestedManyWithoutProblemInput
   referenceSolutions?: Prisma.referenceSolutionUncheckedCreateNestedManyWithoutProblemInput
   problemTestGenerators?: Prisma.ProblemTestGeneratorUncheckedCreateNestedOneWithoutProblemInput
+  aiconversations?: Prisma.AIConversationUncheckedCreateNestedManyWithoutProblemInput
 }
 
 export type ProblemCreateOrConnectWithoutTagsInput = {
@@ -1458,6 +1517,7 @@ export type ProblemUpdateWithoutTagsInput = {
   driverCode?: Prisma.driverCodeUpdateManyWithoutProblemNestedInput
   referenceSolutions?: Prisma.referenceSolutionUpdateManyWithoutProblemNestedInput
   problemTestGenerators?: Prisma.ProblemTestGeneratorUpdateOneWithoutProblemNestedInput
+  aiconversations?: Prisma.AIConversationUpdateManyWithoutProblemNestedInput
 }
 
 export type ProblemUncheckedUpdateWithoutTagsInput = {
@@ -1468,6 +1528,99 @@ export type ProblemUncheckedUpdateWithoutTagsInput = {
   difficulty?: Prisma.EnumproblemDifficultyFieldUpdateOperationsInput | $Enums.problemDifficulty
   source?: Prisma.StringFieldUpdateOperationsInput | string
   examProblems?: Prisma.ExamProblemUncheckedUpdateManyWithoutProblemNestedInput
+  testCase?: Prisma.TestCaseUncheckedUpdateOneWithoutProblemNestedInput
+  runTestCase?: Prisma.RunTestCaseUncheckedUpdateOneWithoutProblemNestedInput
+  selfSubmissions?: Prisma.selfSubmissionUncheckedUpdateManyWithoutProblemNestedInput
+  submissions?: Prisma.SubmissionUncheckedUpdateManyWithoutProblemNestedInput
+  complexityTestingCases?: Prisma.complexityTestingCasesUncheckedUpdateOneWithoutProblemNestedInput
+  driverCode?: Prisma.driverCodeUncheckedUpdateManyWithoutProblemNestedInput
+  referenceSolutions?: Prisma.referenceSolutionUncheckedUpdateManyWithoutProblemNestedInput
+  problemTestGenerators?: Prisma.ProblemTestGeneratorUncheckedUpdateOneWithoutProblemNestedInput
+  aiconversations?: Prisma.AIConversationUncheckedUpdateManyWithoutProblemNestedInput
+}
+
+export type ProblemCreateWithoutAiconversationsInput = {
+  id?: string
+  number: number
+  title: string
+  description: string
+  difficulty: $Enums.problemDifficulty
+  source?: string
+  examProblems?: Prisma.ExamProblemCreateNestedManyWithoutProblemInput
+  tags?: Prisma.ProblemTagCreateNestedManyWithoutProblemInput
+  testCase?: Prisma.TestCaseCreateNestedOneWithoutProblemInput
+  runTestCase?: Prisma.RunTestCaseCreateNestedOneWithoutProblemInput
+  selfSubmissions?: Prisma.selfSubmissionCreateNestedManyWithoutProblemInput
+  submissions?: Prisma.SubmissionCreateNestedManyWithoutProblemInput
+  complexityTestingCases?: Prisma.complexityTestingCasesCreateNestedOneWithoutProblemInput
+  driverCode?: Prisma.driverCodeCreateNestedManyWithoutProblemInput
+  referenceSolutions?: Prisma.referenceSolutionCreateNestedManyWithoutProblemInput
+  problemTestGenerators?: Prisma.ProblemTestGeneratorCreateNestedOneWithoutProblemInput
+}
+
+export type ProblemUncheckedCreateWithoutAiconversationsInput = {
+  id?: string
+  number: number
+  title: string
+  description: string
+  difficulty: $Enums.problemDifficulty
+  source?: string
+  examProblems?: Prisma.ExamProblemUncheckedCreateNestedManyWithoutProblemInput
+  tags?: Prisma.ProblemTagUncheckedCreateNestedManyWithoutProblemInput
+  testCase?: Prisma.TestCaseUncheckedCreateNestedOneWithoutProblemInput
+  runTestCase?: Prisma.RunTestCaseUncheckedCreateNestedOneWithoutProblemInput
+  selfSubmissions?: Prisma.selfSubmissionUncheckedCreateNestedManyWithoutProblemInput
+  submissions?: Prisma.SubmissionUncheckedCreateNestedManyWithoutProblemInput
+  complexityTestingCases?: Prisma.complexityTestingCasesUncheckedCreateNestedOneWithoutProblemInput
+  driverCode?: Prisma.driverCodeUncheckedCreateNestedManyWithoutProblemInput
+  referenceSolutions?: Prisma.referenceSolutionUncheckedCreateNestedManyWithoutProblemInput
+  problemTestGenerators?: Prisma.ProblemTestGeneratorUncheckedCreateNestedOneWithoutProblemInput
+}
+
+export type ProblemCreateOrConnectWithoutAiconversationsInput = {
+  where: Prisma.ProblemWhereUniqueInput
+  create: Prisma.XOR<Prisma.ProblemCreateWithoutAiconversationsInput, Prisma.ProblemUncheckedCreateWithoutAiconversationsInput>
+}
+
+export type ProblemUpsertWithoutAiconversationsInput = {
+  update: Prisma.XOR<Prisma.ProblemUpdateWithoutAiconversationsInput, Prisma.ProblemUncheckedUpdateWithoutAiconversationsInput>
+  create: Prisma.XOR<Prisma.ProblemCreateWithoutAiconversationsInput, Prisma.ProblemUncheckedCreateWithoutAiconversationsInput>
+  where?: Prisma.ProblemWhereInput
+}
+
+export type ProblemUpdateToOneWithWhereWithoutAiconversationsInput = {
+  where?: Prisma.ProblemWhereInput
+  data: Prisma.XOR<Prisma.ProblemUpdateWithoutAiconversationsInput, Prisma.ProblemUncheckedUpdateWithoutAiconversationsInput>
+}
+
+export type ProblemUpdateWithoutAiconversationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  number?: Prisma.IntFieldUpdateOperationsInput | number
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  difficulty?: Prisma.EnumproblemDifficultyFieldUpdateOperationsInput | $Enums.problemDifficulty
+  source?: Prisma.StringFieldUpdateOperationsInput | string
+  examProblems?: Prisma.ExamProblemUpdateManyWithoutProblemNestedInput
+  tags?: Prisma.ProblemTagUpdateManyWithoutProblemNestedInput
+  testCase?: Prisma.TestCaseUpdateOneWithoutProblemNestedInput
+  runTestCase?: Prisma.RunTestCaseUpdateOneWithoutProblemNestedInput
+  selfSubmissions?: Prisma.selfSubmissionUpdateManyWithoutProblemNestedInput
+  submissions?: Prisma.SubmissionUpdateManyWithoutProblemNestedInput
+  complexityTestingCases?: Prisma.complexityTestingCasesUpdateOneWithoutProblemNestedInput
+  driverCode?: Prisma.driverCodeUpdateManyWithoutProblemNestedInput
+  referenceSolutions?: Prisma.referenceSolutionUpdateManyWithoutProblemNestedInput
+  problemTestGenerators?: Prisma.ProblemTestGeneratorUpdateOneWithoutProblemNestedInput
+}
+
+export type ProblemUncheckedUpdateWithoutAiconversationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  number?: Prisma.IntFieldUpdateOperationsInput | number
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  difficulty?: Prisma.EnumproblemDifficultyFieldUpdateOperationsInput | $Enums.problemDifficulty
+  source?: Prisma.StringFieldUpdateOperationsInput | string
+  examProblems?: Prisma.ExamProblemUncheckedUpdateManyWithoutProblemNestedInput
+  tags?: Prisma.ProblemTagUncheckedUpdateManyWithoutProblemNestedInput
   testCase?: Prisma.TestCaseUncheckedUpdateOneWithoutProblemNestedInput
   runTestCase?: Prisma.RunTestCaseUncheckedUpdateOneWithoutProblemNestedInput
   selfSubmissions?: Prisma.selfSubmissionUncheckedUpdateManyWithoutProblemNestedInput
@@ -1490,6 +1643,7 @@ export type ProblemCountOutputType = {
   submissions: number
   driverCode: number
   referenceSolutions: number
+  aiconversations: number
 }
 
 export type ProblemCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1499,6 +1653,7 @@ export type ProblemCountOutputTypeSelect<ExtArgs extends runtime.Types.Extension
   submissions?: boolean | ProblemCountOutputTypeCountSubmissionsArgs
   driverCode?: boolean | ProblemCountOutputTypeCountDriverCodeArgs
   referenceSolutions?: boolean | ProblemCountOutputTypeCountReferenceSolutionsArgs
+  aiconversations?: boolean | ProblemCountOutputTypeCountAiconversationsArgs
 }
 
 /**
@@ -1553,6 +1708,13 @@ export type ProblemCountOutputTypeCountReferenceSolutionsArgs<ExtArgs extends ru
   where?: Prisma.referenceSolutionWhereInput
 }
 
+/**
+ * ProblemCountOutputType without action
+ */
+export type ProblemCountOutputTypeCountAiconversationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AIConversationWhereInput
+}
+
 
 export type ProblemSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1571,6 +1733,7 @@ export type ProblemSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   driverCode?: boolean | Prisma.Problem$driverCodeArgs<ExtArgs>
   referenceSolutions?: boolean | Prisma.Problem$referenceSolutionsArgs<ExtArgs>
   problemTestGenerators?: boolean | Prisma.Problem$problemTestGeneratorsArgs<ExtArgs>
+  aiconversations?: boolean | Prisma.Problem$aiconversationsArgs<ExtArgs>
   _count?: boolean | Prisma.ProblemCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["problem"]>
 
@@ -1613,6 +1776,7 @@ export type ProblemInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs
   driverCode?: boolean | Prisma.Problem$driverCodeArgs<ExtArgs>
   referenceSolutions?: boolean | Prisma.Problem$referenceSolutionsArgs<ExtArgs>
   problemTestGenerators?: boolean | Prisma.Problem$problemTestGeneratorsArgs<ExtArgs>
+  aiconversations?: boolean | Prisma.Problem$aiconversationsArgs<ExtArgs>
   _count?: boolean | Prisma.ProblemCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ProblemIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -1631,6 +1795,7 @@ export type $ProblemPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     driverCode: Prisma.$driverCodePayload<ExtArgs>[]
     referenceSolutions: Prisma.$referenceSolutionPayload<ExtArgs>[]
     problemTestGenerators: Prisma.$ProblemTestGeneratorPayload<ExtArgs> | null
+    aiconversations: Prisma.$AIConversationPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -2043,6 +2208,7 @@ export interface Prisma__ProblemClient<T, Null = never, ExtArgs extends runtime.
   driverCode<T extends Prisma.Problem$driverCodeArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Problem$driverCodeArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$driverCodePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   referenceSolutions<T extends Prisma.Problem$referenceSolutionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Problem$referenceSolutionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$referenceSolutionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   problemTestGenerators<T extends Prisma.Problem$problemTestGeneratorsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Problem$problemTestGeneratorsArgs<ExtArgs>>): Prisma.Prisma__ProblemTestGeneratorClient<runtime.Types.Result.GetResult<Prisma.$ProblemTestGeneratorPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  aiconversations<T extends Prisma.Problem$aiconversationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Problem$aiconversationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AIConversationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2683,6 +2849,30 @@ export type Problem$problemTestGeneratorsArgs<ExtArgs extends runtime.Types.Exte
    */
   include?: Prisma.ProblemTestGeneratorInclude<ExtArgs> | null
   where?: Prisma.ProblemTestGeneratorWhereInput
+}
+
+/**
+ * Problem.aiconversations
+ */
+export type Problem$aiconversationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AIConversation
+   */
+  select?: Prisma.AIConversationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the AIConversation
+   */
+  omit?: Prisma.AIConversationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AIConversationInclude<ExtArgs> | null
+  where?: Prisma.AIConversationWhereInput
+  orderBy?: Prisma.AIConversationOrderByWithRelationInput | Prisma.AIConversationOrderByWithRelationInput[]
+  cursor?: Prisma.AIConversationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AIConversationScalarFieldEnum | Prisma.AIConversationScalarFieldEnum[]
 }
 
 /**

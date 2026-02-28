@@ -11,6 +11,10 @@ export interface Group {
   noOfMembers: number;
   createdAt: Date;
   joinByLink: boolean;
+  type: string;
+  aiEnabled: boolean;
+  aiMaxMessages: number;
+  aiMaxTokens: number;
 }
 
 export interface GroupMember {

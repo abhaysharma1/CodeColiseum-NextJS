@@ -7,7 +7,16 @@ import { Spinner } from "@/components/ui/shadcn-io/spinner";
 import { Textarea } from "@/components/ui/textarea";
 import React, { useEffect, useState, useTransition, use } from "react";
 
-import { CalendarIcon, Clock, Save, Send, Trash2, Users } from "lucide-react";
+import {
+  Bot,
+  BotIcon,
+  CalendarIcon,
+  Clock,
+  Save,
+  Send,
+  Trash2,
+  Users,
+} from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -31,6 +40,8 @@ import { Exam } from "@/generated/prisma/client";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { getBackendURL } from "@/utils/utilities";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Badge } from "@/components/ui/badge";
 
 interface Group {
   id: string;
@@ -40,6 +51,7 @@ interface Group {
   noOfMembers: number;
   joinByLink: boolean;
   createdAt: Date;
+  aiEnabled: boolean;
 }
 
 export interface ExamProblem {
@@ -265,7 +277,10 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
         const domain = getBackendURL();
         const res = await axios.get(`${domain}/teacher/exam/getallgroups`, {
           params: {
-            examId: examId,
+            take: 100,
+            skip: 0,
+            searchValue: "",
+            groupType: "All",
           },
           withCredentials: true,
         });
@@ -372,34 +387,31 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
                 <div className="space-y-3">
                   <Label>Safe Exam Browser (SEB)</Label>
                   <div className="flex gap-6">
-                    <label className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="radio"
-                        name="sebEnabled"
-                        checked={examDetails?.sebEnabled === true}
-                        onChange={() =>
-                          setExamDetails((prev) =>
-                            prev ? { ...prev, sebEnabled: true } : prev
-                          )
-                        }
-                        className="h-4 w-4 text-primary focus:ring-2 focus:ring-primary"
-                      />
-                      <span className="text-sm font-medium">Enable SEB</span>
-                    </label>
-                    <label className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="radio"
-                        name="sebEnabled"
-                        checked={examDetails?.sebEnabled === false}
-                        onChange={() =>
-                          setExamDetails((prev) =>
-                            prev ? { ...prev, sebEnabled: false } : prev
-                          )
-                        }
-                        className="h-4 w-4 text-primary focus:ring-2 focus:ring-primary"
-                      />
-                      <span className="text-sm font-medium">Disable SEB</span>
-                    </label>
+                    <RadioGroup
+                      value={examDetails?.sebEnabled ? "enable" : "disable"}
+                      onValueChange={(value) =>
+                        setExamDetails((prev) =>
+                          prev
+                            ? { ...prev, sebEnabled: value === "enable" }
+                            : prev
+                        )
+                      }
+                      className="flex  gap-3"
+                    >
+                      <div className="flex items-center gap-2">
+                        <RadioGroupItem value="enable" id="seb-enable" />
+                        <Label htmlFor="seb-enable" className="cursor-pointer">
+                          Enable SEB
+                        </Label>
+                      </div>
+
+                      <div className="flex items-center gap-2">
+                        <RadioGroupItem value="disable" id="seb-disable" />
+                        <Label htmlFor="seb-disable" className="cursor-pointer">
+                          Disable SEB
+                        </Label>
+                      </div>
+                    </RadioGroup>
                   </div>
                   <p className="text-xs text-muted-foreground">
                     Safe Exam Browser provides a secure testing environment by
@@ -593,8 +605,13 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
                                 <p className="font-medium truncate">
                                   {group.name}
                                 </p>
-                                <p className="text-sm text-muted-foreground">
+                                <p className="text-sm text-muted-foreground flex gap-3">
                                   {group.noOfMembers} members
+                                  {group.aiEnabled && (
+                                    <Badge variant={"secondary"}>
+                                      <Bot /> AI Enabled
+                                    </Badge>
+                                  )}
                                 </p>
                               </div>
                             </div>

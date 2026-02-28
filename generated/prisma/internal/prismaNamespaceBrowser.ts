@@ -74,7 +74,10 @@ export const ModelName = {
   Group: 'Group',
   GroupMember: 'GroupMember',
   Tag: 'Tag',
-  ProblemTag: 'ProblemTag'
+  ProblemTag: 'ProblemTag',
+  AIConversation: 'AIConversation',
+  AIMessage: 'AIMessage',
+  AIRateLimit: 'AIRateLimit'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -373,7 +376,11 @@ export const GroupScalarFieldEnum = {
   creatorId: 'creatorId',
   noOfMembers: 'noOfMembers',
   createdAt: 'createdAt',
-  joinByLink: 'joinByLink'
+  joinByLink: 'joinByLink',
+  type: 'type',
+  aiEnabled: 'aiEnabled',
+  aiMaxMessages: 'aiMaxMessages',
+  aiMaxTokens: 'aiMaxTokens'
 } as const
 
 export type GroupScalarFieldEnum = (typeof GroupScalarFieldEnum)[keyof typeof GroupScalarFieldEnum]
@@ -403,6 +410,45 @@ export const ProblemTagScalarFieldEnum = {
 } as const
 
 export type ProblemTagScalarFieldEnum = (typeof ProblemTagScalarFieldEnum)[keyof typeof ProblemTagScalarFieldEnum]
+
+
+export const AIConversationScalarFieldEnum = {
+  id: 'id',
+  studentId: 'studentId',
+  groupId: 'groupId',
+  examId: 'examId',
+  problemId: 'problemId',
+  messageCount: 'messageCount',
+  totalTokens: 'totalTokens',
+  isClosed: 'isClosed',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AIConversationScalarFieldEnum = (typeof AIConversationScalarFieldEnum)[keyof typeof AIConversationScalarFieldEnum]
+
+
+export const AIMessageScalarFieldEnum = {
+  id: 'id',
+  conversationId: 'conversationId',
+  role: 'role',
+  content: 'content',
+  tokenCount: 'tokenCount',
+  modelUsed: 'modelUsed',
+  createdAt: 'createdAt'
+} as const
+
+export type AIMessageScalarFieldEnum = (typeof AIMessageScalarFieldEnum)[keyof typeof AIMessageScalarFieldEnum]
+
+
+export const AIRateLimitScalarFieldEnum = {
+  id: 'id',
+  studentId: 'studentId',
+  problemId: 'problemId',
+  lastRequest: 'lastRequest'
+} as const
+
+export type AIRateLimitScalarFieldEnum = (typeof AIRateLimitScalarFieldEnum)[keyof typeof AIRateLimitScalarFieldEnum]
 
 
 export const SortOrder = {

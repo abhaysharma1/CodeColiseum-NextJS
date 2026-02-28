@@ -280,6 +280,7 @@ export type ExamWhereInput = {
   examGroups?: Prisma.ExamGroupListRelationFilter
   examAttempts?: Prisma.ExamAttemptListRelationFilter
   aiEvaluations?: Prisma.AiEvaluationListRelationFilter
+  aiconversations?: Prisma.AIConversationListRelationFilter
 }
 
 export type ExamOrderByWithRelationInput = {
@@ -303,6 +304,7 @@ export type ExamOrderByWithRelationInput = {
   examGroups?: Prisma.ExamGroupOrderByRelationAggregateInput
   examAttempts?: Prisma.ExamAttemptOrderByRelationAggregateInput
   aiEvaluations?: Prisma.AiEvaluationOrderByRelationAggregateInput
+  aiconversations?: Prisma.AIConversationOrderByRelationAggregateInput
 }
 
 export type ExamWhereUniqueInput = Prisma.AtLeast<{
@@ -329,6 +331,7 @@ export type ExamWhereUniqueInput = Prisma.AtLeast<{
   examGroups?: Prisma.ExamGroupListRelationFilter
   examAttempts?: Prisma.ExamAttemptListRelationFilter
   aiEvaluations?: Prisma.AiEvaluationListRelationFilter
+  aiconversations?: Prisma.AIConversationListRelationFilter
 }, "id">
 
 export type ExamOrderByWithAggregationInput = {
@@ -389,6 +392,7 @@ export type ExamCreateInput = {
   examGroups?: Prisma.ExamGroupCreateNestedManyWithoutExamInput
   examAttempts?: Prisma.ExamAttemptCreateNestedManyWithoutExamInput
   aiEvaluations?: Prisma.AiEvaluationCreateNestedManyWithoutExamInput
+  aiconversations?: Prisma.AIConversationCreateNestedManyWithoutExamInput
 }
 
 export type ExamUncheckedCreateInput = {
@@ -411,6 +415,7 @@ export type ExamUncheckedCreateInput = {
   examGroups?: Prisma.ExamGroupUncheckedCreateNestedManyWithoutExamInput
   examAttempts?: Prisma.ExamAttemptUncheckedCreateNestedManyWithoutExamInput
   aiEvaluations?: Prisma.AiEvaluationUncheckedCreateNestedManyWithoutExamInput
+  aiconversations?: Prisma.AIConversationUncheckedCreateNestedManyWithoutExamInput
 }
 
 export type ExamUpdateInput = {
@@ -433,6 +438,7 @@ export type ExamUpdateInput = {
   examGroups?: Prisma.ExamGroupUpdateManyWithoutExamNestedInput
   examAttempts?: Prisma.ExamAttemptUpdateManyWithoutExamNestedInput
   aiEvaluations?: Prisma.AiEvaluationUpdateManyWithoutExamNestedInput
+  aiconversations?: Prisma.AIConversationUpdateManyWithoutExamNestedInput
 }
 
 export type ExamUncheckedUpdateInput = {
@@ -455,6 +461,7 @@ export type ExamUncheckedUpdateInput = {
   examGroups?: Prisma.ExamGroupUncheckedUpdateManyWithoutExamNestedInput
   examAttempts?: Prisma.ExamAttemptUncheckedUpdateManyWithoutExamNestedInput
   aiEvaluations?: Prisma.AiEvaluationUncheckedUpdateManyWithoutExamNestedInput
+  aiconversations?: Prisma.AIConversationUncheckedUpdateManyWithoutExamNestedInput
 }
 
 export type ExamCreateManyInput = {
@@ -722,6 +729,20 @@ export type ExamUpdateOneWithoutAiEvaluationsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.ExamUpdateToOneWithWhereWithoutAiEvaluationsInput, Prisma.ExamUpdateWithoutAiEvaluationsInput>, Prisma.ExamUncheckedUpdateWithoutAiEvaluationsInput>
 }
 
+export type ExamCreateNestedOneWithoutAiconversationsInput = {
+  create?: Prisma.XOR<Prisma.ExamCreateWithoutAiconversationsInput, Prisma.ExamUncheckedCreateWithoutAiconversationsInput>
+  connectOrCreate?: Prisma.ExamCreateOrConnectWithoutAiconversationsInput
+  connect?: Prisma.ExamWhereUniqueInput
+}
+
+export type ExamUpdateOneRequiredWithoutAiconversationsNestedInput = {
+  create?: Prisma.XOR<Prisma.ExamCreateWithoutAiconversationsInput, Prisma.ExamUncheckedCreateWithoutAiconversationsInput>
+  connectOrCreate?: Prisma.ExamCreateOrConnectWithoutAiconversationsInput
+  upsert?: Prisma.ExamUpsertWithoutAiconversationsInput
+  connect?: Prisma.ExamWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ExamUpdateToOneWithWhereWithoutAiconversationsInput, Prisma.ExamUpdateWithoutAiconversationsInput>, Prisma.ExamUncheckedUpdateWithoutAiconversationsInput>
+}
+
 export type ExamCreateWithoutCreatorInput = {
   id?: string
   title: string
@@ -741,6 +762,7 @@ export type ExamCreateWithoutCreatorInput = {
   examGroups?: Prisma.ExamGroupCreateNestedManyWithoutExamInput
   examAttempts?: Prisma.ExamAttemptCreateNestedManyWithoutExamInput
   aiEvaluations?: Prisma.AiEvaluationCreateNestedManyWithoutExamInput
+  aiconversations?: Prisma.AIConversationCreateNestedManyWithoutExamInput
 }
 
 export type ExamUncheckedCreateWithoutCreatorInput = {
@@ -762,6 +784,7 @@ export type ExamUncheckedCreateWithoutCreatorInput = {
   examGroups?: Prisma.ExamGroupUncheckedCreateNestedManyWithoutExamInput
   examAttempts?: Prisma.ExamAttemptUncheckedCreateNestedManyWithoutExamInput
   aiEvaluations?: Prisma.AiEvaluationUncheckedCreateNestedManyWithoutExamInput
+  aiconversations?: Prisma.AIConversationUncheckedCreateNestedManyWithoutExamInput
 }
 
 export type ExamCreateOrConnectWithoutCreatorInput = {
@@ -827,6 +850,7 @@ export type ExamCreateWithoutProblemsInput = {
   examGroups?: Prisma.ExamGroupCreateNestedManyWithoutExamInput
   examAttempts?: Prisma.ExamAttemptCreateNestedManyWithoutExamInput
   aiEvaluations?: Prisma.AiEvaluationCreateNestedManyWithoutExamInput
+  aiconversations?: Prisma.AIConversationCreateNestedManyWithoutExamInput
 }
 
 export type ExamUncheckedCreateWithoutProblemsInput = {
@@ -848,6 +872,7 @@ export type ExamUncheckedCreateWithoutProblemsInput = {
   examGroups?: Prisma.ExamGroupUncheckedCreateNestedManyWithoutExamInput
   examAttempts?: Prisma.ExamAttemptUncheckedCreateNestedManyWithoutExamInput
   aiEvaluations?: Prisma.AiEvaluationUncheckedCreateNestedManyWithoutExamInput
+  aiconversations?: Prisma.AIConversationUncheckedCreateNestedManyWithoutExamInput
 }
 
 export type ExamCreateOrConnectWithoutProblemsInput = {
@@ -885,6 +910,7 @@ export type ExamUpdateWithoutProblemsInput = {
   examGroups?: Prisma.ExamGroupUpdateManyWithoutExamNestedInput
   examAttempts?: Prisma.ExamAttemptUpdateManyWithoutExamNestedInput
   aiEvaluations?: Prisma.AiEvaluationUpdateManyWithoutExamNestedInput
+  aiconversations?: Prisma.AIConversationUpdateManyWithoutExamNestedInput
 }
 
 export type ExamUncheckedUpdateWithoutProblemsInput = {
@@ -906,6 +932,7 @@ export type ExamUncheckedUpdateWithoutProblemsInput = {
   examGroups?: Prisma.ExamGroupUncheckedUpdateManyWithoutExamNestedInput
   examAttempts?: Prisma.ExamAttemptUncheckedUpdateManyWithoutExamNestedInput
   aiEvaluations?: Prisma.AiEvaluationUncheckedUpdateManyWithoutExamNestedInput
+  aiconversations?: Prisma.AIConversationUncheckedUpdateManyWithoutExamNestedInput
 }
 
 export type ExamCreateWithoutEnrollmentsInput = {
@@ -927,6 +954,7 @@ export type ExamCreateWithoutEnrollmentsInput = {
   examGroups?: Prisma.ExamGroupCreateNestedManyWithoutExamInput
   examAttempts?: Prisma.ExamAttemptCreateNestedManyWithoutExamInput
   aiEvaluations?: Prisma.AiEvaluationCreateNestedManyWithoutExamInput
+  aiconversations?: Prisma.AIConversationCreateNestedManyWithoutExamInput
 }
 
 export type ExamUncheckedCreateWithoutEnrollmentsInput = {
@@ -948,6 +976,7 @@ export type ExamUncheckedCreateWithoutEnrollmentsInput = {
   examGroups?: Prisma.ExamGroupUncheckedCreateNestedManyWithoutExamInput
   examAttempts?: Prisma.ExamAttemptUncheckedCreateNestedManyWithoutExamInput
   aiEvaluations?: Prisma.AiEvaluationUncheckedCreateNestedManyWithoutExamInput
+  aiconversations?: Prisma.AIConversationUncheckedCreateNestedManyWithoutExamInput
 }
 
 export type ExamCreateOrConnectWithoutEnrollmentsInput = {
@@ -985,6 +1014,7 @@ export type ExamUpdateWithoutEnrollmentsInput = {
   examGroups?: Prisma.ExamGroupUpdateManyWithoutExamNestedInput
   examAttempts?: Prisma.ExamAttemptUpdateManyWithoutExamNestedInput
   aiEvaluations?: Prisma.AiEvaluationUpdateManyWithoutExamNestedInput
+  aiconversations?: Prisma.AIConversationUpdateManyWithoutExamNestedInput
 }
 
 export type ExamUncheckedUpdateWithoutEnrollmentsInput = {
@@ -1006,6 +1036,7 @@ export type ExamUncheckedUpdateWithoutEnrollmentsInput = {
   examGroups?: Prisma.ExamGroupUncheckedUpdateManyWithoutExamNestedInput
   examAttempts?: Prisma.ExamAttemptUncheckedUpdateManyWithoutExamNestedInput
   aiEvaluations?: Prisma.AiEvaluationUncheckedUpdateManyWithoutExamNestedInput
+  aiconversations?: Prisma.AIConversationUncheckedUpdateManyWithoutExamNestedInput
 }
 
 export type ExamCreateWithoutSubmissionsInput = {
@@ -1027,6 +1058,7 @@ export type ExamCreateWithoutSubmissionsInput = {
   examGroups?: Prisma.ExamGroupCreateNestedManyWithoutExamInput
   examAttempts?: Prisma.ExamAttemptCreateNestedManyWithoutExamInput
   aiEvaluations?: Prisma.AiEvaluationCreateNestedManyWithoutExamInput
+  aiconversations?: Prisma.AIConversationCreateNestedManyWithoutExamInput
 }
 
 export type ExamUncheckedCreateWithoutSubmissionsInput = {
@@ -1048,6 +1080,7 @@ export type ExamUncheckedCreateWithoutSubmissionsInput = {
   examGroups?: Prisma.ExamGroupUncheckedCreateNestedManyWithoutExamInput
   examAttempts?: Prisma.ExamAttemptUncheckedCreateNestedManyWithoutExamInput
   aiEvaluations?: Prisma.AiEvaluationUncheckedCreateNestedManyWithoutExamInput
+  aiconversations?: Prisma.AIConversationUncheckedCreateNestedManyWithoutExamInput
 }
 
 export type ExamCreateOrConnectWithoutSubmissionsInput = {
@@ -1085,6 +1118,7 @@ export type ExamUpdateWithoutSubmissionsInput = {
   examGroups?: Prisma.ExamGroupUpdateManyWithoutExamNestedInput
   examAttempts?: Prisma.ExamAttemptUpdateManyWithoutExamNestedInput
   aiEvaluations?: Prisma.AiEvaluationUpdateManyWithoutExamNestedInput
+  aiconversations?: Prisma.AIConversationUpdateManyWithoutExamNestedInput
 }
 
 export type ExamUncheckedUpdateWithoutSubmissionsInput = {
@@ -1106,6 +1140,7 @@ export type ExamUncheckedUpdateWithoutSubmissionsInput = {
   examGroups?: Prisma.ExamGroupUncheckedUpdateManyWithoutExamNestedInput
   examAttempts?: Prisma.ExamAttemptUncheckedUpdateManyWithoutExamNestedInput
   aiEvaluations?: Prisma.AiEvaluationUncheckedUpdateManyWithoutExamNestedInput
+  aiconversations?: Prisma.AIConversationUncheckedUpdateManyWithoutExamNestedInput
 }
 
 export type ExamCreateWithoutResultsInput = {
@@ -1127,6 +1162,7 @@ export type ExamCreateWithoutResultsInput = {
   examGroups?: Prisma.ExamGroupCreateNestedManyWithoutExamInput
   examAttempts?: Prisma.ExamAttemptCreateNestedManyWithoutExamInput
   aiEvaluations?: Prisma.AiEvaluationCreateNestedManyWithoutExamInput
+  aiconversations?: Prisma.AIConversationCreateNestedManyWithoutExamInput
 }
 
 export type ExamUncheckedCreateWithoutResultsInput = {
@@ -1148,6 +1184,7 @@ export type ExamUncheckedCreateWithoutResultsInput = {
   examGroups?: Prisma.ExamGroupUncheckedCreateNestedManyWithoutExamInput
   examAttempts?: Prisma.ExamAttemptUncheckedCreateNestedManyWithoutExamInput
   aiEvaluations?: Prisma.AiEvaluationUncheckedCreateNestedManyWithoutExamInput
+  aiconversations?: Prisma.AIConversationUncheckedCreateNestedManyWithoutExamInput
 }
 
 export type ExamCreateOrConnectWithoutResultsInput = {
@@ -1185,6 +1222,7 @@ export type ExamUpdateWithoutResultsInput = {
   examGroups?: Prisma.ExamGroupUpdateManyWithoutExamNestedInput
   examAttempts?: Prisma.ExamAttemptUpdateManyWithoutExamNestedInput
   aiEvaluations?: Prisma.AiEvaluationUpdateManyWithoutExamNestedInput
+  aiconversations?: Prisma.AIConversationUpdateManyWithoutExamNestedInput
 }
 
 export type ExamUncheckedUpdateWithoutResultsInput = {
@@ -1206,6 +1244,7 @@ export type ExamUncheckedUpdateWithoutResultsInput = {
   examGroups?: Prisma.ExamGroupUncheckedUpdateManyWithoutExamNestedInput
   examAttempts?: Prisma.ExamAttemptUncheckedUpdateManyWithoutExamNestedInput
   aiEvaluations?: Prisma.AiEvaluationUncheckedUpdateManyWithoutExamNestedInput
+  aiconversations?: Prisma.AIConversationUncheckedUpdateManyWithoutExamNestedInput
 }
 
 export type ExamCreateWithoutExamGroupsInput = {
@@ -1227,6 +1266,7 @@ export type ExamCreateWithoutExamGroupsInput = {
   results?: Prisma.ExamResultCreateNestedManyWithoutExamInput
   examAttempts?: Prisma.ExamAttemptCreateNestedManyWithoutExamInput
   aiEvaluations?: Prisma.AiEvaluationCreateNestedManyWithoutExamInput
+  aiconversations?: Prisma.AIConversationCreateNestedManyWithoutExamInput
 }
 
 export type ExamUncheckedCreateWithoutExamGroupsInput = {
@@ -1248,6 +1288,7 @@ export type ExamUncheckedCreateWithoutExamGroupsInput = {
   results?: Prisma.ExamResultUncheckedCreateNestedManyWithoutExamInput
   examAttempts?: Prisma.ExamAttemptUncheckedCreateNestedManyWithoutExamInput
   aiEvaluations?: Prisma.AiEvaluationUncheckedCreateNestedManyWithoutExamInput
+  aiconversations?: Prisma.AIConversationUncheckedCreateNestedManyWithoutExamInput
 }
 
 export type ExamCreateOrConnectWithoutExamGroupsInput = {
@@ -1285,6 +1326,7 @@ export type ExamUpdateWithoutExamGroupsInput = {
   results?: Prisma.ExamResultUpdateManyWithoutExamNestedInput
   examAttempts?: Prisma.ExamAttemptUpdateManyWithoutExamNestedInput
   aiEvaluations?: Prisma.AiEvaluationUpdateManyWithoutExamNestedInput
+  aiconversations?: Prisma.AIConversationUpdateManyWithoutExamNestedInput
 }
 
 export type ExamUncheckedUpdateWithoutExamGroupsInput = {
@@ -1306,6 +1348,7 @@ export type ExamUncheckedUpdateWithoutExamGroupsInput = {
   results?: Prisma.ExamResultUncheckedUpdateManyWithoutExamNestedInput
   examAttempts?: Prisma.ExamAttemptUncheckedUpdateManyWithoutExamNestedInput
   aiEvaluations?: Prisma.AiEvaluationUncheckedUpdateManyWithoutExamNestedInput
+  aiconversations?: Prisma.AIConversationUncheckedUpdateManyWithoutExamNestedInput
 }
 
 export type ExamCreateWithoutExamAttemptsInput = {
@@ -1327,6 +1370,7 @@ export type ExamCreateWithoutExamAttemptsInput = {
   results?: Prisma.ExamResultCreateNestedManyWithoutExamInput
   examGroups?: Prisma.ExamGroupCreateNestedManyWithoutExamInput
   aiEvaluations?: Prisma.AiEvaluationCreateNestedManyWithoutExamInput
+  aiconversations?: Prisma.AIConversationCreateNestedManyWithoutExamInput
 }
 
 export type ExamUncheckedCreateWithoutExamAttemptsInput = {
@@ -1348,6 +1392,7 @@ export type ExamUncheckedCreateWithoutExamAttemptsInput = {
   results?: Prisma.ExamResultUncheckedCreateNestedManyWithoutExamInput
   examGroups?: Prisma.ExamGroupUncheckedCreateNestedManyWithoutExamInput
   aiEvaluations?: Prisma.AiEvaluationUncheckedCreateNestedManyWithoutExamInput
+  aiconversations?: Prisma.AIConversationUncheckedCreateNestedManyWithoutExamInput
 }
 
 export type ExamCreateOrConnectWithoutExamAttemptsInput = {
@@ -1385,6 +1430,7 @@ export type ExamUpdateWithoutExamAttemptsInput = {
   results?: Prisma.ExamResultUpdateManyWithoutExamNestedInput
   examGroups?: Prisma.ExamGroupUpdateManyWithoutExamNestedInput
   aiEvaluations?: Prisma.AiEvaluationUpdateManyWithoutExamNestedInput
+  aiconversations?: Prisma.AIConversationUpdateManyWithoutExamNestedInput
 }
 
 export type ExamUncheckedUpdateWithoutExamAttemptsInput = {
@@ -1406,6 +1452,7 @@ export type ExamUncheckedUpdateWithoutExamAttemptsInput = {
   results?: Prisma.ExamResultUncheckedUpdateManyWithoutExamNestedInput
   examGroups?: Prisma.ExamGroupUncheckedUpdateManyWithoutExamNestedInput
   aiEvaluations?: Prisma.AiEvaluationUncheckedUpdateManyWithoutExamNestedInput
+  aiconversations?: Prisma.AIConversationUncheckedUpdateManyWithoutExamNestedInput
 }
 
 export type ExamCreateWithoutAiEvaluationsInput = {
@@ -1427,6 +1474,7 @@ export type ExamCreateWithoutAiEvaluationsInput = {
   results?: Prisma.ExamResultCreateNestedManyWithoutExamInput
   examGroups?: Prisma.ExamGroupCreateNestedManyWithoutExamInput
   examAttempts?: Prisma.ExamAttemptCreateNestedManyWithoutExamInput
+  aiconversations?: Prisma.AIConversationCreateNestedManyWithoutExamInput
 }
 
 export type ExamUncheckedCreateWithoutAiEvaluationsInput = {
@@ -1448,6 +1496,7 @@ export type ExamUncheckedCreateWithoutAiEvaluationsInput = {
   results?: Prisma.ExamResultUncheckedCreateNestedManyWithoutExamInput
   examGroups?: Prisma.ExamGroupUncheckedCreateNestedManyWithoutExamInput
   examAttempts?: Prisma.ExamAttemptUncheckedCreateNestedManyWithoutExamInput
+  aiconversations?: Prisma.AIConversationUncheckedCreateNestedManyWithoutExamInput
 }
 
 export type ExamCreateOrConnectWithoutAiEvaluationsInput = {
@@ -1485,6 +1534,7 @@ export type ExamUpdateWithoutAiEvaluationsInput = {
   results?: Prisma.ExamResultUpdateManyWithoutExamNestedInput
   examGroups?: Prisma.ExamGroupUpdateManyWithoutExamNestedInput
   examAttempts?: Prisma.ExamAttemptUpdateManyWithoutExamNestedInput
+  aiconversations?: Prisma.AIConversationUpdateManyWithoutExamNestedInput
 }
 
 export type ExamUncheckedUpdateWithoutAiEvaluationsInput = {
@@ -1506,6 +1556,111 @@ export type ExamUncheckedUpdateWithoutAiEvaluationsInput = {
   results?: Prisma.ExamResultUncheckedUpdateManyWithoutExamNestedInput
   examGroups?: Prisma.ExamGroupUncheckedUpdateManyWithoutExamNestedInput
   examAttempts?: Prisma.ExamAttemptUncheckedUpdateManyWithoutExamNestedInput
+  aiconversations?: Prisma.AIConversationUncheckedUpdateManyWithoutExamNestedInput
+}
+
+export type ExamCreateWithoutAiconversationsInput = {
+  id?: string
+  title: string
+  description?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  isPublished?: boolean
+  durationMin: number
+  sebEnabled?: boolean
+  status: $Enums.ExamStatus
+  startDate: Date | string
+  endDate: Date | string
+  creator: Prisma.UserCreateNestedOneWithoutExamsInput
+  problems?: Prisma.ExamProblemCreateNestedManyWithoutExamInput
+  enrollments?: Prisma.ExamEnrollmentCreateNestedManyWithoutExamInput
+  submissions?: Prisma.SubmissionCreateNestedManyWithoutExamInput
+  results?: Prisma.ExamResultCreateNestedManyWithoutExamInput
+  examGroups?: Prisma.ExamGroupCreateNestedManyWithoutExamInput
+  examAttempts?: Prisma.ExamAttemptCreateNestedManyWithoutExamInput
+  aiEvaluations?: Prisma.AiEvaluationCreateNestedManyWithoutExamInput
+}
+
+export type ExamUncheckedCreateWithoutAiconversationsInput = {
+  id?: string
+  title: string
+  description?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  isPublished?: boolean
+  durationMin: number
+  sebEnabled?: boolean
+  status: $Enums.ExamStatus
+  creatorId: string
+  startDate: Date | string
+  endDate: Date | string
+  problems?: Prisma.ExamProblemUncheckedCreateNestedManyWithoutExamInput
+  enrollments?: Prisma.ExamEnrollmentUncheckedCreateNestedManyWithoutExamInput
+  submissions?: Prisma.SubmissionUncheckedCreateNestedManyWithoutExamInput
+  results?: Prisma.ExamResultUncheckedCreateNestedManyWithoutExamInput
+  examGroups?: Prisma.ExamGroupUncheckedCreateNestedManyWithoutExamInput
+  examAttempts?: Prisma.ExamAttemptUncheckedCreateNestedManyWithoutExamInput
+  aiEvaluations?: Prisma.AiEvaluationUncheckedCreateNestedManyWithoutExamInput
+}
+
+export type ExamCreateOrConnectWithoutAiconversationsInput = {
+  where: Prisma.ExamWhereUniqueInput
+  create: Prisma.XOR<Prisma.ExamCreateWithoutAiconversationsInput, Prisma.ExamUncheckedCreateWithoutAiconversationsInput>
+}
+
+export type ExamUpsertWithoutAiconversationsInput = {
+  update: Prisma.XOR<Prisma.ExamUpdateWithoutAiconversationsInput, Prisma.ExamUncheckedUpdateWithoutAiconversationsInput>
+  create: Prisma.XOR<Prisma.ExamCreateWithoutAiconversationsInput, Prisma.ExamUncheckedCreateWithoutAiconversationsInput>
+  where?: Prisma.ExamWhereInput
+}
+
+export type ExamUpdateToOneWithWhereWithoutAiconversationsInput = {
+  where?: Prisma.ExamWhereInput
+  data: Prisma.XOR<Prisma.ExamUpdateWithoutAiconversationsInput, Prisma.ExamUncheckedUpdateWithoutAiconversationsInput>
+}
+
+export type ExamUpdateWithoutAiconversationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  durationMin?: Prisma.IntFieldUpdateOperationsInput | number
+  sebEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
+  startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  creator?: Prisma.UserUpdateOneRequiredWithoutExamsNestedInput
+  problems?: Prisma.ExamProblemUpdateManyWithoutExamNestedInput
+  enrollments?: Prisma.ExamEnrollmentUpdateManyWithoutExamNestedInput
+  submissions?: Prisma.SubmissionUpdateManyWithoutExamNestedInput
+  results?: Prisma.ExamResultUpdateManyWithoutExamNestedInput
+  examGroups?: Prisma.ExamGroupUpdateManyWithoutExamNestedInput
+  examAttempts?: Prisma.ExamAttemptUpdateManyWithoutExamNestedInput
+  aiEvaluations?: Prisma.AiEvaluationUpdateManyWithoutExamNestedInput
+}
+
+export type ExamUncheckedUpdateWithoutAiconversationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  durationMin?: Prisma.IntFieldUpdateOperationsInput | number
+  sebEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
+  creatorId?: Prisma.StringFieldUpdateOperationsInput | string
+  startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  problems?: Prisma.ExamProblemUncheckedUpdateManyWithoutExamNestedInput
+  enrollments?: Prisma.ExamEnrollmentUncheckedUpdateManyWithoutExamNestedInput
+  submissions?: Prisma.SubmissionUncheckedUpdateManyWithoutExamNestedInput
+  results?: Prisma.ExamResultUncheckedUpdateManyWithoutExamNestedInput
+  examGroups?: Prisma.ExamGroupUncheckedUpdateManyWithoutExamNestedInput
+  examAttempts?: Prisma.ExamAttemptUncheckedUpdateManyWithoutExamNestedInput
+  aiEvaluations?: Prisma.AiEvaluationUncheckedUpdateManyWithoutExamNestedInput
 }
 
 export type ExamCreateManyCreatorInput = {
@@ -1541,6 +1696,7 @@ export type ExamUpdateWithoutCreatorInput = {
   examGroups?: Prisma.ExamGroupUpdateManyWithoutExamNestedInput
   examAttempts?: Prisma.ExamAttemptUpdateManyWithoutExamNestedInput
   aiEvaluations?: Prisma.AiEvaluationUpdateManyWithoutExamNestedInput
+  aiconversations?: Prisma.AIConversationUpdateManyWithoutExamNestedInput
 }
 
 export type ExamUncheckedUpdateWithoutCreatorInput = {
@@ -1562,6 +1718,7 @@ export type ExamUncheckedUpdateWithoutCreatorInput = {
   examGroups?: Prisma.ExamGroupUncheckedUpdateManyWithoutExamNestedInput
   examAttempts?: Prisma.ExamAttemptUncheckedUpdateManyWithoutExamNestedInput
   aiEvaluations?: Prisma.AiEvaluationUncheckedUpdateManyWithoutExamNestedInput
+  aiconversations?: Prisma.AIConversationUncheckedUpdateManyWithoutExamNestedInput
 }
 
 export type ExamUncheckedUpdateManyWithoutCreatorInput = {
@@ -1591,6 +1748,7 @@ export type ExamCountOutputType = {
   examGroups: number
   examAttempts: number
   aiEvaluations: number
+  aiconversations: number
 }
 
 export type ExamCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1601,6 +1759,7 @@ export type ExamCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   examGroups?: boolean | ExamCountOutputTypeCountExamGroupsArgs
   examAttempts?: boolean | ExamCountOutputTypeCountExamAttemptsArgs
   aiEvaluations?: boolean | ExamCountOutputTypeCountAiEvaluationsArgs
+  aiconversations?: boolean | ExamCountOutputTypeCountAiconversationsArgs
 }
 
 /**
@@ -1662,6 +1821,13 @@ export type ExamCountOutputTypeCountAiEvaluationsArgs<ExtArgs extends runtime.Ty
   where?: Prisma.AiEvaluationWhereInput
 }
 
+/**
+ * ExamCountOutputType without action
+ */
+export type ExamCountOutputTypeCountAiconversationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AIConversationWhereInput
+}
+
 
 export type ExamSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1684,6 +1850,7 @@ export type ExamSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   examGroups?: boolean | Prisma.Exam$examGroupsArgs<ExtArgs>
   examAttempts?: boolean | Prisma.Exam$examAttemptsArgs<ExtArgs>
   aiEvaluations?: boolean | Prisma.Exam$aiEvaluationsArgs<ExtArgs>
+  aiconversations?: boolean | Prisma.Exam$aiconversationsArgs<ExtArgs>
   _count?: boolean | Prisma.ExamCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["exam"]>
 
@@ -1744,6 +1911,7 @@ export type ExamInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   examGroups?: boolean | Prisma.Exam$examGroupsArgs<ExtArgs>
   examAttempts?: boolean | Prisma.Exam$examAttemptsArgs<ExtArgs>
   aiEvaluations?: boolean | Prisma.Exam$aiEvaluationsArgs<ExtArgs>
+  aiconversations?: boolean | Prisma.Exam$aiconversationsArgs<ExtArgs>
   _count?: boolean | Prisma.ExamCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ExamIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1764,6 +1932,7 @@ export type $ExamPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     examGroups: Prisma.$ExamGroupPayload<ExtArgs>[]
     examAttempts: Prisma.$ExamAttemptPayload<ExtArgs>[]
     aiEvaluations: Prisma.$AiEvaluationPayload<ExtArgs>[]
+    aiconversations: Prisma.$AIConversationPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -2180,6 +2349,7 @@ export interface Prisma__ExamClient<T, Null = never, ExtArgs extends runtime.Typ
   examGroups<T extends Prisma.Exam$examGroupsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Exam$examGroupsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ExamGroupPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   examAttempts<T extends Prisma.Exam$examAttemptsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Exam$examAttemptsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ExamAttemptPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   aiEvaluations<T extends Prisma.Exam$aiEvaluationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Exam$aiEvaluationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AiEvaluationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  aiconversations<T extends Prisma.Exam$aiconversationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Exam$aiconversationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AIConversationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2782,6 +2952,30 @@ export type Exam$aiEvaluationsArgs<ExtArgs extends runtime.Types.Extensions.Inte
   take?: number
   skip?: number
   distinct?: Prisma.AiEvaluationScalarFieldEnum | Prisma.AiEvaluationScalarFieldEnum[]
+}
+
+/**
+ * Exam.aiconversations
+ */
+export type Exam$aiconversationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AIConversation
+   */
+  select?: Prisma.AIConversationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the AIConversation
+   */
+  omit?: Prisma.AIConversationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AIConversationInclude<ExtArgs> | null
+  where?: Prisma.AIConversationWhereInput
+  orderBy?: Prisma.AIConversationOrderByWithRelationInput | Prisma.AIConversationOrderByWithRelationInput[]
+  cursor?: Prisma.AIConversationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AIConversationScalarFieldEnum | Prisma.AIConversationScalarFieldEnum[]
 }
 
 /**

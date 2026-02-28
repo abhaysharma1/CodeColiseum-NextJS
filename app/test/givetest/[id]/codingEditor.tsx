@@ -221,7 +221,6 @@ function CodingEditor({
   return (
     <div className="flex-1">
       <div
-        title="tab navbar"
         className="flex-1 h-[calc(100vh-7rem)] outline-1 m-5 outline-offset-8 rounded-md py-3 px-5"
       >
         <div

@@ -1,30 +1,24 @@
 "use client";
-import { Label } from "@/components/ui/label";
 import * as React from "react";
 
 import {
   ColumnDef,
-  ColumnFiltersState,
   flexRender,
   getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
   getSortedRowModel,
   SortingState,
   useReactTable,
   VisibilityState,
 } from "@tanstack/react-table";
-import { ChevronDown, MoreHorizontal } from "lucide-react";
+import { ChevronDown, ArrowUpDown, Bot, Users } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
+import { Badge } from "@/components/ui/badge";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
@@ -40,285 +34,354 @@ import { toast } from "sonner";
 import axios from "axios";
 import { Spinner } from "@/components/ui/shadcn-io/spinner";
 import { TbReload } from "react-icons/tb";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { getBackendURL } from "@/utils/utilities";
 import { Group } from "@/generated/prisma/client";
 
-
-
 export const columns: ColumnDef<Group>[] = [
-
-  {
-    accessorKey: "id",
-    header: ({ column }) => {
-      return <div className="text-left ml-3">ID</div>;
-    },
-    cell: ({ row }) => <div className="lowercase truncate ml-3">{row.getValue("id")}</div>,
-  },
   {
     accessorKey: "name",
-    header: () => <div className="text-center">Group Name</div>,
-    cell: ({ row }) => {
-      return (
-        <div className="text-center font-medium">{row.getValue("name")}</div>
-      );
-    },
+    header: ({ column }) => (
+      <Button
+        variant="ghost"
+        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        className="px-0 font-semibold"
+      >
+        Group Name
+        <ArrowUpDown className="ml-2 h-4 w-4" />
+      </Button>
+    ),
+    cell: ({ row }) => (
+      <div className="font-medium">{row.getValue("name")}</div>
+    ),
   },
   {
     accessorKey: "description",
     header: "Description",
-    cell: ({ row }) => <div className="">{row.getValue("description")}</div>,
+    cell: ({ row }) => {
+      const desc: string = row.getValue("description");
+      return (
+        <div className="text-muted-foreground text-sm truncate max-w-[200px]">
+          {desc || <span className="italic">No description</span>}
+        </div>
+      );
+    },
+  },
+  {
+    accessorKey: "type",
+    header: "Type",
+    cell: ({ row }) => {
+      const type: string = row.getValue("type");
+      return (
+        <Badge variant="outline">{type[0] + type.slice(1).toLowerCase()}</Badge>
+      );
+    },
   },
   {
     accessorKey: "noOfMembers",
-    header: () => <div className="text-center">No of Students</div>,
-    cell: ({ row }) => (
-      <div className="text-center">{row.getValue("noOfMembers")}</div>
+    header: ({ column }) => (
+      <Button
+        variant="ghost"
+        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        className="px-0 font-semibold text-center"
+      >
+        <Users className="mr-1 h-4 w-4" />
+        Students
+        <ArrowUpDown className="ml-2 h-4 w-4" />
+      </Button>
     ),
+    cell: ({ row }) => (
+      <div className="text-center tabular-nums">
+        {row.getValue("noOfMembers")}
+      </div>
+    ),
+  },
+  {
+    accessorKey: "aiEnabled",
+    header: () => (
+      <div className="flex items-center gap-1">
+        <Bot className="h-4 w-4" />
+        AI
+      </div>
+    ),
+    cell: ({ row }) => {
+      const enabled: boolean = row.getValue("aiEnabled");
+      return (
+        <Badge variant={enabled ? "default" : "outline"}>
+          {enabled ? "Enabled" : "Disabled"}
+        </Badge>
+      );
+    },
+  },
+  {
+    accessorKey: "createdAt",
+    header: ({ column }) => (
+      <Button
+        variant="ghost"
+        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        className="px-0 font-semibold"
+      >
+        Created
+        <ArrowUpDown className="ml-2 h-4 w-4" />
+      </Button>
+    ),
+    cell: ({ row }) => {
+      const date = new Date(row.getValue("createdAt"));
+      return (
+        <div className="text-muted-foreground text-sm whitespace-nowrap">
+          {date.toLocaleDateString(undefined, {
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+          })}
+        </div>
+      );
+    },
   },
   {
     id: "actions",
     enableHiding: false,
-    cell: ({ row }) => {
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>
-              <Link
-                href={`/dashboard/teacher/students/editgroup/${row.original.id}`}
-              >
-                See Group Details
-              </Link>
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
-    },
+    cell: ({ row }) => (
+      <Button variant="outline" size="sm" asChild>
+        <Link href={`/dashboard/teacher/students/editgroup/${row.original.id}`}>
+          View Details
+        </Link>
+      </Button>
+    ),
   },
 ];
 
 function CreatedGroups() {
   const [sorting, setSorting] = React.useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
-  );
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
-  const [rowSelection, setRowSelection] = React.useState({});
 
   const [data, setData] = React.useState<Group[]>([]);
   const [loadingGroups, setLoadingGroups] = React.useState(false);
-  const router = useRouter();
+
+  const [groupType, setGroupType] = React.useState("ALL");
+
+  const take = 8;
+  const [inputValue, setInputValue] = React.useState("");
+  const [params, setParams] = React.useState({ skip: 0, search: "" });
 
   const table = useReactTable({
     data,
     columns,
     onSortingChange: setSorting,
-    onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
-    onRowSelectionChange: setRowSelection,
     state: {
       sorting,
-      columnFilters,
       columnVisibility,
-      rowSelection,
     },
   });
 
-  const fetchGroups = async () => {
-    setLoadingGroups(true);
-    try {
-      const response = await axios.get(
-        `${getBackendURL()}/teacher/getallgroups`,
-        {
-          withCredentials: true,
-        }
-      );
-      setData(response.data as Group[]);
-      toast.success("Groups Fetched Successfully");
-    } catch (error) {
-      console.error("Error fetching groups:", error);
-    } finally {
-      setLoadingGroups(false);
-    }
-  };
+  const fetchGroups = React.useCallback(
+    async (currentSkip: number, currentSearch: string, groupType: string) => {
+      setLoadingGroups(true);
+      try {
+        const response = await axios.get(
+          `${getBackendURL()}/teacher/getallgroups`,
+          {
+            params: {
+              take,
+              skip: currentSkip,
+              searchValue: currentSearch,
+              groupType: groupType,
+            },
+            withCredentials: true,
+          }
+        );
+        setData(response.data as Group[]);
+      } catch (error) {
+        console.error("Error fetching groups:", error);
+        toast.error("Failed to fetch groups");
+      } finally {
+        setLoadingGroups(false);
+      }
+    },
+    [take]
+  );
 
+  // Single fetch effect — fires whenever skip or search changes atomically
   React.useEffect(() => {
-    fetchGroups();
-  }, []);
+    fetchGroups(params.skip, params.search, groupType);
+  }, [params, fetchGroups, groupType]);
+
+  // Debounce search input — resets skip to 0 atomically with the new search value
+  React.useEffect(() => {
+    const t = setTimeout(() => {
+      setParams({ skip: 0, search: inputValue });
+    }, 400);
+    return () => clearTimeout(t);
+  }, [inputValue]);
+
+  const handlePrev = () =>
+    setParams((prev) => ({ ...prev, skip: Math.max(0, prev.skip - take) }));
+
+  const handleNext = () =>
+    setParams((prev) => ({ ...prev, skip: prev.skip + take }));
 
   return (
-    <div className="">
-      <div>
-        <Label className="text-xl">Created Groups</Label>
+    <div className="space-y-4 w-full">
+      <div className="flex items-center justify-between w-full">
+        <div>
+          <h2 className="text-xl font-semibold tracking-tight">
+            Created Groups
+          </h2>
+          <p className="text-sm text-muted-foreground">
+            Manage and view all your student groups.
+          </p>
+        </div>
+        <Button variant="default" asChild>
+          <Link href="/dashboard/teacher/students/creategroup">
+            + Create Group
+          </Link>
+        </Button>
       </div>
-      <div>
-        <div className="w-full">
-          <div className="flex items-center justify-between py-4">
-            <div className="flex">
-              <Input
-                placeholder="Search Group Name..."
-                value={
-                  (table.getColumn("name")?.getFilterValue() as string) ?? ""
-                }
-                onChange={(event) =>
-                  table.getColumn("name")?.setFilterValue(event.target.value)
-                }
-                className="max-w-sm "
-              />
-              <Button
-                className="ml-2"
-                variant="outline"
-                onClick={fetchGroups}
-                disabled={loadingGroups}
-              >
-                <TbReload />
-              </Button>
-            </div>
 
-            <div>
-              <Button variant={"default"} asChild className="mx-2">
-                <Link href={"/dashboard/teacher/students/creategroup"}>
-                  Create Group
-                </Link>
+      <div className="flex items-center gap-2">
+        <Input
+          placeholder="Search by group name..."
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
+          className="max-w-sm"
+        />
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant={"outline"}>
+              {groupType[0] + groupType.slice(1).toLowerCase()}
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem onClick={() => setGroupType("All")}>
+              All
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setGroupType("CLASS")}>
+              Class
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setGroupType("LAB")}>
+              Lab
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+        <Button
+          variant="outline"
+          size="icon"
+          onClick={() => fetchGroups(params.skip, params.search, groupType)}
+          disabled={loadingGroups}
+        >
+          <TbReload className={loadingGroups ? "animate-spin" : ""} />
+        </Button>
+        <div className="ml-auto">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline">
+                Columns <ChevronDown className="ml-2 h-4 w-4" />
               </Button>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="outline">
-                    Columns <ChevronDown />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  {table
-                    .getAllColumns()
-                    .filter((column) => column.getCanHide())
-                    .map((column) => {
-                      return (
-                        <DropdownMenuCheckboxItem
-                          key={column.id}
-                          className="capitalize"
-                          checked={column.getIsVisible()}
-                          onCheckedChange={(value) =>
-                            column.toggleVisibility(!!value)
-                          }
-                        >
-                          {column.id}
-                        </DropdownMenuCheckboxItem>
-                      );
-                    })}
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
-          </div>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              {table
+                .getAllColumns()
+                .filter((col) => col.getCanHide())
+                .map((col) => (
+                  <DropdownMenuCheckboxItem
+                    key={col.id}
+                    className="capitalize"
+                    checked={col.getIsVisible()}
+                    onCheckedChange={(value) => col.toggleVisibility(!!value)}
+                  >
+                    {col.id}
+                  </DropdownMenuCheckboxItem>
+                ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      </div>
 
-          {loadingGroups ? (
-            <div className="w-full flex justify-center items-center rounded-md border min-h-[20vh]">
-              <Spinner variant="ellipsis" />
-            </div>
-          ) : (
-            <div className="w-full overflow-x-auto rounded-md border animate-fade-down animate-once animate-ease-in-out">
-              <Table className="w-full table-fixed">
-                <TableHeader>
-                  {table.getHeaderGroups().map((headerGroup) => (
-                    <TableRow key={headerGroup.id}>
-                      {headerGroup.headers.map((header) => {
-                        return (
-                          <TableHead
-                            key={header.id}
-                            className={
-                              header.column.id === "description"
-                                ? "break-words"
-                                : ""
-                            }
-                          >
-                            {header.isPlaceholder
-                              ? null
-                              : flexRender(
-                                  header.column.columnDef.header,
-                                  header.getContext()
-                                )}
-                          </TableHead>
-                        );
-                      })}
-                    </TableRow>
+      {loadingGroups ? (
+        <div className="flex min-h-[20vh] w-full items-center justify-center rounded-md border">
+          <Spinner variant="ellipsis" />
+        </div>
+      ) : (
+        <div className="animate-fade-down animate-once animate-ease-in-out overflow-hidden rounded-md border w-full">
+          <Table className="w-full">
+            <TableHeader>
+              {table.getHeaderGroups().map((headerGroup) => (
+                <TableRow key={headerGroup.id}>
+                  {headerGroup.headers.map((header) => (
+                    <TableHead key={header.id}>
+                      {header.isPlaceholder
+                        ? null
+                        : flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
+                    </TableHead>
                   ))}
-                </TableHeader>
-                <TableBody>
-                  {table.getRowModel().rows?.length ? (
-                    table.getRowModel().rows.map((row) => (
-                      <TableRow
-                        key={row.id}
-                        data-state={row.getIsSelected() && "selected"}
-                      >
-                        {row.getVisibleCells().map((cell) => (
-                          <TableCell
-                            key={cell.id}
-                            className={`animate-fade-down animate-once animate-ease-in-out ${
-                              cell.column.id === "description"
-                                ? "break-words"
-                                : ""
-                            }`}
-                          >
-                            {flexRender(
-                              cell.column.columnDef.cell,
-                              cell.getContext()
-                            )}
-                          </TableCell>
-                        ))}
-                      </TableRow>
-                    ))
-                  ) : (
-                    <TableRow>
+                </TableRow>
+              ))}
+            </TableHeader>
+            <TableBody>
+              {table.getRowModel().rows?.length ? (
+                table.getRowModel().rows.map((row) => (
+                  <TableRow key={row.id}>
+                    {row.getVisibleCells().map((cell) => (
                       <TableCell
-                        colSpan={columns.length}
-                        className="h-24 text-center"
+                        key={cell.id}
+                        className="animate-fade-down animate-once animate-ease-in-out"
                       >
-                        No Groups Created
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
                       </TableCell>
-                    </TableRow>
-                  )}
-                </TableBody>
-              </Table>
-            </div>
-          )}
+                    ))}
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell
+                    colSpan={columns.length}
+                    className="h-24 text-center text-muted-foreground"
+                  >
+                    No groups created yet.
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </div>
+      )}
 
-          <div className="flex items-center justify-end space-x-2 py-4">
-            <div className="text-muted-foreground flex-1 text-sm">
-              {table.getFilteredSelectedRowModel().rows.length} of{" "}
-              {table.getFilteredRowModel().rows.length} row(s) selected.
-            </div>
-            <div className="space-x-2">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => table.previousPage()}
-                disabled={!table.getCanPreviousPage()}
-              >
-                Previous
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => table.nextPage()}
-                disabled={!table.getCanNextPage()}
-              >
-                Next
-              </Button>
-            </div>
-          </div>
+      <div className="flex items-center justify-between">
+        <p className="text-sm text-muted-foreground">
+          {data.length > 0
+            ? `Showing ${params.skip + 1}–${params.skip + data.length}`
+            : "No groups found"}
+        </p>
+        <div className="flex items-center gap-2">
+          <span className="text-sm text-muted-foreground">
+            Page {Math.floor(params.skip / take) + 1}
+          </span>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handlePrev}
+            disabled={params.skip === 0 || loadingGroups}
+          >
+            Previous
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleNext}
+            disabled={data.length < take || loadingGroups}
+          >
+            Next
+          </Button>
         </div>
       </div>
     </div>

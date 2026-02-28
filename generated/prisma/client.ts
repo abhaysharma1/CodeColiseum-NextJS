@@ -12,8 +12,6 @@
 
 import * as process from 'node:process'
 import * as path from 'node:path'
-import { fileURLToPath } from 'node:url'
-globalThis['__dirname'] = path.dirname(fileURLToPath(import.meta.url))
 
 import * as runtime from "@prisma/client/runtime/client"
 import * as $Enums from "./enums"
@@ -159,3 +157,18 @@ export type Tag = Prisma.TagModel
  * 
  */
 export type ProblemTag = Prisma.ProblemTagModel
+/**
+ * Model AIConversation
+ * 
+ */
+export type AIConversation = Prisma.AIConversationModel
+/**
+ * Model AIMessage
+ * 
+ */
+export type AIMessage = Prisma.AIMessageModel
+/**
+ * Model AIRateLimit
+ * 
+ */
+export type AIRateLimit = Prisma.AIRateLimitModel

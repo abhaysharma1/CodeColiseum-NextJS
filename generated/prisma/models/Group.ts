@@ -28,10 +28,14 @@ export type AggregateGroup = {
 
 export type GroupAvgAggregateOutputType = {
   noOfMembers: number | null
+  aiMaxMessages: number | null
+  aiMaxTokens: number | null
 }
 
 export type GroupSumAggregateOutputType = {
   noOfMembers: number | null
+  aiMaxMessages: number | null
+  aiMaxTokens: number | null
 }
 
 export type GroupMinAggregateOutputType = {
@@ -42,6 +46,10 @@ export type GroupMinAggregateOutputType = {
   noOfMembers: number | null
   createdAt: Date | null
   joinByLink: boolean | null
+  type: $Enums.groupType | null
+  aiEnabled: boolean | null
+  aiMaxMessages: number | null
+  aiMaxTokens: number | null
 }
 
 export type GroupMaxAggregateOutputType = {
@@ -52,6 +60,10 @@ export type GroupMaxAggregateOutputType = {
   noOfMembers: number | null
   createdAt: Date | null
   joinByLink: boolean | null
+  type: $Enums.groupType | null
+  aiEnabled: boolean | null
+  aiMaxMessages: number | null
+  aiMaxTokens: number | null
 }
 
 export type GroupCountAggregateOutputType = {
@@ -62,16 +74,24 @@ export type GroupCountAggregateOutputType = {
   noOfMembers: number
   createdAt: number
   joinByLink: number
+  type: number
+  aiEnabled: number
+  aiMaxMessages: number
+  aiMaxTokens: number
   _all: number
 }
 
 
 export type GroupAvgAggregateInputType = {
   noOfMembers?: true
+  aiMaxMessages?: true
+  aiMaxTokens?: true
 }
 
 export type GroupSumAggregateInputType = {
   noOfMembers?: true
+  aiMaxMessages?: true
+  aiMaxTokens?: true
 }
 
 export type GroupMinAggregateInputType = {
@@ -82,6 +102,10 @@ export type GroupMinAggregateInputType = {
   noOfMembers?: true
   createdAt?: true
   joinByLink?: true
+  type?: true
+  aiEnabled?: true
+  aiMaxMessages?: true
+  aiMaxTokens?: true
 }
 
 export type GroupMaxAggregateInputType = {
@@ -92,6 +116,10 @@ export type GroupMaxAggregateInputType = {
   noOfMembers?: true
   createdAt?: true
   joinByLink?: true
+  type?: true
+  aiEnabled?: true
+  aiMaxMessages?: true
+  aiMaxTokens?: true
 }
 
 export type GroupCountAggregateInputType = {
@@ -102,6 +130,10 @@ export type GroupCountAggregateInputType = {
   noOfMembers?: true
   createdAt?: true
   joinByLink?: true
+  type?: true
+  aiEnabled?: true
+  aiMaxMessages?: true
+  aiMaxTokens?: true
   _all?: true
 }
 
@@ -199,6 +231,10 @@ export type GroupGroupByOutputType = {
   noOfMembers: number
   createdAt: Date
   joinByLink: boolean
+  type: $Enums.groupType
+  aiEnabled: boolean
+  aiMaxMessages: number | null
+  aiMaxTokens: number | null
   _count: GroupCountAggregateOutputType | null
   _avg: GroupAvgAggregateOutputType | null
   _sum: GroupSumAggregateOutputType | null
@@ -232,9 +268,14 @@ export type GroupWhereInput = {
   noOfMembers?: Prisma.IntFilter<"Group"> | number
   createdAt?: Prisma.DateTimeFilter<"Group"> | Date | string
   joinByLink?: Prisma.BoolFilter<"Group"> | boolean
+  type?: Prisma.EnumgroupTypeFilter<"Group"> | $Enums.groupType
+  aiEnabled?: Prisma.BoolFilter<"Group"> | boolean
+  aiMaxMessages?: Prisma.IntNullableFilter<"Group"> | number | null
+  aiMaxTokens?: Prisma.IntNullableFilter<"Group"> | number | null
   creator?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   members?: Prisma.GroupMemberListRelationFilter
   examGroups?: Prisma.ExamGroupListRelationFilter
+  aiconversations?: Prisma.AIConversationListRelationFilter
 }
 
 export type GroupOrderByWithRelationInput = {
@@ -245,9 +286,14 @@ export type GroupOrderByWithRelationInput = {
   noOfMembers?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   joinByLink?: Prisma.SortOrder
+  type?: Prisma.SortOrder
+  aiEnabled?: Prisma.SortOrder
+  aiMaxMessages?: Prisma.SortOrderInput | Prisma.SortOrder
+  aiMaxTokens?: Prisma.SortOrderInput | Prisma.SortOrder
   creator?: Prisma.UserOrderByWithRelationInput
   members?: Prisma.GroupMemberOrderByRelationAggregateInput
   examGroups?: Prisma.ExamGroupOrderByRelationAggregateInput
+  aiconversations?: Prisma.AIConversationOrderByRelationAggregateInput
 }
 
 export type GroupWhereUniqueInput = Prisma.AtLeast<{
@@ -261,9 +307,14 @@ export type GroupWhereUniqueInput = Prisma.AtLeast<{
   noOfMembers?: Prisma.IntFilter<"Group"> | number
   createdAt?: Prisma.DateTimeFilter<"Group"> | Date | string
   joinByLink?: Prisma.BoolFilter<"Group"> | boolean
+  type?: Prisma.EnumgroupTypeFilter<"Group"> | $Enums.groupType
+  aiEnabled?: Prisma.BoolFilter<"Group"> | boolean
+  aiMaxMessages?: Prisma.IntNullableFilter<"Group"> | number | null
+  aiMaxTokens?: Prisma.IntNullableFilter<"Group"> | number | null
   creator?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   members?: Prisma.GroupMemberListRelationFilter
   examGroups?: Prisma.ExamGroupListRelationFilter
+  aiconversations?: Prisma.AIConversationListRelationFilter
 }, "id">
 
 export type GroupOrderByWithAggregationInput = {
@@ -274,6 +325,10 @@ export type GroupOrderByWithAggregationInput = {
   noOfMembers?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   joinByLink?: Prisma.SortOrder
+  type?: Prisma.SortOrder
+  aiEnabled?: Prisma.SortOrder
+  aiMaxMessages?: Prisma.SortOrderInput | Prisma.SortOrder
+  aiMaxTokens?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.GroupCountOrderByAggregateInput
   _avg?: Prisma.GroupAvgOrderByAggregateInput
   _max?: Prisma.GroupMaxOrderByAggregateInput
@@ -292,6 +347,10 @@ export type GroupScalarWhereWithAggregatesInput = {
   noOfMembers?: Prisma.IntWithAggregatesFilter<"Group"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Group"> | Date | string
   joinByLink?: Prisma.BoolWithAggregatesFilter<"Group"> | boolean
+  type?: Prisma.EnumgroupTypeWithAggregatesFilter<"Group"> | $Enums.groupType
+  aiEnabled?: Prisma.BoolWithAggregatesFilter<"Group"> | boolean
+  aiMaxMessages?: Prisma.IntNullableWithAggregatesFilter<"Group"> | number | null
+  aiMaxTokens?: Prisma.IntNullableWithAggregatesFilter<"Group"> | number | null
 }
 
 export type GroupCreateInput = {
@@ -301,9 +360,14 @@ export type GroupCreateInput = {
   noOfMembers?: number
   createdAt?: Date | string
   joinByLink?: boolean
+  type?: $Enums.groupType
+  aiEnabled?: boolean
+  aiMaxMessages?: number | null
+  aiMaxTokens?: number | null
   creator: Prisma.UserCreateNestedOneWithoutCreatedGroupsInput
   members?: Prisma.GroupMemberCreateNestedManyWithoutGroupInput
   examGroups?: Prisma.ExamGroupCreateNestedManyWithoutGroupInput
+  aiconversations?: Prisma.AIConversationCreateNestedManyWithoutGroupInput
 }
 
 export type GroupUncheckedCreateInput = {
@@ -314,8 +378,13 @@ export type GroupUncheckedCreateInput = {
   noOfMembers?: number
   createdAt?: Date | string
   joinByLink?: boolean
+  type?: $Enums.groupType
+  aiEnabled?: boolean
+  aiMaxMessages?: number | null
+  aiMaxTokens?: number | null
   members?: Prisma.GroupMemberUncheckedCreateNestedManyWithoutGroupInput
   examGroups?: Prisma.ExamGroupUncheckedCreateNestedManyWithoutGroupInput
+  aiconversations?: Prisma.AIConversationUncheckedCreateNestedManyWithoutGroupInput
 }
 
 export type GroupUpdateInput = {
@@ -325,9 +394,14 @@ export type GroupUpdateInput = {
   noOfMembers?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   joinByLink?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  type?: Prisma.EnumgroupTypeFieldUpdateOperationsInput | $Enums.groupType
+  aiEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  aiMaxMessages?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  aiMaxTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   creator?: Prisma.UserUpdateOneRequiredWithoutCreatedGroupsNestedInput
   members?: Prisma.GroupMemberUpdateManyWithoutGroupNestedInput
   examGroups?: Prisma.ExamGroupUpdateManyWithoutGroupNestedInput
+  aiconversations?: Prisma.AIConversationUpdateManyWithoutGroupNestedInput
 }
 
 export type GroupUncheckedUpdateInput = {
@@ -338,8 +412,13 @@ export type GroupUncheckedUpdateInput = {
   noOfMembers?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   joinByLink?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  type?: Prisma.EnumgroupTypeFieldUpdateOperationsInput | $Enums.groupType
+  aiEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  aiMaxMessages?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  aiMaxTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   members?: Prisma.GroupMemberUncheckedUpdateManyWithoutGroupNestedInput
   examGroups?: Prisma.ExamGroupUncheckedUpdateManyWithoutGroupNestedInput
+  aiconversations?: Prisma.AIConversationUncheckedUpdateManyWithoutGroupNestedInput
 }
 
 export type GroupCreateManyInput = {
@@ -350,6 +429,10 @@ export type GroupCreateManyInput = {
   noOfMembers?: number
   createdAt?: Date | string
   joinByLink?: boolean
+  type?: $Enums.groupType
+  aiEnabled?: boolean
+  aiMaxMessages?: number | null
+  aiMaxTokens?: number | null
 }
 
 export type GroupUpdateManyMutationInput = {
@@ -359,6 +442,10 @@ export type GroupUpdateManyMutationInput = {
   noOfMembers?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   joinByLink?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  type?: Prisma.EnumgroupTypeFieldUpdateOperationsInput | $Enums.groupType
+  aiEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  aiMaxMessages?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  aiMaxTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
 
 export type GroupUncheckedUpdateManyInput = {
@@ -369,6 +456,10 @@ export type GroupUncheckedUpdateManyInput = {
   noOfMembers?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   joinByLink?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  type?: Prisma.EnumgroupTypeFieldUpdateOperationsInput | $Enums.groupType
+  aiEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  aiMaxMessages?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  aiMaxTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
 
 export type GroupListRelationFilter = {
@@ -394,10 +485,16 @@ export type GroupCountOrderByAggregateInput = {
   noOfMembers?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   joinByLink?: Prisma.SortOrder
+  type?: Prisma.SortOrder
+  aiEnabled?: Prisma.SortOrder
+  aiMaxMessages?: Prisma.SortOrder
+  aiMaxTokens?: Prisma.SortOrder
 }
 
 export type GroupAvgOrderByAggregateInput = {
   noOfMembers?: Prisma.SortOrder
+  aiMaxMessages?: Prisma.SortOrder
+  aiMaxTokens?: Prisma.SortOrder
 }
 
 export type GroupMaxOrderByAggregateInput = {
@@ -408,6 +505,10 @@ export type GroupMaxOrderByAggregateInput = {
   noOfMembers?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   joinByLink?: Prisma.SortOrder
+  type?: Prisma.SortOrder
+  aiEnabled?: Prisma.SortOrder
+  aiMaxMessages?: Prisma.SortOrder
+  aiMaxTokens?: Prisma.SortOrder
 }
 
 export type GroupMinOrderByAggregateInput = {
@@ -418,10 +519,16 @@ export type GroupMinOrderByAggregateInput = {
   noOfMembers?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   joinByLink?: Prisma.SortOrder
+  type?: Prisma.SortOrder
+  aiEnabled?: Prisma.SortOrder
+  aiMaxMessages?: Prisma.SortOrder
+  aiMaxTokens?: Prisma.SortOrder
 }
 
 export type GroupSumOrderByAggregateInput = {
   noOfMembers?: Prisma.SortOrder
+  aiMaxMessages?: Prisma.SortOrder
+  aiMaxTokens?: Prisma.SortOrder
 }
 
 export type GroupCreateNestedManyWithoutCreatorInput = {
@@ -480,6 +587,10 @@ export type GroupUpdateOneRequiredWithoutExamGroupsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.GroupUpdateToOneWithWhereWithoutExamGroupsInput, Prisma.GroupUpdateWithoutExamGroupsInput>, Prisma.GroupUncheckedUpdateWithoutExamGroupsInput>
 }
 
+export type EnumgroupTypeFieldUpdateOperationsInput = {
+  set?: $Enums.groupType
+}
+
 export type GroupCreateNestedOneWithoutMembersInput = {
   create?: Prisma.XOR<Prisma.GroupCreateWithoutMembersInput, Prisma.GroupUncheckedCreateWithoutMembersInput>
   connectOrCreate?: Prisma.GroupCreateOrConnectWithoutMembersInput
@@ -494,6 +605,20 @@ export type GroupUpdateOneRequiredWithoutMembersNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.GroupUpdateToOneWithWhereWithoutMembersInput, Prisma.GroupUpdateWithoutMembersInput>, Prisma.GroupUncheckedUpdateWithoutMembersInput>
 }
 
+export type GroupCreateNestedOneWithoutAiconversationsInput = {
+  create?: Prisma.XOR<Prisma.GroupCreateWithoutAiconversationsInput, Prisma.GroupUncheckedCreateWithoutAiconversationsInput>
+  connectOrCreate?: Prisma.GroupCreateOrConnectWithoutAiconversationsInput
+  connect?: Prisma.GroupWhereUniqueInput
+}
+
+export type GroupUpdateOneRequiredWithoutAiconversationsNestedInput = {
+  create?: Prisma.XOR<Prisma.GroupCreateWithoutAiconversationsInput, Prisma.GroupUncheckedCreateWithoutAiconversationsInput>
+  connectOrCreate?: Prisma.GroupCreateOrConnectWithoutAiconversationsInput
+  upsert?: Prisma.GroupUpsertWithoutAiconversationsInput
+  connect?: Prisma.GroupWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.GroupUpdateToOneWithWhereWithoutAiconversationsInput, Prisma.GroupUpdateWithoutAiconversationsInput>, Prisma.GroupUncheckedUpdateWithoutAiconversationsInput>
+}
+
 export type GroupCreateWithoutCreatorInput = {
   id?: string
   name: string
@@ -501,8 +626,13 @@ export type GroupCreateWithoutCreatorInput = {
   noOfMembers?: number
   createdAt?: Date | string
   joinByLink?: boolean
+  type?: $Enums.groupType
+  aiEnabled?: boolean
+  aiMaxMessages?: number | null
+  aiMaxTokens?: number | null
   members?: Prisma.GroupMemberCreateNestedManyWithoutGroupInput
   examGroups?: Prisma.ExamGroupCreateNestedManyWithoutGroupInput
+  aiconversations?: Prisma.AIConversationCreateNestedManyWithoutGroupInput
 }
 
 export type GroupUncheckedCreateWithoutCreatorInput = {
@@ -512,8 +642,13 @@ export type GroupUncheckedCreateWithoutCreatorInput = {
   noOfMembers?: number
   createdAt?: Date | string
   joinByLink?: boolean
+  type?: $Enums.groupType
+  aiEnabled?: boolean
+  aiMaxMessages?: number | null
+  aiMaxTokens?: number | null
   members?: Prisma.GroupMemberUncheckedCreateNestedManyWithoutGroupInput
   examGroups?: Prisma.ExamGroupUncheckedCreateNestedManyWithoutGroupInput
+  aiconversations?: Prisma.AIConversationUncheckedCreateNestedManyWithoutGroupInput
 }
 
 export type GroupCreateOrConnectWithoutCreatorInput = {
@@ -553,6 +688,10 @@ export type GroupScalarWhereInput = {
   noOfMembers?: Prisma.IntFilter<"Group"> | number
   createdAt?: Prisma.DateTimeFilter<"Group"> | Date | string
   joinByLink?: Prisma.BoolFilter<"Group"> | boolean
+  type?: Prisma.EnumgroupTypeFilter<"Group"> | $Enums.groupType
+  aiEnabled?: Prisma.BoolFilter<"Group"> | boolean
+  aiMaxMessages?: Prisma.IntNullableFilter<"Group"> | number | null
+  aiMaxTokens?: Prisma.IntNullableFilter<"Group"> | number | null
 }
 
 export type GroupCreateWithoutExamGroupsInput = {
@@ -562,8 +701,13 @@ export type GroupCreateWithoutExamGroupsInput = {
   noOfMembers?: number
   createdAt?: Date | string
   joinByLink?: boolean
+  type?: $Enums.groupType
+  aiEnabled?: boolean
+  aiMaxMessages?: number | null
+  aiMaxTokens?: number | null
   creator: Prisma.UserCreateNestedOneWithoutCreatedGroupsInput
   members?: Prisma.GroupMemberCreateNestedManyWithoutGroupInput
+  aiconversations?: Prisma.AIConversationCreateNestedManyWithoutGroupInput
 }
 
 export type GroupUncheckedCreateWithoutExamGroupsInput = {
@@ -574,7 +718,12 @@ export type GroupUncheckedCreateWithoutExamGroupsInput = {
   noOfMembers?: number
   createdAt?: Date | string
   joinByLink?: boolean
+  type?: $Enums.groupType
+  aiEnabled?: boolean
+  aiMaxMessages?: number | null
+  aiMaxTokens?: number | null
   members?: Prisma.GroupMemberUncheckedCreateNestedManyWithoutGroupInput
+  aiconversations?: Prisma.AIConversationUncheckedCreateNestedManyWithoutGroupInput
 }
 
 export type GroupCreateOrConnectWithoutExamGroupsInput = {
@@ -600,8 +749,13 @@ export type GroupUpdateWithoutExamGroupsInput = {
   noOfMembers?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   joinByLink?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  type?: Prisma.EnumgroupTypeFieldUpdateOperationsInput | $Enums.groupType
+  aiEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  aiMaxMessages?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  aiMaxTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   creator?: Prisma.UserUpdateOneRequiredWithoutCreatedGroupsNestedInput
   members?: Prisma.GroupMemberUpdateManyWithoutGroupNestedInput
+  aiconversations?: Prisma.AIConversationUpdateManyWithoutGroupNestedInput
 }
 
 export type GroupUncheckedUpdateWithoutExamGroupsInput = {
@@ -612,7 +766,12 @@ export type GroupUncheckedUpdateWithoutExamGroupsInput = {
   noOfMembers?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   joinByLink?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  type?: Prisma.EnumgroupTypeFieldUpdateOperationsInput | $Enums.groupType
+  aiEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  aiMaxMessages?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  aiMaxTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   members?: Prisma.GroupMemberUncheckedUpdateManyWithoutGroupNestedInput
+  aiconversations?: Prisma.AIConversationUncheckedUpdateManyWithoutGroupNestedInput
 }
 
 export type GroupCreateWithoutMembersInput = {
@@ -622,8 +781,13 @@ export type GroupCreateWithoutMembersInput = {
   noOfMembers?: number
   createdAt?: Date | string
   joinByLink?: boolean
+  type?: $Enums.groupType
+  aiEnabled?: boolean
+  aiMaxMessages?: number | null
+  aiMaxTokens?: number | null
   creator: Prisma.UserCreateNestedOneWithoutCreatedGroupsInput
   examGroups?: Prisma.ExamGroupCreateNestedManyWithoutGroupInput
+  aiconversations?: Prisma.AIConversationCreateNestedManyWithoutGroupInput
 }
 
 export type GroupUncheckedCreateWithoutMembersInput = {
@@ -634,7 +798,12 @@ export type GroupUncheckedCreateWithoutMembersInput = {
   noOfMembers?: number
   createdAt?: Date | string
   joinByLink?: boolean
+  type?: $Enums.groupType
+  aiEnabled?: boolean
+  aiMaxMessages?: number | null
+  aiMaxTokens?: number | null
   examGroups?: Prisma.ExamGroupUncheckedCreateNestedManyWithoutGroupInput
+  aiconversations?: Prisma.AIConversationUncheckedCreateNestedManyWithoutGroupInput
 }
 
 export type GroupCreateOrConnectWithoutMembersInput = {
@@ -660,8 +829,13 @@ export type GroupUpdateWithoutMembersInput = {
   noOfMembers?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   joinByLink?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  type?: Prisma.EnumgroupTypeFieldUpdateOperationsInput | $Enums.groupType
+  aiEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  aiMaxMessages?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  aiMaxTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   creator?: Prisma.UserUpdateOneRequiredWithoutCreatedGroupsNestedInput
   examGroups?: Prisma.ExamGroupUpdateManyWithoutGroupNestedInput
+  aiconversations?: Prisma.AIConversationUpdateManyWithoutGroupNestedInput
 }
 
 export type GroupUncheckedUpdateWithoutMembersInput = {
@@ -672,6 +846,91 @@ export type GroupUncheckedUpdateWithoutMembersInput = {
   noOfMembers?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   joinByLink?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  type?: Prisma.EnumgroupTypeFieldUpdateOperationsInput | $Enums.groupType
+  aiEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  aiMaxMessages?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  aiMaxTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  examGroups?: Prisma.ExamGroupUncheckedUpdateManyWithoutGroupNestedInput
+  aiconversations?: Prisma.AIConversationUncheckedUpdateManyWithoutGroupNestedInput
+}
+
+export type GroupCreateWithoutAiconversationsInput = {
+  id?: string
+  name: string
+  description?: string | null
+  noOfMembers?: number
+  createdAt?: Date | string
+  joinByLink?: boolean
+  type?: $Enums.groupType
+  aiEnabled?: boolean
+  aiMaxMessages?: number | null
+  aiMaxTokens?: number | null
+  creator: Prisma.UserCreateNestedOneWithoutCreatedGroupsInput
+  members?: Prisma.GroupMemberCreateNestedManyWithoutGroupInput
+  examGroups?: Prisma.ExamGroupCreateNestedManyWithoutGroupInput
+}
+
+export type GroupUncheckedCreateWithoutAiconversationsInput = {
+  id?: string
+  name: string
+  description?: string | null
+  creatorId: string
+  noOfMembers?: number
+  createdAt?: Date | string
+  joinByLink?: boolean
+  type?: $Enums.groupType
+  aiEnabled?: boolean
+  aiMaxMessages?: number | null
+  aiMaxTokens?: number | null
+  members?: Prisma.GroupMemberUncheckedCreateNestedManyWithoutGroupInput
+  examGroups?: Prisma.ExamGroupUncheckedCreateNestedManyWithoutGroupInput
+}
+
+export type GroupCreateOrConnectWithoutAiconversationsInput = {
+  where: Prisma.GroupWhereUniqueInput
+  create: Prisma.XOR<Prisma.GroupCreateWithoutAiconversationsInput, Prisma.GroupUncheckedCreateWithoutAiconversationsInput>
+}
+
+export type GroupUpsertWithoutAiconversationsInput = {
+  update: Prisma.XOR<Prisma.GroupUpdateWithoutAiconversationsInput, Prisma.GroupUncheckedUpdateWithoutAiconversationsInput>
+  create: Prisma.XOR<Prisma.GroupCreateWithoutAiconversationsInput, Prisma.GroupUncheckedCreateWithoutAiconversationsInput>
+  where?: Prisma.GroupWhereInput
+}
+
+export type GroupUpdateToOneWithWhereWithoutAiconversationsInput = {
+  where?: Prisma.GroupWhereInput
+  data: Prisma.XOR<Prisma.GroupUpdateWithoutAiconversationsInput, Prisma.GroupUncheckedUpdateWithoutAiconversationsInput>
+}
+
+export type GroupUpdateWithoutAiconversationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  noOfMembers?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  joinByLink?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  type?: Prisma.EnumgroupTypeFieldUpdateOperationsInput | $Enums.groupType
+  aiEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  aiMaxMessages?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  aiMaxTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  creator?: Prisma.UserUpdateOneRequiredWithoutCreatedGroupsNestedInput
+  members?: Prisma.GroupMemberUpdateManyWithoutGroupNestedInput
+  examGroups?: Prisma.ExamGroupUpdateManyWithoutGroupNestedInput
+}
+
+export type GroupUncheckedUpdateWithoutAiconversationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  creatorId?: Prisma.StringFieldUpdateOperationsInput | string
+  noOfMembers?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  joinByLink?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  type?: Prisma.EnumgroupTypeFieldUpdateOperationsInput | $Enums.groupType
+  aiEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  aiMaxMessages?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  aiMaxTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  members?: Prisma.GroupMemberUncheckedUpdateManyWithoutGroupNestedInput
   examGroups?: Prisma.ExamGroupUncheckedUpdateManyWithoutGroupNestedInput
 }
 
@@ -682,6 +941,10 @@ export type GroupCreateManyCreatorInput = {
   noOfMembers?: number
   createdAt?: Date | string
   joinByLink?: boolean
+  type?: $Enums.groupType
+  aiEnabled?: boolean
+  aiMaxMessages?: number | null
+  aiMaxTokens?: number | null
 }
 
 export type GroupUpdateWithoutCreatorInput = {
@@ -691,8 +954,13 @@ export type GroupUpdateWithoutCreatorInput = {
   noOfMembers?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   joinByLink?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  type?: Prisma.EnumgroupTypeFieldUpdateOperationsInput | $Enums.groupType
+  aiEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  aiMaxMessages?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  aiMaxTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   members?: Prisma.GroupMemberUpdateManyWithoutGroupNestedInput
   examGroups?: Prisma.ExamGroupUpdateManyWithoutGroupNestedInput
+  aiconversations?: Prisma.AIConversationUpdateManyWithoutGroupNestedInput
 }
 
 export type GroupUncheckedUpdateWithoutCreatorInput = {
@@ -702,8 +970,13 @@ export type GroupUncheckedUpdateWithoutCreatorInput = {
   noOfMembers?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   joinByLink?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  type?: Prisma.EnumgroupTypeFieldUpdateOperationsInput | $Enums.groupType
+  aiEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  aiMaxMessages?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  aiMaxTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   members?: Prisma.GroupMemberUncheckedUpdateManyWithoutGroupNestedInput
   examGroups?: Prisma.ExamGroupUncheckedUpdateManyWithoutGroupNestedInput
+  aiconversations?: Prisma.AIConversationUncheckedUpdateManyWithoutGroupNestedInput
 }
 
 export type GroupUncheckedUpdateManyWithoutCreatorInput = {
@@ -713,6 +986,10 @@ export type GroupUncheckedUpdateManyWithoutCreatorInput = {
   noOfMembers?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   joinByLink?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  type?: Prisma.EnumgroupTypeFieldUpdateOperationsInput | $Enums.groupType
+  aiEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  aiMaxMessages?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  aiMaxTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
 
 
@@ -723,11 +1000,13 @@ export type GroupUncheckedUpdateManyWithoutCreatorInput = {
 export type GroupCountOutputType = {
   members: number
   examGroups: number
+  aiconversations: number
 }
 
 export type GroupCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   members?: boolean | GroupCountOutputTypeCountMembersArgs
   examGroups?: boolean | GroupCountOutputTypeCountExamGroupsArgs
+  aiconversations?: boolean | GroupCountOutputTypeCountAiconversationsArgs
 }
 
 /**
@@ -754,6 +1033,13 @@ export type GroupCountOutputTypeCountExamGroupsArgs<ExtArgs extends runtime.Type
   where?: Prisma.ExamGroupWhereInput
 }
 
+/**
+ * GroupCountOutputType without action
+ */
+export type GroupCountOutputTypeCountAiconversationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AIConversationWhereInput
+}
+
 
 export type GroupSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -763,9 +1049,14 @@ export type GroupSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   noOfMembers?: boolean
   createdAt?: boolean
   joinByLink?: boolean
+  type?: boolean
+  aiEnabled?: boolean
+  aiMaxMessages?: boolean
+  aiMaxTokens?: boolean
   creator?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   members?: boolean | Prisma.Group$membersArgs<ExtArgs>
   examGroups?: boolean | Prisma.Group$examGroupsArgs<ExtArgs>
+  aiconversations?: boolean | Prisma.Group$aiconversationsArgs<ExtArgs>
   _count?: boolean | Prisma.GroupCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["group"]>
 
@@ -777,6 +1068,10 @@ export type GroupSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   noOfMembers?: boolean
   createdAt?: boolean
   joinByLink?: boolean
+  type?: boolean
+  aiEnabled?: boolean
+  aiMaxMessages?: boolean
+  aiMaxTokens?: boolean
   creator?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["group"]>
 
@@ -788,6 +1083,10 @@ export type GroupSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   noOfMembers?: boolean
   createdAt?: boolean
   joinByLink?: boolean
+  type?: boolean
+  aiEnabled?: boolean
+  aiMaxMessages?: boolean
+  aiMaxTokens?: boolean
   creator?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["group"]>
 
@@ -799,13 +1098,18 @@ export type GroupSelectScalar = {
   noOfMembers?: boolean
   createdAt?: boolean
   joinByLink?: boolean
+  type?: boolean
+  aiEnabled?: boolean
+  aiMaxMessages?: boolean
+  aiMaxTokens?: boolean
 }
 
-export type GroupOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "creatorId" | "noOfMembers" | "createdAt" | "joinByLink", ExtArgs["result"]["group"]>
+export type GroupOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "creatorId" | "noOfMembers" | "createdAt" | "joinByLink" | "type" | "aiEnabled" | "aiMaxMessages" | "aiMaxTokens", ExtArgs["result"]["group"]>
 export type GroupInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   creator?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   members?: boolean | Prisma.Group$membersArgs<ExtArgs>
   examGroups?: boolean | Prisma.Group$examGroupsArgs<ExtArgs>
+  aiconversations?: boolean | Prisma.Group$aiconversationsArgs<ExtArgs>
   _count?: boolean | Prisma.GroupCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type GroupIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -821,6 +1125,7 @@ export type $GroupPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     creator: Prisma.$UserPayload<ExtArgs>
     members: Prisma.$GroupMemberPayload<ExtArgs>[]
     examGroups: Prisma.$ExamGroupPayload<ExtArgs>[]
+    aiconversations: Prisma.$AIConversationPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -830,6 +1135,10 @@ export type $GroupPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     noOfMembers: number
     createdAt: Date
     joinByLink: boolean
+    type: $Enums.groupType
+    aiEnabled: boolean
+    aiMaxMessages: number | null
+    aiMaxTokens: number | null
   }, ExtArgs["result"]["group"]>
   composites: {}
 }
@@ -1227,6 +1536,7 @@ export interface Prisma__GroupClient<T, Null = never, ExtArgs extends runtime.Ty
   creator<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   members<T extends Prisma.Group$membersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Group$membersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$GroupMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   examGroups<T extends Prisma.Group$examGroupsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Group$examGroupsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ExamGroupPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  aiconversations<T extends Prisma.Group$aiconversationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Group$aiconversationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AIConversationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1263,6 +1573,10 @@ export interface GroupFieldRefs {
   readonly noOfMembers: Prisma.FieldRef<"Group", 'Int'>
   readonly createdAt: Prisma.FieldRef<"Group", 'DateTime'>
   readonly joinByLink: Prisma.FieldRef<"Group", 'Boolean'>
+  readonly type: Prisma.FieldRef<"Group", 'groupType'>
+  readonly aiEnabled: Prisma.FieldRef<"Group", 'Boolean'>
+  readonly aiMaxMessages: Prisma.FieldRef<"Group", 'Int'>
+  readonly aiMaxTokens: Prisma.FieldRef<"Group", 'Int'>
 }
     
 
@@ -1704,6 +2018,30 @@ export type Group$examGroupsArgs<ExtArgs extends runtime.Types.Extensions.Intern
   take?: number
   skip?: number
   distinct?: Prisma.ExamGroupScalarFieldEnum | Prisma.ExamGroupScalarFieldEnum[]
+}
+
+/**
+ * Group.aiconversations
+ */
+export type Group$aiconversationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AIConversation
+   */
+  select?: Prisma.AIConversationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the AIConversation
+   */
+  omit?: Prisma.AIConversationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AIConversationInclude<ExtArgs> | null
+  where?: Prisma.AIConversationWhereInput
+  orderBy?: Prisma.AIConversationOrderByWithRelationInput | Prisma.AIConversationOrderByWithRelationInput[]
+  cursor?: Prisma.AIConversationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AIConversationScalarFieldEnum | Prisma.AIConversationScalarFieldEnum[]
 }
 
 /**

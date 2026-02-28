@@ -1,6 +1,7 @@
 "use client";
 import * as React from "react";
 import { Autocomplete } from "@base-ui/react/autocomplete";
+import { Bot } from "lucide-react";
 
 interface Group {
   id: string;
@@ -10,6 +11,7 @@ interface Group {
   noOfMembers: number;
   joinByLink: boolean;
   createdAt: Date;
+  aiEnabled: boolean;
 }
 
 interface AutoCompleteSearchBarProps {
@@ -125,7 +127,12 @@ export default function AutoCompleteSearchBar({
                     }}
                   >
                     <div className="flex w-full flex-col gap-1">
-                      <div className="font-medium leading-5">{group.name}</div>
+                      <div className="flex justify-between ">
+                        <div className="font-medium leading-5">
+                          {group.name}
+                        </div>
+                        {group.aiEnabled && <Bot size={20} />}
+                      </div>
                       {group.description && (
                         <div className="text-sm leading-4 text-muted-foreground">
                           {group.description}

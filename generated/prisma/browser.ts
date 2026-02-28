@@ -137,3 +137,18 @@ export type Tag = Prisma.TagModel
  * 
  */
 export type ProblemTag = Prisma.ProblemTagModel
+/**
+ * Model AIConversation
+ * 
+ */
+export type AIConversation = Prisma.AIConversationModel
+/**
+ * Model AIMessage
+ * 
+ */
+export type AIMessage = Prisma.AIMessageModel
+/**
+ * Model AIRateLimit
+ * 
+ */
+export type AIRateLimit = Prisma.AIRateLimitModel

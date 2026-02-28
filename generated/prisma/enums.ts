@@ -113,3 +113,20 @@ export const ExamAttemptStatus = {
 } as const
 
 export type ExamAttemptStatus = (typeof ExamAttemptStatus)[keyof typeof ExamAttemptStatus]
+
+
+export const groupType = {
+  CLASS: 'CLASS',
+  LAB: 'LAB'
+} as const
+
+export type groupType = (typeof groupType)[keyof typeof groupType]
+
+
+export const AIRole = {
+  USER: 'USER',
+  ASSISTANT: 'ASSISTANT',
+  SYSTEM: 'SYSTEM'
+} as const
+
+export type AIRole = (typeof AIRole)[keyof typeof AIRole]

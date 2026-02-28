@@ -426,7 +426,10 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
         <div className="font-logoFont font-bold">CODECOLISEUM</div>
         <div>{examDetails?.title}</div>
         <div>
-          Remaining Time: {remainingTime && Math.floor(remainingTime / 60)} min
+          Remaining Time:{" "}
+          {remainingTime !== undefined
+            ? `${Math.floor(remainingTime / 60)} min ${remainingTime % 60} sec`
+            : "N/A"}
         </div>
         <div>
           <Button

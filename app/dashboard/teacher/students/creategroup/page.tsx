@@ -12,7 +12,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { UploadIcon, FileText, X } from "lucide-react";
 import React, { ChangeEvent, useEffect, useState } from "react";
 import { toast } from "sonner";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import {
   Card,
   CardContent,
@@ -24,12 +23,24 @@ import { Badge } from "@/components/ui/badge";
 import axios from "axios";
 import CreateCompletion from "./createCompletion";
 import { getBackendURL } from "@/utils/utilities";
+import { groupType } from "@/generated/prisma/enums";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 interface newgroupdataprops {
   groupName: string;
   description: string;
   emails: string[];
   allowJoinByLink: boolean;
+  isAiEnabled: boolean;
+  type: groupType;
+  aiMaxMessages: number;
+  aiMaxTokens: number;
 }
 
 interface CreateGroupResponse {
@@ -64,6 +75,10 @@ function CreateGroup() {
     description: "",
     emails: [] as string[],
     allowJoinByLink: true,
+    isAiEnabled: false,
+    type: "CLASS",
+    aiMaxMessages: 20,
+    aiMaxTokens: 2000,
   });
 
   useEffect(() => {
@@ -135,6 +150,10 @@ function CreateGroup() {
         description: "",
         emails: [],
         allowJoinByLink: true,
+        isAiEnabled: false,
+        type: "CLASS",
+        aiMaxMessages: 20,
+        aiMaxTokens: 2000,
       });
       setTextEmailField(undefined);
       setFiles(undefined);
@@ -200,16 +219,149 @@ function CreateGroup() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <form onSubmit={createNewGroup} className="space-y-6">
-              <div className="space-y-2">
-                <Label htmlFor="groupName">Group Name</Label>
-                <Input
-                  id="groupName"
-                  placeholder="Enter group name"
-                  onChange={handleChange}
-                  name="groupName"
-                  value={newGroupData.groupName}
-                />
+            <form onSubmit={createNewGroup} className="space-y-4">
+              <div className="flex gap-5 items-start">
+                <div className="space-y-2">
+                  <Label htmlFor="groupName">Group Name</Label>
+                  <Input
+                    id="groupName"
+                    placeholder="Enter group name"
+                    onChange={handleChange}
+                    name="groupName"
+                    value={newGroupData.groupName}
+                    className="min-w-115"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label className="w-20">Group Type</Label>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger className="w-20" asChild>
+                      <Button variant="outline">
+                        {" "}
+                        {newGroupData.type[0] +
+                          newGroupData.type.slice(1).toLowerCase()}
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="start" className="w-40 ">
+                      <DropdownMenuItem
+                        onClick={() =>
+                          setNewGroupData((prev) => ({
+                            ...prev,
+                            type: "CLASS",
+                          }))
+                        }
+                      >
+                        Class
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        onClick={() =>
+                          setNewGroupData((prev) => ({
+                            ...prev,
+                            type: "LAB",
+                          }))
+                        }
+                      >
+                        Lab
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </div>
+                <div className="space-y-2">
+                  <Label>AI Assist</Label>
+                  <div className="flex gap-6">
+                    <RadioGroup
+                      value={newGroupData?.isAiEnabled ? "enable" : "disable"}
+                      onValueChange={(value) =>
+                        setNewGroupData((prev) =>
+                          prev
+                            ? { ...prev, isAiEnabled: value === "enable" }
+                            : prev
+                        )
+                      }
+                      className="flex  gap-3"
+                    >
+                      <div className="flex items-center gap-2">
+                        <RadioGroupItem
+                          value="enable"
+                          id="ai-enable"
+                          className="cursor-pointer"
+                        />
+                        <Label htmlFor="ai-enable" className="cursor-pointer">
+                          Enable
+                        </Label>
+                      </div>
+
+                      <div className="flex items-center gap-2">
+                        <RadioGroupItem
+                          value="disable"
+                          id="ai-disable"
+                          className="cursor-pointer"
+                        />
+                        <Label htmlFor="ai-disable" className="cursor-pointer">
+                          Disable
+                        </Label>
+                      </div>
+                    </RadioGroup>
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    Allow Students to have access to AI Assist chat which will
+                    guide them through out the exam.
+                  </p>
+                </div>
+              </div>
+
+              {/* AI Settings Panel */}
+              <div
+                className={`overflow-hidden transition-all duration-500 ease-in-out ${
+                  newGroupData.isAiEnabled
+                    ? "max-h-96 opacity-100"
+                    : "max-h-0 opacity-0"
+                }`}
+              >
+                <div className="rounded-lg border border-dashed border-primary/40 bg-primary/5 p-4 space-y-4">
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm font-semibold text-primary">
+                      AI Settings
+                    </span>
+                    <span className="text-xs text-muted-foreground">
+                      Configure limits for AI Assist
+                    </span>
+                  </div>
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    <div className="space-y-2">
+                      <Label htmlFor="aiMaxMessages">Max Messages</Label>
+                      <Input
+                        id="aiMaxMessages"
+                        name="aiMaxMessages"
+                        type="number"
+                        min={1}
+                        value={newGroupData.aiMaxMessages}
+                        onChange={handleChange}
+                        placeholder="e.g. 20"
+                      />
+                      <p className="text-xs text-muted-foreground">
+                        Maximum number of AI messages per student per question.
+                      </p>
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="aiMaxTokens">Max Tokens</Label>
+                      <Input
+                        id="aiMaxTokens"
+                        name="aiMaxTokens"
+                        type="number"
+                        min={1}
+                        value={newGroupData.aiMaxTokens}
+                        onChange={handleChange}
+                        placeholder="e.g. 2000"
+                      />
+                      <p className="text-xs text-muted-foreground">
+                        Maximum total tokens the AI can use per student per
+                        problem.
+                      </p>
+                    </div>
+                  </div>
+                </div>
               </div>
 
               <div className="grid gap-6 md:grid-cols-2">
@@ -224,40 +376,6 @@ function CreateGroup() {
                     rows={4}
                   />
                 </div>
-
-                <div className="space-y-2">
-                  <Label>Join Settings</Label>
-                  <Card className="p-4">
-                    <RadioGroup
-                      defaultValue="enable"
-                      onValueChange={(value) =>
-                        setNewGroupData((prev) => ({
-                          ...prev,
-                          allowJoinByLink: value === "enable",
-                        }))
-                      }
-                    >
-                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="enable" id="enable" />
-                        <Label
-                          htmlFor="enable"
-                          className="font-normal cursor-pointer"
-                        >
-                          Allow joining by link/ID
-                        </Label>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="disable" id="disable" />
-                        <Label
-                          htmlFor="disable"
-                          className="font-normal cursor-pointer"
-                        >
-                          Invite only
-                        </Label>
-                      </div>
-                    </RadioGroup>
-                  </Card>
-                </div>
               </div>
 
               <div className="space-y-4">
@@ -268,9 +386,10 @@ function CreateGroup() {
                   </p>
                 </div>
 
-                <div className="grid gap-4 md:grid-cols-2">
+                <div className="grid gap-4 md:grid-cols-2 ">
                   <div className="space-y-2">
                     <Textarea
+                      className="min-h-[150px]"
                       disabled={textDisabled}
                       placeholder="Enter emails separated by commas or new lines&#10;example@email.com, another@email.com"
                       value={textEmailField || ""}
@@ -307,7 +426,7 @@ function CreateGroup() {
 
                   <Dropzone
                     disabled={fileUploadDisabled}
-                    className="h-full min-h-[150px]"
+                    className=" h-[150px]"
                     accept={{
                       "text/csv": [],
                       "application/vnd.ms-excel": [],
@@ -382,6 +501,10 @@ function CreateGroup() {
                       description: "",
                       emails: [],
                       allowJoinByLink: true,
+                      isAiEnabled: false,
+                      type: "CLASS",
+                      aiMaxMessages: 20,
+                      aiMaxTokens: 2000,
                     });
                     setTextEmailField(undefined);
                     setFiles(undefined);

@@ -18,6 +18,14 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import {
   Dialog,
   DialogContent,
@@ -35,8 +43,15 @@ import {
   CheckCircle2,
   AlertCircle,
   Pencil,
+  Bot,
+  Link2,
+  MessageSquare,
+  Coins,
+  ArrowLeft,
 } from "lucide-react";
 import { getBackendURL } from "@/utils/utilities";
+import { router } from "better-auth/api";
+import { useRouter } from "next/navigation";
 
 function Page({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
@@ -53,6 +68,12 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
   const [showEditGroup, setShowEditGroup] = useState(false);
   const [editedName, setEditedName] = useState("");
   const [editedDescription, setEditedDescription] = useState("");
+  const [editedType, setEditedType] = useState<string>("CLASS");
+  const [editedAiEnabled, setEditedAiEnabled] = useState(false);
+  const [editedAiMaxMessages, setEditedAiMaxMessages] = useState(20);
+  const [editedAiMaxTokens, setEditedAiMaxTokens] = useState(2000);
+
+  const router = useRouter();
 
   const getData = async () => {
     try {
@@ -158,6 +179,10 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
   const handleEditClick = () => {
     setEditedName(groupData?.name || "");
     setEditedDescription(groupData?.description || "");
+    setEditedType(groupData?.type || "CLASS");
+    setEditedAiEnabled(groupData?.aiEnabled || false);
+    setEditedAiMaxMessages(groupData?.aiMaxMessages ?? 20);
+    setEditedAiMaxTokens(groupData?.aiMaxTokens ?? 2000);
     setShowEditGroup(true);
   };
 
@@ -182,7 +207,9 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
           ) : (
             <div className="space-y-3">
               <div className="flex items-center gap-3">
-                <Hash className="h-6 w-6 text-muted-foreground" />
+                <Button variant={"ghost"} onClick={() => router.back()}>
+                  <ArrowLeft />
+                </Button>
                 <h1 className="text-3xl font-semibold">{groupData.name}</h1>
                 <Button
                   variant="ghost"
@@ -200,7 +227,35 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
                 </p>
               )}
 
-              <div className="flex items-center gap-4 text-sm text-muted-foreground">
+              {/* Badges row */}
+              <div className="flex flex-wrap items-center gap-2">
+                <Badge variant="secondary" className="capitalize">
+                  {groupData.type[0] + groupData.type.slice(1).toLowerCase()}
+                </Badge>
+                {groupData.aiEnabled ? (
+                  <Badge className="gap-1 bg-primary/10 text-primary border border-primary/30 hover:bg-primary/20">
+                    <Bot className="h-3 w-3" />
+                    AI Enabled
+                  </Badge>
+                ) : (
+                  <Badge
+                    variant="outline"
+                    className="gap-1 text-muted-foreground"
+                  >
+                    <Bot className="h-3 w-3" />
+                    AI Disabled
+                  </Badge>
+                )}
+                {groupData.joinByLink && (
+                  <Badge variant="outline" className="gap-1">
+                    <Link2 className="h-3 w-3" />
+                    Join by Link
+                  </Badge>
+                )}
+              </div>
+
+              {/* Stats row */}
+              <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
                 <div className="flex items-center gap-2">
                   <Users className="h-4 w-4" />
                   <span>{groupMembers?.length || 0} Members</span>
@@ -213,6 +268,21 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
                       {new Date(groupData.createdAt).toLocaleDateString()}
                     </span>
                   </div>
+                )}
+
+                {groupData.aiEnabled && (
+                  <>
+                    <div className="flex items-center gap-2">
+                      <MessageSquare className="h-4 w-4" />
+                      <span>{groupData.aiMaxMessages} MSG limit</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Coins className="h-4 w-4" />
+                      <span>
+                        {groupData.aiMaxTokens.toLocaleString()} token limit
+                      </span>
+                    </div>
+                  </>
                 )}
               </div>
             </div>
@@ -331,48 +401,158 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
 
       {/* Edit Group Dialog */}
       <Dialog open={showEditGroup} onOpenChange={setShowEditGroup}>
-        <DialogContent className="sm:max-w-[500px]">
+        <DialogContent className="sm:max-w-[560px]">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
               <Pencil className="h-5 w-5" />
               Edit Group Details
             </DialogTitle>
             <DialogDescription>
-              Update the group name and description
+              Update the group name, type, and AI settings
             </DialogDescription>
           </DialogHeader>
 
           <div className="space-y-4 py-4">
+            {/* Name */}
             <div className="space-y-2">
-              <label htmlFor="groupName" className="text-sm font-medium">
-                Group Name
-              </label>
+              <Label htmlFor="editGroupName">Group Name</Label>
               <Input
-                id="groupName"
+                id="editGroupName"
                 placeholder="Enter group name"
                 value={editedName}
                 onChange={(e) => setEditedName(e.target.value)}
               />
             </div>
 
+            {/* Description */}
             <div className="space-y-2">
-              <label htmlFor="groupDescription" className="text-sm font-medium">
-                Description
-              </label>
+              <Label htmlFor="editGroupDescription">Description</Label>
               <Input
-                id="groupDescription"
+                id="editGroupDescription"
                 placeholder="Enter group description (optional)"
                 value={editedDescription}
                 onChange={(e) => setEditedDescription(e.target.value)}
               />
             </div>
+
+            {/* Type + AI Assist in a row */}
+            <div className="flex gap-6 items-start">
+              {/* Group Type */}
+              <div className="space-y-2">
+                <Label>Group Type</Label>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="outline" className="w-24">
+                      {editedType[0] + editedType.slice(1).toLowerCase()}
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="start" className="w-32">
+                    <DropdownMenuItem onClick={() => setEditedType("CLASS")}>
+                      Class
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setEditedType("LAB")}>
+                      Lab
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+
+              {/* AI Assist */}
+              <div className="space-y-2">
+                <Label>AI Assist</Label>
+                <RadioGroup
+                  value={editedAiEnabled ? "enable" : "disable"}
+                  onValueChange={(v) => setEditedAiEnabled(v === "enable")}
+                  className="flex gap-4"
+                >
+                  <div className="flex items-center gap-2">
+                    <RadioGroupItem
+                      value="enable"
+                      id="edit-ai-enable"
+                      className="cursor-pointer"
+                    />
+                    <Label htmlFor="edit-ai-enable" className="cursor-pointer">
+                      Enable
+                    </Label>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <RadioGroupItem
+                      value="disable"
+                      id="edit-ai-disable"
+                      className="cursor-pointer"
+                    />
+                    <Label htmlFor="edit-ai-disable" className="cursor-pointer">
+                      Disable
+                    </Label>
+                  </div>
+                </RadioGroup>
+              </div>
+            </div>
+
+            {/* Animated AI Settings Panel */}
+            <div
+              className={`overflow-hidden transition-all duration-500 ease-in-out ${
+                editedAiEnabled ? "max-h-72 opacity-100" : "max-h-0 opacity-0"
+              }`}
+            >
+              <div className="rounded-lg border border-dashed border-primary/40 bg-primary/5 p-4 space-y-4">
+                <div className="flex items-center gap-2">
+                  <span className="text-sm font-semibold text-primary">
+                    AI Settings
+                  </span>
+                  <span className="text-xs text-muted-foreground">
+                    Configure limits for AI Assist
+                  </span>
+                </div>
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <div className="space-y-2">
+                    <Label htmlFor="editAiMaxMessages">Max Messages</Label>
+                    <Input
+                      id="editAiMaxMessages"
+                      type="number"
+                      min={1}
+                      value={editedAiMaxMessages}
+                      onChange={(e) =>
+                        setEditedAiMaxMessages(Number(e.target.value))
+                      }
+                      placeholder="e.g. 20"
+                    />
+                    <p className="text-xs text-muted-foreground">
+                      Max AI messages per student per exam.
+                    </p>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="editAiMaxTokens">Max Tokens</Label>
+                    <Input
+                      id="editAiMaxTokens"
+                      type="number"
+                      min={1}
+                      value={editedAiMaxTokens}
+                      onChange={(e) =>
+                        setEditedAiMaxTokens(Number(e.target.value))
+                      }
+                      placeholder="e.g. 2000"
+                    />
+                    <p className="text-xs text-muted-foreground">
+                      Max tokens the AI can use per student per exam.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
 
           <div className="flex justify-end gap-3">
-            <Button variant="outline" onClick={() => setShowEditGroup(false)}>
+            <Button
+              variant="outline"
+              className="cursor-pointer"
+              onClick={() => setShowEditGroup(false)}
+            >
               Cancel
             </Button>
-            <Button onClick={handleSaveEdit}>Save Changes</Button>
+            <Button onClick={handleSaveEdit} className="cursor-pointer">
+              Save Changes
+            </Button>
           </div>
         </DialogContent>
       </Dialog>

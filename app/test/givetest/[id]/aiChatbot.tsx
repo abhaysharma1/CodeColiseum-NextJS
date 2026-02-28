@@ -56,7 +56,9 @@ function AiChatBot({
     stopPollingRef.current = true; // cancel any in-flight poll for the old problem
     setIsLoading(false);
     setInput("");
-    setMessages(loadMessages(examId, problemId));
+    const messages = loadMessages(examId, problemId);
+    setMessages([]);
+    setMessages(messages);
   }, [examId, problemId]);
 
   // Persist messages to localStorage whenever they change

@@ -504,6 +504,40 @@ export type BoolNullableWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedBoolNullableFilter<$PrismaModel>
 }
 
+export type EnumgroupTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.groupType | Prisma.EnumgroupTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.groupType[] | Prisma.ListEnumgroupTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.groupType[] | Prisma.ListEnumgroupTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumgroupTypeFilter<$PrismaModel> | $Enums.groupType
+}
+
+export type EnumgroupTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.groupType | Prisma.EnumgroupTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.groupType[] | Prisma.ListEnumgroupTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.groupType[] | Prisma.ListEnumgroupTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumgroupTypeWithAggregatesFilter<$PrismaModel> | $Enums.groupType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumgroupTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumgroupTypeFilter<$PrismaModel>
+}
+
+export type EnumAIRoleFilter<$PrismaModel = never> = {
+  equals?: $Enums.AIRole | Prisma.EnumAIRoleFieldRefInput<$PrismaModel>
+  in?: $Enums.AIRole[] | Prisma.ListEnumAIRoleFieldRefInput<$PrismaModel>
+  notIn?: $Enums.AIRole[] | Prisma.ListEnumAIRoleFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumAIRoleFilter<$PrismaModel> | $Enums.AIRole
+}
+
+export type EnumAIRoleWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.AIRole | Prisma.EnumAIRoleFieldRefInput<$PrismaModel>
+  in?: $Enums.AIRole[] | Prisma.ListEnumAIRoleFieldRefInput<$PrismaModel>
+  notIn?: $Enums.AIRole[] | Prisma.ListEnumAIRoleFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumAIRoleWithAggregatesFilter<$PrismaModel> | $Enums.AIRole
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumAIRoleFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumAIRoleFilter<$PrismaModel>
+}
+
 export type NestedStringFilter<$PrismaModel = never> = {
   equals?: string | Prisma.StringFieldRefInput<$PrismaModel>
   in?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
@@ -951,6 +985,40 @@ export type NestedBoolNullableWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
   _min?: Prisma.NestedBoolNullableFilter<$PrismaModel>
   _max?: Prisma.NestedBoolNullableFilter<$PrismaModel>
+}
+
+export type NestedEnumgroupTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.groupType | Prisma.EnumgroupTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.groupType[] | Prisma.ListEnumgroupTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.groupType[] | Prisma.ListEnumgroupTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumgroupTypeFilter<$PrismaModel> | $Enums.groupType
+}
+
+export type NestedEnumgroupTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.groupType | Prisma.EnumgroupTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.groupType[] | Prisma.ListEnumgroupTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.groupType[] | Prisma.ListEnumgroupTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumgroupTypeWithAggregatesFilter<$PrismaModel> | $Enums.groupType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumgroupTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumgroupTypeFilter<$PrismaModel>
+}
+
+export type NestedEnumAIRoleFilter<$PrismaModel = never> = {
+  equals?: $Enums.AIRole | Prisma.EnumAIRoleFieldRefInput<$PrismaModel>
+  in?: $Enums.AIRole[] | Prisma.ListEnumAIRoleFieldRefInput<$PrismaModel>
+  notIn?: $Enums.AIRole[] | Prisma.ListEnumAIRoleFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumAIRoleFilter<$PrismaModel> | $Enums.AIRole
+}
+
+export type NestedEnumAIRoleWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.AIRole | Prisma.EnumAIRoleFieldRefInput<$PrismaModel>
+  in?: $Enums.AIRole[] | Prisma.ListEnumAIRoleFieldRefInput<$PrismaModel>
+  notIn?: $Enums.AIRole[] | Prisma.ListEnumAIRoleFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumAIRoleWithAggregatesFilter<$PrismaModel> | $Enums.AIRole
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumAIRoleFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumAIRoleFilter<$PrismaModel>
 }
 
 
