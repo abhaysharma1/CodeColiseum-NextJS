@@ -444,14 +444,18 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
       </div>
       <Separator></Separator>
       <div className="flex p-2 gap-3">
-        <div className="w-fit h-[calc(100vh-7rem)] overflow-y-scroll scroll-smooth m-5 outline-1 outline-offset-8 rounded-md  px-4 py-3 box-border bg-accent/30">
-          <h1 className="mb-4">Problem List</h1>
-          <div className="grid grid-cols-2 gap-2">
+        <div className="min-w-17 w-fit h-[calc(100vh-7rem)] overflow-y-scroll scroll-smooth m-5 outline-1 outline-offset-8 rounded-md px-4 py-3 box-border bg-accent/30">
+          <h1 className="mb-4 font-semibold">Problem List</h1>
+
+          {/* Changed grid to flex with wrap */}
+          <div className="flex flex-wrap gap-2 justify-start">
             {examProblems?.map((p) => (
-              <div className="" key={p.id}>
+              <div key={p.id}>
                 <Button
-                  variant={currProblem == p.order ? "default" : "outline"}
+                  variant={currProblem === p.order ? "default" : "outline"}
                   onClick={() => setCurrProblem(p.order)}
+                  // Added w-10 (or similar) to keep buttons uniform and square-ish
+                  // className="w-10 h-10 p-0"
                 >
                   {p.order}
                 </Button>

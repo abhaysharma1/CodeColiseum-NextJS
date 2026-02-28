@@ -153,7 +153,6 @@ function AiChatBot({
           examId,
           problemId,
           message: userMessage.content,
-          code,
           language,
         },
         { withCredentials: true }
