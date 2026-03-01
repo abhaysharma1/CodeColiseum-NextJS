@@ -11,6 +11,7 @@ import { useRouter } from "next/navigation";
 import { MdOutlineSpaceDashboard } from "react-icons/md";
 import { IoCodeSlashOutline } from "react-icons/io5";
 import { IoMdPeople } from "react-icons/io";
+import { TestTube, TestTubeDiagonal, TestTubes } from "lucide-react";
 
 export function NavStudentMain({ page }: { page: string }) {
   const router = useRouter();
@@ -34,15 +35,28 @@ export function NavStudentMain({ page }: { page: string }) {
           </SidebarMenuItem>
           <SidebarMenuItem
             className={
-              page == "GROUPS"
+              page == "CLASSES"
                 ? "bg-primary text-primary-foreground rounded-md"
                 : ""
             }
-            onClick={() => router.push("/dashboard/student/groups")}
+            onClick={() => router.push("/dashboard/student/classes")}
           >
-            <SidebarMenuButton tooltip={"Groups"}>
+            <SidebarMenuButton tooltip={"Classes"}>
               <IoMdPeople />
-              <span>Groups</span>
+              <span>Classes</span>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+          <SidebarMenuItem
+            className={
+              page == "LABS"
+                ? "bg-primary text-primary-foreground rounded-md"
+                : ""
+            }
+            onClick={() => router.push("/dashboard/student/labs")}
+          >
+            <SidebarMenuButton tooltip={"Labs"}>
+              <TestTubeDiagonal />
+              <span>Labs</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
           <SidebarMenuItem

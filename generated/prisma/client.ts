@@ -172,3 +172,23 @@ export type AIMessage = Prisma.AIMessageModel
  * 
  */
 export type AIRateLimit = Prisma.AIRateLimitModel
+/**
+ * Model GroupOverallStats
+ * 
+ */
+export type GroupOverallStats = Prisma.GroupOverallStatsModel
+/**
+ * Model StudentOverallStats
+ * 
+ */
+export type StudentOverallStats = Prisma.StudentOverallStatsModel
+/**
+ * Model GroupProblemStats
+ * 
+ */
+export type GroupProblemStats = Prisma.GroupProblemStatsModel
+/**
+ * Model StudentProblemStats
+ * 
+ */
+export type StudentProblemStats = Prisma.StudentProblemStatsModel

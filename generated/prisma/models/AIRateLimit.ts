@@ -174,6 +174,8 @@ export type AIRateLimitWhereInput = {
   studentId?: Prisma.StringFilter<"AIRateLimit"> | string
   problemId?: Prisma.StringFilter<"AIRateLimit"> | string
   lastRequest?: Prisma.DateTimeFilter<"AIRateLimit"> | Date | string
+  student?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  problem?: Prisma.XOR<Prisma.ProblemScalarRelationFilter, Prisma.ProblemWhereInput>
 }
 
 export type AIRateLimitOrderByWithRelationInput = {
@@ -181,6 +183,8 @@ export type AIRateLimitOrderByWithRelationInput = {
   studentId?: Prisma.SortOrder
   problemId?: Prisma.SortOrder
   lastRequest?: Prisma.SortOrder
+  student?: Prisma.UserOrderByWithRelationInput
+  problem?: Prisma.ProblemOrderByWithRelationInput
 }
 
 export type AIRateLimitWhereUniqueInput = Prisma.AtLeast<{
@@ -192,6 +196,8 @@ export type AIRateLimitWhereUniqueInput = Prisma.AtLeast<{
   studentId?: Prisma.StringFilter<"AIRateLimit"> | string
   problemId?: Prisma.StringFilter<"AIRateLimit"> | string
   lastRequest?: Prisma.DateTimeFilter<"AIRateLimit"> | Date | string
+  student?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  problem?: Prisma.XOR<Prisma.ProblemScalarRelationFilter, Prisma.ProblemWhereInput>
 }, "id" | "studentId_problemId">
 
 export type AIRateLimitOrderByWithAggregationInput = {
@@ -216,9 +222,9 @@ export type AIRateLimitScalarWhereWithAggregatesInput = {
 
 export type AIRateLimitCreateInput = {
   id?: string
-  studentId: string
-  problemId: string
   lastRequest: Date | string
+  student: Prisma.UserCreateNestedOneWithoutAirateLimitsInput
+  problem: Prisma.ProblemCreateNestedOneWithoutAirateLimitsInput
 }
 
 export type AIRateLimitUncheckedCreateInput = {
@@ -230,9 +236,9 @@ export type AIRateLimitUncheckedCreateInput = {
 
 export type AIRateLimitUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  studentId?: Prisma.StringFieldUpdateOperationsInput | string
-  problemId?: Prisma.StringFieldUpdateOperationsInput | string
   lastRequest?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  student?: Prisma.UserUpdateOneRequiredWithoutAirateLimitsNestedInput
+  problem?: Prisma.ProblemUpdateOneRequiredWithoutAirateLimitsNestedInput
 }
 
 export type AIRateLimitUncheckedUpdateInput = {
@@ -251,8 +257,6 @@ export type AIRateLimitCreateManyInput = {
 
 export type AIRateLimitUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  studentId?: Prisma.StringFieldUpdateOperationsInput | string
-  problemId?: Prisma.StringFieldUpdateOperationsInput | string
   lastRequest?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -261,6 +265,16 @@ export type AIRateLimitUncheckedUpdateManyInput = {
   studentId?: Prisma.StringFieldUpdateOperationsInput | string
   problemId?: Prisma.StringFieldUpdateOperationsInput | string
   lastRequest?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type AIRateLimitListRelationFilter = {
+  every?: Prisma.AIRateLimitWhereInput
+  some?: Prisma.AIRateLimitWhereInput
+  none?: Prisma.AIRateLimitWhereInput
+}
+
+export type AIRateLimitOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
 }
 
 export type AIRateLimitStudentIdProblemIdCompoundUniqueInput = {
@@ -289,6 +303,224 @@ export type AIRateLimitMinOrderByAggregateInput = {
   lastRequest?: Prisma.SortOrder
 }
 
+export type AIRateLimitCreateNestedManyWithoutStudentInput = {
+  create?: Prisma.XOR<Prisma.AIRateLimitCreateWithoutStudentInput, Prisma.AIRateLimitUncheckedCreateWithoutStudentInput> | Prisma.AIRateLimitCreateWithoutStudentInput[] | Prisma.AIRateLimitUncheckedCreateWithoutStudentInput[]
+  connectOrCreate?: Prisma.AIRateLimitCreateOrConnectWithoutStudentInput | Prisma.AIRateLimitCreateOrConnectWithoutStudentInput[]
+  createMany?: Prisma.AIRateLimitCreateManyStudentInputEnvelope
+  connect?: Prisma.AIRateLimitWhereUniqueInput | Prisma.AIRateLimitWhereUniqueInput[]
+}
+
+export type AIRateLimitUncheckedCreateNestedManyWithoutStudentInput = {
+  create?: Prisma.XOR<Prisma.AIRateLimitCreateWithoutStudentInput, Prisma.AIRateLimitUncheckedCreateWithoutStudentInput> | Prisma.AIRateLimitCreateWithoutStudentInput[] | Prisma.AIRateLimitUncheckedCreateWithoutStudentInput[]
+  connectOrCreate?: Prisma.AIRateLimitCreateOrConnectWithoutStudentInput | Prisma.AIRateLimitCreateOrConnectWithoutStudentInput[]
+  createMany?: Prisma.AIRateLimitCreateManyStudentInputEnvelope
+  connect?: Prisma.AIRateLimitWhereUniqueInput | Prisma.AIRateLimitWhereUniqueInput[]
+}
+
+export type AIRateLimitUpdateManyWithoutStudentNestedInput = {
+  create?: Prisma.XOR<Prisma.AIRateLimitCreateWithoutStudentInput, Prisma.AIRateLimitUncheckedCreateWithoutStudentInput> | Prisma.AIRateLimitCreateWithoutStudentInput[] | Prisma.AIRateLimitUncheckedCreateWithoutStudentInput[]
+  connectOrCreate?: Prisma.AIRateLimitCreateOrConnectWithoutStudentInput | Prisma.AIRateLimitCreateOrConnectWithoutStudentInput[]
+  upsert?: Prisma.AIRateLimitUpsertWithWhereUniqueWithoutStudentInput | Prisma.AIRateLimitUpsertWithWhereUniqueWithoutStudentInput[]
+  createMany?: Prisma.AIRateLimitCreateManyStudentInputEnvelope
+  set?: Prisma.AIRateLimitWhereUniqueInput | Prisma.AIRateLimitWhereUniqueInput[]
+  disconnect?: Prisma.AIRateLimitWhereUniqueInput | Prisma.AIRateLimitWhereUniqueInput[]
+  delete?: Prisma.AIRateLimitWhereUniqueInput | Prisma.AIRateLimitWhereUniqueInput[]
+  connect?: Prisma.AIRateLimitWhereUniqueInput | Prisma.AIRateLimitWhereUniqueInput[]
+  update?: Prisma.AIRateLimitUpdateWithWhereUniqueWithoutStudentInput | Prisma.AIRateLimitUpdateWithWhereUniqueWithoutStudentInput[]
+  updateMany?: Prisma.AIRateLimitUpdateManyWithWhereWithoutStudentInput | Prisma.AIRateLimitUpdateManyWithWhereWithoutStudentInput[]
+  deleteMany?: Prisma.AIRateLimitScalarWhereInput | Prisma.AIRateLimitScalarWhereInput[]
+}
+
+export type AIRateLimitUncheckedUpdateManyWithoutStudentNestedInput = {
+  create?: Prisma.XOR<Prisma.AIRateLimitCreateWithoutStudentInput, Prisma.AIRateLimitUncheckedCreateWithoutStudentInput> | Prisma.AIRateLimitCreateWithoutStudentInput[] | Prisma.AIRateLimitUncheckedCreateWithoutStudentInput[]
+  connectOrCreate?: Prisma.AIRateLimitCreateOrConnectWithoutStudentInput | Prisma.AIRateLimitCreateOrConnectWithoutStudentInput[]
+  upsert?: Prisma.AIRateLimitUpsertWithWhereUniqueWithoutStudentInput | Prisma.AIRateLimitUpsertWithWhereUniqueWithoutStudentInput[]
+  createMany?: Prisma.AIRateLimitCreateManyStudentInputEnvelope
+  set?: Prisma.AIRateLimitWhereUniqueInput | Prisma.AIRateLimitWhereUniqueInput[]
+  disconnect?: Prisma.AIRateLimitWhereUniqueInput | Prisma.AIRateLimitWhereUniqueInput[]
+  delete?: Prisma.AIRateLimitWhereUniqueInput | Prisma.AIRateLimitWhereUniqueInput[]
+  connect?: Prisma.AIRateLimitWhereUniqueInput | Prisma.AIRateLimitWhereUniqueInput[]
+  update?: Prisma.AIRateLimitUpdateWithWhereUniqueWithoutStudentInput | Prisma.AIRateLimitUpdateWithWhereUniqueWithoutStudentInput[]
+  updateMany?: Prisma.AIRateLimitUpdateManyWithWhereWithoutStudentInput | Prisma.AIRateLimitUpdateManyWithWhereWithoutStudentInput[]
+  deleteMany?: Prisma.AIRateLimitScalarWhereInput | Prisma.AIRateLimitScalarWhereInput[]
+}
+
+export type AIRateLimitCreateNestedManyWithoutProblemInput = {
+  create?: Prisma.XOR<Prisma.AIRateLimitCreateWithoutProblemInput, Prisma.AIRateLimitUncheckedCreateWithoutProblemInput> | Prisma.AIRateLimitCreateWithoutProblemInput[] | Prisma.AIRateLimitUncheckedCreateWithoutProblemInput[]
+  connectOrCreate?: Prisma.AIRateLimitCreateOrConnectWithoutProblemInput | Prisma.AIRateLimitCreateOrConnectWithoutProblemInput[]
+  createMany?: Prisma.AIRateLimitCreateManyProblemInputEnvelope
+  connect?: Prisma.AIRateLimitWhereUniqueInput | Prisma.AIRateLimitWhereUniqueInput[]
+}
+
+export type AIRateLimitUncheckedCreateNestedManyWithoutProblemInput = {
+  create?: Prisma.XOR<Prisma.AIRateLimitCreateWithoutProblemInput, Prisma.AIRateLimitUncheckedCreateWithoutProblemInput> | Prisma.AIRateLimitCreateWithoutProblemInput[] | Prisma.AIRateLimitUncheckedCreateWithoutProblemInput[]
+  connectOrCreate?: Prisma.AIRateLimitCreateOrConnectWithoutProblemInput | Prisma.AIRateLimitCreateOrConnectWithoutProblemInput[]
+  createMany?: Prisma.AIRateLimitCreateManyProblemInputEnvelope
+  connect?: Prisma.AIRateLimitWhereUniqueInput | Prisma.AIRateLimitWhereUniqueInput[]
+}
+
+export type AIRateLimitUpdateManyWithoutProblemNestedInput = {
+  create?: Prisma.XOR<Prisma.AIRateLimitCreateWithoutProblemInput, Prisma.AIRateLimitUncheckedCreateWithoutProblemInput> | Prisma.AIRateLimitCreateWithoutProblemInput[] | Prisma.AIRateLimitUncheckedCreateWithoutProblemInput[]
+  connectOrCreate?: Prisma.AIRateLimitCreateOrConnectWithoutProblemInput | Prisma.AIRateLimitCreateOrConnectWithoutProblemInput[]
+  upsert?: Prisma.AIRateLimitUpsertWithWhereUniqueWithoutProblemInput | Prisma.AIRateLimitUpsertWithWhereUniqueWithoutProblemInput[]
+  createMany?: Prisma.AIRateLimitCreateManyProblemInputEnvelope
+  set?: Prisma.AIRateLimitWhereUniqueInput | Prisma.AIRateLimitWhereUniqueInput[]
+  disconnect?: Prisma.AIRateLimitWhereUniqueInput | Prisma.AIRateLimitWhereUniqueInput[]
+  delete?: Prisma.AIRateLimitWhereUniqueInput | Prisma.AIRateLimitWhereUniqueInput[]
+  connect?: Prisma.AIRateLimitWhereUniqueInput | Prisma.AIRateLimitWhereUniqueInput[]
+  update?: Prisma.AIRateLimitUpdateWithWhereUniqueWithoutProblemInput | Prisma.AIRateLimitUpdateWithWhereUniqueWithoutProblemInput[]
+  updateMany?: Prisma.AIRateLimitUpdateManyWithWhereWithoutProblemInput | Prisma.AIRateLimitUpdateManyWithWhereWithoutProblemInput[]
+  deleteMany?: Prisma.AIRateLimitScalarWhereInput | Prisma.AIRateLimitScalarWhereInput[]
+}
+
+export type AIRateLimitUncheckedUpdateManyWithoutProblemNestedInput = {
+  create?: Prisma.XOR<Prisma.AIRateLimitCreateWithoutProblemInput, Prisma.AIRateLimitUncheckedCreateWithoutProblemInput> | Prisma.AIRateLimitCreateWithoutProblemInput[] | Prisma.AIRateLimitUncheckedCreateWithoutProblemInput[]
+  connectOrCreate?: Prisma.AIRateLimitCreateOrConnectWithoutProblemInput | Prisma.AIRateLimitCreateOrConnectWithoutProblemInput[]
+  upsert?: Prisma.AIRateLimitUpsertWithWhereUniqueWithoutProblemInput | Prisma.AIRateLimitUpsertWithWhereUniqueWithoutProblemInput[]
+  createMany?: Prisma.AIRateLimitCreateManyProblemInputEnvelope
+  set?: Prisma.AIRateLimitWhereUniqueInput | Prisma.AIRateLimitWhereUniqueInput[]
+  disconnect?: Prisma.AIRateLimitWhereUniqueInput | Prisma.AIRateLimitWhereUniqueInput[]
+  delete?: Prisma.AIRateLimitWhereUniqueInput | Prisma.AIRateLimitWhereUniqueInput[]
+  connect?: Prisma.AIRateLimitWhereUniqueInput | Prisma.AIRateLimitWhereUniqueInput[]
+  update?: Prisma.AIRateLimitUpdateWithWhereUniqueWithoutProblemInput | Prisma.AIRateLimitUpdateWithWhereUniqueWithoutProblemInput[]
+  updateMany?: Prisma.AIRateLimitUpdateManyWithWhereWithoutProblemInput | Prisma.AIRateLimitUpdateManyWithWhereWithoutProblemInput[]
+  deleteMany?: Prisma.AIRateLimitScalarWhereInput | Prisma.AIRateLimitScalarWhereInput[]
+}
+
+export type AIRateLimitCreateWithoutStudentInput = {
+  id?: string
+  lastRequest: Date | string
+  problem: Prisma.ProblemCreateNestedOneWithoutAirateLimitsInput
+}
+
+export type AIRateLimitUncheckedCreateWithoutStudentInput = {
+  id?: string
+  problemId: string
+  lastRequest: Date | string
+}
+
+export type AIRateLimitCreateOrConnectWithoutStudentInput = {
+  where: Prisma.AIRateLimitWhereUniqueInput
+  create: Prisma.XOR<Prisma.AIRateLimitCreateWithoutStudentInput, Prisma.AIRateLimitUncheckedCreateWithoutStudentInput>
+}
+
+export type AIRateLimitCreateManyStudentInputEnvelope = {
+  data: Prisma.AIRateLimitCreateManyStudentInput | Prisma.AIRateLimitCreateManyStudentInput[]
+  skipDuplicates?: boolean
+}
+
+export type AIRateLimitUpsertWithWhereUniqueWithoutStudentInput = {
+  where: Prisma.AIRateLimitWhereUniqueInput
+  update: Prisma.XOR<Prisma.AIRateLimitUpdateWithoutStudentInput, Prisma.AIRateLimitUncheckedUpdateWithoutStudentInput>
+  create: Prisma.XOR<Prisma.AIRateLimitCreateWithoutStudentInput, Prisma.AIRateLimitUncheckedCreateWithoutStudentInput>
+}
+
+export type AIRateLimitUpdateWithWhereUniqueWithoutStudentInput = {
+  where: Prisma.AIRateLimitWhereUniqueInput
+  data: Prisma.XOR<Prisma.AIRateLimitUpdateWithoutStudentInput, Prisma.AIRateLimitUncheckedUpdateWithoutStudentInput>
+}
+
+export type AIRateLimitUpdateManyWithWhereWithoutStudentInput = {
+  where: Prisma.AIRateLimitScalarWhereInput
+  data: Prisma.XOR<Prisma.AIRateLimitUpdateManyMutationInput, Prisma.AIRateLimitUncheckedUpdateManyWithoutStudentInput>
+}
+
+export type AIRateLimitScalarWhereInput = {
+  AND?: Prisma.AIRateLimitScalarWhereInput | Prisma.AIRateLimitScalarWhereInput[]
+  OR?: Prisma.AIRateLimitScalarWhereInput[]
+  NOT?: Prisma.AIRateLimitScalarWhereInput | Prisma.AIRateLimitScalarWhereInput[]
+  id?: Prisma.StringFilter<"AIRateLimit"> | string
+  studentId?: Prisma.StringFilter<"AIRateLimit"> | string
+  problemId?: Prisma.StringFilter<"AIRateLimit"> | string
+  lastRequest?: Prisma.DateTimeFilter<"AIRateLimit"> | Date | string
+}
+
+export type AIRateLimitCreateWithoutProblemInput = {
+  id?: string
+  lastRequest: Date | string
+  student: Prisma.UserCreateNestedOneWithoutAirateLimitsInput
+}
+
+export type AIRateLimitUncheckedCreateWithoutProblemInput = {
+  id?: string
+  studentId: string
+  lastRequest: Date | string
+}
+
+export type AIRateLimitCreateOrConnectWithoutProblemInput = {
+  where: Prisma.AIRateLimitWhereUniqueInput
+  create: Prisma.XOR<Prisma.AIRateLimitCreateWithoutProblemInput, Prisma.AIRateLimitUncheckedCreateWithoutProblemInput>
+}
+
+export type AIRateLimitCreateManyProblemInputEnvelope = {
+  data: Prisma.AIRateLimitCreateManyProblemInput | Prisma.AIRateLimitCreateManyProblemInput[]
+  skipDuplicates?: boolean
+}
+
+export type AIRateLimitUpsertWithWhereUniqueWithoutProblemInput = {
+  where: Prisma.AIRateLimitWhereUniqueInput
+  update: Prisma.XOR<Prisma.AIRateLimitUpdateWithoutProblemInput, Prisma.AIRateLimitUncheckedUpdateWithoutProblemInput>
+  create: Prisma.XOR<Prisma.AIRateLimitCreateWithoutProblemInput, Prisma.AIRateLimitUncheckedCreateWithoutProblemInput>
+}
+
+export type AIRateLimitUpdateWithWhereUniqueWithoutProblemInput = {
+  where: Prisma.AIRateLimitWhereUniqueInput
+  data: Prisma.XOR<Prisma.AIRateLimitUpdateWithoutProblemInput, Prisma.AIRateLimitUncheckedUpdateWithoutProblemInput>
+}
+
+export type AIRateLimitUpdateManyWithWhereWithoutProblemInput = {
+  where: Prisma.AIRateLimitScalarWhereInput
+  data: Prisma.XOR<Prisma.AIRateLimitUpdateManyMutationInput, Prisma.AIRateLimitUncheckedUpdateManyWithoutProblemInput>
+}
+
+export type AIRateLimitCreateManyStudentInput = {
+  id?: string
+  problemId: string
+  lastRequest: Date | string
+}
+
+export type AIRateLimitUpdateWithoutStudentInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  lastRequest?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  problem?: Prisma.ProblemUpdateOneRequiredWithoutAirateLimitsNestedInput
+}
+
+export type AIRateLimitUncheckedUpdateWithoutStudentInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  problemId?: Prisma.StringFieldUpdateOperationsInput | string
+  lastRequest?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type AIRateLimitUncheckedUpdateManyWithoutStudentInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  problemId?: Prisma.StringFieldUpdateOperationsInput | string
+  lastRequest?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type AIRateLimitCreateManyProblemInput = {
+  id?: string
+  studentId: string
+  lastRequest: Date | string
+}
+
+export type AIRateLimitUpdateWithoutProblemInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  lastRequest?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  student?: Prisma.UserUpdateOneRequiredWithoutAirateLimitsNestedInput
+}
+
+export type AIRateLimitUncheckedUpdateWithoutProblemInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  studentId?: Prisma.StringFieldUpdateOperationsInput | string
+  lastRequest?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type AIRateLimitUncheckedUpdateManyWithoutProblemInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  studentId?: Prisma.StringFieldUpdateOperationsInput | string
+  lastRequest?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
 
 
 export type AIRateLimitSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -296,6 +528,8 @@ export type AIRateLimitSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   studentId?: boolean
   problemId?: boolean
   lastRequest?: boolean
+  student?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  problem?: boolean | Prisma.ProblemDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["aIRateLimit"]>
 
 export type AIRateLimitSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -303,6 +537,8 @@ export type AIRateLimitSelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
   studentId?: boolean
   problemId?: boolean
   lastRequest?: boolean
+  student?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  problem?: boolean | Prisma.ProblemDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["aIRateLimit"]>
 
 export type AIRateLimitSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -310,6 +546,8 @@ export type AIRateLimitSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
   studentId?: boolean
   problemId?: boolean
   lastRequest?: boolean
+  student?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  problem?: boolean | Prisma.ProblemDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["aIRateLimit"]>
 
 export type AIRateLimitSelectScalar = {
@@ -320,10 +558,25 @@ export type AIRateLimitSelectScalar = {
 }
 
 export type AIRateLimitOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "studentId" | "problemId" | "lastRequest", ExtArgs["result"]["aIRateLimit"]>
+export type AIRateLimitInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  student?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  problem?: boolean | Prisma.ProblemDefaultArgs<ExtArgs>
+}
+export type AIRateLimitIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  student?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  problem?: boolean | Prisma.ProblemDefaultArgs<ExtArgs>
+}
+export type AIRateLimitIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  student?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  problem?: boolean | Prisma.ProblemDefaultArgs<ExtArgs>
+}
 
 export type $AIRateLimitPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "AIRateLimit"
-  objects: {}
+  objects: {
+    student: Prisma.$UserPayload<ExtArgs>
+    problem: Prisma.$ProblemPayload<ExtArgs>
+  }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     studentId: string
@@ -723,6 +976,8 @@ readonly fields: AIRateLimitFieldRefs;
  */
 export interface Prisma__AIRateLimitClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  student<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  problem<T extends Prisma.ProblemDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ProblemDefaultArgs<ExtArgs>>): Prisma.Prisma__ProblemClient<runtime.Types.Result.GetResult<Prisma.$ProblemPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -773,6 +1028,10 @@ export type AIRateLimitFindUniqueArgs<ExtArgs extends runtime.Types.Extensions.I
    */
   omit?: Prisma.AIRateLimitOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AIRateLimitInclude<ExtArgs> | null
+  /**
    * Filter, which AIRateLimit to fetch.
    */
   where: Prisma.AIRateLimitWhereUniqueInput
@@ -791,6 +1050,10 @@ export type AIRateLimitFindUniqueOrThrowArgs<ExtArgs extends runtime.Types.Exten
    */
   omit?: Prisma.AIRateLimitOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AIRateLimitInclude<ExtArgs> | null
+  /**
    * Filter, which AIRateLimit to fetch.
    */
   where: Prisma.AIRateLimitWhereUniqueInput
@@ -808,6 +1071,10 @@ export type AIRateLimitFindFirstArgs<ExtArgs extends runtime.Types.Extensions.In
    * Omit specific fields from the AIRateLimit
    */
   omit?: Prisma.AIRateLimitOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AIRateLimitInclude<ExtArgs> | null
   /**
    * Filter, which AIRateLimit to fetch.
    */
@@ -857,6 +1124,10 @@ export type AIRateLimitFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Extens
    */
   omit?: Prisma.AIRateLimitOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AIRateLimitInclude<ExtArgs> | null
+  /**
    * Filter, which AIRateLimit to fetch.
    */
   where?: Prisma.AIRateLimitWhereInput
@@ -905,6 +1176,10 @@ export type AIRateLimitFindManyArgs<ExtArgs extends runtime.Types.Extensions.Int
    */
   omit?: Prisma.AIRateLimitOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AIRateLimitInclude<ExtArgs> | null
+  /**
    * Filter, which AIRateLimits to fetch.
    */
   where?: Prisma.AIRateLimitWhereInput
@@ -948,6 +1223,10 @@ export type AIRateLimitCreateArgs<ExtArgs extends runtime.Types.Extensions.Inter
    */
   omit?: Prisma.AIRateLimitOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AIRateLimitInclude<ExtArgs> | null
+  /**
    * The data needed to create a AIRateLimit.
    */
   data: Prisma.XOR<Prisma.AIRateLimitCreateInput, Prisma.AIRateLimitUncheckedCreateInput>
@@ -981,6 +1260,10 @@ export type AIRateLimitCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Ext
    */
   data: Prisma.AIRateLimitCreateManyInput | Prisma.AIRateLimitCreateManyInput[]
   skipDuplicates?: boolean
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AIRateLimitIncludeCreateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -995,6 +1278,10 @@ export type AIRateLimitUpdateArgs<ExtArgs extends runtime.Types.Extensions.Inter
    * Omit specific fields from the AIRateLimit
    */
   omit?: Prisma.AIRateLimitOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AIRateLimitInclude<ExtArgs> | null
   /**
    * The data needed to update a AIRateLimit.
    */
@@ -1047,6 +1334,10 @@ export type AIRateLimitUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Ext
    * Limit how many AIRateLimits to update.
    */
   limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AIRateLimitIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1061,6 +1352,10 @@ export type AIRateLimitUpsertArgs<ExtArgs extends runtime.Types.Extensions.Inter
    * Omit specific fields from the AIRateLimit
    */
   omit?: Prisma.AIRateLimitOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AIRateLimitInclude<ExtArgs> | null
   /**
    * The filter to search for the AIRateLimit to update in case it exists.
    */
@@ -1087,6 +1382,10 @@ export type AIRateLimitDeleteArgs<ExtArgs extends runtime.Types.Extensions.Inter
    * Omit specific fields from the AIRateLimit
    */
   omit?: Prisma.AIRateLimitOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AIRateLimitInclude<ExtArgs> | null
   /**
    * Filter which AIRateLimit to delete.
    */
@@ -1119,4 +1418,8 @@ export type AIRateLimitDefaultArgs<ExtArgs extends runtime.Types.Extensions.Inte
    * Omit specific fields from the AIRateLimit
    */
   omit?: Prisma.AIRateLimitOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AIRateLimitInclude<ExtArgs> | null
 }

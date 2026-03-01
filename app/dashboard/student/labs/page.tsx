@@ -14,7 +14,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Search, Users, Link as LinkIcon, Calendar } from "lucide-react";
+import { Search, Users, Link as LinkIcon, Calendar, Bot } from "lucide-react";
 import { SiteHeader } from "@/components/site-header";
 import { useRouter } from "next/navigation";
 import axios from "axios";
@@ -42,6 +42,7 @@ interface GroupT {
   createdAt: Date; // ISO date string
   joinByLink: boolean;
   creator: Creator;
+  aiEnabled: boolean;
 }
 
 type GroupData = GroupT[];
@@ -84,6 +85,7 @@ function Page() {
           take: take,
           skip: skip,
           searchValue: searchValue,
+          groupType: "LAB",
         },
         withCredentials: true,
       });
@@ -237,13 +239,13 @@ function Page() {
                       <Users className="h-4 w-4" />
                       <span>{group.noOfMembers} members</span>
                     </div>
-                    {group.joinByLink && (
+                    {group.aiEnabled === true && (
                       <Badge
                         variant="secondary"
                         className="flex items-center gap-1"
                       >
-                        <LinkIcon className="h-3 w-3" />
-                        <span>Join by link</span>
+                        <Bot />
+                        <span>AI Enabled</span>
                       </Badge>
                     )}
                   </div>
@@ -271,7 +273,8 @@ function Page() {
         )}
         {shownGroups && shownGroups.length > ITEMS_PER_PAGE && (
           <div className="flex items-center justify-center gap-4 pt-6">
-            <Button variant={"outline"}
+            <Button
+              variant={"outline"}
               className="px-4 py-2 text-sm "
               disabled={skip === 0}
               onClick={handlePreviousPage}
@@ -280,10 +283,12 @@ function Page() {
             </Button>
 
             <span className="text-sm text-muted-foreground">
-              Showing {skip + 1} - {Math.min(skip + take, shownGroups.length)} of {shownGroups.length}
+              Showing {skip + 1} - {Math.min(skip + take, shownGroups.length)}{" "}
+              of {shownGroups.length}
             </span>
 
-            <Button variant={"outline"}
+            <Button
+              variant={"outline"}
               className="px-4 py-2 text-sm"
               disabled={groupsData && groupsData.length < take}
               onClick={handleNextPage}

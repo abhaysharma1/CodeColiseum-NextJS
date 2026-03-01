@@ -24,8 +24,10 @@ export default function StudentLayout({
       setPage("CONTESTS");
     } else if (path.startsWith("/dashboard/student/progress")) {
       setPage("PROGRESS");
-    } else if (path.startsWith("/dashboard/student/groups")) {
-      setPage("GROUPS");
+    } else if (path.startsWith("/dashboard/student/classes")) {
+      setPage("CLASSES");
+    } else if (path.startsWith("/dashboard/student/labs")) {
+      setPage("LABS");
     } else {
       setPage("DASHBOARD");
     }

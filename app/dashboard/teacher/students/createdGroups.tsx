@@ -143,7 +143,7 @@ export const columns: ColumnDef<Group>[] = [
     enableHiding: false,
     cell: ({ row }) => (
       <Button variant="outline" size="sm" asChild>
-        <Link href={`/dashboard/teacher/students/editgroup/${row.original.id}`}>
+        <Link href={`/dashboard/teacher/students/group/${row.original.id}`}>
           View Details
         </Link>
       </Button>

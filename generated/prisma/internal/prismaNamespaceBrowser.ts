@@ -77,7 +77,11 @@ export const ModelName = {
   ProblemTag: 'ProblemTag',
   AIConversation: 'AIConversation',
   AIMessage: 'AIMessage',
-  AIRateLimit: 'AIRateLimit'
+  AIRateLimit: 'AIRateLimit',
+  GroupOverallStats: 'GroupOverallStats',
+  StudentOverallStats: 'StudentOverallStats',
+  GroupProblemStats: 'GroupProblemStats',
+  StudentProblemStats: 'StudentProblemStats'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -449,6 +453,63 @@ export const AIRateLimitScalarFieldEnum = {
 } as const
 
 export type AIRateLimitScalarFieldEnum = (typeof AIRateLimitScalarFieldEnum)[keyof typeof AIRateLimitScalarFieldEnum]
+
+
+export const GroupOverallStatsScalarFieldEnum = {
+  id: 'id',
+  groupId: 'groupId',
+  totalExams: 'totalExams',
+  totalStudents: 'totalStudents',
+  avgScoreAllExams: 'avgScoreAllExams',
+  overallPassRate: 'overallPassRate',
+  highestExamAvg: 'highestExamAvg',
+  lowestExamAvg: 'lowestExamAvg',
+  updatedAt: 'updatedAt'
+} as const
+
+export type GroupOverallStatsScalarFieldEnum = (typeof GroupOverallStatsScalarFieldEnum)[keyof typeof GroupOverallStatsScalarFieldEnum]
+
+
+export const StudentOverallStatsScalarFieldEnum = {
+  id: 'id',
+  groupId: 'groupId',
+  studentId: 'studentId',
+  totalScore: 'totalScore',
+  totalExams: 'totalExams',
+  avgScore: 'avgScore',
+  totalAttempts: 'totalAttempts',
+  updatedAt: 'updatedAt'
+} as const
+
+export type StudentOverallStatsScalarFieldEnum = (typeof StudentOverallStatsScalarFieldEnum)[keyof typeof StudentOverallStatsScalarFieldEnum]
+
+
+export const GroupProblemStatsScalarFieldEnum = {
+  id: 'id',
+  groupId: 'groupId',
+  problemId: 'problemId',
+  totalStudents: 'totalStudents',
+  attemptedCount: 'attemptedCount',
+  acceptedCount: 'acceptedCount',
+  totalAttempts: 'totalAttempts',
+  avgRuntime: 'avgRuntime',
+  avgMemory: 'avgMemory',
+  updatedAt: 'updatedAt'
+} as const
+
+export type GroupProblemStatsScalarFieldEnum = (typeof GroupProblemStatsScalarFieldEnum)[keyof typeof GroupProblemStatsScalarFieldEnum]
+
+
+export const StudentProblemStatsScalarFieldEnum = {
+  id: 'id',
+  studentId: 'studentId',
+  groupId: 'groupId',
+  problemId: 'problemId',
+  attempts: 'attempts',
+  solved: 'solved'
+} as const
+
+export type StudentProblemStatsScalarFieldEnum = (typeof StudentProblemStatsScalarFieldEnum)[keyof typeof StudentProblemStatsScalarFieldEnum]
 
 
 export const SortOrder = {
