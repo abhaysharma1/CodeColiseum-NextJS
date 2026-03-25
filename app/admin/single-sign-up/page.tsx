@@ -16,14 +16,12 @@ import {
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { getBackendURL } from "@/utils/utilities";
-
-type Role = "ADMIN" | "TEACHER" | "STUDENT";
+import { RBAC_ROLE_IDS, RBAC_ROLE_OPTIONS, type RbacRoleId } from "@/lib/rbac-roles";
 
 type UserSummary = {
   id: string;
   name: string;
   email: string;
-  role: Role;
   globalRoleId: string | null;
 };
 
@@ -46,14 +44,14 @@ export default function SingleSignUpPage() {
     name: "",
     email: "",
     password: generateTemporaryPassword(),
-    role: "STUDENT" as Role,
+    roleId: RBAC_ROLE_IDS.ORG_STUDENT as RbacRoleId,
   });
   const [createLoading, setCreateLoading] = useState(false);
   const [createdUser, setCreatedUser] = useState<UserSummary | null>(null);
 
   const [assignForm, setAssignForm] = useState({
     email: "",
-    role: "STUDENT" as Role,
+    roleId: RBAC_ROLE_IDS.ORG_STUDENT as RbacRoleId,
   });
   const [assignLoading, setAssignLoading] = useState(false);
   const [assignedUser, setAssignedUser] = useState<UserSummary | null>(null);
@@ -85,7 +83,7 @@ export default function SingleSignUpPage() {
           name: createForm.name.trim(),
           email: createForm.email.trim().toLowerCase(),
           password: createForm.password,
-          role: createForm.role,
+          roleId: createForm.roleId,
         },
         { withCredentials: true }
       );
@@ -117,7 +115,7 @@ export default function SingleSignUpPage() {
         `${getBackendURL()}/admin/assign-role`,
         {
           email: assignForm.email.trim().toLowerCase(),
-          role: assignForm.role,
+          roleId: assignForm.roleId,
         },
         { withCredentials: true }
       );
@@ -235,18 +233,20 @@ export default function SingleSignUpPage() {
             <div className="space-y-1.5">
               <Label>Role</Label>
               <Select
-                value={createForm.role}
+                value={createForm.roleId}
                 onValueChange={(value) =>
-                  setCreateForm((prev) => ({ ...prev, role: value as Role }))
+                  setCreateForm((prev) => ({ ...prev, roleId: value as RbacRoleId }))
                 }
               >
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="STUDENT">Student</SelectItem>
-                  <SelectItem value="TEACHER">Teacher</SelectItem>
-                  <SelectItem value="ADMIN">Admin</SelectItem>
+                  {RBAC_ROLE_OPTIONS.map((option) => (
+                    <SelectItem key={option.value} value={option.value}>
+                      {option.label}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>
@@ -259,7 +259,7 @@ export default function SingleSignUpPage() {
           {createdUser && (
             <p className="text-xs text-muted-foreground">
               Created: {createdUser.name} ({createdUser.email}) as{" "}
-              {createdUser.role}
+              {createdUser.globalRoleId ?? "unassigned"}
             </p>
           )}
         </CardContent>
@@ -285,18 +285,20 @@ export default function SingleSignUpPage() {
             <div className="space-y-1.5">
               <Label>New Role</Label>
               <Select
-                value={assignForm.role}
+                value={assignForm.roleId}
                 onValueChange={(value) =>
-                  setAssignForm((prev) => ({ ...prev, role: value as Role }))
+                  setAssignForm((prev) => ({ ...prev, roleId: value as RbacRoleId }))
                 }
               >
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="STUDENT">Student</SelectItem>
-                  <SelectItem value="TEACHER">Teacher</SelectItem>
-                  <SelectItem value="ADMIN">Admin</SelectItem>
+                  {RBAC_ROLE_OPTIONS.map((option) => (
+                    <SelectItem key={option.value} value={option.value}>
+                      {option.label}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>
@@ -308,7 +310,7 @@ export default function SingleSignUpPage() {
 
           {assignedUser && (
             <p className="text-xs text-muted-foreground">
-              Updated: {assignedUser.email} is now {assignedUser.role}
+              Updated: {assignedUser.email} is now {assignedUser.globalRoleId}
             </p>
           )}
         </CardContent>

@@ -26,7 +26,7 @@ export default function TeacherLayout({
   }, [path]);
 
   return (
-    <ProtectedRoute requiredRole="TEACHER" requiredPermission="group:view">
+    <ProtectedRoute requiredPermission="group:view">
       <SidebarProvider>
         <AppSidebar user={user} variant="inset" page={page} />
         <SidebarInset>{children}</SidebarInset>

@@ -4,6 +4,12 @@ import { jwtVerify } from "jose";
 
 const secret = new TextEncoder().encode(process.env.BETTER_AUTH_SECRET);
 
+const RBAC_ROLE_DESTINATIONS: Record<string, string> = {
+  role_platform_admin: "/admin/dashboard",
+  role_org_teacher: "/dashboard/teacher",
+  role_org_student: "/dashboard/student",
+};
+
 export async function proxy(req: NextRequest) {
   const pathname = req.nextUrl.pathname;
 
@@ -53,34 +59,13 @@ export async function proxy(req: NextRequest) {
       return NextResponse.redirect(new URL("/onboarding", req.url));
     }
 
-    // Admin route protection
-    if (pathname.startsWith("/admin") && user.role !== "ADMIN") {
-      return NextResponse.redirect(new URL("/dashboard", req.url));
-    }
-
-    // Root dashboard redirect by role
-    if (pathname === "/dashboard") {
-      if (user.role === "TEACHER") {
-        return NextResponse.redirect(new URL("/dashboard/teacher", req.url));
-      } else if (user.role === "STUDENT") {
-        return NextResponse.redirect(new URL("/dashboard/student", req.url));
-      } else if (user.role === "ADMIN") {
-        return NextResponse.redirect(new URL("/admin/dashboard", req.url));
+    // Role-based routing for dashboard landing page
+    // Redirect /dashboard to role-specific page based on globalRoleId
+    if (pathname === "/dashboard" && user.globalRoleId) {
+      const destination = RBAC_ROLE_DESTINATIONS[user.globalRoleId];
+      if (destination) {
+        return NextResponse.redirect(new URL(destination, req.url));
       }
-    }
-
-    // Role-based access for /dashboard/student
-    if (pathname.startsWith("/dashboard/student") && user.role !== "STUDENT") {
-      return NextResponse.redirect(
-        new URL(`/dashboard/${user.role.toLowerCase()}`, req.url)
-      );
-    }
-
-    // Role-based access for /dashboard/teacher
-    if (pathname.startsWith("/dashboard/teacher") && user.role !== "TEACHER") {
-      return NextResponse.redirect(
-        new URL(`/dashboard/${user.role.toLowerCase()}`, req.url)
-      );
     }
 
     return response;

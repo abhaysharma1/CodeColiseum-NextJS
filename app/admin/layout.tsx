@@ -51,7 +51,7 @@ export default function Layout({ children }: { children: ReactNode }) {
   };
 
   return (
-    <ProtectedRoute requiredRole="ADMIN" requiredPermission="group:delete">
+    <ProtectedRoute requiredPermission="group:delete">
       <div className="flex min-h-screen bg-background text-foreground">
         <aside className="flex h-screen w-60 flex-col border-r bg-card/60 px-4 py-4">
           <div className="mb-6 flex flex-col gap-1">

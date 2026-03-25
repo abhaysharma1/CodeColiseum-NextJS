@@ -34,7 +34,7 @@ export default function StudentLayout({
   }, [path]);
 
   return (
-    <ProtectedRoute requiredRole="STUDENT" requiredPermission="group:view">
+    <ProtectedRoute requiredPermission="group:view">
       <SidebarProvider>
         <StudentSidebar user={user} variant="inset" page={page} />
         <SidebarInset>{children}</SidebarInset>

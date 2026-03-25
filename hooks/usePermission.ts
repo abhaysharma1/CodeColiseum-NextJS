@@ -1,35 +1,9 @@
 "use client";
 
 import axios from "axios";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "@/context/authcontext";
 import { getBackendURL } from "@/utils/utilities";
-
-const ROLE_FALLBACK_PERMISSIONS = {
-  ADMIN: new Set<string>([
-    "group:view",
-    "group:edit",
-    "group:delete",
-    "exam:create",
-    "exam:edit",
-    "exam:publish",
-    "submission:view",
-    "submission:grade",
-    "analytics:view",
-  ]),
-  TEACHER: new Set<string>([
-    "group:view",
-    "group:edit",
-    "group:delete",
-    "exam:create",
-    "exam:edit",
-    "exam:publish",
-    "submission:view",
-    "submission:grade",
-    "analytics:view",
-  ]),
-  STUDENT: new Set<string>(["group:view", "submission:view"]),
-} as const;
 
 function normalizePermission(permission: string): string {
   return permission.trim().toLowerCase();
@@ -48,31 +22,10 @@ function getCacheKey(permission: string, groupId?: string): string {
   return [normalizePermission(permission), groupId ?? "global"].join(":");
 }
 
-function getFallbackPermission(role: unknown, permission: string): boolean {
-  const roleKey = String(
-    role ?? ""
-  ).toUpperCase() as keyof typeof ROLE_FALLBACK_PERMISSIONS;
-  const permissionSet = ROLE_FALLBACK_PERMISSIONS[roleKey];
-
-  if (!permissionSet) {
-    return false;
-  }
-
-  return permissionSet.has(normalizePermission(permission));
-}
-
 export function usePermission(permission: string, groupId?: string): boolean {
   const { user } = useAuth();
 
-  const fallbackValue = useMemo(() => {
-    if (!user?.role) {
-      return false;
-    }
-
-    return getFallbackPermission(user.role, permission);
-  }, [permission, user?.role]);
-
-  const [allowed, setAllowed] = useState<boolean>(fallbackValue);
+  const [allowed, setAllowed] = useState<boolean>(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -118,7 +71,7 @@ export function usePermission(permission: string, groupId?: string): boolean {
         }
       } catch {
         if (!cancelled) {
-          setAllowed(fallbackValue);
+          setAllowed(false);
         }
       }
     };
@@ -128,7 +81,7 @@ export function usePermission(permission: string, groupId?: string): boolean {
     return () => {
       cancelled = true;
     };
-  }, [fallbackValue, groupId, permission, user?.id]);
+  }, [groupId, permission, user?.id]);
 
   return allowed;
 }
@@ -139,17 +92,7 @@ export function useHasAnyPermission(
 ): boolean {
   const { user } = useAuth();
 
-  const fallbackValue = useMemo(() => {
-    if (!user?.role) {
-      return false;
-    }
-
-    return permissions.some((permission) =>
-      getFallbackPermission(user.role, permission)
-    );
-  }, [permissions, user?.role]);
-
-  const [allowed, setAllowed] = useState<boolean>(fallbackValue);
+  const [allowed, setAllowed] = useState<boolean>(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -204,7 +147,7 @@ export function useHasAnyPermission(
         }
       } catch {
         if (!cancelled) {
-          setAllowed(fallbackValue);
+          setAllowed(false);
         }
       }
     };
@@ -214,7 +157,7 @@ export function useHasAnyPermission(
     return () => {
       cancelled = true;
     };
-  }, [fallbackValue, groupId, permissions, user?.id]);
+  }, [groupId, permissions, user?.id]);
 
   return allowed;
 }

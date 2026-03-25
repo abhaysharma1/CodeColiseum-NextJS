@@ -16,8 +16,7 @@ import axios from "axios";
 import { Upload, X } from "lucide-react";
 import React, { useRef, useState } from "react";
 import { toast } from "sonner";
-
-type Role = "TEACHER" | "STUDENT" | "ADMIN";
+import { RBAC_ROLE_IDS, RBAC_ROLE_OPTIONS, type RbacRoleId } from "@/lib/rbac-roles";
 
 interface BulkSignupResult {
   email: string;
@@ -50,7 +49,7 @@ const isValidEmail = (e: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
 export default function BulkSignUp() {
   const [textEmails, setTextEmails] = useState("");
   const [csvFile, setCsvFile] = useState<File | null>(null);
-  const [role, setRole] = useState<Role>("STUDENT");
+  const [roleId, setRoleId] = useState<RbacRoleId>(RBAC_ROLE_IDS.ORG_STUDENT);
   const [loading, setLoading] = useState(false);
   const [response, setResponse] = useState<BulkSignupResponse | null>(null);
   const [dragOver, setDragOver] = useState(false);
@@ -96,7 +95,7 @@ export default function BulkSignUp() {
     try {
       const res = await axios.post<BulkSignupResponse>(
         `${getBackendURL()}/admin/bulkSignup`,
-        { emails, role },
+        { emails, roleId },
         { withCredentials: true }
       );
       setResponse(res.data);
@@ -140,14 +139,19 @@ export default function BulkSignUp() {
               <span className="text-xs font-medium text-muted-foreground">
                 Role
               </span>
-              <Select value={role} onValueChange={(v) => setRole(v as Role)}>
+              <Select
+                value={roleId}
+                onValueChange={(v) => setRoleId(v as RbacRoleId)}
+              >
                 <SelectTrigger className="w-36 h-8 text-sm">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="STUDENT">Student</SelectItem>
-                  <SelectItem value="TEACHER">Teacher</SelectItem>
-                  <SelectItem value="ADMIN">Admin</SelectItem>
+                  {RBAC_ROLE_OPTIONS.map((option) => (
+                    <SelectItem key={option.value} value={option.value}>
+                      {option.label}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>
