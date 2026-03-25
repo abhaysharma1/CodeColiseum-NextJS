@@ -7,6 +7,7 @@ import {
   IconCode,
   IconFileCode,
   IconSparkles,
+  IconUsersPlus,
   IconUserPlus,
 } from "@tabler/icons-react";
 import { usePathname, useRouter } from "next/navigation";
@@ -31,7 +32,7 @@ const navigation = [
   {
     name: "Bulk Sign Up",
     href: "/admin/bulk-sign-up",
-    icon: IconSparkles,
+    icon: IconUsersPlus,
   },
   {
     name: "Single Sign Up",
@@ -52,14 +53,14 @@ export default function Layout({ children }: { children: ReactNode }) {
 
   return (
     <ProtectedRoute requiredPermission="group:delete">
-      <div className="flex min-h-screen bg-background text-foreground">
-        <aside className="flex h-screen w-60 flex-col border-r bg-card/60 px-4 py-4">
+      <div className="flex h-screen overflow-hidden bg-background text-foreground">
+        <aside className="flex h-full w-60 flex-col overflow-y-auto border-r bg-card/60 px-4 py-4">
           <div className="mb-6 flex flex-col gap-1">
             <span className=" font-logoFont  ">CodeColiseum</span>
             <span className="text-sm font-semibold">Admin</span>
           </div>
 
-          <div className="flex flex-col justify-between h-full cursor-pointer">
+          <div className="flex h-full min-h-0 cursor-pointer flex-col justify-between">
             <nav className="space-y-1">
               {navigation.map((item) => {
                 const Icon = item.icon;
@@ -88,8 +89,10 @@ export default function Layout({ children }: { children: ReactNode }) {
           </div>
         </aside>
 
-        <main className="flex-1 min-h-screen bg-background">
-          <div className="h-full px-6 py-6 md:px-8 lg:px-10">{children}</div>
+        <main className="h-full flex-1 overflow-y-auto bg-background">
+          <div className="min-h-full px-6 py-6 md:px-8 lg:px-10">
+            {children}
+          </div>
         </main>
       </div>
     </ProtectedRoute>
