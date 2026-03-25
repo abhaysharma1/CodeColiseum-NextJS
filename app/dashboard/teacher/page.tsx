@@ -56,15 +56,10 @@ export interface incomingData {
 }
 
 const columns: ColumnDef<incomingData>[] = [
-
   {
     accessorKey: "title",
     header: ({ column }) => {
-      return (
-        <div className="ml-3">
-          Title
-        </div>
-      );
+      return <div className="ml-3">Title</div>;
     },
     cell: ({ row }) => (
       <div className=" ml-3 capitalize">{row.getValue("title")}</div>
@@ -175,13 +170,15 @@ const columns: ColumnDef<incomingData>[] = [
         <div className="flex space-x-2">
           {exam.isPublished ? (
             <Button variant="outline" className="h-7" asChild>
-              <Link href={`/dashboard/teacher/test/seeresults/${exam.id}`}>
+              <Link href={`/dashboard/teacher/tests/results/${exam.id}`}>
                 See Results
               </Link>
             </Button>
           ) : (
             <Button variant="outline" className="h-7" asChild>
-              <Link href={`teacher/test/edit/${exam.id}`}>Edit</Link>
+              <Link href={`/dashboard/teacher/tests/edit/${exam.id}`}>
+                Edit
+              </Link>
             </Button>
           )}
         </div>
@@ -193,19 +190,19 @@ const columns: ColumnDef<incomingData>[] = [
 export default function DataTable() {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    [],
+    []
   );
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
-  const [data, setData] = React.useState<incomingData[] >([]);
+  const [data, setData] = React.useState<incomingData[]>([]);
 
   const [draftingExam, setDraftingExam] = React.useState(false);
 
   const [loading, setLoading] = React.useState(false);
-  const [take,setTake] = React.useState(8);
-  const [skip,setSkip] = React.useState(0);
-  const [searchValue,setSearchValue] = React.useState("");
+  const [take, setTake] = React.useState(8);
+  const [skip, setSkip] = React.useState(0);
+  const [searchValue, setSearchValue] = React.useState("");
 
   const router = useRouter();
 
@@ -220,37 +217,39 @@ export default function DataTable() {
     fetchExams();
   }, [skip, take, searchValue]);
 
-  const fetchAllExams = async() => {
+  const fetchAllExams = async () => {
     try {
-        const domain = getBackendURL()
-        const res = await axios.get(`${domain}/teacher/exam/fetchallexams`, {
-          params: {
-            take: take,
-            skip: skip,
-            searchvalue: searchValue
-          },
-          withCredentials: true
-        });
-        console.log(res)
-        return res.data as incomingData[]
+      const domain = getBackendURL();
+      const res = await axios.get(`${domain}/teacher/exam/fetchallexams`, {
+        params: {
+          take: take,
+          skip: skip,
+          searchvalue: searchValue,
+        },
+        withCredentials: true,
+      });
+      console.log(res);
+      return res.data as incomingData[];
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
 
   const draftExam = async () => {
     try {
-      setDraftingExam(true)
-      const domain = getBackendURL()
-      const res = await axios.get(`${domain}/teacher/exam/draftexam`,{withCredentials:true});
-      const exam = res.data as Exam
-      router.push(`/dashboard/teacher/test/edit/${exam.id}`)
+      setDraftingExam(true);
+      const domain = getBackendURL();
+      const res = await axios.get(`${domain}/teacher/exam/draftexam`, {
+        withCredentials: true,
+      });
+      const exam = res.data as Exam;
+      router.push(`/dashboard/teacher/tests/edit/${exam.id}`);
     } catch (error) {
-      console.log(error)
-    }finally{
-      setDraftingExam(false)
+      console.log(error);
+    } finally {
+      setDraftingExam(false);
     }
-  }
+  };
 
   const table = useReactTable({
     data,
@@ -338,7 +337,7 @@ export default function DataTable() {
                               ? null
                               : flexRender(
                                   header.column.columnDef.header,
-                                  header.getContext(),
+                                  header.getContext()
                                 )}
                           </TableHead>
                         );
@@ -357,7 +356,7 @@ export default function DataTable() {
                           <TableCell key={cell.id}>
                             {flexRender(
                               cell.column.columnDef.cell,
-                              cell.getContext(),
+                              cell.getContext()
                             )}
                           </TableCell>
                         ))}
@@ -385,8 +384,8 @@ export default function DataTable() {
             <div className="flex items-center justify-end space-x-2 py-4">
               <div className="text-muted-foreground flex-1 text-sm">
                 {table.getFilteredSelectedRowModel().rows.length} of{" "}
-                {table.getFilteredRowModel().rows.length} row(s) selected.
-                {" "}· Page {Math.floor(skip / take) + 1}
+                {table.getFilteredRowModel().rows.length} row(s) selected. ·
+                Page {Math.floor(skip / take) + 1}
               </div>
               <div className="space-x-2">
                 <Button

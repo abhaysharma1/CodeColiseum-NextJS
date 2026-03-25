@@ -25,7 +25,8 @@ export default function Header() {
         paddingTop: compact ? "0.5rem" : "1rem",
       }}
       transition={{ duration: 0.25, ease: "easeOut" }}
-      className="fixed inset-x-0 top-0 z-50">
+      className="fixed inset-x-0 top-0 z-50"
+    >
       <motion.div
         animate={{
           paddingTop: compact ? "0.75rem" : "1rem",
@@ -34,7 +35,8 @@ export default function Header() {
           backdropFilter: compact ? "blur(20px)" : "blur(28px)",
         }}
         transition={{ duration: 0.25, ease: "easeOut" }}
-        className={`mx-auto mt-4 max-w-7xl px-6 transition-all duration-300 ${compact ? "glass-card-dark py-3 rounded-2xl" : "bg-transparent py-4 rounded-3xl border-transparent"}`}>
+        className={`mx-auto mt-4 max-w-7xl px-6 transition-all duration-300 ${compact ? "glass-card-dark py-3 rounded-2xl" : "bg-transparent py-4 rounded-3xl border-transparent"}`}
+      >
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-3 group">
@@ -45,17 +47,20 @@ export default function Header() {
           <nav className="hidden items-center gap-8 md:flex text-white">
             <Link
               href="#product"
-              className="text-white/80 hover:text-white transition-colors font-medium">
+              className="text-white/80 hover:text-white transition-colors font-medium"
+            >
               Exams
             </Link>
             <Link
-              href="/problemlist"
-              className="text-white/80 hover:text-white transition-colors font-medium">
+              href="/problem-list"
+              className="text-white/80 hover:text-white transition-colors font-medium"
+            >
               Practice
             </Link>
             <Link
               href="#pricing"
-              className="text-white/80 hover:text-white transition-colors font-medium">
+              className="text-white/80 hover:text-white transition-colors font-medium"
+            >
               Contests
             </Link>
 
@@ -64,19 +69,22 @@ export default function Header() {
               {user ? (
                 <Button
                   className="bg-white text-black text-xs font-bold h-8 px-4 rounded-md hover:bg-zinc-200 transition-colors"
-                  asChild>
+                  asChild
+                >
                   <Link href="/dashboard">Dashboard</Link>
                 </Button>
               ) : (
                 <>
                   <Link
                     href="/login"
-                    className="text-white/80 hover:text-white transition-colors font-medium">
+                    className="text-white/80 hover:text-white transition-colors font-medium"
+                  >
                     Log in
                   </Link>
                   <Link
                     href="/signup"
-                    className="px-5 py-2.5 bg-white text-black rounded-full font-bold hover:bg-white/90 transition-all hover:scale-105 active:scale-95 shadow-lg shadow-white/10">
+                    className="px-5 py-2.5 bg-white text-black rounded-full font-bold hover:bg-white/90 transition-all hover:scale-105 active:scale-95 shadow-lg shadow-white/10"
+                  >
                     Sign up
                   </Link>
                 </>
@@ -88,7 +96,8 @@ export default function Header() {
           <button
             onClick={() => setOpen(!open)}
             className="md:hidden text-white"
-            aria-label="Toggle menu">
+            aria-label="Toggle menu"
+          >
             {open ? <X size={22} /> : <Menu size={22} />}
           </button>
         </div>

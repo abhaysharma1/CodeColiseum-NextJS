@@ -20,8 +20,8 @@ import { getLanguageId } from "@/utils/getLanguageId";
 import { runTestCaseType } from "./interface";
 import { useRemainingTime } from "./getRemainingTime";
 
-function Page({ params }: { params: Promise<{ id: string }> }) {
-  const { id: examId } = use(params);
+function Page({ params }: { params: Promise<{ "exam-id": string }> }) {
+  const { "exam-id": examId } = use(params);
 
   const [examDetails, setExamDetails] = useState<Exam | undefined>();
   const [examProblems, setExamProblems] = useState<ExamProblem[] | undefined>();

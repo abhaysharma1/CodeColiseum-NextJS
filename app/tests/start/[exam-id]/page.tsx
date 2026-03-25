@@ -11,8 +11,8 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { getBackendURL } from "@/utils/utilities";
 
-function Page({ params }: { params: Promise<{ id: string }> }) {
-  const { id: examId } = use(params);
+function Page({ params }: { params: Promise<{ "exam-id": string }> }) {
+  const { "exam-id": examId } = use(params);
 
   const [error, setError] = useState<any>();
 
@@ -31,7 +31,7 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
         const det = res.data as Exam;
         setExamDetails(det);
         console.log(res);
-        router.push(`/test/givetest/${det.id}`);
+        router.push(`/tests/attempt/${det.id}`);
       } catch (err: any) {
         if (err.status >= 400) {
           router.replace("/dashboard");
@@ -122,7 +122,7 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
 
           <div className="mt-6 flex justify-end">
             <Button>
-              <Link href={`/test/givetest/${examDetails?.id}`}>Start Exam</Link>
+              <Link href={`/tests/attempt/${examDetails?.id}`}>Start Exam</Link>
             </Button>
           </div>
         </CardContent>

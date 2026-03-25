@@ -73,8 +73,8 @@ function combineDateAndTime(date: Date, time: string) {
   return merged;
 }
 
-function Page({ params }: { params: Promise<{ id: string }> }) {
-  const { id: examId } = use(params);
+function Page({ params }: { params: Promise<{ "exam-id": string }> }) {
+  const { "exam-id": examId } = use(params);
 
   const [groups, setGroups] = useState<Group[] | undefined>();
 

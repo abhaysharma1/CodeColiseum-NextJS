@@ -22,9 +22,11 @@ export async function proxy(req: NextRequest) {
   const response = NextResponse.next();
   response.headers.set("Content-Security-Policy", cspHeader);
 
-  // Protect both /dashboard and /admin routes
+  // Protect dashboard, admin, and exam runtime routes.
   const isProtected =
-    pathname.startsWith("/dashboard") || pathname.startsWith("/admin");
+    pathname.startsWith("/dashboard") ||
+    pathname.startsWith("/admin") ||
+    pathname.startsWith("/tests");
 
   if (!isProtected) {
     return response;
@@ -33,7 +35,7 @@ export async function proxy(req: NextRequest) {
   const token =
     req.cookies.get("__Secure-better-auth.session_data")?.value ||
     req.cookies.get("better-auth.session_data")?.value;
-    
+
   if (!token) {
     return NextResponse.redirect(new URL("/login", req.url));
   }

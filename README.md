@@ -27,6 +27,14 @@ To learn more about Next.js, take a look at the following resources:
 - [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
 - [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
+## Route Architecture
+
+The production route contract and migration strategy for student, teacher, admin, and HOD dashboards is documented in:
+
+- [docs/route-layout.md](docs/route-layout.md)
+
+Use this document as the canonical reference for route naming, role route boundaries, and legacy redirect planning.
+
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
 ## Deploy on Vercel

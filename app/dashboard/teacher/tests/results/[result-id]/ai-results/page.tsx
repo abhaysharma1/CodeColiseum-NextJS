@@ -94,8 +94,8 @@ type SubmissionWithDetails = {
   };
 };
 
-function Page({ params }: { params: Promise<{ id: string }> }) {
-  const { id: examId } = use(params);
+function Page({ params }: { params: Promise<{ "result-id": string }> }) {
+  const { "result-id": examId } = use(params);
   const [data, setData] = useState<SubmissionWithDetails[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);

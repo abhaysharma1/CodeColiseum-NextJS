@@ -1,6 +1,6 @@
 import React from "react";
 import { Navbar01 } from "@/components/ui/shadcn-io/navbar";
-import ProblemsTable from "@/app/problemlist/problemsTable";
+import ProblemsTable from "@/app/problem-list/problemsTable";
 
 function page() {
   return (

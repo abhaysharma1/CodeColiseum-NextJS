@@ -1,5 +1,6 @@
 "use client";
 import { useAuth } from "@/context/authcontext";
+import { ProtectedRoute } from "@/components/protectedroute";
 import React, { useEffect, useState } from "react";
 import { AppSidebar } from "@/components/app-sidebar";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
@@ -25,9 +26,11 @@ export default function TeacherLayout({
   }, [path]);
 
   return (
-    <SidebarProvider>
-      <AppSidebar user={user} variant="inset" page={page} />
-      <SidebarInset>{children}</SidebarInset>
-    </SidebarProvider>
+    <ProtectedRoute requiredRole="TEACHER" requiredPermission="group:view">
+      <SidebarProvider>
+        <AppSidebar user={user} variant="inset" page={page} />
+        <SidebarInset>{children}</SidebarInset>
+      </SidebarProvider>
+    </ProtectedRoute>
   );
 }

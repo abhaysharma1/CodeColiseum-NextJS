@@ -109,8 +109,12 @@ export type TeacherTestResultsResponse = {
 
 type AiEvalUIStatus = "NOT_STARTED" | "EVALUATING" | "COMPLETED";
 
-function TestResultsPage({ params }: { params: Promise<{ id: string }> }) {
-  const { id: examId } = use(params);
+function TestResultsPage({
+  params,
+}: {
+  params: Promise<{ "result-id": string }>;
+}) {
+  const { "result-id": examId } = use(params);
   const router = useRouter();
 
   const [data, setData] = useState<TeacherTestResultsResponse | null>(null);
@@ -397,7 +401,7 @@ function TestResultsPage({ params }: { params: Promise<{ id: string }> }) {
 
     if (aiEvaluatingStatus === "COMPLETED") {
       router.push(
-        `/dashboard/teacher/test/seeresults/${data.examDetails.id}/airesults`
+        `/dashboard/teacher/tests/results/${data.examDetails.id}/ai-results`
       );
       return;
     }
@@ -645,7 +649,7 @@ function TestResultsPage({ params }: { params: Promise<{ id: string }> }) {
                           <TableHead>Last Activity</TableHead>
                         </TableRow>
                       </TableHeader>
-                      <TableBody >
+                      <TableBody>
                         {data.studentResults.map((student, index) => (
                           <TableRow key={student.attemptId}>
                             <TableCell className="font-medium">

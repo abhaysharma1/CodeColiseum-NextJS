@@ -112,8 +112,8 @@ export type ExamResultResponse = {
   };
 };
 
-function Page({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = use(params);
+function Page({ params }: { params: Promise<{ "result-id": string }> }) {
+  const { "result-id": id } = use(params);
   const [result, setResult] = useState<ExamResultResponse | undefined>();
   const [loading, setLoading] = useState<boolean>(true);
   const router = useRouter();
@@ -309,7 +309,7 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
                       variant={"secondary"}
                       onClick={() =>
                         router.push(
-                          `/dashboard/student/seeresults/${examDetails.id}/airesults`
+                          `/dashboard/student/results/${examDetails.id}/ai-results`
                         )
                       }
                     >

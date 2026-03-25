@@ -1,4 +1,4 @@
-import ProblemsTable from "@/app/problemlist/problemsTable";
+import ProblemsTable from "@/app/problem-list/problemsTable";
 import { SiteHeader } from "@/components/site-header";
 import React from "react";
 
