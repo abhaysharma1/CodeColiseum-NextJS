@@ -72,6 +72,7 @@ function ProblemsTable() {
             difficulty,
             take: 10,
             skip: (page - 1) * 10,
+            withDescription: false,
           },
           withCredentials: true,
         }
@@ -108,7 +109,7 @@ function ProblemsTable() {
       const response = await axios.get(`${getBackendURL()}/problems/gettags`, {
         withCredentials: true,
       });
-      
+
       const data = response.data as Tag[];
 
       setPossibleTags(data);

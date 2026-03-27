@@ -12,7 +12,7 @@ import { useRouter } from "next/navigation";
 import { MdOutlineSpaceDashboard } from "react-icons/md";
 import { IoCodeSlashOutline } from "react-icons/io5";
 import { IoMdPeople } from "react-icons/io";
-import { TestTube, TestTubeDiagonal, TestTubes } from "lucide-react";
+import { TestTubeDiagonal, Bell } from "lucide-react";
 
 export function NavStudentMain({ page }: { page: string }) {
   const router = useRouter();
@@ -83,6 +83,19 @@ export function NavStudentMain({ page }: { page: string }) {
               </SidebarMenuButton>
             </SidebarMenuItem>
           )}
+          <SidebarMenuItem
+            className={
+              page == "NOTIFICATIONS"
+                ? "bg-primary text-primary-foreground rounded-md"
+                : ""
+            }
+            onClick={() => router.push("/dashboard/student/notifications")}
+          >
+            <SidebarMenuButton tooltip={"Notifications"}>
+              <Bell />
+              <span>Notifications</span>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
         </SidebarMenu>
       </SidebarGroupContent>
     </SidebarGroup>

@@ -65,6 +65,7 @@ import { router } from "better-auth/api";
 import { useRouter } from "next/navigation";
 import { IoAnalytics } from "react-icons/io5";
 import Link from "next/link";
+import { AnalyticsPagination } from "@/components/analytics/AnalyticsPagination";
 
 interface StudentOverallStats {
   id: string;
@@ -103,6 +104,21 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
   const [editedAiEnabled, setEditedAiEnabled] = useState(false);
   const [editedAiMaxMessages, setEditedAiMaxMessages] = useState(20);
   const [editedAiMaxTokens, setEditedAiMaxTokens] = useState(2000);
+  const [savingGroup, setSavingGroup] = useState(false);
+
+  const [searchValue, setSearchValue] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [totalMembers, setTotalMembers] = useState(0);
+  const [membersLoading, setMembersLoading] = useState(false);
+  const [removingMemberId, setRemovingMemberId] = useState<string | null>(null);
+  const [confirmRemoveOpen, setConfirmRemoveOpen] = useState(false);
+  const [memberToRemove, setMemberToRemove] = useState<User | null>(null);
+
+  const [coTeacherEmail, setCoTeacherEmail] = useState("");
+  const [addingCoTeacher, setAddingCoTeacher] = useState(false);
+  const [assignCoTeacherOpen, setAssignCoTeacherOpen] = useState(false);
 
   const router = useRouter();
 
@@ -126,18 +142,43 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
     }
   };
 
-  const getMembers = async () => {
+  const getMembers = async (page: number, limit: number, search: string) => {
     try {
+      if (!groupData?.id) return;
+
+      setMembersLoading(true);
       const res = await axios.get(
         `${getBackendURL()}/teacher/getgroupmembers`,
         {
           params: {
-            groupId: id,
+            groupId: groupData.id,
+            page,
+            limit,
+            search: search || undefined,
           },
           withCredentials: true,
         }
       );
-      setGroupMembers(res.data as User[]);
+
+      const data = res.data as
+        | User[]
+        | {
+            data: User[];
+            pagination?: {
+              page: number;
+              limit: number;
+              total: number;
+              pages: number;
+            };
+          };
+
+      if (Array.isArray(data)) {
+        setGroupMembers(data);
+        setTotalMembers(data.length);
+      } else {
+        setGroupMembers(data.data);
+        setTotalMembers(data.pagination?.total ?? data.data.length);
+      }
     } catch (error) {
       if (typeof error == "string") {
         toast.error(error);
@@ -145,6 +186,7 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
       console.log(error);
     } finally {
       setLoading(false);
+      setMembersLoading(false);
     }
   };
 
@@ -152,7 +194,7 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
     try {
       setStatsLoading(true);
       const res = await axios.get(
-        `${getBackendURL()}/teacher/student-overall-stats`,
+        `${getBackendURL()}/teaxcher/student-overall-stats`,
         {
           params: {
             groupId: id,
@@ -194,7 +236,7 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
       setDialogOpen(true);
       setNewEmails("");
 
-      await getMembers();
+      await getMembers(currentPage, pageSize, debouncedSearch);
       await getData();
     } catch (error: any) {
       if (typeof error.message === "string") {
@@ -214,10 +256,23 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
 
   useEffect(() => {
     if (groupData?.id) {
-      getMembers();
       getStudentStats();
     }
   }, [groupData]);
+
+  useEffect(() => {
+    if (!groupData?.id) return;
+    getMembers(currentPage, pageSize, debouncedSearch);
+  }, [groupData?.id, currentPage, pageSize, debouncedSearch]);
+
+  useEffect(() => {
+    const t = setTimeout(() => {
+      setDebouncedSearch(searchValue);
+      setCurrentPage(1);
+    }, 400);
+
+    return () => clearTimeout(t);
+  }, [searchValue]);
 
   const getInitials = (name: string) => {
     return name
@@ -238,10 +293,135 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
     setShowEditGroup(true);
   };
 
-  const handleSaveEdit = () => {
-    // Backend integration will be added here
-    toast.success("Changes will be saved (backend not implemented yet)");
-    setShowEditGroup(false);
+  const handleSaveEdit = async () => {
+    if (!groupData?.id) {
+      toast.error("Group not loaded");
+      return;
+    }
+
+    if (!editedName.trim()) {
+      toast.error("Please enter group name");
+      return;
+    }
+
+    try {
+      setSavingGroup(true);
+
+      await axios.post(
+        `${getBackendURL()}/teacher/updategroupdetails`,
+        {
+          groupId: groupData.id,
+          name: editedName.trim(),
+          description: editedDescription,
+          type: editedType,
+          aiEnabled: editedAiEnabled,
+          aiMaxMessages: editedAiEnabled ? editedAiMaxMessages : undefined,
+          aiMaxTokens: editedAiEnabled ? editedAiMaxTokens : undefined,
+        },
+        {
+          withCredentials: true,
+        }
+      );
+
+      toast.success("Group updated successfully");
+      await getData();
+      setShowEditGroup(false);
+    } catch (error: any) {
+      const message =
+        error?.response?.data?.error ||
+        (typeof error?.message === "string"
+          ? error.message
+          : "Failed to update group");
+      toast.error(message);
+      console.log(error);
+    } finally {
+      setSavingGroup(false);
+    }
+  };
+
+  const handleRemoveMember = async (memberId: string) => {
+    if (!groupData?.id) return;
+
+    try {
+      setRemovingMemberId(memberId);
+
+      await axios.post(
+        `${getBackendURL()}/teacher/removememberfromgroup`,
+        {
+          groupId: groupData.id,
+          userId: memberId,
+        },
+        {
+          withCredentials: true,
+        }
+      );
+
+      toast.success("Student removed from group");
+
+      // Adjust page if we removed the last member on the current page
+      const isLastOnPage = groupMembers && groupMembers.length === 1;
+      if (isLastOnPage && currentPage > 1) {
+        setCurrentPage(currentPage - 1);
+      } else {
+        getMembers(currentPage, pageSize, debouncedSearch);
+      }
+
+      // Refresh group details and stats so counts stay in sync
+      await getData();
+      await getStudentStats();
+    } catch (error: any) {
+      const message =
+        error?.response?.data?.error ||
+        (typeof error?.message === "string"
+          ? error.message
+          : "Failed to remove student from group");
+      toast.error(message);
+      console.log(error);
+    } finally {
+      setRemovingMemberId(null);
+      setConfirmRemoveOpen(false);
+      setMemberToRemove(null);
+    }
+  };
+
+  const handleAddCoTeacher = async () => {
+    if (!groupData?.id) return;
+
+    if (!coTeacherEmail.trim()) {
+      toast.error("Enter a teacher email");
+      return;
+    }
+
+    try {
+      setAddingCoTeacher(true);
+
+      await axios.post(
+        `${getBackendURL()}/teacher/addcoteachertogroup`,
+        {
+          groupId: groupData.id,
+          email: coTeacherEmail.trim(),
+        },
+        {
+          withCredentials: true,
+        }
+      );
+
+      toast.success("Co-teacher added successfully");
+      setCoTeacherEmail("");
+
+      await getMembers(currentPage, pageSize, debouncedSearch);
+      await getData();
+    } catch (error: any) {
+      const message =
+        error?.response?.data?.error ||
+        (typeof error?.message === "string"
+          ? error.message
+          : "Failed to add co-teacher");
+      toast.error(message);
+      console.log(error);
+    } finally {
+      setAddingCoTeacher(false);
+    }
   };
 
   return (
@@ -273,13 +453,22 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
                     <Pencil className="h-4 w-4" />
                   </Button>
                 </div>
-                <Link
-                  href={`/dashboard/teacher/students/group/${groupData.id}/analytics`}
-                >
-                  <Button variant={"outline"}>
-                    <IoAnalytics /> Analytics
+                <div className="flex items-center gap-3">
+                  <Button
+                    variant="outline"
+                    onClick={() => setAssignCoTeacherOpen(true)}
+                    className="cursor-pointer"
+                  >
+                    <UserPlus className="h-4 w-4 mr-1" /> Assign Co-teacher
                   </Button>
-                </Link>
+                  <Link
+                    href={`/dashboard/teacher/students/group/${groupData.id}/analytics`}
+                  >
+                    <Button variant={"outline"}>
+                      <IoAnalytics /> Analytics
+                    </Button>
+                  </Link>
+                </div>
               </div>
 
               {groupData.description && (
@@ -319,7 +508,9 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
               <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
                 <div className="flex items-center gap-2">
                   <Users className="h-4 w-4" />
-                  <span>{groupMembers?.length || 0} Members</span>
+                  <span>
+                    {totalMembers || groupMembers?.length || 0} Members
+                  </span>
                 </div>
 
                 {groupData.createdAt && (
@@ -396,11 +587,20 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
               Group Members
             </CardTitle>
             <CardDescription>
-              {groupMembers?.length || 0} members in this group
+              {totalMembers || groupMembers?.length || 0} members in this group
             </CardDescription>
+            <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <Input
+                type="text"
+                placeholder="Search by name or email..."
+                value={searchValue}
+                onChange={(e) => setSearchValue(e.target.value)}
+                className="max-w-sm"
+              />
+            </div>
           </CardHeader>
           <CardContent>
-            {loading ? (
+            {loading || membersLoading ? (
               <div className="space-y-4">
                 {[1, 2, 3].map((i) => (
                   <div key={i} className="flex items-center gap-4">
@@ -466,6 +666,27 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
                             <Badge variant="outline" className="text-xs">
                               {member.role}
                             </Badge>
+                            <Button
+                              asChild
+                              variant="outline"
+                              size="sm"
+                              className="ml-2 cursor-pointer"
+                              disabled={removingMemberId === member.id}
+                            >
+                              <span
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  if (removingMemberId !== member.id) {
+                                    setMemberToRemove(member);
+                                    setConfirmRemoveOpen(true);
+                                  }
+                                }}
+                              >
+                                {removingMemberId === member.id
+                                  ? "Removing..."
+                                  : "Remove"}
+                              </span>
+                            </Button>
                           </div>
                         </div>
                       </AccordionTrigger>
@@ -588,11 +809,25 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
               <div className="text-center py-12">
                 <Users className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
                 <p className="text-lg font-medium text-muted-foreground">
-                  No members in this group yet
+                  {searchValue
+                    ? "No members match your search"
+                    : "No members in this group yet"}
                 </p>
               </div>
             )}
           </CardContent>
+          {totalMembers > 0 && (
+            <div className="px-6 pb-6">
+              <AnalyticsPagination
+                currentPage={currentPage}
+                pageSize={pageSize}
+                totalItems={totalMembers}
+                onPageChange={setCurrentPage}
+                onPageSizeChange={setPageSize}
+                isLoading={membersLoading}
+              />
+            </div>
+          )}
         </Card>
       </div>
 
@@ -747,8 +982,12 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
             >
               Cancel
             </Button>
-            <Button onClick={handleSaveEdit} className="cursor-pointer">
-              Save Changes
+            <Button
+              onClick={handleSaveEdit}
+              className="cursor-pointer"
+              disabled={savingGroup}
+            >
+              {savingGroup ? "Saving..." : "Save Changes"}
             </Button>
           </div>
         </DialogContent>
@@ -799,6 +1038,124 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
 
           <div className="mt-6 flex justify-end">
             <Button onClick={() => setDialogOpen(false)}>Close</Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Remove Member Confirmation Dialog */}
+      <Dialog
+        open={confirmRemoveOpen}
+        onOpenChange={(open) => {
+          setConfirmRemoveOpen(open);
+          if (!open) {
+            setMemberToRemove(null);
+          }
+        }}
+      >
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <AlertCircle className="h-5 w-5 text-yellow-500" />
+              Remove Student from Group
+            </DialogTitle>
+            <DialogDescription>
+              {memberToRemove ? (
+                <span>
+                  Are you sure you want to remove{" "}
+                  <span className="font-semibold">
+                    {memberToRemove.name || memberToRemove.email}
+                  </span>{" "}
+                  from this group? They will lose access to exams and resources
+                  tied to this group.
+                </span>
+              ) : (
+                "Are you sure you want to remove this student from the group?"
+              )}
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="mt-6 flex justify-end gap-3">
+            <Button
+              variant="outline"
+              className="cursor-pointer"
+              onClick={() => {
+                setConfirmRemoveOpen(false);
+                setMemberToRemove(null);
+              }}
+              disabled={!!removingMemberId}
+            >
+              Cancel
+            </Button>
+            <Button
+              variant="destructive"
+              className="cursor-pointer"
+              disabled={!memberToRemove || !!removingMemberId}
+              onClick={() => {
+                if (memberToRemove) {
+                  void handleRemoveMember(memberToRemove.id);
+                }
+              }}
+            >
+              {removingMemberId ? "Removing..." : "Remove"}
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Assign Co-teacher Dialog */}
+      <Dialog
+        open={assignCoTeacherOpen}
+        onOpenChange={(open) => {
+          setAssignCoTeacherOpen(open);
+          if (!open) {
+            setCoTeacherEmail("");
+          }
+        }}
+      >
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <UserPlus className="h-5 w-5" />
+              Assign Co-teacher
+            </DialogTitle>
+            <DialogDescription>
+              Add another organization teacher as a co-teacher for this group.
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="space-y-4 pt-2">
+            <div className="space-y-2">
+              <Label htmlFor="coTeacherEmail">Teacher Email</Label>
+              <div className="relative">
+                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input
+                  id="coTeacherEmail"
+                  type="email"
+                  placeholder="teacher@example.com"
+                  value={coTeacherEmail}
+                  onChange={(e) => setCoTeacherEmail(e.target.value)}
+                  className="pl-10"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-6 flex justify-end gap-3">
+            <Button
+              variant="outline"
+              className="cursor-pointer"
+              onClick={() => setAssignCoTeacherOpen(false)}
+              disabled={addingCoTeacher}
+            >
+              Cancel
+            </Button>
+            <Button
+              className="cursor-pointer"
+              onClick={handleAddCoTeacher}
+              disabled={addingCoTeacher}
+            >
+              {addingCoTeacher ? "Assigning..." : "Assign Co-teacher"}
+            </Button>
           </div>
         </DialogContent>
       </Dialog>

@@ -11,6 +11,8 @@ import { usePermission } from "@/hooks/usePermission";
 import { useRouter } from "next/navigation";
 import { MdLibraryBooks, MdOutlineSpaceDashboard } from "react-icons/md";
 import { PiStudentBold } from "react-icons/pi";
+import { IoAnalytics } from "react-icons/io5";
+import { BookOpen, Megaphone } from "lucide-react";
 
 export function NavMain({ page }: { page: string }) {
   const router = useRouter();
@@ -34,6 +36,21 @@ export function NavMain({ page }: { page: string }) {
               <SidebarMenuButton tooltip={"Dashboard"}>
                 <MdOutlineSpaceDashboard />
                 <span>Dashboard</span>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          )}
+          {canEditExam && (
+            <SidebarMenuItem
+              className={
+                page == "TESTS"
+                  ? "bg-primary text-primary-foreground rounded-md"
+                  : ""
+              }
+              onClick={() => router.push("/dashboard/teacher/tests")}
+            >
+              <SidebarMenuButton tooltip={"Tests & Exams"}>
+                <BookOpen />
+                <span>Tests & Exams</span>
               </SidebarMenuButton>
             </SidebarMenuItem>
           )}
@@ -64,6 +81,36 @@ export function NavMain({ page }: { page: string }) {
               <SidebarMenuButton tooltip={"Problems"}>
                 <MdLibraryBooks />
                 <span>Problems</span>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          )}
+          {canViewGroups && (
+            <SidebarMenuItem
+              className={
+                page == "ANALYTICS"
+                  ? "bg-primary text-primary-foreground rounded-md"
+                  : ""
+              }
+              onClick={() => router.push("/dashboard/teacher/analytics")}
+            >
+              <SidebarMenuButton tooltip={"Analytics"}>
+                <IoAnalytics />
+                <span>Analytics</span>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          )}
+          {canViewGroups && (
+            <SidebarMenuItem
+              className={
+                page == "ANNOUNCEMENTS"
+                  ? "bg-primary text-primary-foreground rounded-md"
+                  : ""
+              }
+              onClick={() => router.push("/dashboard/teacher/announcements")}
+            >
+              <SidebarMenuButton tooltip={"Announcements"}>
+                <Megaphone />
+                <span>Announcements</span>
               </SidebarMenuButton>
             </SidebarMenuItem>
           )}

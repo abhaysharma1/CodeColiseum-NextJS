@@ -28,6 +28,8 @@ export default function StudentLayout({
       setPage("CLASSES");
     } else if (path.startsWith("/dashboard/student/labs")) {
       setPage("LABS");
+    } else if (path.startsWith("/dashboard/student/notifications")) {
+      setPage("NOTIFICATIONS");
     } else {
       setPage("DASHBOARD");
     }
