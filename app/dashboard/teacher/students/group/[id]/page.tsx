@@ -66,6 +66,7 @@ import { useRouter } from "next/navigation";
 import { IoAnalytics } from "react-icons/io5";
 import Link from "next/link";
 import { AnalyticsPagination } from "@/components/analytics/AnalyticsPagination";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 interface StudentOverallStats {
   id: string;
@@ -81,6 +82,15 @@ interface StudentOverallStats {
     name: string;
     email: string;
   };
+}
+
+interface GroupExam {
+  id: string;
+  title: string;
+  isPublished: boolean;
+  status: string;
+  startDate: string;
+  endDate: string;
 }
 
 function Page({ params }: { params: Promise<{ id: string }> }) {
@@ -119,6 +129,9 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
   const [coTeacherEmail, setCoTeacherEmail] = useState("");
   const [addingCoTeacher, setAddingCoTeacher] = useState(false);
   const [assignCoTeacherOpen, setAssignCoTeacherOpen] = useState(false);
+
+  const [groupExams, setGroupExams] = useState<GroupExam[]>([]);
+  const [examsLoading, setExamsLoading] = useState(false);
 
   const router = useRouter();
 
@@ -210,6 +223,30 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
     }
   };
 
+  const getGroupExams = async () => {
+    if (!groupData?.id) return;
+    try {
+      setExamsLoading(true);
+      const res = await axios.get(`${getBackendURL()}/teacher/getgroupexams`, {
+        params: {
+          groupId: groupData.id,
+        },
+        withCredentials: true,
+      });
+      setGroupExams(res.data as GroupExam[]);
+    } catch (error: any) {
+      const message =
+        error?.response?.data?.error ||
+        (typeof error?.message === "string"
+          ? error.message
+          : "Failed to load group exams");
+      toast.error(message);
+      console.log(error);
+    } finally {
+      setExamsLoading(false);
+    }
+  };
+
   const addMembersToGroupFunc = async () => {
     if (!groupData?.id) return;
     try {
@@ -257,6 +294,12 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
   useEffect(() => {
     if (groupData?.id) {
       getStudentStats();
+    }
+  }, [groupData]);
+
+  useEffect(() => {
+    if (groupData?.id) {
+      getGroupExams();
     }
   }, [groupData]);
 
@@ -544,291 +587,389 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
 
       {/* Members Section */}
       <div className="container mx-auto px-6 py-8">
-        {/* Add Member Card */}
-        <Card className="mb-6 border-dashed">
-          <CardHeader>
-            <CardTitle className="text-lg flex items-center gap-2">
-              <UserPlus className="h-5 w-5" />
-              Add New Members
-            </CardTitle>
-            <CardDescription>
-              Add comma separated emails and add them to the group
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="flex gap-3">
-              <div className="relative flex-1">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <Input
-                  type="text"
-                  placeholder="Enter email address..."
-                  value={newEmails}
-                  onChange={(e) => setNewEmails(e.target.value)}
-                  className="pl-10"
-                />
-              </div>
-              <Button
-                className="gap-2 cursor-pointer"
-                onClick={addMembersToGroupFunc}
-                disabled={addingToGroupLoader}
-              >
-                <UserPlus className="h-4 w-4" />
-                {addingToGroupLoader ? "Loading..." : "Add Member"}
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
+        <Tabs defaultValue="members" className="space-y-4">
+          <TabsList>
+            <TabsTrigger value="members">Members</TabsTrigger>
+            <TabsTrigger value="exams">Exams</TabsTrigger>
+          </TabsList>
 
-        {/* Members List Card */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-2xl flex items-center gap-2">
-              <Users className="h-6 w-6" />
-              Group Members
-            </CardTitle>
-            <CardDescription>
-              {totalMembers || groupMembers?.length || 0} members in this group
-            </CardDescription>
-            <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-              <Input
-                type="text"
-                placeholder="Search by name or email..."
-                value={searchValue}
-                onChange={(e) => setSearchValue(e.target.value)}
-                className="max-w-sm"
-              />
-            </div>
-          </CardHeader>
-          <CardContent>
-            {loading || membersLoading ? (
-              <div className="space-y-4">
-                {[1, 2, 3].map((i) => (
-                  <div key={i} className="flex items-center gap-4">
-                    <Skeleton className="h-12 w-12 rounded-full" />
-                    <div className="space-y-2">
-                      <Skeleton className="h-4 w-48" />
-                      <Skeleton className="h-3 w-32" />
-                    </div>
+          <TabsContent value="members" className="space-y-6">
+            {/* Add Member Card */}
+            <Card className="border-dashed">
+              <CardHeader>
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <UserPlus className="h-5 w-5" />
+                  Add New Members
+                </CardTitle>
+                <CardDescription>
+                  Add comma separated emails and add them to the group
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="flex gap-3">
+                  <div className="relative flex-1">
+                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <Input
+                      type="text"
+                      placeholder="Enter email address..."
+                      value={newEmails}
+                      onChange={(e) => setNewEmails(e.target.value)}
+                      className="pl-10"
+                    />
                   </div>
-                ))}
-              </div>
-            ) : groupMembers && groupMembers.length > 0 ? (
-              <Accordion type="single" collapsible className="space-y-2">
-                {groupMembers.map((member) => {
-                  const stats = studentStats.find(
-                    (s) => s.studentId === member.id
-                  );
-                  return (
-                    <AccordionItem
-                      key={member.id}
-                      value={member.id}
-                      className="border rounded-lg px-4 data-[state=open]:bg-muted/30 transition-colors"
-                    >
-                      <AccordionTrigger className="hover:no-underline py-3">
-                        <div className="flex items-center gap-4 w-full mr-4">
-                          <Avatar className="h-10 w-10">
-                            <AvatarImage src={member.image || undefined} />
-                            <AvatarFallback className="bg-primary/10 text-primary font-semibold text-sm">
-                              {getInitials(member.name || "U")}
-                            </AvatarFallback>
-                          </Avatar>
+                  <Button
+                    className="gap-2 cursor-pointer"
+                    onClick={addMembersToGroupFunc}
+                    disabled={addingToGroupLoader}
+                  >
+                    <UserPlus className="h-4 w-4" />
+                    {addingToGroupLoader ? "Loading..." : "Add Member"}
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
 
-                          <div className="flex-1 min-w-0 text-left">
-                            <p className="font-semibold text-sm truncate">
-                              {member.name}
-                            </p>
-                            <p className="text-xs text-muted-foreground truncate">
-                              {member.email}
-                            </p>
-                          </div>
-
-                          <div className="hidden md:flex items-center gap-3 shrink-0">
-                            {stats && (
-                              <>
-                                <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                                  <Trophy className="h-3.5 w-3.5" />
-                                  <span>{stats.avgScore.toFixed(0)} avg</span>
-                                </div>
-                                <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                                  <FileText className="h-3.5 w-3.5" />
-                                  <span>{stats.totalExams} exams</span>
-                                </div>
-                              </>
-                            )}
-                          </div>
-
-                          <div className="flex items-center gap-2 shrink-0">
-                            {member.emailVerified && (
-                              <Badge variant="secondary" className="text-xs">
-                                Verified
-                              </Badge>
-                            )}
-                            <Badge variant="outline" className="text-xs">
-                              {member.role}
-                            </Badge>
-                            <Button
-                              asChild
-                              variant="outline"
-                              size="sm"
-                              className="ml-2 cursor-pointer"
-                              disabled={removingMemberId === member.id}
-                            >
-                              <span
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  if (removingMemberId !== member.id) {
-                                    setMemberToRemove(member);
-                                    setConfirmRemoveOpen(true);
-                                  }
-                                }}
-                              >
-                                {removingMemberId === member.id
-                                  ? "Removing..."
-                                  : "Remove"}
-                              </span>
-                            </Button>
-                          </div>
+            {/* Members List Card */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-2xl flex items-center gap-2">
+                  <Users className="h-6 w-6" />
+                  Group Members
+                </CardTitle>
+                <CardDescription>
+                  {totalMembers || groupMembers?.length || 0} members in this
+                  group
+                </CardDescription>
+                <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                  <Input
+                    type="text"
+                    placeholder="Search by name or email..."
+                    value={searchValue}
+                    onChange={(e) => setSearchValue(e.target.value)}
+                    className="max-w-sm"
+                  />
+                </div>
+              </CardHeader>
+              <CardContent>
+                {loading || membersLoading ? (
+                  <div className="space-y-4">
+                    {[1, 2, 3].map((i) => (
+                      <div key={i} className="flex items-center gap-4">
+                        <Skeleton className="h-12 w-12 rounded-full" />
+                        <div className="space-y-2">
+                          <Skeleton className="h-4 w-48" />
+                          <Skeleton className="h-3 w-32" />
                         </div>
-                      </AccordionTrigger>
+                      </div>
+                    ))}
+                  </div>
+                ) : groupMembers && groupMembers.length > 0 ? (
+                  <Accordion type="single" collapsible className="space-y-2">
+                    {groupMembers.map((member) => {
+                      const stats = studentStats.find(
+                        (s) => s.studentId === member.id
+                      );
+                      return (
+                        <AccordionItem
+                          key={member.id}
+                          value={member.id}
+                          className="border rounded-lg px-4 data-[state=open]:bg-muted/30 transition-colors"
+                        >
+                          <AccordionTrigger className="hover:no-underline py-3">
+                            <div className="flex items-center gap-4 w-full mr-4">
+                              <Avatar className="h-10 w-10">
+                                <AvatarImage src={member.image || undefined} />
+                                <AvatarFallback className="bg-primary/10 text-primary font-semibold text-sm">
+                                  {getInitials(member.name || "U")}
+                                </AvatarFallback>
+                              </Avatar>
 
-                      <AccordionContent>
-                        {statsLoading ? (
-                          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 pt-1 pb-2">
-                            {Array.from({ length: 4 }).map((_, i) => (
-                              <Skeleton
-                                key={i}
-                                className="h-24 w-full rounded-lg"
-                              />
-                            ))}
-                          </div>
-                        ) : stats ? (
-                          <div className="space-y-3 pt-1 pb-2">
-                            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-                              {/* Total Score */}
-                              <div className="rounded-lg border bg-card p-3 space-y-2">
-                                <div className="flex items-center gap-2">
-                                  <div className="flex h-7 w-7 items-center justify-center rounded-md bg-amber-500/10">
-                                    <Trophy className="h-3.5 w-3.5 text-amber-500" />
-                                  </div>
-                                  <span className="text-xs text-muted-foreground">
-                                    Total Score
-                                  </span>
-                                </div>
-                                <p className="text-xl font-bold tracking-tight">
-                                  {stats.totalScore}
+                              <div className="flex-1 min-w-0 text-left">
+                                <p className="font-semibold text-sm truncate">
+                                  {member.name}
+                                </p>
+                                <p className="text-xs text-muted-foreground truncate">
+                                  {member.email}
                                 </p>
                               </div>
 
-                              {/* Total Exams */}
-                              <div className="rounded-lg border bg-card p-3 space-y-2">
-                                <div className="flex items-center gap-2">
-                                  <div className="flex h-7 w-7 items-center justify-center rounded-md bg-blue-500/10">
-                                    <FileText className="h-3.5 w-3.5 text-blue-500" />
-                                  </div>
-                                  <span className="text-xs text-muted-foreground">
-                                    Total Exams
-                                  </span>
-                                </div>
-                                <p className="text-xl font-bold tracking-tight">
-                                  {stats.totalExams}
-                                </p>
+                              <div className="hidden md:flex items-center gap-3 shrink-0">
+                                {stats && (
+                                  <>
+                                    <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                                      <Trophy className="h-3.5 w-3.5" />
+                                      <span>
+                                        {stats.avgScore.toFixed(0)} avg
+                                      </span>
+                                    </div>
+                                    <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                                      <FileText className="h-3.5 w-3.5" />
+                                      <span>{stats.totalExams} exams</span>
+                                    </div>
+                                  </>
+                                )}
                               </div>
 
-                              {/* Avg Score */}
-                              <div className="rounded-lg border bg-card p-3 space-y-2">
-                                <div className="flex items-center gap-2">
-                                  <div className="flex h-7 w-7 items-center justify-center rounded-md bg-emerald-500/10">
-                                    <BarChart3 className="h-3.5 w-3.5 text-emerald-500" />
-                                  </div>
-                                  <span className="text-xs text-muted-foreground">
-                                    Avg Score
+                              <div className="flex items-center gap-2 shrink-0">
+                                {member.emailVerified && (
+                                  <Badge
+                                    variant="secondary"
+                                    className="text-xs"
+                                  >
+                                    Verified
+                                  </Badge>
+                                )}
+                                <Badge variant="outline" className="text-xs">
+                                  {member.role}
+                                </Badge>
+                                <Button
+                                  asChild
+                                  variant="outline"
+                                  size="sm"
+                                  className="ml-2 cursor-pointer"
+                                  disabled={removingMemberId === member.id}
+                                >
+                                  <span
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      if (removingMemberId !== member.id) {
+                                        setMemberToRemove(member);
+                                        setConfirmRemoveOpen(true);
+                                      }
+                                    }}
+                                  >
+                                    {removingMemberId === member.id
+                                      ? "Removing..."
+                                      : "Remove"}
                                   </span>
-                                </div>
-                                <p className="text-xl font-bold tracking-tight">
-                                  {stats.avgScore.toFixed(1)}
-                                </p>
-                              </div>
-
-                              {/* Total Attempts */}
-                              <div className="rounded-lg border bg-card p-3 space-y-2">
-                                <div className="flex items-center gap-2">
-                                  <div className="flex h-7 w-7 items-center justify-center rounded-md bg-violet-500/10">
-                                    <RotateCcw className="h-3.5 w-3.5 text-violet-500" />
-                                  </div>
-                                  <span className="text-xs text-muted-foreground">
-                                    Total Attempts
-                                  </span>
-                                </div>
-                                <p className="text-xl font-bold tracking-tight">
-                                  {stats.totalAttempts}
-                                </p>
+                                </Button>
                               </div>
                             </div>
+                          </AccordionTrigger>
 
-                            {/* Score bar */}
-                            {stats.totalExams > 0 && (
-                              <div className="flex items-center gap-3 px-1">
-                                <span className="text-xs text-muted-foreground shrink-0">
-                                  Performance
-                                </span>
-                                <Progress
-                                  value={Math.min(
-                                    (stats.avgScore /
-                                      (stats.totalScore / stats.totalExams > 0
-                                        ? stats.totalScore / stats.totalExams
-                                        : 1)) *
-                                      100,
-                                    100
-                                  )}
-                                  className="h-1.5 flex-1"
-                                />
-                                <span className="text-xs font-medium shrink-0">
-                                  {stats.avgScore.toFixed(0)} avg
-                                </span>
+                          <AccordionContent>
+                            {statsLoading ? (
+                              <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 pt-1 pb-2">
+                                {Array.from({ length: 4 }).map((_, i) => (
+                                  <Skeleton
+                                    key={i}
+                                    className="h-24 w-full rounded-lg"
+                                  />
+                                ))}
+                              </div>
+                            ) : stats ? (
+                              <div className="space-y-3 pt-1 pb-2">
+                                <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+                                  {/* Total Score */}
+                                  <div className="rounded-lg border bg-card p-3 space-y-2">
+                                    <div className="flex items-center gap-2">
+                                      <div className="flex h-7 w-7 items-center justify-center rounded-md bg-amber-500/10">
+                                        <Trophy className="h-3.5 w-3.5 text-amber-500" />
+                                      </div>
+                                      <span className="text-xs text-muted-foreground">
+                                        Total Score
+                                      </span>
+                                    </div>
+                                    <p className="text-xl font-bold tracking-tight">
+                                      {stats.totalScore}
+                                    </p>
+                                  </div>
+
+                                  {/* Total Exams */}
+                                  <div className="rounded-lg border bg-card p-3 space-y-2">
+                                    <div className="flex items-center gap-2">
+                                      <div className="flex h-7 w-7 items-center justify-center rounded-md bg-blue-500/10">
+                                        <FileText className="h-3.5 w-3.5 text-blue-500" />
+                                      </div>
+                                      <span className="text-xs text-muted-foreground">
+                                        Total Exams
+                                      </span>
+                                    </div>
+                                    <p className="text-xl font-bold tracking-tight">
+                                      {stats.totalExams}
+                                    </p>
+                                  </div>
+
+                                  {/* Avg Score */}
+                                  <div className="rounded-lg border bg-card p-3 space-y-2">
+                                    <div className="flex items-center gap-2">
+                                      <div className="flex h-7 w-7 items-center justify-center rounded-md bg-emerald-500/10">
+                                        <BarChart3 className="h-3.5 w-3.5 text-emerald-500" />
+                                      </div>
+                                      <span className="text-xs text-muted-foreground">
+                                        Avg Score
+                                      </span>
+                                    </div>
+                                    <p className="text-xl font-bold tracking-tight">
+                                      {stats.avgScore.toFixed(1)}
+                                    </p>
+                                  </div>
+
+                                  {/* Total Attempts */}
+                                  <div className="rounded-lg border bg-card p-3 space-y-2">
+                                    <div className="flex items-center gap-2">
+                                      <div className="flex h-7 w-7 items-center justify-center rounded-md bg-violet-500/10">
+                                        <RotateCcw className="h-3.5 w-3.5 text-violet-500" />
+                                      </div>
+                                      <span className="text-xs text-muted-foreground">
+                                        Total Attempts
+                                      </span>
+                                    </div>
+                                    <p className="text-xl font-bold tracking-tight">
+                                      {stats.totalAttempts}
+                                    </p>
+                                  </div>
+                                </div>
+
+                                {/* Score bar */}
+                                {stats.totalExams > 0 && (
+                                  <div className="flex items-center gap-3 px-1">
+                                    <span className="text-xs text-muted-foreground shrink-0">
+                                      Performance
+                                    </span>
+                                    <Progress
+                                      value={Math.min(
+                                        (stats.avgScore /
+                                          (stats.totalScore / stats.totalExams >
+                                          0
+                                            ? stats.totalScore /
+                                              stats.totalExams
+                                            : 1)) *
+                                          100,
+                                        100
+                                      )}
+                                      className="h-1.5 flex-1"
+                                    />
+                                    <span className="text-xs font-medium shrink-0">
+                                      {stats.avgScore.toFixed(0)} avg
+                                    </span>
+                                  </div>
+                                )}
+
+                                <p className="text-[11px] text-muted-foreground px-1">
+                                  Last updated:{" "}
+                                  {new Date(stats.updatedAt).toLocaleString()}
+                                </p>
+                              </div>
+                            ) : (
+                              <div className="text-center py-6">
+                                <p className="text-sm text-muted-foreground">
+                                  No stats available for this student yet.
+                                </p>
                               </div>
                             )}
+                          </AccordionContent>
+                        </AccordionItem>
+                      );
+                    })}
+                  </Accordion>
+                ) : (
+                  <div className="text-center py-12">
+                    <Users className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                    <p className="text-lg font-medium text-muted-foreground">
+                      {searchValue
+                        ? "No members match your search"
+                        : "No members in this group yet"}
+                    </p>
+                  </div>
+                )}
+              </CardContent>
+              {totalMembers > 0 && (
+                <div className="px-6 pb-6">
+                  <AnalyticsPagination
+                    currentPage={currentPage}
+                    pageSize={pageSize}
+                    totalItems={totalMembers}
+                    onPageChange={setCurrentPage}
+                    onPageSizeChange={setPageSize}
+                    isLoading={membersLoading}
+                  />
+                </div>
+              )}
+            </Card>
+          </TabsContent>
 
-                            <p className="text-[11px] text-muted-foreground px-1">
-                              Last updated:{" "}
-                              {new Date(stats.updatedAt).toLocaleString()}
+          <TabsContent value="exams">
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-2xl flex items-center gap-2">
+                  <FileText className="h-6 w-6" />
+                  Group Exams
+                </CardTitle>
+                <CardDescription>
+                  {groupExams.length} exams linked to this group
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                {examsLoading ? (
+                  <div className="space-y-4">
+                    {[1, 2, 3].map((i) => (
+                      <div
+                        key={i}
+                        className="flex items-center justify-between gap-4"
+                      >
+                        <div className="space-y-2 flex-1">
+                          <Skeleton className="h-4 w-40" />
+                          <Skeleton className="h-3 w-64" />
+                        </div>
+                        <Skeleton className="h-9 w-28" />
+                      </div>
+                    ))}
+                  </div>
+                ) : groupExams.length > 0 ? (
+                  <div className="space-y-3">
+                    {groupExams.map((exam) => {
+                      const isPublished = exam.isPublished;
+                      const actionLabel = isPublished ? "View results" : "Edit";
+                      const actionHref = isPublished
+                        ? `/dashboard/teacher/tests/results/${exam.id}`
+                        : `/dashboard/teacher/tests/edit/${exam.id}`;
+
+                      return (
+                        <div
+                          key={exam.id}
+                          className="flex items-center justify-between gap-4 rounded-lg border bg-card px-4 py-3"
+                        >
+                          <div className="flex flex-col gap-1 flex-1 min-w-0">
+                            <p className="font-semibold truncate">
+                              {exam.title}
                             </p>
+                            <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
+                              <span>
+                                {new Date(exam.startDate).toLocaleString()} –{" "}
+                                {new Date(exam.endDate).toLocaleString()}
+                              </span>
+                              <Badge variant="outline" className="capitalize">
+                                {isPublished ? "Published" : "Draft"}
+                              </Badge>
+                            </div>
                           </div>
-                        ) : (
-                          <div className="text-center py-6">
-                            <p className="text-sm text-muted-foreground">
-                              No stats available for this student yet.
-                            </p>
+                          <div className="shrink-0">
+                            <Link href={actionHref}>
+                              <Button
+                                className="cursor-pointer"
+                                variant="outline"
+                              >
+                                {actionLabel}
+                              </Button>
+                            </Link>
                           </div>
-                        )}
-                      </AccordionContent>
-                    </AccordionItem>
-                  );
-                })}
-              </Accordion>
-            ) : (
-              <div className="text-center py-12">
-                <Users className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                <p className="text-lg font-medium text-muted-foreground">
-                  {searchValue
-                    ? "No members match your search"
-                    : "No members in this group yet"}
-                </p>
-              </div>
-            )}
-          </CardContent>
-          {totalMembers > 0 && (
-            <div className="px-6 pb-6">
-              <AnalyticsPagination
-                currentPage={currentPage}
-                pageSize={pageSize}
-                totalItems={totalMembers}
-                onPageChange={setCurrentPage}
-                onPageSizeChange={setPageSize}
-                isLoading={membersLoading}
-              />
-            </div>
-          )}
-        </Card>
+                        </div>
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <div className="text-center py-12">
+                    <FileText className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                    <p className="text-lg font-medium text-muted-foreground">
+                      No exams linked to this group yet
+                    </p>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </Tabs>
       </div>
 
       {/* Edit Group Dialog */}
