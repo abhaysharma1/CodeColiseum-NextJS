@@ -12,12 +12,30 @@ import {
 } from "@tabler/icons-react";
 import { usePathname, useRouter } from "next/navigation";
 import { ReactNode } from "react";
+import { useTheme } from "next-themes";
+import { useCustomTheme } from "@/hooks/use-custom-theme";
+import { ThemeName, THEMES } from "@/themes";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Switch } from "@/components/ui/switch";
+import { MdDarkMode } from "react-icons/md";
+import { FaSun } from "react-icons/fa";
+import { Palette } from "lucide-react";
 
 const navigation = [
   {
     name: "Upload Problems",
     href: "/admin/dashboard",
     icon: IconCode,
+  },
+  {
+    name: "Create Problem (Beta)",
+    href: "/admin/problem-editor",
+    icon: IconFileCode,
   },
   {
     name: "Upload Driver Code",
@@ -46,6 +64,12 @@ export default function Layout({ children }: { children: ReactNode }) {
   const path = usePathname();
 
   const { logout } = useAuth();
+  const { theme, setTheme } = useTheme();
+  const { selected, setThemeName } = useCustomTheme();
+
+  const changeTheme = () => {
+    setTheme(theme === "dark" ? "light" : "dark");
+  };
 
   const changePage = (href: string) => {
     router.push(href);
@@ -83,9 +107,53 @@ export default function Layout({ children }: { children: ReactNode }) {
                 );
               })}
             </nav>
-            <Button variant={"default"} onClick={logout}>
-              Logout
-            </Button>
+            <div className="flex flex-col gap-2">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className="w-full justify-between mt-2 data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+                  >
+                    <div className="flex items-center gap-2">
+                      <Palette size={15} />
+                      <span>Theme: {String(selected)}</span>
+                    </div>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-56" align="center" side="top">
+                  {Object.entries(THEMES).map(([key]) => (
+                    <DropdownMenuItem
+                      key={key}
+                      onClick={() => setThemeName(key as ThemeName)}
+                    >
+                      {key[0].toUpperCase() + key.slice(1)}
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+
+              <div
+                onClick={(event) => {
+                  event.preventDefault();
+                  changeTheme();
+                }}
+                className="w-full flex items-center justify-between px-2 py-2 cursor-pointer rounded hover:bg-muted"
+              >
+                <div className="flex items-center text-sm font-medium">
+                  {theme === "dark" ? (
+                    <MdDarkMode className="mt-0.5 mr-2 size-4" />
+                  ) : (
+                    <FaSun className="mt-0.5 mr-2 size-4" />
+                  )}
+                  <span>Toggle Theme</span>
+                </div>
+                <Switch checked={theme === "light"} />
+              </div>
+
+              <Button variant={"default"} onClick={logout} className="mt-2">
+                Logout
+              </Button>
+            </div>
           </div>
         </aside>
 
