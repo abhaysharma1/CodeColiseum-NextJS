@@ -22,29 +22,23 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useEffect, useState } from "react";
 
-import { authClient } from "@/lib/auth-client"; //import the auth client
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/authcontext";
+import axios from "axios";
+import { getBackendURL } from "@/utils/utilities";
+import { RBAC_ROLE_IDS, RBAC_ROLE_OPTIONS, type RbacRoleId } from "@/lib/rbac-roles";
 
 export function SignupForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
-  const [role, setRole] = useState("Select Role");
+  const [roleId, setRoleId] = useState<RbacRoleId>(RBAC_ROLE_IDS.ORG_STUDENT);
   const [formData, setData] = useState({
     name: "",
     email: "",
     password: "",
-    role: "",
   });
-
-  useEffect(() => {
-    setData((prev) => ({
-      ...prev,
-      role: role,
-    }));
-  }, [role]);
 
   // Redirect If user already logged in
   const { user } = useAuth();
@@ -74,40 +68,34 @@ export function SignupForm({
     event.preventDefault(); // prevents page reload
     setLoading(true);
 
-    if (role == "Select Role") {
-      toast.error("Please select a role");
-      setLoading(false);
-      return;
-    }
+    toast.loading("Signing Up");
 
-    const { data, error } = await authClient.signUp.email(
-      {
-        email: formData.email, // user email address
-        password: formData.password, // user password -> min 8 characters by default
-        name: formData.name, // user display name
-        role: formData.role.toUpperCase(), // User role
-        isOnboarded: true,
-        callbackURL: "/dashboard", // A URL to redirect to after the user verifies their email (optional)
-      } as any,
-      {
-        onRequest: (ctx) => {
-          setLoading(true);
-          toast.loading("Signing Up");
+    try {
+      await axios.post(
+        `${getBackendURL()}/public-auth/signup`,
+        {
+          email: formData.email,
+          password: formData.password,
+          name: formData.name,
+          roleId,
         },
-        onSuccess: (ctx) => {
-          setLoading(false);
-          toast.dismiss();
-          toast.success("Signed Up Successfully");
-          toast.success("Check your Email for Verification.");
-        },
-        onError: (ctx) => {
-          setLoading(false);
-          toast.dismiss();
-          toast.error("Couldn't Log In");
-          toast.error(ctx.error.message);
-        },
-      }
-    );
+        { withCredentials: true }
+      );
+
+      setLoading(false);
+      toast.dismiss();
+      toast.success("Signed Up Successfully");
+      toast.success("Check your Email for Verification.");
+    } catch (error: any) {
+      setLoading(false);
+      toast.dismiss();
+      toast.error("Couldn't Sign Up");
+      toast.error(
+        error?.response?.data?.message ??
+          error?.response?.data?.error ??
+          "Signup failed"
+      );
+    }
   };
 
   return (
@@ -142,27 +130,26 @@ export function SignupForm({
                     <DropdownMenuTrigger asChild>
                       <Button
                         variant="outline"
-                        className={
-                          role === "Select Role" ? "text-white/60" : ""
-                        }
+                        className="text-white/90"
                       >
-                        {role.charAt(0).toUpperCase() +
-                          role.slice(1).toLowerCase()}
+                        {RBAC_ROLE_OPTIONS.find((opt) => opt.value === roleId)
+                          ?.label ?? "Student"}
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className="w-[45%]">
                       <DropdownMenuLabel>Your Role</DropdownMenuLabel>
                       <DropdownMenuSeparator />
                       <DropdownMenuRadioGroup
-                        value={role}
-                        onValueChange={setRole}
+                        value={roleId}
+                        onValueChange={(value) => setRoleId(value as RbacRoleId)}
                       >
-                        <DropdownMenuRadioItem value="TEACHER">
-                          Teacher
-                        </DropdownMenuRadioItem>
-                        <DropdownMenuRadioItem value="STUDENT">
-                          Student
-                        </DropdownMenuRadioItem>
+                        {RBAC_ROLE_OPTIONS.filter(
+                          (option) => option.value !== RBAC_ROLE_IDS.PLATFORM_ADMIN
+                        ).map((option) => (
+                          <DropdownMenuRadioItem key={option.value} value={option.value}>
+                            {option.label}
+                          </DropdownMenuRadioItem>
+                        ))}
                       </DropdownMenuRadioGroup>
                     </DropdownMenuContent>
                   </DropdownMenu>

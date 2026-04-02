@@ -1,10 +1,10 @@
 "use client";
 import { useAuth } from "@/context/authcontext";
+import { ProtectedRoute } from "@/components/protectedroute";
 import React, { useEffect, useState } from "react";
 import { StudentSidebar } from "@/components/student-sidebar";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { usePathname } from "next/navigation";
-import Link from "next/link";
 
 export default function StudentLayout({
   children,
@@ -18,7 +18,7 @@ export default function StudentLayout({
   useEffect(() => {
     if (path === "/dashboard/student") {
       setPage("DASHBOARD");
-    } else if (path.startsWith("/dashboard/student/problemlist")) {
+    } else if (path.startsWith("/dashboard/student/problem-list")) {
       setPage("PROBLEMS");
     } else if (path.startsWith("/dashboard/student/contests")) {
       setPage("CONTESTS");
@@ -28,15 +28,19 @@ export default function StudentLayout({
       setPage("CLASSES");
     } else if (path.startsWith("/dashboard/student/labs")) {
       setPage("LABS");
+    } else if (path.startsWith("/dashboard/student/notifications")) {
+      setPage("NOTIFICATIONS");
     } else {
       setPage("DASHBOARD");
     }
   }, [path]);
 
   return (
-    <SidebarProvider>
-      <StudentSidebar user={user} variant="inset" page={page} />
-      <SidebarInset>{children}</SidebarInset>
-    </SidebarProvider>
+    <ProtectedRoute requiredPermission="group:view">
+      <SidebarProvider>
+        <StudentSidebar user={user} variant="inset" page={page} />
+        <SidebarInset>{children}</SidebarInset>
+      </SidebarProvider>
+    </ProtectedRoute>
   );
 }

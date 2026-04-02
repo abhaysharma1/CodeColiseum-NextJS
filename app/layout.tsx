@@ -4,6 +4,7 @@ import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import { AuthProvider } from "@/context/authcontext";
 import { ThemeProvider } from "@/components/theme-provider";
+import { RbacProvider } from "@/context/rbacContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -37,8 +38,10 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <AuthProvider>
-            <main>{children}</main>
-            <Toaster />
+            <RbacProvider>
+              <main>{children}</main>
+              <Toaster />
+            </RbacProvider>
           </AuthProvider>
         </ThemeProvider>
       </body>

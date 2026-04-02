@@ -236,7 +236,7 @@ function CreatedGroups() {
           </p>
         </div>
         <Button variant="default" asChild>
-          <Link href="/dashboard/teacher/students/creategroup">
+          <Link href="/dashboard/teacher/students/create-group">
             + Create Group
           </Link>
         </Button>

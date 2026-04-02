@@ -302,7 +302,7 @@ function Page() {
                   <Card
                     key={exam.id}
                     className="hover:shadow-lg transition-shadow cursor-pointer"
-                    onClick={() => router.push(`/test/starttest/${exam.id}`)}
+                    onClick={() => router.push(`/tests/start/${exam.id}`)}
                   >
                     <CardHeader>
                       <CardTitle className="text-lg">{exam.title}</CardTitle>

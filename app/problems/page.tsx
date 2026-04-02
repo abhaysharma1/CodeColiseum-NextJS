@@ -81,7 +81,7 @@ function QuestionSolvingPageContent({
       const response = await axios.get(
         `${getBackendURL()}/problems/getproblems`,
         {
-          params: { searchValue: id },
+          params: { searchValue: id, withDescription: true },
           withCredentials: true,
         }
       );

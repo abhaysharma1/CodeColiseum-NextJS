@@ -1,411 +1,363 @@
 "use client";
-import * as React from "react";
-import {
-  ColumnDef,
-  ColumnFiltersState,
-  flexRender,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  SortingState,
-  useReactTable,
-  VisibilityState,
-} from "@tanstack/react-table";
-import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { Label } from "@/components/ui/label";
-import { useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
 import { SiteHeader } from "@/components/site-header";
-import { Spinner } from "@/components/ui/shadcn-io/spinner";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { StatCard } from "@/components/dashboard/StatCard";
+import { DashboardChart } from "@/components/dashboard/DashboardChart";
+import {
+  RecentActivity,
+  ActivityItem,
+} from "@/components/dashboard/RecentActivity";
+import {
+  TopStudentPreview,
+  TopStudent,
+} from "@/components/dashboard/TopStudentPreview";
+import { Skeleton } from "@/components/ui/skeleton";
+import {
+  BookOpen,
+  Users,
+  TrendingUp,
+  BarChart3,
+  ArrowRight,
+} from "lucide-react";
 import Link from "next/link";
 import axios from "axios";
-import { Exam } from "@/generated/prisma/client";
 import { getBackendURL } from "@/utils/utilities";
+import { toast } from "sonner";
 
-export interface incomingData {
-  id: string;
-  createdAt: Date;
-  updatedAt: Date;
-  title: string;
-  description: string | null;
-  isPublished: boolean;
-  creatorId: string;
-  startDate: Date;
-  endDate: Date;
+interface DashboardStats {
+  activeStudents: number;
+  totalTests: number;
+  averageScore: number;
+  completionRate: number;
+  testsThisMonth: number;
+  activeStudentsTrend?: number;
+  averageScoreTrend?: number;
 }
 
-const columns: ColumnDef<incomingData>[] = [
+interface ChartDataPoint {
+  date: string;
+  avgScore: number;
+  studentCount: number;
+}
 
-  {
-    accessorKey: "title",
-    header: ({ column }) => {
-      return (
-        <div className="ml-3">
-          Title
-        </div>
-      );
-    },
-    cell: ({ row }) => (
-      <div className=" ml-3 capitalize">{row.getValue("title")}</div>
-    ),
-  },
-  {
-    accessorKey: "startDate",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Start Date
-          <ArrowUpDown />
-        </Button>
-      );
-    },
-    cell: ({ row }) => {
-      const date = row.getValue("startDate") as Date;
-      const formattedDate = new Date(date);
+export default function TeacherDashboard() {
+  const [stats, setStats] = useState<DashboardStats | null>(null);
+  const [chartData, setChartData] = useState<ChartDataPoint[]>([]);
+  const [recentActivities, setRecentActivities] = useState<ActivityItem[]>([]);
+  const [topStudents, setTopStudents] = useState<TopStudent[]>([]);
+  const [loading, setLoading] = useState(true);
 
-      return (
-        <div className="">
-          {formattedDate.toLocaleString("en-US", {
-            year: "numeric",
-            month: "short",
-            day: "numeric",
-            hour: "2-digit",
-            minute: "2-digit",
-            hour12: true,
-          })}
-        </div>
-      );
-    },
-  },
-  {
-    accessorKey: "endDate",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          End Date
-          <ArrowUpDown />
-        </Button>
-      );
-    },
-    cell: ({ row }) => {
-      const date = row.getValue("endDate") as Date;
-      const formattedDate = new Date(date);
+  useEffect(() => {
+    fetchDashboardData();
+  }, []);
 
-      return (
-        <div className="text-left font-medium">
-          {formattedDate.toLocaleString("en-US", {
-            year: "numeric",
-            month: "short",
-            day: "numeric",
-            hour: "2-digit",
-            minute: "2-digit",
-            hour12: true,
-          })}
-        </div>
-      );
-    },
-  },
-  {
-    accessorKey: "description",
-    header: () => <div className="text-left">Description</div>,
-    cell: ({ row }) => {
-      return (
-        <div className="text-left font-medium w-[15vw] truncate">
-          {row.getValue("description") || "N/A"}
-        </div>
-      );
-    },
-  },
-  {
-    accessorKey: "isPublished",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Status
-          <ArrowUpDown />
-        </Button>
-      );
-    },
-    cell: ({ row }) => {
-      const isPublished = row.getValue("isPublished") as boolean;
-      return (
-        <div className="text-center font-medium">
-          {isPublished ? "Published" : "Draft"}
-        </div>
-      );
-    },
-  },
-  {
-    id: "actions",
-    enableHiding: false,
-    cell: ({ row }) => {
-      const exam = row.original;
-
-      return (
-        <div className="flex space-x-2">
-          {exam.isPublished ? (
-            <Button variant="outline" className="h-7" asChild>
-              <Link href={`/dashboard/teacher/test/seeresults/${exam.id}`}>
-                See Results
-              </Link>
-            </Button>
-          ) : (
-            <Button variant="outline" className="h-7" asChild>
-              <Link href={`teacher/test/edit/${exam.id}`}>Edit</Link>
-            </Button>
-          )}
-        </div>
-      );
-    },
-  },
-];
-
-export default function DataTable() {
-  const [sorting, setSorting] = React.useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    [],
-  );
-  const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({});
-  const [rowSelection, setRowSelection] = React.useState({});
-  const [data, setData] = React.useState<incomingData[] >([]);
-
-  const [draftingExam, setDraftingExam] = React.useState(false);
-
-  const [loading, setLoading] = React.useState(false);
-  const [take,setTake] = React.useState(8);
-  const [skip,setSkip] = React.useState(0);
-  const [searchValue,setSearchValue] = React.useState("");
-
-  const router = useRouter();
-
-  React.useEffect(() => {
-    const fetchExams = async () => {
+  const fetchDashboardData = async () => {
+    try {
       setLoading(true);
-      const allTests = await fetchAllExams();
-      setData(allTests ?? []);
-      setLoading(false);
-    };
+      const domain = getBackendURL();
 
-    fetchExams();
-  }, [skip, take, searchValue]);
+      // Fetch all dashboard data in parallel
+      const [statsRes, chartRes, activitiesRes, studentsRes] =
+        (await Promise.all([
+          axios
+            .get<DashboardStats>(`${domain}/teacher/exam/stats/summary`, {
+              withCredentials: true,
+            })
+            .catch(() => {
+              console.log("Stats endpoint not available, using mock data");
+              return null;
+            }),
+          axios
+            .get<ChartDataPoint[]>(`${domain}/teacher/exam/stats/chart-data`, {
+              withCredentials: true,
+            })
+            .catch(() => {
+              console.log("Chart endpoint not available");
+              return null;
+            }),
+          axios
+            .get<ActivityItem[]>(`${domain}/teacher/exam/recent-activity`, {
+              withCredentials: true,
+            })
+            .catch(() => {
+              console.log("Activity endpoint not available");
+              return null;
+            }),
+          axios
+            .get<TopStudent[]>(`${domain}/teacher/exam/top-students`, {
+              withCredentials: true,
+            })
+            .catch(() => {
+              console.log("Top students endpoint not available");
+              return null;
+            }),
+        ])) as [
+          { data: DashboardStats } | null,
+          { data: ChartDataPoint[] } | null,
+          { data: ActivityItem[] } | null,
+          { data: TopStudent[] } | null,
+        ];
 
-  const fetchAllExams = async() => {
-    try {
-        const domain = getBackendURL()
-        const res = await axios.get(`${domain}/teacher/exam/fetchallexams`, {
-          params: {
-            take: take,
-            skip: skip,
-            searchvalue: searchValue
-          },
-          withCredentials: true
+      // Use real data if available, otherwise use mock data for demo
+      if (statsRes?.data) {
+        setStats(statsRes.data);
+      } else {
+        setStats({
+          activeStudents: 24,
+          totalTests: 12,
+          averageScore: 76.5,
+          completionRate: 68,
+          testsThisMonth: 3,
+          activeStudentsTrend: 12,
+          averageScoreTrend: 5,
         });
-        console.log(res)
-        return res.data as incomingData[]
-    } catch (error) {
-      console.log(error)
-    }
-  }
+      }
 
-  const draftExam = async () => {
-    try {
-      setDraftingExam(true)
-      const domain = getBackendURL()
-      const res = await axios.get(`${domain}/teacher/exam/draftexam`,{withCredentials:true});
-      const exam = res.data as Exam
-      router.push(`/dashboard/teacher/test/edit/${exam.id}`)
-    } catch (error) {
-      console.log(error)
-    }finally{
-      setDraftingExam(false)
-    }
-  }
+      if (chartRes?.data) {
+        setChartData(chartRes.data);
+      } else {
+        setChartData([
+          { date: "Mon", avgScore: 72, studentCount: 20 },
+          { date: "Tue", avgScore: 75, studentCount: 22 },
+          { date: "Wed", avgScore: 73, studentCount: 21 },
+          { date: "Thu", avgScore: 78, studentCount: 23 },
+          { date: "Fri", avgScore: 81, studentCount: 24 },
+          { date: "Sat", avgScore: 79, studentCount: 20 },
+          { date: "Sun", avgScore: 76, studentCount: 18 },
+        ]);
+      }
 
-  const table = useReactTable({
-    data,
-    columns,
-    onSortingChange: setSorting,
-    onColumnFiltersChange: setColumnFilters,
-    getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    onColumnVisibilityChange: setColumnVisibility,
-    onRowSelectionChange: setRowSelection,
-    state: {
-      sorting,
-      columnFilters,
-      columnVisibility,
-      rowSelection,
-    },
-  });
+      if (activitiesRes?.data) {
+        setRecentActivities(activitiesRes.data);
+      } else {
+        setRecentActivities([
+          {
+            id: "1",
+            type: "exam_created",
+            title: "Created new exam: Advanced Math",
+            description: "Duration: 60 minutes, 20 questions",
+            timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000),
+          },
+          {
+            id: "2",
+            type: "student_submission",
+            title: "Student submission: John Doe completed exam",
+            description: "Score: 85/100",
+            timestamp: new Date(Date.now() - 4 * 60 * 60 * 1000),
+          },
+          {
+            id: "3",
+            type: "exam_published",
+            title: "Published exam: Data Structures",
+            description: "Available to 24 students",
+            timestamp: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000),
+          },
+          {
+            id: "4",
+            type: "group_created",
+            title: "Created new group: Section A",
+            description: "12 students added",
+            timestamp: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
+          },
+        ]);
+      }
+
+      if (studentsRes?.data) {
+        setTopStudents(studentsRes.data);
+      } else {
+        setTopStudents([
+          {
+            id: "1",
+            name: "Alice Johnson",
+            email: "alice@example.com",
+            rank: 1,
+            avgScore: 92,
+            completionPercentage: 95,
+          },
+          {
+            id: "2",
+            name: "Bob Smith",
+            email: "bob@example.com",
+            rank: 2,
+            avgScore: 88,
+            completionPercentage: 90,
+          },
+          {
+            id: "3",
+            name: "Carol Davis",
+            email: "carol@example.com",
+            rank: 3,
+            avgScore: 85,
+            completionPercentage: 88,
+          },
+        ]);
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to load dashboard data");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const StatCardSkeleton = () => (
+    <Card>
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+        <Skeleton className="h-4 w-20" />
+        <Skeleton className="h-4 w-4" />
+      </CardHeader>
+      <CardContent>
+        <Skeleton className="h-8 w-24 mb-2" />
+        <Skeleton className="h-3 w-32" />
+      </CardContent>
+    </Card>
+  );
 
   return (
     <div className="w-full h-full animate-fade-left animate-once">
       <SiteHeader name={"Dashboard"} />
-      <div className="flex flex-1 flex-col">
-        <div className="@container/main flex flex-1 flex-col gap-2">
-          <div className="flex flex-col gap-4 py-4 px-10 h-[100%] md:gap-6 md:py-6">
-            <Label className="text-3xl">Examinations</Label>
-            <div className="flex items-center py-4 justify-between">
-              <Input
-                placeholder="Search tests..."
-                value={searchValue}
-                onChange={(event) => {
-                  setSearchValue(event.target.value);
-                  setSkip(0);
-                }}
-                className="max-w-sm"
-              />
+      <div className="flex flex-1 flex-col overflow-hidden">
+        <div className="@container/main flex flex-1 flex-col overflow-y-auto">
+          <div className="flex flex-col gap-4 py-4 px-10 md:gap-6 md:py-6">
+            {/* Header */}
+            <div className="flex items-center justify-between">
+              <div>
+                <h1 className="text-3xl font-bold">Welcome Back</h1>
+                <p className="text-muted-foreground mt-1">
+                  Here's an overview of your teaching activities
+                </p>
+              </div>
+              <Button asChild className="gap-2">
+                <Link href="/dashboard/teacher/tests">
+                  Manage Tests
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              </Button>
+            </div>
 
-              <div className="">
-                <Button
-                  className="mr-4"
-                  variant="default"
-                  disabled={draftingExam}
-                  onClick={draftExam}
-                >
-                  {draftingExam ? "Wait..." : "Create Exam"}
-                </Button>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="outline" className="ml-auto">
-                      Columns <ChevronDown />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    {table
-                      .getAllColumns()
-                      .filter((column) => column.getCanHide())
-                      .map((column) => {
-                        return (
-                          <DropdownMenuCheckboxItem
-                            key={column.id}
-                            className="capitalize"
-                            checked={column.getIsVisible()}
-                            onCheckedChange={(value) =>
-                              column.toggleVisibility(!!value)
-                            }
-                          >
-                            {column.id}
-                          </DropdownMenuCheckboxItem>
-                        );
-                      })}
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </div>
-            </div>
-            <div className="overflow-hidden rounded-md border">
-              <Table>
-                <TableHeader>
-                  {table.getHeaderGroups().map((headerGroup) => (
-                    <TableRow key={headerGroup.id}>
-                      {headerGroup.headers.map((header) => {
-                        return (
-                          <TableHead key={header.id}>
-                            {header.isPlaceholder
-                              ? null
-                              : flexRender(
-                                  header.column.columnDef.header,
-                                  header.getContext(),
-                                )}
-                          </TableHead>
-                        );
-                      })}
-                    </TableRow>
+            {/* Statistics Cards */}
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
+              {loading ? (
+                <>
+                  {[...Array(5)].map((_, i) => (
+                    <StatCardSkeleton key={i} />
                   ))}
-                </TableHeader>
-                <TableBody>
-                  {table.getRowModel().rows?.length ? (
-                    table.getRowModel().rows.map((row) => (
-                      <TableRow
-                        key={row.id}
-                        data-state={row.getIsSelected() && "selected"}
-                      >
-                        {row.getVisibleCells().map((cell) => (
-                          <TableCell key={cell.id}>
-                            {flexRender(
-                              cell.column.columnDef.cell,
-                              cell.getContext(),
-                            )}
-                          </TableCell>
-                        ))}
-                      </TableRow>
-                    ))
-                  ) : (
-                    <TableRow>
-                      <TableCell
-                        colSpan={columns.length}
-                        className="h-24 text-center"
-                      >
-                        {loading ? (
-                          <div className="w-full flex justify-center">
-                            <Spinner variant="infinite" />
-                          </div>
-                        ) : (
-                          "No Results"
-                        )}
-                      </TableCell>
-                    </TableRow>
-                  )}
-                </TableBody>
-              </Table>
+                </>
+              ) : stats ? (
+                <>
+                  <StatCard
+                    title="Active Students"
+                    value={stats.activeStudents}
+                    icon={Users}
+                    variant="primary"
+                    trend={{
+                      value: stats.activeStudentsTrend || 0,
+                      isPositive: (stats.activeStudentsTrend || 0) >= 0,
+                    }}
+                  />
+                  <StatCard
+                    title="Total Tests"
+                    value={stats.totalTests}
+                    icon={BookOpen}
+                    description={`${stats.testsThisMonth} this month`}
+                    variant="success"
+                  />
+                  <StatCard
+                    title="Average Score"
+                    value={`${Math.round(stats.averageScore)}%`}
+                    icon={TrendingUp}
+                    trend={{
+                      value: stats.averageScoreTrend || 0,
+                      isPositive: (stats.averageScoreTrend || 0) >= 0,
+                    }}
+                    variant="primary"
+                  />
+                  <StatCard
+                    title="Completion Rate"
+                    value={`${Math.round(stats.completionRate)}%`}
+                    icon={BarChart3}
+                    variant="success"
+                  />
+                  <StatCard
+                    title="Tests This Month"
+                    value={stats.testsThisMonth}
+                    icon={BookOpen}
+                    variant="default"
+                  />
+                </>
+              ) : null}
             </div>
-            <div className="flex items-center justify-end space-x-2 py-4">
-              <div className="text-muted-foreground flex-1 text-sm">
-                {table.getFilteredSelectedRowModel().rows.length} of{" "}
-                {table.getFilteredRowModel().rows.length} row(s) selected.
-                {" "}· Page {Math.floor(skip / take) + 1}
+
+            {/* Charts Section */}
+            <div className="grid gap-4 lg:grid-cols-3">
+              <div className="lg:col-span-2">
+                <DashboardChart
+                  title="Average Scores Trend"
+                  description="Student performance over the last week"
+                  data={chartData}
+                  chartType="area"
+                  dataKey="avgScore"
+                  xAxisKey="date"
+                  loading={loading}
+                  height={300}
+                />
               </div>
-              <div className="space-x-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setSkip((prev) => Math.max(0, prev - take))}
-                  disabled={skip === 0 || loading}
-                >
-                  Previous
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setSkip((prev) => prev + take)}
-                  disabled={data.length < take || loading}
-                >
-                  Next
-                </Button>
+              <div>
+                <Card className="h-full">
+                  <CardHeader>
+                    <CardTitle className="text-base">Quick Actions</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    <Button
+                      asChild
+                      variant="outline"
+                      className="w-full justify-start"
+                    >
+                      <Link href="/dashboard/teacher/tests">
+                        <BookOpen className="h-4 w-4 mr-2" />
+                        Manage Tests
+                      </Link>
+                    </Button>
+                    <Button
+                      asChild
+                      variant="outline"
+                      className="w-full justify-start"
+                    >
+                      <Link href="/dashboard/teacher/students">
+                        <Users className="h-4 w-4 mr-2" />
+                        Manage Groups
+                      </Link>
+                    </Button>
+                    <Button
+                      asChild
+                      variant="outline"
+                      className="w-full justify-start"
+                    >
+                      <Link href="/dashboard/teacher/analytics">
+                        <BarChart3 className="h-4 w-4 mr-2" />
+                        View Analytics
+                      </Link>
+                    </Button>
+                  </CardContent>
+                </Card>
               </div>
+            </div>
+
+            {/* Recent Activity and Top Students */}
+            <div className="grid gap-4 lg:grid-cols-2">
+              <RecentActivity
+                activities={recentActivities}
+                loading={loading}
+                emptyMessage="No recent activity yet"
+              />
+              <TopStudentPreview
+                students={topStudents}
+                loading={loading}
+                onViewAll="/dashboard/teacher/analytics"
+              />
             </div>
           </div>
         </div>

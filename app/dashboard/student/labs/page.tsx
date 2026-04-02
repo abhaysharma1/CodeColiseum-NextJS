@@ -1,5 +1,5 @@
 "use client";
-import { Group, UserRole } from "@/generated/prisma/client";
+import { Group } from "@/generated/prisma/client";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import Fuse from "fuse.js";
@@ -25,7 +25,6 @@ interface Creator {
   id: string;
   name: string;
   email: string;
-  role: UserRole | null;
   isOnboarded: boolean;
   emailVerified: boolean;
   image: string | null;

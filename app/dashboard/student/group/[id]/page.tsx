@@ -405,7 +405,7 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
                                 className="h-7 "
                                 onClick={() =>
                                   router.push(
-                                    `/dashboard/student/seeresults/${exam.id}`
+                                    `/dashboard/student/results/${exam.id}`
                                   )
                                 }
                               >
@@ -416,7 +416,7 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
                                 variant={"default"}
                                 className="h-7"
                                 onClick={() => {
-                                  router.push(`/test/starttest/${exam.id}`);
+                                  router.push(`/tests/start/${exam.id}`);
                                 }}
                               >
                                 Start Exam

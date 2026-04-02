@@ -21,8 +21,6 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Image from "next/image";
 import { useTheme } from "next-themes";
 
-
-
 // Simple logo component for the navbar
 const Logo = (props: React.SVGAttributes<SVGElement>) => {
   return (
@@ -235,7 +233,7 @@ export const Navbar01 = React.forwardRef<HTMLElement, Navbar01Props>(
                 <NavigationMenu className="flex">
                   <NavigationMenuList className="gap-1">
                     <NavigationMenuItem>
-                      <Link href={`/problemlist`}>
+                      <Link href={`/problem-list`}>
                         <button
                           className={cn(
                             "group inline-flex h-9 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 cursor-pointer no-underline text-foreground/80"

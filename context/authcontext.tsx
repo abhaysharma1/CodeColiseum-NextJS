@@ -1,16 +1,16 @@
 "use client";
 
-import {
-  createContext,
-  useContext,
-  ReactNode,
-} from "react";
+import { createContext, useContext, ReactNode } from "react";
 import { authClient } from "@/lib/auth-client";
 import { BetterFetchError } from "better-auth/react";
 import { User } from "@/generated/prisma/client";
 
+export type AuthUser = User & {
+  globalRoleId?: string | null;
+};
+
 interface AuthContexttype {
-  user: User | null | undefined;
+  user: AuthUser | null | undefined;
   loading: boolean;
   refetch: () => void;
   error: BetterFetchError | null;
@@ -27,7 +27,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     refetch,
   } = authClient.useSession();
 
-
   const logout = async () => {
     await authClient.signOut();
   };
@@ -35,7 +34,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   return (
     <AuthContext.Provider
       value={{
-        user: data?.user as User,
+        user: data?.user as AuthUser,
         loading,
         refetch,
         error,

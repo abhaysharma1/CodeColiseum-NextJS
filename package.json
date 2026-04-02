@@ -54,6 +54,7 @@
     "@tabler/icons-react": "^3.35.0",
     "@tailwindcss/typography": "^0.5.19",
     "@tanstack/react-table": "^8.21.3",
+    "@tanstack/react-virtual": "^3.13.23",
     "@wasm-fmt/biome_fmt": "^0.1.14",
     "ai": "^5.0.112",
     "axios": "^1.13.5",

@@ -1,7 +1,6 @@
 "use client";
 
 import * as React from "react";
-import { IconInnerShadowTop } from "@tabler/icons-react";
 import { NavUser } from "@/components/nav-user";
 import {
   Sidebar,
@@ -13,6 +12,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { NavStudentMain } from "@/components/nav-student-main";
+import { NotificationBell } from "@/components/NotificationBell";
 
 interface StudentSidebarProps {
   user: any;
@@ -36,9 +36,12 @@ export function StudentSidebar({
               asChild
               className="data-[slot=sidebar-menu-button]:!p-1.5"
             >
-              <a href="/">
-                <span className="font-logoFont text-xl ">CODECOLISEUM</span>
-              </a>
+              <div className="flex w-full items-center justify-between gap-2">
+                <a href="/" className="flex items-center gap-2">
+                  <span className="font-logoFont text-xl ">CODECOLISEUM</span>
+                </a>
+                <NotificationBell />
+              </div>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>

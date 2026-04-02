@@ -21,6 +21,7 @@ import {
 
 import { NavMain } from "@/components/nav-main";
 import { NavUser } from "@/components/nav-user";
+import { NotificationBell } from "@/components/NotificationBell";
 import {
   Sidebar,
   SidebarContent,
@@ -151,11 +152,16 @@ const data = {
 interface TeacherSidebarProps {
   user: any;
   variant: "sidebar" | "floating" | "inset" | undefined;
-  page: string
+  page: string;
   props?: React.ComponentProps<typeof Sidebar>;
 }
 
-export function AppSidebar({ user, variant,page, ...props }: TeacherSidebarProps) {
+export function AppSidebar({
+  user,
+  variant,
+  page,
+  ...props
+}: TeacherSidebarProps) {
   return (
     <Sidebar collapsible="offcanvas" variant={variant}>
       <SidebarHeader>
@@ -163,23 +169,26 @@ export function AppSidebar({ user, variant,page, ...props }: TeacherSidebarProps
           <SidebarMenuItem>
             <SidebarMenuButton
               asChild
-              className="data-[slot=sidebar-menu-button]:!p-1.5"
+              className="flex w-full items-center justify-between gap-2 data-[slot=sidebar-menu-button]:!p-1.5"
             >
-              <a href="/">
-                {/* <IconInnerShadowTop className="!size-5" /> */}
-                <span className="font-logoFont text-xl">CODECOLISEUM</span>
-              </a>
+              <div className="flex w-full items-center justify-between gap-2">
+                <a href="/" className="flex items-center gap-2">
+                  {/* <IconInnerShadowTop className="!size-5" /> */}
+                  <span className="font-logoFont text-xl">CODECOLISEUM</span>
+                </a>
+                <NotificationBell />
+              </div>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <NavMain page={page}/>
+        <NavMain page={page} />
         {/* <NavDocuments items={data.documents} /> */}
         {/* <NavSecondary items={data.navSecondary} className="mt-auto" /> */}
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={user}  />
+        <NavUser user={user} />
       </SidebarFooter>
     </Sidebar>
   );
