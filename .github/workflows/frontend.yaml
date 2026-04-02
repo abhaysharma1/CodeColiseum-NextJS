@@ -23,7 +23,7 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    environment: production
+    environment: Codecoliseum
 
     steps:
       - uses: actions/checkout@v3
