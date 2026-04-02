@@ -4,7 +4,21 @@ on:
   push:
     branches: [main]
     paths:
-      - "frontend/**"
+      - "app/**"
+      - "components/**"
+      - "context/**"
+      - "generated/**"
+      - "hooks/**"
+      - "interfaces/**"
+      - "lib/**"
+      - "prisma/**"
+      - "public/**"
+      - "themes/**"
+      - "utils/**"
+      - "next.config.ts"
+      - "package.json"
+      - "package-lock.json"
+      - "Dockerfile"
 
 jobs:
   deploy:
@@ -25,7 +39,7 @@ jobs:
 
       - name: Build Docker
         run: |
-          docker build -t frontend ./frontend
+          docker build -t frontend -f Dockerfile .
           docker tag frontend:latest ${{ secrets.ECR_REPOSITORY_FRONTEND }}:latest
           docker push ${{ secrets.ECR_REPOSITORY_FRONTEND }}:latest
 
