@@ -5,7 +5,7 @@ export default function Dashboard() {
   // This page only shows briefly during the redirect
   return (
     <div className="flex items-center justify-center h-screen w-screen">
-      <div><Spinner variant="ring" /> </div>
+      <div><Spinner variant="ring" /></div>
     </div>
   );
 }
