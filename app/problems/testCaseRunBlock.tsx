@@ -53,7 +53,7 @@ function TestCaseRunBlock({
                   Time taken: {Number(item.time).toFixed(2)} sec
                   <br />
                   Memory used: {(item.memory && item.memory / 1024)?.toFixed(
-                    2,
+                    2
                   )}{" "}
                   mb
                 </div>
@@ -83,6 +83,13 @@ function TestCaseRunBlock({
                     Your Output
                     <br />
                     {item.stdout}
+                  </div>
+                )}
+                {item.stderr && (
+                  <div className="p-2 px-4 bg-red-500/10 whitespace-break-spaces rounded-b-md mt-2">
+                    Runtime Error
+                    <br />
+                    {item.stderr}
                   </div>
                 )}
                 {item.status.id > 3 && (

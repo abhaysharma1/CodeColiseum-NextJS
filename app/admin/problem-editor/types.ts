@@ -2,7 +2,7 @@ export type ProblemStatus = "DRAFT" | "PUBLISHED";
 
 export type Difficulty = "EASY" | "MEDIUM" | "HARD";
 
-export type LanguageId = "cpp" | "python" | "java" | "javascript";
+export type LanguageId = "c" | "cpp" | "python" | "java";
 
 export interface DescriptionSections {
   description: string;

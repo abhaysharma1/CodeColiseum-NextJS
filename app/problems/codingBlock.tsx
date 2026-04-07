@@ -21,6 +21,7 @@ import {
 import { toast } from "sonner";
 import axios from "axios";
 import { getLanguageId } from "@/utils/getLanguageId";
+import { supportedLanguages } from "@/utils/languageCatalog";
 import { MdFormatAlignLeft } from "react-icons/md";
 import { runTestCaseType, submitTestCaseType } from "./interface";
 
@@ -79,12 +80,11 @@ interface sentCode {
   code: string;
 }
 
-const availableLanguages = [
-  // { id: 50, name: "C", monacoLang: "c" },
-  { id: 54, name: "C++", monacoLang: "cpp" },
-  { id: 62, name: "Java", monacoLang: "java" },
-  { id: 71, name: "Python", monacoLang: "python" },
-];
+const availableLanguages = supportedLanguages.map((item) => ({
+  id: item.runtimeId,
+  name: item.label,
+  monacoLang: item.monaco,
+}));
 
 const themeMap: Record<string, any> = {
   Active4D: Active4DTheme,
@@ -133,6 +133,8 @@ const themeMap: Record<string, any> = {
 };
 
 const availableThemes = Object.keys(themeMap);
+const defaultRuntimeLanguageId = 54;
+const terminalStatuses = new Set(["ACCEPTED", "BAD_ALGORITHM", "BAD_SCALING"]);
 
 interface CodingBlockProps {
   questionId: string;
@@ -259,7 +261,7 @@ function CodingBlock({
     setTabPage("testcasesrun");
     setRunTestCaseResults(undefined);
 
-    const languageId = getLanguageId(language) ?? 54;
+    const languageId = getLanguageId(language) ?? defaultRuntimeLanguageId;
 
     const sentData: sentCode = {
       questionId,
@@ -296,7 +298,7 @@ function CodingBlock({
     setSubmitTestCaseResults(undefined);
 
     try {
-      const languageId = getLanguageId(language) ?? 54;
+      const languageId = getLanguageId(language) ?? defaultRuntimeLanguageId;
 
       const submitCode: sentCode = {
         questionId,
@@ -310,7 +312,32 @@ function CodingBlock({
         { withCredentials: true }
       );
 
-      setSubmitTestCaseResults(submitCodeResponse.data as submitTestCaseType);
+      const queuedResult = submitCodeResponse.data as submitTestCaseType;
+      setSubmitTestCaseResults(queuedResult);
+
+      if (!queuedResult?.submissionId) {
+        return;
+      }
+
+      const maxPolls = 90;
+      const pollDelayMs = 1000;
+
+      for (let attempt = 0; attempt < maxPolls; attempt++) {
+        const statusResponse = await axios.get(
+          `${getBackendURL()}/problems/submission-status/${queuedResult.submissionId}`,
+          { withCredentials: true }
+        );
+
+        const latest = statusResponse.data as submitTestCaseType;
+        setSubmitTestCaseResults(latest);
+
+        if (terminalStatuses.has(latest.status)) {
+          break;
+        }
+
+        await new Promise((resolve) => setTimeout(resolve, pollDelayMs));
+      }
+
       setSubmissionRefetch(true);
     } catch (error) {
       console.log(error);

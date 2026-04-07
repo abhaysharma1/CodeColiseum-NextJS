@@ -20,6 +20,18 @@ import { getLanguageId } from "@/utils/getLanguageId";
 import { runTestCaseType } from "./interface";
 import { useRemainingTime } from "./getRemainingTime";
 
+const defaultRuntimeLanguageId = 54;
+const terminalStatuses = new Set([
+  "ACCEPTED",
+  "PARTIAL",
+  "WRONG_ANSWER",
+  "COMPILE_ERROR",
+  "RUNTIME_ERROR",
+  "TIME_LIMIT",
+  "INTERNAL_ERROR",
+  "MEMORY_LIMIT",
+]);
+
 function Page({ params }: { params: Promise<{ "exam-id": string }> }) {
   const { "exam-id": examId } = use(params);
 
@@ -293,7 +305,7 @@ function Page({ params }: { params: Promise<{ "exam-id": string }> }) {
     try {
       setRunning(true);
       setCurrentTab("runresults");
-      const languageId = getLanguageId(language) ?? 54;
+      const languageId = getLanguageId(language) ?? defaultRuntimeLanguageId;
 
       const sentData = {
         questionId: examProblems[currProblem - 1].problemId,
@@ -353,8 +365,38 @@ function Page({ params }: { params: Promise<{ "exam-id": string }> }) {
           withCredentials: true,
         }
       );
-      setSubmittingResults(res.data as SubmitCodeResponse);
-      console.log(res.data);
+      const queuedResult = res.data as SubmitCodeResponse;
+      setSubmittingResults(queuedResult);
+
+      if (!queuedResult || !("submissionId" in queuedResult)) {
+        return;
+      }
+
+      const maxPolls = 90;
+      const pollDelayMs = 1000;
+
+      for (let attempt = 0; attempt < maxPolls; attempt++) {
+        const statusResponse = await axios.get(
+          `${getBackendURL()}/student/exam/submission-status/${queuedResult.submissionId}`,
+          {
+            withCredentials: true,
+          }
+        );
+
+        const latestResult = statusResponse.data as SubmitCodeResponse;
+        setSubmittingResults(latestResult);
+
+        if (
+          "status" in latestResult &&
+          terminalStatuses.has(latestResult.status)
+        ) {
+          return;
+        }
+
+        await new Promise((resolve) => setTimeout(resolve, pollDelayMs));
+      }
+
+      toast.error("Submission is still processing. Please refresh shortly.");
     } catch (error: any) {
       if (error.status == 403) {
         setSebError(true);

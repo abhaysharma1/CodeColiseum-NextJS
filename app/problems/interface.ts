@@ -1,4 +1,6 @@
 export interface submitTestCaseType {
+  success?: boolean;
+  submissionId?: string;
   failedCase?: {
     language_id: number;
     source_code: string;
@@ -6,10 +8,13 @@ export interface submitTestCaseType {
     expected_output: string;
   };
   noOfPassedCases?: number;
+  passedTestcases?: number;
   totalCases?: number;
+  totalTestcases?: number;
   totalMemoryUsed?: number;
   totalTimeTaken?: number;
-  status: "BAD_ALGORITHM" | "BAD_SCALING" | "ACCEPTED";
+  status: "PENDING" | "RUNNING" | "BAD_ALGORITHM" | "BAD_SCALING" | "ACCEPTED";
+  stderr?: string | null;
   failedCaseExecutionDetails?: JudgeResponse;
   yourTimeComplexity?: string;
   expectedTimeComplexity?: string;

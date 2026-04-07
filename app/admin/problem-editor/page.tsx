@@ -19,10 +19,10 @@ import {
 import { toast } from "sonner";
 
 const initialDriverCode = (): DriverCodeByLanguage => ({
+  c: { header: "", template: "", footer: "" },
   cpp: { header: "", template: "", footer: "" },
   python: { header: "", template: "", footer: "" },
   java: { header: "", template: "", footer: "" },
-  javascript: { header: "", template: "", footer: "" },
 });
 
 const initialTestCases = (): TestCaseGroups => ({

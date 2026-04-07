@@ -24,6 +24,23 @@ function TestSubmitCode({
     );
   }
 
+  if (results.status === "PENDING" || results.status === "RUNNING") {
+    return (
+      <div className="p-4">
+        <Card>
+          <CardHeader>
+            <CardTitle>Submission Queued</CardTitle>
+            <CardDescription>
+              {results.status === "PENDING"
+                ? "Your submission is queued for execution."
+                : "Your submission is currently being executed."}
+            </CardDescription>
+          </CardHeader>
+        </Card>
+      </div>
+    );
+  }
+
   // Handle error responses
   if ("error" in results) {
     return (
@@ -104,20 +121,22 @@ function TestSubmitCode({
                 <div>
                   <div className="text-sm text-foreground/60">Score</div>
                   <div className="text-lg font-semibold">
-                    {results.score}/100
+                    {results.score ?? 0}/100
                   </div>
                 </div>
                 <div>
                   <div className="text-sm text-foreground/60">Test Cases</div>
                   <div className="text-lg font-semibold">
-                    {results.passedCount}/{results.totalCount}
+                    {results.passedCount ?? 0}/{results.totalCount ?? 0}
                   </div>
                 </div>
                 <div>
                   <div className="text-sm text-foreground/60">Success Rate</div>
                   <div className="text-lg font-semibold">
                     {Math.round(
-                      (results.passedCount / results.totalCount) * 100
+                      ((results.passedCount ?? 0) /
+                        Math.max(results.totalCount ?? 0, 1)) *
+                        100
                     )}
                     %
                   </div>
@@ -130,8 +149,8 @@ function TestSubmitCode({
         {/* Test Cases Chart - Show for all statuses */}
         <div className="mb-4 animate-fade animate-once">
           <CasesPassedChart
-            noOfPassedCases={results.passedCount}
-            totalCases={results.totalCount}
+            noOfPassedCases={results.passedCount ?? 0}
+            totalCases={results.totalCount ?? 0}
           />
         </div>
 
@@ -173,20 +192,20 @@ function TestSubmitCode({
         )} */}
 
         {/* Failed Test Case Details - Show only if there are failures */}
-        {results.passedCount < results.totalCount && (
+        {(results.passedCount ?? 0) < (results.totalCount ?? 0) && (
           <div className="animate-fade-up animate-once">
             <Card>
               <CardHeader>
                 <CardTitle>Failed Test Cases</CardTitle>
                 <CardDescription>
-                  {results.passedCount > 0
-                    ? `Passed ${results.passedCount} out of ${results.totalCount} test cases`
+                  {(results.passedCount ?? 0) > 0
+                    ? `Passed ${results.passedCount ?? 0} out of ${results.totalCount ?? 0} test cases`
                     : "All test cases failed"}
                 </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {results.results
+                  {(results.results ?? [])
                     .map((result, index) => {
                       if (result.status === "ACCEPTED") return null;
 
@@ -252,6 +271,17 @@ function TestSubmitCode({
                       );
                     })
                     .filter(Boolean)}
+
+                  {!results.results?.length && results.stderr && (
+                    <div className="p-3 px-4 bg-red-500/10 border border-red-500/20 rounded-md">
+                      <div className="text-xs font-semibold text-red-600 mb-1">
+                        RUNTIME ERROR
+                      </div>
+                      <pre className="whitespace-pre-wrap font-mono text-sm text-red-600">
+                        {results.stderr}
+                      </pre>
+                    </div>
+                  )}
                 </div>
               </CardContent>
               <CardFooter>

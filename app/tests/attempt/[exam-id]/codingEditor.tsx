@@ -21,6 +21,7 @@ import {
 import { toast } from "sonner";
 import axios from "axios";
 import { getLanguageId } from "@/utils/getLanguageId";
+import { supportedLanguages } from "@/utils/languageCatalog";
 import { MdFormatAlignLeft } from "react-icons/md";
 
 // Static theme imports
@@ -76,11 +77,11 @@ interface sentCode {
   code: string;
 }
 
-const availableLanguages = [
-  { id: 54, name: "C++", monacoLang: "cpp" },
-  { id: 62, name: "Java", monacoLang: "java" },
-  { id: 71, name: "Python", monacoLang: "python" },
-];
+const availableLanguages = supportedLanguages.map((item) => ({
+  id: item.runtimeId,
+  name: item.label,
+  monacoLang: item.monaco,
+}));
 
 const themeMap: Record<string, any> = {
   Active4D: Active4DTheme,
@@ -220,9 +221,7 @@ function CodingEditor({
 
   return (
     <div className="flex-1">
-      <div
-        className="flex-1 h-[calc(100vh-7rem)] outline-1 m-5 outline-offset-8 rounded-md py-3 px-5"
-      >
+      <div className="flex-1 h-[calc(100vh-7rem)] outline-1 m-5 outline-offset-8 rounded-md py-3 px-5">
         <div
           className={`rounded-md overflow-hidden border-2 h-full flex flex-col min-h-[300px] ${
             editorInFocus && "border-1 border-foreground/15"

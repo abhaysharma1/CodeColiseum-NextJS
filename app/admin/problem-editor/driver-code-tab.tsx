@@ -20,10 +20,10 @@ interface DriverCodeTabProps {
 
 const languageOptions: { value: LanguageId; label: string; monaco: string }[] =
   [
+    { value: "c", label: "C", monaco: "c" },
     { value: "cpp", label: "C++", monaco: "cpp" },
     { value: "python", label: "Python", monaco: "python" },
     { value: "java", label: "Java", monaco: "java" },
-    { value: "javascript", label: "JavaScript", monaco: "javascript" },
   ];
 
 export function DriverCodeTab(props: DriverCodeTabProps) {

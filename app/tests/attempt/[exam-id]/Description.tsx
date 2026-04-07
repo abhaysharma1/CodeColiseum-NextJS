@@ -39,17 +39,21 @@ interface SubmitCodeSuccessResponse {
   success: true;
   submissionId: string;
   status:
+    | "PENDING"
+    | "RUNNING"
     | "ACCEPTED"
     | "PARTIAL"
     | "WRONG_ANSWER"
     | "COMPILE_ERROR"
     | "RUNTIME_ERROR"
     | "TIME_LIMIT"
+    | "MEMORY_LIMIT"
     | "INTERNAL_ERROR";
-  score: number;
-  passedCount: number;
-  totalCount: number;
-  results: TestCaseResult[];
+  score?: number;
+  passedCount?: number;
+  totalCount?: number;
+  stderr?: string | null;
+  results?: TestCaseResult[];
   yourTimeComplexity?: string | null;
   expectedTimeComplexity?: string | null;
 }
