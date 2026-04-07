@@ -76,6 +76,9 @@ export type SubmitCodeResponse =
   | SubmitCodeSuccessResponse
   | SubmitCodeErrorResponse;
 
+const normalizeOutput = (value?: string | null) =>
+  (value ?? "").replace(/\s+/g, " ").trim();
+
 function Description({
   descriptionData,
   testcases,
@@ -306,48 +309,86 @@ function Description({
               ) : (
                 runningResults?.responses.map((item, index) => (
                   <div
-                    key={item.token}
+                    key={`${item.language}-${index}`}
                     className="my-4 animate-fade-down animate-once animate-delay-[10ms]"
                   >
-                    <Card>
-                      <CardHeader>
-                        <CardTitle>Test {index + 1}</CardTitle>
-                        <CardDescription className="flex justify-between">
-                          <div>
-                            Time taken: {Number(item.time).toFixed(2)} sec
-                            <br />
-                            Memory used:{" "}
-                            {(item.memory && item.memory / 1024)?.toFixed(2)} mb
-                          </div>
-                          <div>
-                            {item.status.description === "Accepted" ? (
-                              <span className="text-green-600">Accepted</span>
-                            ) : (
-                              <span className="text-red-600">Failed</span>
-                            )}
-                          </div>
-                        </CardDescription>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="rounded-md">
-                          <div className="p-2 px-4 dark:bg-background/40 bg-foreground/10 whitespace-break-spaces rounded-t-md">
-                            Input
-                            <br />
-                            {runningResults?.cases[index].input}
-                          </div>
-                          <div className="p-2 px-4 dark:bg-background/40 bg-foreground/10 whitespace-break-spaces">
-                            Expected Output
-                            <br />
-                            {runningResults.cases[index].output}
-                          </div>
-                          <div className="p-2 px-4 dark:bg-background/40 bg-foreground/10 whitespace-break-spaces rounded-b-md">
-                            Your Output
-                            <br />
-                            {item.stdout}
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
+                    {(() => {
+                      const expected =
+                        runningResults.cases[index]?.output ?? "";
+                      const stdout = item.run?.stdout ?? "";
+                      const compileError = item.compile?.stderr ?? "";
+                      const runtimeError = item.run?.stderr ?? "";
+                      const hasExitCodeFailure =
+                        typeof item.run?.code === "number" &&
+                        item.run.code !== 0;
+
+                      const passed =
+                        !compileError &&
+                        !runtimeError &&
+                        !hasExitCodeFailure &&
+                        normalizeOutput(stdout) === normalizeOutput(expected);
+
+                      return (
+                        <Card>
+                          <CardHeader>
+                            <CardTitle>Test {index + 1}</CardTitle>
+                            <CardDescription className="flex justify-between">
+                              <div>
+                                Exit code: {item.run?.code ?? "N/A"}
+                                {item.run?.signal ? (
+                                  <>
+                                    <br />
+                                    Signal: {item.run.signal}
+                                  </>
+                                ) : null}
+                              </div>
+                              <div>
+                                {passed ? (
+                                  <span className="text-green-600">
+                                    Accepted
+                                  </span>
+                                ) : (
+                                  <span className="text-red-600">Failed</span>
+                                )}
+                              </div>
+                            </CardDescription>
+                          </CardHeader>
+                          <CardContent>
+                            <div className="rounded-md">
+                              <div className="p-2 px-4 dark:bg-background/40 bg-foreground/10 whitespace-break-spaces rounded-t-md">
+                                Input
+                                <br />
+                                {runningResults?.cases[index].input}
+                              </div>
+                              <div className="p-2 px-4 dark:bg-background/40 bg-foreground/10 whitespace-break-spaces">
+                                Expected Output
+                                <br />
+                                {runningResults.cases[index].output}
+                              </div>
+                              <div className="p-2 px-4 dark:bg-background/40 bg-foreground/10 whitespace-break-spaces rounded-b-md">
+                                Your Output
+                                <br />
+                                {stdout || "(no stdout)"}
+                              </div>
+                              {compileError && (
+                                <div className="p-2 px-4 bg-red-500/10 whitespace-break-spaces rounded-b-md mt-2">
+                                  Compile Error
+                                  <br />
+                                  {compileError}
+                                </div>
+                              )}
+                              {runtimeError && (
+                                <div className="p-2 px-4 bg-red-500/10 whitespace-break-spaces rounded-b-md mt-2">
+                                  Runtime Error
+                                  <br />
+                                  {runtimeError}
+                                </div>
+                              )}
+                            </div>
+                          </CardContent>
+                        </Card>
+                      );
+                    })()}
                   </div>
                 ))
               )}

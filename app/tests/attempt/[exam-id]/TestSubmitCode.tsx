@@ -24,23 +24,6 @@ function TestSubmitCode({
     );
   }
 
-  if (results.status === "PENDING" || results.status === "RUNNING") {
-    return (
-      <div className="p-4">
-        <Card>
-          <CardHeader>
-            <CardTitle>Submission Queued</CardTitle>
-            <CardDescription>
-              {results.status === "PENDING"
-                ? "Your submission is queued for execution."
-                : "Your submission is currently being executed."}
-            </CardDescription>
-          </CardHeader>
-        </Card>
-      </div>
-    );
-  }
-
   // Handle error responses
   if ("error" in results) {
     return (
@@ -66,6 +49,23 @@ function TestSubmitCode({
             )}
           </Card>
         </div>
+      </div>
+    );
+  }
+
+  if (results.status === "PENDING" || results.status === "RUNNING") {
+    return (
+      <div className="p-4">
+        <Card>
+          <CardHeader>
+            <CardTitle>Submission Queued</CardTitle>
+            <CardDescription>
+              {results.status === "PENDING"
+                ? "Your submission is queued for execution."
+                : "Your submission is currently being executed."}
+            </CardDescription>
+          </CardHeader>
+        </Card>
       </div>
     );
   }

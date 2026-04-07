@@ -27,23 +27,26 @@ export interface submitTestCaseType {
 }
 
 export interface runTestCaseType {
-  responses: {
-    stdout: string | null;
-    time: string | null;
-    memory: number | null;
-    stderr: string | null;
-    token: string;
-    compile_output: string | null;
-    message: string | null;
-    status: {
-      id: number;
-      description: string;
-    };
-  }[];
+  responses: PistonExecutionResponse[];
   cases: {
     input: string;
     output: string;
   }[];
+}
+
+export interface PistonExecutionStage {
+  stdout: string;
+  stderr: string;
+  output: string;
+  code: number | null;
+  signal: string | null;
+}
+
+export interface PistonExecutionResponse {
+  language: string;
+  version: string;
+  run: PistonExecutionStage;
+  compile?: PistonExecutionStage;
 }
 
 export type ProblemSubmissionItem = {
