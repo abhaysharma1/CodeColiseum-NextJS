@@ -70,32 +70,32 @@ function TestCaseRunBlock({
                 </CardHeader>
                 <CardContent>
                   <div className="rounded-md">
-                    <div className="p-2 px-4 dark:bg-background/40 bg-foreground/10 whitespace-break-spaces rounded-t-md">
+                    <div className="p-2 px-4 rounded-md dark:bg-background/40 bg-foreground/10 whitespace-break-spaces rounded-t-md">
                       Input
                       <br />
                       {results?.cases[index].input}
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-2">
-                      <div className="p-2 px-4 dark:bg-background/40 bg-foreground/10 whitespace-break-spaces rounded-md">
+                      <div className="p-2 px-4 dark:bg-background/40 bg-foreground/10 whitespace-break-spaces rounded-md overflow-y-scroll overflow-x-scroll">
                         Expected Output
                         <br />
                         {results.cases[index].output}
                       </div>
-                      <div className="p-2 px-4 dark:bg-background/40 bg-foreground/10 whitespace-break-spaces rounded-md">
+                      <div className="p-2 px-4 dark:bg-background/40 bg-foreground/10 whitespace-break-spaces rounded-md overflow-y-scroll overflow-x-scroll">
                         Your Output
                         <br />
                         {stdout || "(no stdout)"}
                       </div>
                     </div>
                     {compileError && (
-                      <div className="p-2 px-4 bg-red-500/10 whitespace-break-spaces rounded-b-md mt-2">
+                      <div className="p-2 px-4 bg-red-500/10 whitespace-break-spaces rounded-b-md mt-2 overflow-y-scroll overflow-x-scroll">
                         Compile Error
                         <br />
                         {compileError}
                       </div>
                     )}
                     {runtimeError && (
-                      <div className="p-2 px-4 bg-red-500/10 whitespace-break-spaces rounded-b-md mt-2">
+                      <div className="p-2 px-4 bg-red-500/10 whitespace-break-spaces rounded-b-md mt-2 overflow-y-scroll overflow-x-scroll">
                         Runtime Error
                         <br />
                         {runtimeError}
