@@ -34,6 +34,10 @@ function TestCaseRunBlock({
             const runtimeError = item.run?.stderr ?? "";
             const hasExitCodeFailure =
               typeof item.run?.code === "number" && item.run.code !== 0;
+            const hasExecutionError =
+              Boolean(compileError) ||
+              Boolean(runtimeError) ||
+              hasExitCodeFailure;
 
             const passed =
               !compileError &&
@@ -71,15 +75,17 @@ function TestCaseRunBlock({
                       <br />
                       {results?.cases[index].input}
                     </div>
-                    <div className="p-2 px-4 dark:bg-background/40 bg-foreground/10 whitespace-break-spaces">
-                      Expected Output
-                      <br />
-                      {results.cases[index].output}
-                    </div>
-                    <div className="p-2 px-4 dark:bg-background/40 bg-foreground/10 whitespace-break-spaces rounded-b-md">
-                      Your Output
-                      <br />
-                      {stdout || "(no stdout)"}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-2">
+                      <div className="p-2 px-4 dark:bg-background/40 bg-foreground/10 whitespace-break-spaces rounded-md">
+                        Expected Output
+                        <br />
+                        {results.cases[index].output}
+                      </div>
+                      <div className="p-2 px-4 dark:bg-background/40 bg-foreground/10 whitespace-break-spaces rounded-md">
+                        Your Output
+                        <br />
+                        {stdout || "(no stdout)"}
+                      </div>
                     </div>
                     {compileError && (
                       <div className="p-2 px-4 bg-red-500/10 whitespace-break-spaces rounded-b-md mt-2">
@@ -95,7 +101,7 @@ function TestCaseRunBlock({
                         {runtimeError}
                       </div>
                     )}
-                    {!compileError && !runtimeError && item.run?.output && (
+                    {hasExecutionError && item.run?.output && (
                       <div className="p-2 px-4 dark:bg-background/40 bg-foreground/10 whitespace-break-spaces rounded-b-md mt-2">
                         Engine Output
                         <br />

@@ -321,6 +321,10 @@ function Description({
                       const hasExitCodeFailure =
                         typeof item.run?.code === "number" &&
                         item.run.code !== 0;
+                      const hasExecutionError =
+                        Boolean(compileError) ||
+                        Boolean(runtimeError) ||
+                        hasExitCodeFailure;
 
                       const passed =
                         !compileError &&
@@ -360,15 +364,17 @@ function Description({
                                 <br />
                                 {runningResults?.cases[index].input}
                               </div>
-                              <div className="p-2 px-4 dark:bg-background/40 bg-foreground/10 whitespace-break-spaces">
-                                Expected Output
-                                <br />
-                                {runningResults.cases[index].output}
-                              </div>
-                              <div className="p-2 px-4 dark:bg-background/40 bg-foreground/10 whitespace-break-spaces rounded-b-md">
-                                Your Output
-                                <br />
-                                {stdout || "(no stdout)"}
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-2">
+                                <div className="p-2 px-4 dark:bg-background/40 bg-foreground/10 whitespace-break-spaces rounded-md">
+                                  Expected Output
+                                  <br />
+                                  {runningResults.cases[index].output}
+                                </div>
+                                <div className="p-2 px-4 dark:bg-background/40 bg-foreground/10 whitespace-break-spaces rounded-md">
+                                  Your Output
+                                  <br />
+                                  {stdout || "(no stdout)"}
+                                </div>
                               </div>
                               {compileError && (
                                 <div className="p-2 px-4 bg-red-500/10 whitespace-break-spaces rounded-b-md mt-2">
@@ -382,6 +388,13 @@ function Description({
                                   Runtime Error
                                   <br />
                                   {runtimeError}
+                                </div>
+                              )}
+                              {hasExecutionError && item.run?.output && (
+                                <div className="p-2 px-4 dark:bg-background/40 bg-foreground/10 whitespace-break-spaces rounded-b-md mt-2">
+                                  Engine Output
+                                  <br />
+                                  {item.run.output}
                                 </div>
                               )}
                             </div>
