@@ -120,7 +120,7 @@ export function Submissions({
                   View Code
                 </summary>
                 <pre className="mt-2 p-3 bg-accent/30 rounded-md text-xs overflow-x-auto whitespace-pre-wrap">
-                  {submission.code}
+                  {submission.sourceCode}
                 </pre>
               </details>
             </div>

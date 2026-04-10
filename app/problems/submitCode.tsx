@@ -199,9 +199,9 @@ function SubmitCode({ results }: { results: SubmissionResult | undefined }) {
                           Execution Time
                         </span>
                         <span className="mt-1 text-lg font-semibold text-foreground">
-                          {results.executionTime.toFixed(3)}
+                          {results.executionTime}
                           <span className="text-xs ml-1 text-muted-foreground">
-                            sec
+                            ms
                           </span>
                         </span>
                       </div>
@@ -212,9 +212,9 @@ function SubmitCode({ results }: { results: SubmissionResult | undefined }) {
                           Memory Used
                         </span>
                         <span className="mt-1 text-lg font-semibold text-foreground">
-                          {results.memory.toFixed(2)}
+                          {results.memory}
                           <span className="text-xs ml-1 text-muted-foreground">
-                            MB
+                            Kb
                           </span>
                         </span>
                       </div>

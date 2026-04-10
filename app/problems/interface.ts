@@ -107,7 +107,7 @@ export interface PistonExecutionResponse {
 export type ProblemSubmissionItem = {
   id: string;
   language: string;
-  code: string;
+  sourceCode: string;
   noOfPassedCases: number;
   createdAt: Date;
 };
