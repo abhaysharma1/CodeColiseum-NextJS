@@ -11,18 +11,46 @@ export type ExecutionStatusType =
   | "INTERNAL_ERROR"
   | "BAD_SCALING";
 
-export interface SubmissionResult {
-  submissionId?: string;
-  sourceCode?: string;
-  language?: string;
-  passedTestcases?: number;
-  totalTestcases?: number;
+/**
+ * Response during active polling phase
+ * Minimal payload to reduce network traffic
+ */
+export interface SubmissionPollingResult {
+  success?: boolean;
+  submissionId: string;
+  status: ExecutionStatusType;
+}
+
+/**
+ * Response when submission processing is complete
+ * Complete payload with all execution details
+ */
+export interface SubmissionTerminalResult {
+  success?: boolean;
+  submissionId: string;
+  sourceCode: string;
+  language: string;
+  passedTestcases: number;
+  totalTestcases: number;
   executionTime?: number; // in seconds
-  memory?: number; // in MB or bytes
+  memory?: number; // in MB
   stderr?: string | null;
   status: ExecutionStatusType;
-  success?: boolean;
+  createdAt?: Date | string;
 }
+
+/**
+ * Discriminated union of polling and terminal submission results
+ * Type guard: check if 'sourceCode' exists to narrow to SubmissionTerminalResult
+ *
+ * @example
+ * if ('sourceCode' in result) {
+ *   // result is SubmissionTerminalResult
+ * }
+ */
+export type SubmissionResult =
+  | SubmissionPollingResult
+  | SubmissionTerminalResult;
 
 /** @deprecated Use SubmissionResult instead */
 export interface submitTestCaseType {
