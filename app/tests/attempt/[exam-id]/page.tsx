@@ -308,27 +308,27 @@ function Page({ params }: { params: Promise<{ "exam-id": string }> }) {
       const languageId = getLanguageId(language) ?? defaultRuntimeLanguageId;
 
       const sentData = {
-        questionId: examProblems[currProblem - 1].problemId,
+        examId: examDetails.id,
+        problemId: examProblems[currProblem - 1].problemId,
+        sourceCode: code,
         languageId,
-        code,
       };
 
-      try {
-        const response = await axios.post(
-          `${getBackendURL()}/problems/runcode`,
-          sentData,
-          {
-            withCredentials: true,
-          }
-        );
-        setRunningResults(response.data as runTestCaseType);
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setRunning(false);
-      }
+      const response = await axios.post(
+        `${getBackendURL()}/student/exam/runcode`,
+        sentData,
+        {
+          withCredentials: true,
+        }
+      );
+
+      setRunningResults(response.data as runTestCaseType);
     } catch (error: any) {
-      toast.error(error);
+      if (error?.response?.status === 403) {
+        setSebError(true);
+        return;
+      }
+      toast.error(error?.message ?? "Failed to run code");
       console.log(error);
     } finally {
       setRunning(false);
