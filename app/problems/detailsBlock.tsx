@@ -8,7 +8,7 @@ import { Spinner } from "@/components/ui/shadcn-io/spinner";
 import TestCases from "./testCases";
 import TestCaseRunBlock from "./testCaseRunBlock";
 import SubmitCode from "./submitCode";
-import { runTestCaseType, submitTestCaseType } from "./interface";
+import { runTestCaseType, SubmissionResult } from "./interface";
 import { Submissions } from "./submissions";
 import { ProblemSubmissionItem } from "./interface";
 import { aiReviewResult } from "./page";
@@ -39,7 +39,7 @@ function DetailsBlock({
   data: descriptionData[];
   loadingDetails: boolean;
   runTestCaseResults: runTestCaseType | undefined;
-  submitTestCaseResults: submitTestCaseType | undefined;
+  submitTestCaseResults: SubmissionResult | undefined;
   tabPage: string;
   setTabPage: (data: string) => void;
   submissionRefetch: boolean;

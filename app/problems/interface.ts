@@ -1,3 +1,30 @@
+export type ExecutionStatusType =
+  | "PENDING"
+  | "RUNNING"
+  | "ACCEPTED"
+  | "PARTIAL"
+  | "WRONG_ANSWER"
+  | "TIME_LIMIT"
+  | "MEMORY_LIMIT"
+  | "RUNTIME_ERROR"
+  | "COMPILE_ERROR"
+  | "INTERNAL_ERROR"
+  | "BAD_SCALING";
+
+export interface SubmissionResult {
+  submissionId?: string;
+  sourceCode?: string;
+  language?: string;
+  passedTestcases?: number;
+  totalTestcases?: number;
+  executionTime?: number; // in seconds
+  memory?: number; // in MB or bytes
+  stderr?: string | null;
+  status: ExecutionStatusType;
+  success?: boolean;
+}
+
+/** @deprecated Use SubmissionResult instead */
 export interface submitTestCaseType {
   success?: boolean;
   submissionId?: string;

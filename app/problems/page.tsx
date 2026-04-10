@@ -7,7 +7,7 @@ import axios from "axios";
 import { toast } from "sonner";
 import { Spinner } from "@/components/ui/shadcn-io/spinner";
 import { Navbar01 } from "@/components/ui/shadcn-io/navbar";
-import { runTestCaseType, submitTestCaseType } from "./interface";
+import { runTestCaseType, SubmissionResult } from "./interface";
 import { AuthProvider } from "@/context/authcontext";
 import { ProblemSubmissionItem } from "./interface";
 import { getBackendURL } from "@/utils/utilities";
@@ -54,7 +54,7 @@ function QuestionSolvingPageContent({
     runTestCaseType | undefined
   >();
   const [submitTestCaseResults, setSubmitTestCaseResults] = useState<
-    submitTestCaseType | undefined
+    SubmissionResult | undefined
   >();
 
   const [descriptionData, setDescriptionData] = useState<descriptionData[]>([]);

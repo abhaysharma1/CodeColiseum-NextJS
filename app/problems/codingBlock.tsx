@@ -23,7 +23,7 @@ import axios from "axios";
 import { getLanguageId } from "@/utils/getLanguageId";
 import { supportedLanguages } from "@/utils/languageCatalog";
 import { MdFormatAlignLeft } from "react-icons/md";
-import { runTestCaseType, submitTestCaseType } from "./interface";
+import { runTestCaseType, SubmissionResult } from "./interface";
 
 // Static theme imports
 import Active4DTheme from "@/utils/themes/Active4D.json";
@@ -134,12 +134,22 @@ const themeMap: Record<string, any> = {
 
 const availableThemes = Object.keys(themeMap);
 const defaultRuntimeLanguageId = 54;
-const terminalStatuses = new Set(["ACCEPTED", "BAD_ALGORITHM", "BAD_SCALING"]);
+const terminalStatuses = new Set([
+  "ACCEPTED",
+  "PARTIAL",
+  "WRONG_ANSWER",
+  "TIME_LIMIT",
+  "MEMORY_LIMIT",
+  "RUNTIME_ERROR",
+  "COMPILE_ERROR",
+  "INTERNAL_ERROR",
+  "BAD_SCALING",
+]);
 
 interface CodingBlockProps {
   questionId: string;
   setRunTestCaseResults: (results: runTestCaseType | undefined) => void;
-  setSubmitTestCaseResults: (data: submitTestCaseType | undefined) => void;
+  setSubmitTestCaseResults: (data: SubmissionResult | undefined) => void;
   setTabPage: (data: string) => void;
   setSubmissionRefetch: (data: boolean) => void;
   setCode: (data: string) => void;
@@ -312,7 +322,7 @@ function CodingBlock({
         { withCredentials: true }
       );
 
-      const queuedResult = submitCodeResponse.data as submitTestCaseType;
+      const queuedResult = submitCodeResponse.data as SubmissionResult;
       setSubmitTestCaseResults(queuedResult);
 
       if (!queuedResult?.submissionId) {
@@ -328,7 +338,7 @@ function CodingBlock({
           { withCredentials: true }
         );
 
-        const latest = statusResponse.data as submitTestCaseType;
+        const latest = statusResponse.data as SubmissionResult;
         setSubmitTestCaseResults(latest);
 
         if (terminalStatuses.has(latest.status)) {
