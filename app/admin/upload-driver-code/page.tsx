@@ -120,7 +120,7 @@ function Page() {
         { problemId: problem.id, ...json },
         { withCredentials: true }
       );
-      setResponse(res.data as any);
+      setResponse((res.data as any)?.data as any);
       console.log(res.data);
     } catch (error: any) {
       if (typeof error.message === "string") {
