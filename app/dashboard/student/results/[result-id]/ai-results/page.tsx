@@ -85,7 +85,13 @@ type ApiResponse = {
 };
 
 function Page() {
-  const { id } = useParams<{ id: string }>();
+  const params = useParams();
+  const examId = useMemo(() => {
+    const raw = params?.["result-id"];
+    if (typeof raw === "string") return raw;
+    if (Array.isArray(raw)) return raw[0];
+    return undefined;
+  }, [params]);
   const [results, setResults] = useState<AiEvaluation[]>([]);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
@@ -94,7 +100,11 @@ function Page() {
   const router = useRouter();
 
   useEffect(() => {
-    if (!id) return;
+    if (!examId) {
+      setLoading(false);
+      setError("Missing exam id.");
+      return;
+    }
 
     const fetchEvaluations = async () => {
       setLoading(true);
@@ -106,7 +116,7 @@ function Page() {
           `${getBackendURL()}/student/getexamairesult`,
           {
             params: {
-              examId: id,
+              examId,
             },
             withCredentials: true,
           }
@@ -124,7 +134,7 @@ function Page() {
     };
 
     fetchEvaluations();
-  }, [id]);
+  }, [examId]);
 
   const stats = useMemo(() => {
     if (!results.length) {
@@ -175,7 +185,11 @@ function Page() {
         {/* Header Section */}
         <div className="space-y-4">
           <div className="flex items-center gap-2">
-            <Button variant="outline" onClick={() => router.back()} className="mr-2">
+            <Button
+              variant="outline"
+              onClick={() => router.back()}
+              className="mr-2"
+            >
               <ArrowLeft className="h-4 w-4" />
             </Button>
             <Sparkles className="h-6 w-6 text-primary" />
@@ -189,7 +203,7 @@ function Page() {
             assessments.
           </p>
           <Badge variant="outline" className="font-mono text-xs">
-            Exam ID: {id}
+            Exam ID: {examId}
           </Badge>
         </div>
 
