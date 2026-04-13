@@ -1,9 +1,7 @@
 import React from "react";
 
 const CodeWindow: React.FC = () => {
-  const [lang, setLang] = React.useState<"cpp" | "python" | "java" | "js">(
-    "cpp",
-  );
+  const [lang, setLang] = React.useState<"cpp" | "python" | "java" | "js">("cpp");
 
   const codeMap = {
     cpp: {
@@ -67,25 +65,26 @@ const CodeWindow: React.FC = () => {
       className={`px-3 py-1 rounded text-xs font-medium transition-all border
       ${
         lang === id
-          ? "bg-white text-black border-white"
-          : "text-zinc-400 border-zinc-700 hover:border-zinc-500 hover:text-zinc-200"
-      }`}>
+          ? "bg-orange-700 text-white border-orange-700 shadow-sm"
+          : "text-stone-500 border-stone-200 bg-white hover:border-orange-300 hover:text-orange-700"
+      }`}
+    >
       {label}
     </button>
   );
 
   return (
-    <div className="relative mx-auto max-w-3xl text-left border border-gray-800 rounded-lg bg-zinc-950 shadow-2xl overflow-hidden transition-all duration-500 hover:border-gray-700">
+    <div className="relative mx-auto w-full max-w-lg text-left border border-orange-200/60 rounded-3xl bg-white shadow-[0_4px_32px_rgba(194,101,42,0.1)] overflow-hidden transition-all duration-500 hover:border-orange-300 hover:shadow-[0_8px_40px_rgba(194,101,42,0.15)] flex flex-col h-full pointer-events-auto">
       {/* Header */}
-      <div className="flex items-center justify-between px-4 py-2 border-b border-gray-800 bg-zinc-950/50">
-        <div className="flex items-center gap-3">
+      <div className="flex items-center justify-between px-5 py-3 border-b border-orange-200/60 bg-orange-50/70">
+        <div className="flex items-center gap-4">
           <div className="flex gap-1.5">
-            <div className="w-2.5 h-2.5 rounded-full bg-red-500/70"></div>
-            <div className="w-2.5 h-2.5 rounded-full bg-yellow-400/70"></div>
-            <div className="w-2.5 h-2.5 rounded-full bg-green-500/70"></div>
+            <div className="w-3 h-3 rounded-full bg-red-400"></div>
+            <div className="w-3 h-3 rounded-full bg-orange-400"></div>
+            <div className="w-3 h-3 rounded-full bg-green-400"></div>
           </div>
 
-          <span className="text-[11px] uppercase tracking-widest text-zinc-500 font-mono">
+          <span className="text-[11px] uppercase tracking-widest text-stone-500 font-mono font-semibold">
             {active.filename}
           </span>
         </div>
@@ -93,29 +92,35 @@ const CodeWindow: React.FC = () => {
         {/* Language Switcher */}
         <div className="flex gap-2">
           <LangBtn id="cpp" label="C++" />
-          <LangBtn id="python" label="Python" />
+          <LangBtn id="python" label="Py" />
           <LangBtn id="java" label="Java" />
           <LangBtn id="js" label="JS" />
         </div>
       </div>
 
       {/* Code Body */}
-      <div className="p-6 font-mono text-sm leading-relaxed overflow-x-auto bg-zinc-950/50">
+      <div className="p-6 font-mono text-sm leading-relaxed overflow-x-auto bg-white flex-1">
         {active.lines.map((line, i) => (
           <div key={i} className="flex gap-4">
-            <span className="text-zinc-700 w-5 text-right select-none">
+            <span className="text-stone-300 w-5 text-right select-none font-medium">
               {i + 1}
             </span>
 
             <div>
-              {line[0] && <span className="text-zinc-500 mr-1">{line[0]}</span>}
-              <span className="text-zinc-200">{line[1]}</span>
+              {line[0] && (
+                <span className="text-orange-700 font-medium mr-1.5">{line[0]}</span>
+              )}
+              {line[1].startsWith("//") || line[1].startsWith("#") ? (
+                <span className="text-stone-400 italic">{line[1]}</span>
+              ) : (
+                <span className="text-stone-700">{line[1]}</span>
+              )}
             </div>
           </div>
         ))}
       </div>
 
-      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
+      <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-orange-300/40 to-transparent"></div>
     </div>
   );
 };
