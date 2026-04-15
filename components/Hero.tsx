@@ -5,6 +5,8 @@ import Link from "next/link";
 import { ArrowRight, CheckCircle } from "lucide-react";
 import ShapeGrid from "./ShapeGrid";
 import CodeWindow from "./CodeWindow";
+import BlurText from "./BlurText";
+import HandwrittenAnnotation from "./HandwrittenAnnotation";
 
 const Hero = () => {
   const [show, setShow] = useState(false);
@@ -36,20 +38,29 @@ const Hero = () => {
           show ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
         }`}
       >
-        <h1
-          className="text-5xl md:text-6xl lg:text-7xl leading-[1.1] font-bold text-stone-900"
-          style={{ fontFamily: "'EB Garamond', serif" }}
-        >
-          Where{" "}
-          <span className="italic text-orange-700">Code;</span>{" "}
-          Meets <span className="text-orange-700">Competition</span>
-        </h1>
+        <div className="relative">
+          {/* Annotation */}
 
-        {/* <p className="text-xl text-stone-500 max-w-lg leading-relaxed">
-          An AI-powered platform that evaluates solutions intelligently —
-          rewarding optimal algorithms, with Streaks, Leaderboards, and
-          Achievements.
-        </p> */}
+          <div style={{ fontFamily: "'EB Garamond', serif" }}>
+            <BlurText
+              text="Where Code;        Meets Competition"
+
+              delay={50}
+              animateBy="words"
+              direction="bottom"
+              className="text-5xl md:text-6xl lg:text-7xl leading-[1.1] font-bold text-stone-900 tracking-tight"
+              wordStyles={{
+                "Code": { className: "text-orange-700 italic" },
+                "Competition": { className: "text-orange-700 italic" },
+              }}
+            />
+          </div>
+        </div>
+
+        <p className="text-lg text-stone-500 max-w-lg leading-relaxed">
+          An AI-powered arena that evaluates solutions intelligently —
+          rewarding <span className="font-semibold text-stone-700">optimal algorithms</span>, with Streaks, Leaderboards, and Achievements.
+        </p>
 
         <div className="flex flex-wrap gap-4">
           <Link

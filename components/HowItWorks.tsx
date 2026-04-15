@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import BlurText from "./BlurText";
+import HandwrittenAnnotation from "./HandwrittenAnnotation";
 
 const steps = [
   {
@@ -16,8 +18,8 @@ const steps = [
   },
   {
     n: "3",
-    title: "Gain Experience",
-    desc: "Watch your levels go up, unlock achievements, and build a profile that proves your skills.",
+    title: "Gain Exams",
+    desc: "In a Secured Environment and build a profile that proves your skills.",
   },
 ];
 
@@ -31,12 +33,33 @@ export default function HowItWorks() {
         <div className="grid lg:grid-cols-2 gap-20 items-center">
           {/* Steps */}
           <div className="space-y-12">
-            <h2
-              className="text-4xl md:text-5xl font-bold text-stone-900 leading-tight"
-              style={{ fontFamily: "'EB Garamond', serif" }}
-            >
-              Elevate your skills in three simple steps.
-            </h2>
+            <div className="relative">
+              {/* Annotation */}
+              <div className="absolute -top-14 right-0 md:-right-12 hidden md:block">
+                <HandwrittenAnnotation
+                  text="it's really this easy!"
+                  arrow="down"
+                  rotate={6}
+                  delay={300}
+                />
+              </div>
+
+              <div style={{ fontFamily: "'EB Garamond', serif" }}>
+                <BlurText
+                  text="Elevate your skills in three simple steps."
+                  delay={40}
+                  animateBy="words"
+                  direction="bottom"
+                  className="text-4xl md:text-5xl font-bold text-stone-900 leading-tight"
+                  wordStyles={{
+                    "Elevate": { className: "italic text-orange-700" },
+                    "three": { className: "italic text-orange-600" },
+                    "simple": { className: "italic text-orange-600" },
+                    "steps": { className: "italic text-orange-600" },
+                  }}
+                />
+              </div>
+            </div>
 
             <div className="space-y-10">
               {steps.map(({ n, title, desc }) => (

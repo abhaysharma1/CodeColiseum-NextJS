@@ -2,6 +2,7 @@
 
 import React, { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
+import BlurText from "./BlurText";
 
 export default function TransformSection() {
   const containerRef = useRef<HTMLElement>(null);
@@ -49,13 +50,17 @@ export default function TransformSection() {
           </svg>
         </div>
 
+
         {/* Main Headline */}
-        <h2 
-          className="text-5xl md:text-7xl font-bold text-stone-900 leading-[1.1] mb-6 tracking-tight"
-          style={{ fontFamily: "'EB Garamond', serif" }}
-        >
-          Transform Your Coding <br className="hidden md:block" /> Journey
-        </h2>
+        <div style={{ fontFamily: "'EB Garamond', serif" }}>
+          <BlurText 
+            text="Transform Your Coding Journey"
+            delay={50}
+            animateBy="words"
+            direction="bottom"
+            className="text-5xl md:text-7xl font-bold text-stone-900 leading-[1.1] mb-6 tracking-tight justify-center"
+          />
+        </div>
 
         {/* Subtitle */}
         <p className="text-xl md:text-2xl text-stone-500 font-light">

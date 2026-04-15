@@ -1,5 +1,7 @@
 "use client";
 
+import BlurText from "./BlurText";
+
 const features = [
   {
     icon: "🔥",
@@ -37,12 +39,15 @@ export default function FeatureCards() {
   return (
     <section id="features" className="max-w-7xl mx-auto px-6 md:px-8 py-24">
       <div className="text-center max-w-2xl mx-auto mb-20 space-y-4">
-        <h2
-          className="text-4xl md:text-5xl font-bold text-stone-900"
-          style={{ fontFamily: "'EB Garamond', serif" }}
-        >
-          Gamify your coding journey.
-        </h2>
+        <div style={{ fontFamily: "'EB Garamond', serif" }}>
+          <BlurText
+            text="Gamify your coding journey."
+            delay={40}
+            animateBy="words"
+            direction="bottom"
+            className="text-4xl md:text-5xl font-bold text-stone-900"
+          />
+        </div>
         <p className="text-stone-500">
           We bring the best of gaming mechanics to the world's most popular
           coding platforms.
