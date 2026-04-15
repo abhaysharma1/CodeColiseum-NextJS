@@ -26,24 +26,7 @@ export const ProtectedRoute = ({
     if (!user?.id && !authLoading) {
       router.replace("/login");
     }
-
-    if (
-      user?.id &&
-      requiredPermission &&
-      !hasRequiredPermission &&
-      !authLoading &&
-      !permissionLoading
-    ) {
-      router.replace("/dashboard");
-    }
-  }, [
-    user,
-    authLoading,
-    requiredPermission,
-    hasRequiredPermission,
-    permissionLoading,
-    router,
-  ]);
+  }, [user?.id, authLoading, router]);
 
   if (authLoading || permissionLoading) {
     return (
