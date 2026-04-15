@@ -8,6 +8,7 @@ import neoBrutalism from "./Neo Brutalism.json";
 import notebook from "./Notebook.json";
 import softPop from "./Soft Pop.json";
 import amberminimal from "./Amber Minimal.json";
+import kietdefault from "./KIET Default.json";
 
 const themeArray = [
   defaultTheme,
@@ -20,6 +21,7 @@ const themeArray = [
   notebook,
   softPop,
   amberminimal,
+  kietdefault
 ];
 
 export const THEMES = Object.fromEntries(

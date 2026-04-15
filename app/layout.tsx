@@ -1,5 +1,10 @@
+import "./globals.css";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, EB_Garamond, Manrope, Caveat } from "next/font/google";
+import { Toaster } from "@/components/ui/sonner";
+import { AuthProvider } from "@/context/authcontext";
+import { ThemeProvider } from "@/components/theme-provider";
+import { RbacProvider } from "@/context/rbacContext";
 
 const caveat = Caveat({
   variable: "--font-caveat",
@@ -18,11 +23,7 @@ const manrope = Manrope({
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700"],
 });
-import "./globals.css";
-import { Toaster } from "@/components/ui/sonner";
-import { AuthProvider } from "@/context/authcontext";
-import { ThemeProvider } from "@/components/theme-provider";
-import { RbacProvider } from "@/context/rbacContext";
+
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -51,7 +52,7 @@ export default function RootLayout({
       >
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
+          defaultTheme="light"
           enableSystem
           disableTransitionOnChange
         >

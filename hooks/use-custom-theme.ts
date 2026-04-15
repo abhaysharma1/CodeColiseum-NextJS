@@ -14,6 +14,9 @@ export function useCustomTheme() {
     const saved = localStorage.getItem("cc-theme") as ThemeName | null;
     if (saved && THEMES[saved]) {
       setSelected(saved);
+    } else {
+      // Set KIET Default as fallback if nothing is saved
+      setSelected("KIET Default" as ThemeName);
     }
   }, []);
 
