@@ -16,7 +16,7 @@ export function useCustomTheme() {
       setSelected(saved);
     } else {
       // Set KIET Default as fallback if nothing is saved
-      setSelected("KIET Default" as ThemeName);
+      setSelected("KIET" as ThemeName);
     }
   }, []);
 
