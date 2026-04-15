@@ -10,11 +10,17 @@ const RBAC_ROLE_DESTINATIONS: Record<string, string> = {
   role_org_student: "/dashboard/student",
 };
 
+const DASHBOARD_ROLE_PREFIXES: Record<string, string> = {
+  role_platform_admin: "/admin",
+  role_org_teacher: "/dashboard/teacher",
+  role_org_student: "/dashboard/student",
+};
+
 export async function proxy(req: NextRequest) {
   const pathname = req.nextUrl.pathname;
 
   const backendDomain = getBackendURL();
-  
+
   const cspHeader = `
     default-src 'self';
     script-src 'self' 'unsafe-inline' 'unsafe-eval' https://github.githubassets.com https://cdn.jsdelivr.net;
@@ -60,13 +66,29 @@ export async function proxy(req: NextRequest) {
       return NextResponse.redirect(new URL("/onboarding", req.url));
     }
 
-    // Role-based routing for dashboard landing page
-    // Redirect /dashboard to role-specific page based on globalRoleId
-    if (pathname === "/dashboard" && user.globalRoleId) {
-      const destination = RBAC_ROLE_DESTINATIONS[user.globalRoleId];
-      if (destination) {
-        return NextResponse.redirect(new URL(destination, req.url));
-      }
+    const destination = user.globalRoleId
+      ? RBAC_ROLE_DESTINATIONS[user.globalRoleId]
+      : undefined;
+    const allowedPrefix = user.globalRoleId
+      ? DASHBOARD_ROLE_PREFIXES[user.globalRoleId]
+      : undefined;
+
+    // Redirect users to their own dashboard area if they open a dashboard route
+    // that belongs to a different role.
+    if (
+      destination &&
+      allowedPrefix &&
+      (pathname.startsWith("/admin") ||
+        pathname.startsWith("/dashboard/teacher") ||
+        pathname.startsWith("/dashboard/student")) &&
+      !pathname.startsWith(allowedPrefix)
+    ) {
+      return NextResponse.redirect(new URL(destination, req.url));
+    }
+
+    // Redirect /dashboard to role-specific page based on globalRoleId.
+    if (pathname === "/dashboard" && destination) {
+      return NextResponse.redirect(new URL(destination, req.url));
     }
 
     return response;
