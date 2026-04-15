@@ -28,7 +28,7 @@ export default function LandingHeader() {
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2">
           <span
-            className="text-xl md:text-2xl font-bold tracking-tight text-orange-900"
+            className="text-xl md:text-2xl font-extrabold tracking-tight text-orange-900"
             style={{ fontFamily: "'EB Garamond', serif" }}
           >
             CodeColiseum
@@ -54,12 +54,6 @@ export default function LandingHeader() {
             className="text-stone-600 font-medium hover:text-orange-800 transition-colors duration-200 text-sm tracking-wide"
           >
             How It Works
-          </Link>
-          <Link
-            href="#pricing"
-            className="text-stone-600 font-medium hover:text-orange-800 transition-colors duration-200 text-sm tracking-wide"
-          >
-            Pricing
           </Link>
         </div>
 

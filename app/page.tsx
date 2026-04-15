@@ -11,7 +11,6 @@ export default function Home() {
   return (
     <div
       className="min-h-screen w-full relative"
-      style={{ backgroundColor: "#faf5ee", color: "#3a302a" }}
     >
       <LandingHeader />
       <main className="pt-20">
