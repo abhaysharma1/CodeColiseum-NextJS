@@ -64,11 +64,25 @@ function Page({ params }: { params: Promise<{ "exam-id": string }> }) {
   const router = useRouter();
 
   const [sebError, setSebError] = useState(false);
+  const [sebMessage, setSebMessage] = useState("Not opened in SEB");
 
   const [templateCode, setTemplateCode] = useState("");
 
   const [isAiEnabled, setIsAiEnabled] = useState(false);
   const [groupId, setGroupId] = useState<string>("");
+
+  function getErrorMessage(err: any) {
+    if (!err) return "Something went wrong. Please try again.";
+    if (typeof err === "string") return err;
+
+    const responseData = err?.response?.data;
+    if (typeof responseData === "string") return responseData;
+    if (typeof responseData?.message === "string") return responseData.message;
+    if (typeof responseData?.error === "string") return responseData.error;
+    if (typeof err?.message === "string") return err.message;
+
+    return "Something went wrong. Please try again.";
+  }
 
   useEffect(() => {
     const getTestDetails = async () => {
@@ -127,6 +141,7 @@ function Page({ params }: { params: Promise<{ "exam-id": string }> }) {
       } catch (err: any) {
         if (err?.response?.status === 403) {
           setSebError(true);
+          setSebMessage(getErrorMessage(err));
         }
         setError(err);
       }
@@ -326,6 +341,7 @@ function Page({ params }: { params: Promise<{ "exam-id": string }> }) {
     } catch (error: any) {
       if (error?.response?.status === 403) {
         setSebError(true);
+        setSebMessage(getErrorMessage(error));
         return;
       }
       toast.error(error?.message ?? "Failed to run code");
@@ -400,6 +416,7 @@ function Page({ params }: { params: Promise<{ "exam-id": string }> }) {
     } catch (error: any) {
       if (error.status == 403) {
         setSebError(true);
+        setSebMessage(getErrorMessage(error));
       }
       console.log(error);
     } finally {
@@ -430,6 +447,7 @@ function Page({ params }: { params: Promise<{ "exam-id": string }> }) {
     } catch (error: any) {
       if (error?.response?.status && error?.response?.status === 403) {
         setSebError(true);
+        setSebMessage(getErrorMessage(error));
       }
       if (typeof error === "string") {
         toast.error(error);
@@ -446,62 +464,18 @@ function Page({ params }: { params: Promise<{ "exam-id": string }> }) {
     }
   };
 
-  const formatError = (err: any) => {
-    if (!err) return "Unknown error";
-    if (typeof err === "string") return err;
-
-    const seen = new WeakSet<object>();
-    const safeStringify = (value: unknown) =>
-      JSON.stringify(
-        value,
-        (_, currentValue) => {
-          if (typeof currentValue === "object" && currentValue !== null) {
-            if (seen.has(currentValue)) {
-              return "[Circular]";
-            }
-            seen.add(currentValue);
-          }
-          return currentValue;
-        },
-        2
-      );
-
-    const formatted = {
-      ...(typeof err?.toJSON === "function" ? err.toJSON() : {}),
-      name: err?.name,
-      message: err?.message,
-      stack: err?.stack,
-      response: err?.response
-        ? {
-            status: err.response.status,
-            statusText: err.response.statusText,
-            headers: err.response.headers,
-            data: err.response.data,
-          }
-        : undefined,
-      request: err?.request,
-      config: err?.config,
-      raw: err,
-    };
-
-    return safeStringify(formatted);
-  };
-
   if (sebError) {
     return (
       <div className="p-8 text-red-500 w-full h-screen flex justify-center items-center">
-        Please Use Safe Exam Browser to give this exam
+        {sebMessage}
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="p-8 w-full h-screen overflow-auto">
-        <h2 className="text-red-500 font-semibold mb-3">Error Details</h2>
-        <pre className="rounded-md border bg-muted p-4 text-xs whitespace-pre-wrap break-words">
-          {formatError(error)}
-        </pre>
+      <div className="p-8 text-red-500 w-full h-screen flex justify-center items-center">
+        {getErrorMessage(error)}
       </div>
     );
   }
