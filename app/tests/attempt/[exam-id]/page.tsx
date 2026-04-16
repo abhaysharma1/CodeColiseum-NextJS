@@ -446,6 +446,47 @@ function Page({ params }: { params: Promise<{ "exam-id": string }> }) {
     }
   };
 
+  const formatError = (err: any) => {
+    if (!err) return "Unknown error";
+    if (typeof err === "string") return err;
+
+    const seen = new WeakSet<object>();
+    const safeStringify = (value: unknown) =>
+      JSON.stringify(
+        value,
+        (_, currentValue) => {
+          if (typeof currentValue === "object" && currentValue !== null) {
+            if (seen.has(currentValue)) {
+              return "[Circular]";
+            }
+            seen.add(currentValue);
+          }
+          return currentValue;
+        },
+        2
+      );
+
+    const formatted = {
+      ...(typeof err?.toJSON === "function" ? err.toJSON() : {}),
+      name: err?.name,
+      message: err?.message,
+      stack: err?.stack,
+      response: err?.response
+        ? {
+            status: err.response.status,
+            statusText: err.response.statusText,
+            headers: err.response.headers,
+            data: err.response.data,
+          }
+        : undefined,
+      request: err?.request,
+      config: err?.config,
+      raw: err,
+    };
+
+    return safeStringify(formatted);
+  };
+
   if (sebError) {
     return (
       <div className="p-8 text-red-500 w-full h-screen flex justify-center items-center">
@@ -456,8 +497,11 @@ function Page({ params }: { params: Promise<{ "exam-id": string }> }) {
 
   if (error) {
     return (
-      <div className="p-8 text-red-500">
-        Something went wrong. Please try again.
+      <div className="p-8 w-full h-screen overflow-auto">
+        <h2 className="text-red-500 font-semibold mb-3">Error Details</h2>
+        <pre className="rounded-md border bg-muted p-4 text-xs whitespace-pre-wrap break-words">
+          {formatError(error)}
+        </pre>
       </div>
     );
   }

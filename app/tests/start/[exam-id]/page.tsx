@@ -8,7 +8,6 @@ import React, { useEffect, useState, use } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
 import { getBackendURL } from "@/utils/utilities";
 
 function Page({ params }: { params: Promise<{ "exam-id": string }> }) {
@@ -17,31 +16,42 @@ function Page({ params }: { params: Promise<{ "exam-id": string }> }) {
   const [error, setError] = useState<any>();
 
   const [examDetails, setExamDetails] = useState<Exam | undefined>();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const router = useRouter();
 
   useEffect(() => {
     const getTestDetails = async () => {
       try {
+        setLoading(true);
         const res = await axios.get(
           `${getBackendURL()}/student/exam/exam-details?examId=${examId}`,
           { withCredentials: true }
         );
         const det = res.data as Exam;
         setExamDetails(det);
-        console.log(res);
-        router.push(`/tests/attempt/${det.id}`);
       } catch (err: any) {
-        if (err.status >= 400) {
+        if (err?.response?.status >= 400) {
           router.replace("/dashboard");
         }
         handleExamError(err);
         setError(err);
+      } finally {
+        setLoading(false);
       }
     };
     getTestDetails();
-  }, [examId]);
+  }, [examId, router]);
+
+  const handleStartExam = () => {
+    if (!examDetails) return;
+    router.push(`/tests/attempt/${examDetails.id}`);
+  };
+
+  const formatDateTime = (value: Date | string) => {
+    const date = new Date(value);
+    return date.toLocaleString();
+  };
 
   function ExamInstructions() {
     return (
@@ -57,6 +67,31 @@ function Page({ params }: { params: Promise<{ "exam-id": string }> }) {
         <Separator />
 
         <CardContent className="pt-4">
+          <div className="mb-6 rounded-md border border-border bg-muted p-4">
+            <h3 className="text-sm font-semibold">Exam Details</h3>
+            <div className="mt-3 grid grid-cols-1 gap-2 text-sm sm:grid-cols-2">
+              <p>
+                <span className="font-medium">Title:</span> {examDetails?.title}
+              </p>
+              <p>
+                <span className="font-medium">Duration:</span>{" "}
+                {examDetails?.durationMin} minutes
+              </p>
+              <p>
+                <span className="font-medium">Starts At:</span>{" "}
+                {examDetails ? formatDateTime(examDetails.startDate) : "-"}
+              </p>
+              <p>
+                <span className="font-medium">Ends At:</span>{" "}
+                {examDetails ? formatDateTime(examDetails.endDate) : "-"}
+              </p>
+              <p className="sm:col-span-2">
+                <span className="font-medium">Description:</span>{" "}
+                {examDetails?.description || "No description available."}
+              </p>
+            </div>
+          </div>
+
           <ol className="list-decimal space-y-3 pl-5 text-sm leading-relaxed">
             <li>
               This is a{" "}
@@ -121,9 +156,7 @@ function Page({ params }: { params: Promise<{ "exam-id": string }> }) {
           </div>
 
           <div className="mt-6 flex justify-end">
-            <Button>
-              <Link href={`/tests/attempt/${examDetails?.id}`}>Start Exam</Link>
-            </Button>
+            <Button onClick={handleStartExam}>Start Exam</Button>
           </div>
         </CardContent>
       </Card>
@@ -138,7 +171,7 @@ function Page({ params }: { params: Promise<{ "exam-id": string }> }) {
     );
   }
 
-  if (!examDetails) {
+  if (loading || !examDetails) {
     return (
       <div className="w-full h-screen flex justify-center items-center">
         <Spinner variant="ring" />

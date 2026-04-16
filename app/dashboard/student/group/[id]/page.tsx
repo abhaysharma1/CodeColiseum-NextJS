@@ -321,6 +321,9 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
                         Status
                       </TableHead>
                       <TableHead className="font-semibold text-center">
+                        SEB
+                      </TableHead>
+                      <TableHead className="font-semibold text-center">
                         Action
                       </TableHead>
                     </TableRow>
@@ -397,6 +400,13 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
                           </TableCell>
                           <TableCell className="text-center">
                             <Badge variant={statusVariant}>{status}</Badge>
+                          </TableCell>
+                          <TableCell className="text-center">
+                            {exam.sebEnabled ? (
+                              <Badge variant="default">Required</Badge>
+                            ) : (
+                              <Badge variant="outline">Not Required</Badge>
+                            )}
                           </TableCell>
                           <TableCell className="text-center">
                             {endDate && endDate < now ? (
