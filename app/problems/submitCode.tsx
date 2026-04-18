@@ -1,9 +1,15 @@
 "use client";
 
 import React, { useEffect } from "react";
-import { SubmissionResult } from "./interface";
+import { SubmissionResult, SubmissionTerminalResult } from "./interface";
 import { CasesPassedChart } from "@/components/casesPassedChart";
-import { Loader2, CheckCircle2, AlertCircle, XCircle } from "lucide-react";
+import {
+  Loader2,
+  CheckCircle2,
+  AlertCircle,
+  XCircle,
+  Copy,
+} from "lucide-react";
 import {
   Card,
   CardContent,
@@ -12,6 +18,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 
 // Terminal statuses are those where execution has finished
 const TERMINAL_STATUSES = new Set([
@@ -169,11 +176,63 @@ function SubmitCode({ results }: { results: SubmissionResult | undefined }) {
 
   // Check if we have terminal response with full data
   const hasFullData = results && "sourceCode" in results;
+  const terminal = hasFullData
+    ? (results as SubmissionTerminalResult & {
+        stdout?: string | null;
+        message?: string | null;
+        error?: string | null;
+        yourTimeComplexity?: string | null;
+        expectedTimeComplexity?: string | null;
+      })
+    : null;
+
+  const stdout = terminal?.stdout ?? null;
+  const stderr = terminal?.stderr ?? null;
+  const extraMessage = terminal?.error ?? terminal?.message ?? null;
+
+  const isErrorStatus =
+    results.status === "RUNTIME_ERROR" ||
+    results.status === "COMPILE_ERROR" ||
+    results.status === "INTERNAL_ERROR" ||
+    results.status === "TIME_LIMIT" ||
+    results.status === "MEMORY_LIMIT";
+  const hasErrorDetails = Boolean(stderr || stdout || extraMessage);
+
+  const showScalingHelp = results.status === "BAD_SCALING";
+  const yourTimeComplexity = terminal?.yourTimeComplexity ?? null;
+  const expectedTimeComplexity = terminal?.expectedTimeComplexity ?? null;
 
   return (
     <div className="p-4 space-y-4 animate-in fade-in duration-300">
       {/* Status Header */}
       {getStatusDisplay()}
+
+      {/* Fallback when backend returns only polling payload */}
+      {!hasFullData && (isErrorStatus || showScalingHelp) && (
+        <Card
+          className={
+            showScalingHelp
+              ? "border-amber-200 dark:border-amber-800"
+              : "border-red-200 dark:border-red-800"
+          }
+        >
+          <CardHeader>
+            <CardTitle className="text-base">
+              {showScalingHelp
+                ? "Performance Issue"
+                : results.status === "TIME_LIMIT"
+                  ? "Time Limit Exceeded"
+                  : results.status === "MEMORY_LIMIT"
+                    ? "Memory Limit Exceeded"
+                    : "Execution Failed"}
+            </CardTitle>
+            <CardDescription>
+              Detailed output is not available for this submission response. Try
+              resubmitting or refreshing the page.
+            </CardDescription>
+          </CardHeader>
+        </Card>
+      )}
 
       {/* Only show detailed results if we have the full response data */}
       {hasFullData && (
@@ -244,35 +303,167 @@ function SubmitCode({ results }: { results: SubmissionResult | undefined }) {
               </div>
             )}
 
-          {/* Error Details - Show stderr for error statuses */}
-          {results.stderr &&
-            (results.status === "RUNTIME_ERROR" ||
-              results.status === "COMPILE_ERROR" ||
-              results.status === "INTERNAL_ERROR") && (
-              <div
-                className="animate-in fade-in slide-in-from-bottom-2 duration-500 ease-out"
-                style={{ animationDelay: "200ms" }}
+          {/* Failure Details - Show output when available */}
+          {(isErrorStatus || showScalingHelp) && (
+            <div
+              className="animate-in fade-in slide-in-from-bottom-2 duration-500 ease-out"
+              style={{ animationDelay: "200ms" }}
+            >
+              <Card
+                className={
+                  showScalingHelp
+                    ? "border-amber-200 dark:border-amber-800"
+                    : "border-red-200 dark:border-red-800"
+                }
               >
-                <Card className="border-red-200 dark:border-red-800">
-                  <CardHeader>
-                    <CardTitle className="text-base">
-                      {results.status === "COMPILE_ERROR"
+                <CardHeader>
+                  <CardTitle className="text-base">
+                    {showScalingHelp
+                      ? "Performance Issue"
+                      : results.status === "COMPILE_ERROR"
                         ? "Compilation Error"
                         : results.status === "RUNTIME_ERROR"
                           ? "Runtime Error"
-                          : "Error Details"}
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="relative bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-800 rounded-md overflow-hidden">
-                      <pre className="p-4 text-sm text-red-700 dark:text-red-300 font-mono whitespace-pre-wrap break-words overflow-auto max-h-96 scrollbar-thin scrollbar-thumb-red-200 dark:scrollbar-thumb-red-800 scrollbar-track-transparent">
-                        {results.stderr}
-                      </pre>
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-            )}
+                          : results.status === "TIME_LIMIT"
+                            ? "Time Limit Exceeded"
+                            : results.status === "MEMORY_LIMIT"
+                              ? "Memory Limit Exceeded"
+                              : "Failure Details"}
+                  </CardTitle>
+                  <CardDescription>
+                    {showScalingHelp
+                      ? "Your solution did not scale on larger inputs. Optimize and submit again."
+                      : "Review the output below and fix your code, then submit again."}
+                  </CardDescription>
+                </CardHeader>
+
+                <CardContent>
+                  <div className="space-y-3">
+                    {extraMessage && (
+                      <div className="rounded-md border border-border bg-muted/40 px-4 py-3 text-sm text-foreground">
+                        {extraMessage}
+                      </div>
+                    )}
+
+                    {showScalingHelp &&
+                      (yourTimeComplexity || expectedTimeComplexity) && (
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                          {yourTimeComplexity && (
+                            <div className="rounded-md border border-border bg-muted/40 px-4 py-3">
+                              <div className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                                Your Time Complexity
+                              </div>
+                              <div className="mt-1 font-mono text-sm text-foreground">
+                                {yourTimeComplexity}
+                              </div>
+                            </div>
+                          )}
+                          {expectedTimeComplexity && (
+                            <div className="rounded-md border border-border bg-muted/40 px-4 py-3">
+                              <div className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                                Expected Time Complexity
+                              </div>
+                              <div className="mt-1 font-mono text-sm text-foreground">
+                                {expectedTimeComplexity}
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      )}
+
+                    {stderr && (
+                      <div className="relative border border-red-200 dark:border-red-800 rounded-md overflow-hidden bg-red-50 dark:bg-red-950/20">
+                        <div className="flex items-center justify-between gap-2 px-4 pt-3">
+                          <div className="text-xs font-semibold text-red-700 dark:text-red-300 uppercase tracking-wide">
+                            Error Output
+                          </div>
+                          <Button
+                            type="button"
+                            variant="outline"
+                            size="xs"
+                            onClick={async () => {
+                              try {
+                                await navigator.clipboard.writeText(stderr);
+                              } catch {
+                                // ignore
+                              }
+                            }}
+                          >
+                            <Copy className="size-3" />
+                            Copy
+                          </Button>
+                        </div>
+                        <pre className="p-4 pt-2 text-sm text-red-700 dark:text-red-300 font-mono whitespace-pre-wrap break-words overflow-auto max-h-96 scrollbar-thin scrollbar-thumb-red-200 dark:scrollbar-thumb-red-800 scrollbar-track-transparent">
+                          {stderr}
+                        </pre>
+                      </div>
+                    )}
+
+                    {stdout && (
+                      <div className="relative border border-amber-200 dark:border-amber-800 rounded-md overflow-hidden bg-amber-50 dark:bg-amber-950/20">
+                        <div className="flex items-center justify-between gap-2 px-4 pt-3">
+                          <div className="text-xs font-semibold text-amber-700 dark:text-amber-300 uppercase tracking-wide">
+                            Program Output
+                          </div>
+                          <Button
+                            type="button"
+                            variant="outline"
+                            size="xs"
+                            onClick={async () => {
+                              try {
+                                await navigator.clipboard.writeText(stdout);
+                              } catch {
+                                // ignore
+                              }
+                            }}
+                          >
+                            <Copy className="size-3" />
+                            Copy
+                          </Button>
+                        </div>
+                        <pre className="p-4 pt-2 text-sm text-amber-700 dark:text-amber-300 font-mono whitespace-pre-wrap break-words overflow-auto max-h-96 scrollbar-thin scrollbar-thumb-amber-200 dark:scrollbar-thumb-amber-800 scrollbar-track-transparent">
+                          {stdout}
+                        </pre>
+                      </div>
+                    )}
+
+                    {!hasErrorDetails && (
+                      <div className="rounded-md border border-border bg-muted/40 px-4 py-3 text-sm text-muted-foreground">
+                        No output was captured for this run.
+                      </div>
+                    )}
+                  </div>
+                </CardContent>
+
+                {(stderr || stdout) && (
+                  <CardFooter className="justify-end gap-2">
+                    <Button
+                      type="button"
+                      variant="secondary"
+                      size="sm"
+                      onClick={async () => {
+                        const combined = [
+                          stderr ? `--- stderr ---\n${stderr}` : "",
+                          stdout ? `--- stdout ---\n${stdout}` : "",
+                        ]
+                          .filter(Boolean)
+                          .join("\n\n");
+                        if (!combined) return;
+                        try {
+                          await navigator.clipboard.writeText(combined);
+                        } catch {
+                          // ignore
+                        }
+                      }}
+                    >
+                      <Copy />
+                      Copy All
+                    </Button>
+                  </CardFooter>
+                )}
+              </Card>
+            </div>
+          )}
         </div>
       )}
     </div>
