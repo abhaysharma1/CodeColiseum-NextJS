@@ -104,6 +104,10 @@ function TestSubmitCode({
           <div className="text-red-600 text-2xl font-bold">
             ✗ Time Limit Exceeded
           </div>
+        ) : results.status === "BAD_SCALING" ? (
+          <div className="text-red-600 text-2xl font-bold">
+            ✗ Bad Scaling, Optimize Code
+          </div>
         ) : (
           <div className="text-red-600 text-2xl font-bold">✗ Wrong Answer</div>
         )}

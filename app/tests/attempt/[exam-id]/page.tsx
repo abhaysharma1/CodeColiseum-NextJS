@@ -30,6 +30,7 @@ const terminalStatuses = new Set([
   "TIME_LIMIT",
   "INTERNAL_ERROR",
   "MEMORY_LIMIT",
+  "BAD_SCALING",
 ]);
 
 function Page({ params }: { params: Promise<{ "exam-id": string }> }) {

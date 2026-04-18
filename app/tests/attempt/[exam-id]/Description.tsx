@@ -48,7 +48,9 @@ interface SubmitCodeSuccessResponse {
     | "RUNTIME_ERROR"
     | "TIME_LIMIT"
     | "MEMORY_LIMIT"
-    | "INTERNAL_ERROR";
+    | "INTERNAL_ERROR"
+    | "BAD_SCALING";
+
   score?: number;
   passedCount?: number;
   totalCount?: number;
@@ -173,6 +175,7 @@ function Description({
       MEMORY_LIMIT: { variant: "destructive", color: "text-red-600" },
       RUNTIME_ERROR: { variant: "destructive", color: "text-red-600" },
       COMPILE_ERROR: { variant: "destructive", color: "text-red-600" },
+      BAD_SCALING: { variant: "destructive", color: "text-red-600" },
       PENDING: { variant: "outline", color: "text-gray-600" },
       RUNNING: { variant: "outline", color: "text-blue-600" },
       INTERNAL_ERROR: { variant: "destructive", color: "text-red-600" },
