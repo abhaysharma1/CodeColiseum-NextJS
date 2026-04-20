@@ -177,12 +177,14 @@ export function DescriptionTab(props: DescriptionTabProps) {
         <Card className="overflow-hidden bg-card/50 backdrop-blur-sm shadow-sm border-muted-foreground/20">
           <ScrollArea className="h-[calc(100vh-14rem)] p-6">
             <div className="prose prose-sm dark:prose-invert max-w-none prose-headings:font-semibold prose-pre:bg-muted/50 prose-pre:text-foreground">
-              <Markdown
-                remarkPlugins={[remarkGfm]}
-                rehypePlugins={[rehypeHighlight]}
-              >
-                {markdown}
-              </Markdown>
+              <div className="markdown-wrapper text-foreground mb-6">
+                <Markdown
+                  remarkPlugins={[remarkGfm]}
+                  rehypePlugins={[rehypeHighlight]}
+                >
+                  {markdown}
+                </Markdown>
+              </div>
             </div>
           </ScrollArea>
         </Card>
