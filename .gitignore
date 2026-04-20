@@ -32,8 +32,13 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+!.env.example
 
 .env
+
+# docker compose (commit templates only)
+docker-compose*.yml
+!docker-compose*.example.yml
 
 # vercel
 .vercel

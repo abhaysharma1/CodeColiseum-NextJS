@@ -29,19 +29,27 @@ export type AggregateGroupOverallStats = {
 export type GroupOverallStatsAvgAggregateOutputType = {
   totalExams: number | null
   totalStudents: number | null
+  activeStudents: number | null
   avgScoreAllExams: number | null
   overallPassRate: number | null
+  completionRate: number | null
   highestExamAvg: number | null
   lowestExamAvg: number | null
+  avgTimePerStudent: number | null
+  totalTimeSpent: number | null
 }
 
 export type GroupOverallStatsSumAggregateOutputType = {
   totalExams: number | null
   totalStudents: number | null
+  activeStudents: number | null
   avgScoreAllExams: number | null
   overallPassRate: number | null
+  completionRate: number | null
   highestExamAvg: number | null
   lowestExamAvg: number | null
+  avgTimePerStudent: number | null
+  totalTimeSpent: number | null
 }
 
 export type GroupOverallStatsMinAggregateOutputType = {
@@ -49,10 +57,17 @@ export type GroupOverallStatsMinAggregateOutputType = {
   groupId: string | null
   totalExams: number | null
   totalStudents: number | null
+  activeStudents: number | null
   avgScoreAllExams: number | null
   overallPassRate: number | null
+  completionRate: number | null
   highestExamAvg: number | null
   lowestExamAvg: number | null
+  weakestProblemId: string | null
+  hardestProblemId: string | null
+  avgTimePerStudent: number | null
+  totalTimeSpent: number | null
+  createdAt: Date | null
   updatedAt: Date | null
 }
 
@@ -61,10 +76,17 @@ export type GroupOverallStatsMaxAggregateOutputType = {
   groupId: string | null
   totalExams: number | null
   totalStudents: number | null
+  activeStudents: number | null
   avgScoreAllExams: number | null
   overallPassRate: number | null
+  completionRate: number | null
   highestExamAvg: number | null
   lowestExamAvg: number | null
+  weakestProblemId: string | null
+  hardestProblemId: string | null
+  avgTimePerStudent: number | null
+  totalTimeSpent: number | null
+  createdAt: Date | null
   updatedAt: Date | null
 }
 
@@ -73,10 +95,17 @@ export type GroupOverallStatsCountAggregateOutputType = {
   groupId: number
   totalExams: number
   totalStudents: number
+  activeStudents: number
   avgScoreAllExams: number
   overallPassRate: number
+  completionRate: number
   highestExamAvg: number
   lowestExamAvg: number
+  weakestProblemId: number
+  hardestProblemId: number
+  avgTimePerStudent: number
+  totalTimeSpent: number
+  createdAt: number
   updatedAt: number
   _all: number
 }
@@ -85,19 +114,27 @@ export type GroupOverallStatsCountAggregateOutputType = {
 export type GroupOverallStatsAvgAggregateInputType = {
   totalExams?: true
   totalStudents?: true
+  activeStudents?: true
   avgScoreAllExams?: true
   overallPassRate?: true
+  completionRate?: true
   highestExamAvg?: true
   lowestExamAvg?: true
+  avgTimePerStudent?: true
+  totalTimeSpent?: true
 }
 
 export type GroupOverallStatsSumAggregateInputType = {
   totalExams?: true
   totalStudents?: true
+  activeStudents?: true
   avgScoreAllExams?: true
   overallPassRate?: true
+  completionRate?: true
   highestExamAvg?: true
   lowestExamAvg?: true
+  avgTimePerStudent?: true
+  totalTimeSpent?: true
 }
 
 export type GroupOverallStatsMinAggregateInputType = {
@@ -105,10 +142,17 @@ export type GroupOverallStatsMinAggregateInputType = {
   groupId?: true
   totalExams?: true
   totalStudents?: true
+  activeStudents?: true
   avgScoreAllExams?: true
   overallPassRate?: true
+  completionRate?: true
   highestExamAvg?: true
   lowestExamAvg?: true
+  weakestProblemId?: true
+  hardestProblemId?: true
+  avgTimePerStudent?: true
+  totalTimeSpent?: true
+  createdAt?: true
   updatedAt?: true
 }
 
@@ -117,10 +161,17 @@ export type GroupOverallStatsMaxAggregateInputType = {
   groupId?: true
   totalExams?: true
   totalStudents?: true
+  activeStudents?: true
   avgScoreAllExams?: true
   overallPassRate?: true
+  completionRate?: true
   highestExamAvg?: true
   lowestExamAvg?: true
+  weakestProblemId?: true
+  hardestProblemId?: true
+  avgTimePerStudent?: true
+  totalTimeSpent?: true
+  createdAt?: true
   updatedAt?: true
 }
 
@@ -129,10 +180,17 @@ export type GroupOverallStatsCountAggregateInputType = {
   groupId?: true
   totalExams?: true
   totalStudents?: true
+  activeStudents?: true
   avgScoreAllExams?: true
   overallPassRate?: true
+  completionRate?: true
   highestExamAvg?: true
   lowestExamAvg?: true
+  weakestProblemId?: true
+  hardestProblemId?: true
+  avgTimePerStudent?: true
+  totalTimeSpent?: true
+  createdAt?: true
   updatedAt?: true
   _all?: true
 }
@@ -228,10 +286,17 @@ export type GroupOverallStatsGroupByOutputType = {
   groupId: string
   totalExams: number
   totalStudents: number
+  activeStudents: number
   avgScoreAllExams: number
   overallPassRate: number
+  completionRate: number
   highestExamAvg: number
   lowestExamAvg: number
+  weakestProblemId: string | null
+  hardestProblemId: string | null
+  avgTimePerStudent: number
+  totalTimeSpent: number
+  createdAt: Date
   updatedAt: Date
   _count: GroupOverallStatsCountAggregateOutputType | null
   _avg: GroupOverallStatsAvgAggregateOutputType | null
@@ -263,10 +328,17 @@ export type GroupOverallStatsWhereInput = {
   groupId?: Prisma.StringFilter<"GroupOverallStats"> | string
   totalExams?: Prisma.IntFilter<"GroupOverallStats"> | number
   totalStudents?: Prisma.IntFilter<"GroupOverallStats"> | number
+  activeStudents?: Prisma.IntFilter<"GroupOverallStats"> | number
   avgScoreAllExams?: Prisma.FloatFilter<"GroupOverallStats"> | number
   overallPassRate?: Prisma.FloatFilter<"GroupOverallStats"> | number
+  completionRate?: Prisma.FloatFilter<"GroupOverallStats"> | number
   highestExamAvg?: Prisma.FloatFilter<"GroupOverallStats"> | number
   lowestExamAvg?: Prisma.FloatFilter<"GroupOverallStats"> | number
+  weakestProblemId?: Prisma.StringNullableFilter<"GroupOverallStats"> | string | null
+  hardestProblemId?: Prisma.StringNullableFilter<"GroupOverallStats"> | string | null
+  avgTimePerStudent?: Prisma.FloatFilter<"GroupOverallStats"> | number
+  totalTimeSpent?: Prisma.FloatFilter<"GroupOverallStats"> | number
+  createdAt?: Prisma.DateTimeFilter<"GroupOverallStats"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"GroupOverallStats"> | Date | string
   group?: Prisma.XOR<Prisma.GroupScalarRelationFilter, Prisma.GroupWhereInput>
 }
@@ -276,10 +348,17 @@ export type GroupOverallStatsOrderByWithRelationInput = {
   groupId?: Prisma.SortOrder
   totalExams?: Prisma.SortOrder
   totalStudents?: Prisma.SortOrder
+  activeStudents?: Prisma.SortOrder
   avgScoreAllExams?: Prisma.SortOrder
   overallPassRate?: Prisma.SortOrder
+  completionRate?: Prisma.SortOrder
   highestExamAvg?: Prisma.SortOrder
   lowestExamAvg?: Prisma.SortOrder
+  weakestProblemId?: Prisma.SortOrderInput | Prisma.SortOrder
+  hardestProblemId?: Prisma.SortOrderInput | Prisma.SortOrder
+  avgTimePerStudent?: Prisma.SortOrder
+  totalTimeSpent?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   group?: Prisma.GroupOrderByWithRelationInput
 }
@@ -292,10 +371,17 @@ export type GroupOverallStatsWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.GroupOverallStatsWhereInput | Prisma.GroupOverallStatsWhereInput[]
   totalExams?: Prisma.IntFilter<"GroupOverallStats"> | number
   totalStudents?: Prisma.IntFilter<"GroupOverallStats"> | number
+  activeStudents?: Prisma.IntFilter<"GroupOverallStats"> | number
   avgScoreAllExams?: Prisma.FloatFilter<"GroupOverallStats"> | number
   overallPassRate?: Prisma.FloatFilter<"GroupOverallStats"> | number
+  completionRate?: Prisma.FloatFilter<"GroupOverallStats"> | number
   highestExamAvg?: Prisma.FloatFilter<"GroupOverallStats"> | number
   lowestExamAvg?: Prisma.FloatFilter<"GroupOverallStats"> | number
+  weakestProblemId?: Prisma.StringNullableFilter<"GroupOverallStats"> | string | null
+  hardestProblemId?: Prisma.StringNullableFilter<"GroupOverallStats"> | string | null
+  avgTimePerStudent?: Prisma.FloatFilter<"GroupOverallStats"> | number
+  totalTimeSpent?: Prisma.FloatFilter<"GroupOverallStats"> | number
+  createdAt?: Prisma.DateTimeFilter<"GroupOverallStats"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"GroupOverallStats"> | Date | string
   group?: Prisma.XOR<Prisma.GroupScalarRelationFilter, Prisma.GroupWhereInput>
 }, "id" | "groupId">
@@ -305,10 +391,17 @@ export type GroupOverallStatsOrderByWithAggregationInput = {
   groupId?: Prisma.SortOrder
   totalExams?: Prisma.SortOrder
   totalStudents?: Prisma.SortOrder
+  activeStudents?: Prisma.SortOrder
   avgScoreAllExams?: Prisma.SortOrder
   overallPassRate?: Prisma.SortOrder
+  completionRate?: Prisma.SortOrder
   highestExamAvg?: Prisma.SortOrder
   lowestExamAvg?: Prisma.SortOrder
+  weakestProblemId?: Prisma.SortOrderInput | Prisma.SortOrder
+  hardestProblemId?: Prisma.SortOrderInput | Prisma.SortOrder
+  avgTimePerStudent?: Prisma.SortOrder
+  totalTimeSpent?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.GroupOverallStatsCountOrderByAggregateInput
   _avg?: Prisma.GroupOverallStatsAvgOrderByAggregateInput
@@ -325,10 +418,17 @@ export type GroupOverallStatsScalarWhereWithAggregatesInput = {
   groupId?: Prisma.StringWithAggregatesFilter<"GroupOverallStats"> | string
   totalExams?: Prisma.IntWithAggregatesFilter<"GroupOverallStats"> | number
   totalStudents?: Prisma.IntWithAggregatesFilter<"GroupOverallStats"> | number
+  activeStudents?: Prisma.IntWithAggregatesFilter<"GroupOverallStats"> | number
   avgScoreAllExams?: Prisma.FloatWithAggregatesFilter<"GroupOverallStats"> | number
   overallPassRate?: Prisma.FloatWithAggregatesFilter<"GroupOverallStats"> | number
+  completionRate?: Prisma.FloatWithAggregatesFilter<"GroupOverallStats"> | number
   highestExamAvg?: Prisma.FloatWithAggregatesFilter<"GroupOverallStats"> | number
   lowestExamAvg?: Prisma.FloatWithAggregatesFilter<"GroupOverallStats"> | number
+  weakestProblemId?: Prisma.StringNullableWithAggregatesFilter<"GroupOverallStats"> | string | null
+  hardestProblemId?: Prisma.StringNullableWithAggregatesFilter<"GroupOverallStats"> | string | null
+  avgTimePerStudent?: Prisma.FloatWithAggregatesFilter<"GroupOverallStats"> | number
+  totalTimeSpent?: Prisma.FloatWithAggregatesFilter<"GroupOverallStats"> | number
+  createdAt?: Prisma.DateTimeWithAggregatesFilter<"GroupOverallStats"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"GroupOverallStats"> | Date | string
 }
 
@@ -336,10 +436,17 @@ export type GroupOverallStatsCreateInput = {
   id?: string
   totalExams: number
   totalStudents: number
+  activeStudents?: number
   avgScoreAllExams: number
   overallPassRate: number
+  completionRate?: number
   highestExamAvg: number
   lowestExamAvg: number
+  weakestProblemId?: string | null
+  hardestProblemId?: string | null
+  avgTimePerStudent?: number
+  totalTimeSpent?: number
+  createdAt?: Date | string
   updatedAt?: Date | string
   group: Prisma.GroupCreateNestedOneWithoutGroupOverallStatsInput
 }
@@ -349,10 +456,17 @@ export type GroupOverallStatsUncheckedCreateInput = {
   groupId: string
   totalExams: number
   totalStudents: number
+  activeStudents?: number
   avgScoreAllExams: number
   overallPassRate: number
+  completionRate?: number
   highestExamAvg: number
   lowestExamAvg: number
+  weakestProblemId?: string | null
+  hardestProblemId?: string | null
+  avgTimePerStudent?: number
+  totalTimeSpent?: number
+  createdAt?: Date | string
   updatedAt?: Date | string
 }
 
@@ -360,10 +474,17 @@ export type GroupOverallStatsUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   totalExams?: Prisma.IntFieldUpdateOperationsInput | number
   totalStudents?: Prisma.IntFieldUpdateOperationsInput | number
+  activeStudents?: Prisma.IntFieldUpdateOperationsInput | number
   avgScoreAllExams?: Prisma.FloatFieldUpdateOperationsInput | number
   overallPassRate?: Prisma.FloatFieldUpdateOperationsInput | number
+  completionRate?: Prisma.FloatFieldUpdateOperationsInput | number
   highestExamAvg?: Prisma.FloatFieldUpdateOperationsInput | number
   lowestExamAvg?: Prisma.FloatFieldUpdateOperationsInput | number
+  weakestProblemId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hardestProblemId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avgTimePerStudent?: Prisma.FloatFieldUpdateOperationsInput | number
+  totalTimeSpent?: Prisma.FloatFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   group?: Prisma.GroupUpdateOneRequiredWithoutGroupOverallStatsNestedInput
 }
@@ -373,10 +494,17 @@ export type GroupOverallStatsUncheckedUpdateInput = {
   groupId?: Prisma.StringFieldUpdateOperationsInput | string
   totalExams?: Prisma.IntFieldUpdateOperationsInput | number
   totalStudents?: Prisma.IntFieldUpdateOperationsInput | number
+  activeStudents?: Prisma.IntFieldUpdateOperationsInput | number
   avgScoreAllExams?: Prisma.FloatFieldUpdateOperationsInput | number
   overallPassRate?: Prisma.FloatFieldUpdateOperationsInput | number
+  completionRate?: Prisma.FloatFieldUpdateOperationsInput | number
   highestExamAvg?: Prisma.FloatFieldUpdateOperationsInput | number
   lowestExamAvg?: Prisma.FloatFieldUpdateOperationsInput | number
+  weakestProblemId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hardestProblemId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avgTimePerStudent?: Prisma.FloatFieldUpdateOperationsInput | number
+  totalTimeSpent?: Prisma.FloatFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -385,10 +513,17 @@ export type GroupOverallStatsCreateManyInput = {
   groupId: string
   totalExams: number
   totalStudents: number
+  activeStudents?: number
   avgScoreAllExams: number
   overallPassRate: number
+  completionRate?: number
   highestExamAvg: number
   lowestExamAvg: number
+  weakestProblemId?: string | null
+  hardestProblemId?: string | null
+  avgTimePerStudent?: number
+  totalTimeSpent?: number
+  createdAt?: Date | string
   updatedAt?: Date | string
 }
 
@@ -396,10 +531,17 @@ export type GroupOverallStatsUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   totalExams?: Prisma.IntFieldUpdateOperationsInput | number
   totalStudents?: Prisma.IntFieldUpdateOperationsInput | number
+  activeStudents?: Prisma.IntFieldUpdateOperationsInput | number
   avgScoreAllExams?: Prisma.FloatFieldUpdateOperationsInput | number
   overallPassRate?: Prisma.FloatFieldUpdateOperationsInput | number
+  completionRate?: Prisma.FloatFieldUpdateOperationsInput | number
   highestExamAvg?: Prisma.FloatFieldUpdateOperationsInput | number
   lowestExamAvg?: Prisma.FloatFieldUpdateOperationsInput | number
+  weakestProblemId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hardestProblemId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avgTimePerStudent?: Prisma.FloatFieldUpdateOperationsInput | number
+  totalTimeSpent?: Prisma.FloatFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -408,10 +550,17 @@ export type GroupOverallStatsUncheckedUpdateManyInput = {
   groupId?: Prisma.StringFieldUpdateOperationsInput | string
   totalExams?: Prisma.IntFieldUpdateOperationsInput | number
   totalStudents?: Prisma.IntFieldUpdateOperationsInput | number
+  activeStudents?: Prisma.IntFieldUpdateOperationsInput | number
   avgScoreAllExams?: Prisma.FloatFieldUpdateOperationsInput | number
   overallPassRate?: Prisma.FloatFieldUpdateOperationsInput | number
+  completionRate?: Prisma.FloatFieldUpdateOperationsInput | number
   highestExamAvg?: Prisma.FloatFieldUpdateOperationsInput | number
   lowestExamAvg?: Prisma.FloatFieldUpdateOperationsInput | number
+  weakestProblemId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hardestProblemId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avgTimePerStudent?: Prisma.FloatFieldUpdateOperationsInput | number
+  totalTimeSpent?: Prisma.FloatFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -425,20 +574,31 @@ export type GroupOverallStatsCountOrderByAggregateInput = {
   groupId?: Prisma.SortOrder
   totalExams?: Prisma.SortOrder
   totalStudents?: Prisma.SortOrder
+  activeStudents?: Prisma.SortOrder
   avgScoreAllExams?: Prisma.SortOrder
   overallPassRate?: Prisma.SortOrder
+  completionRate?: Prisma.SortOrder
   highestExamAvg?: Prisma.SortOrder
   lowestExamAvg?: Prisma.SortOrder
+  weakestProblemId?: Prisma.SortOrder
+  hardestProblemId?: Prisma.SortOrder
+  avgTimePerStudent?: Prisma.SortOrder
+  totalTimeSpent?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
 export type GroupOverallStatsAvgOrderByAggregateInput = {
   totalExams?: Prisma.SortOrder
   totalStudents?: Prisma.SortOrder
+  activeStudents?: Prisma.SortOrder
   avgScoreAllExams?: Prisma.SortOrder
   overallPassRate?: Prisma.SortOrder
+  completionRate?: Prisma.SortOrder
   highestExamAvg?: Prisma.SortOrder
   lowestExamAvg?: Prisma.SortOrder
+  avgTimePerStudent?: Prisma.SortOrder
+  totalTimeSpent?: Prisma.SortOrder
 }
 
 export type GroupOverallStatsMaxOrderByAggregateInput = {
@@ -446,10 +606,17 @@ export type GroupOverallStatsMaxOrderByAggregateInput = {
   groupId?: Prisma.SortOrder
   totalExams?: Prisma.SortOrder
   totalStudents?: Prisma.SortOrder
+  activeStudents?: Prisma.SortOrder
   avgScoreAllExams?: Prisma.SortOrder
   overallPassRate?: Prisma.SortOrder
+  completionRate?: Prisma.SortOrder
   highestExamAvg?: Prisma.SortOrder
   lowestExamAvg?: Prisma.SortOrder
+  weakestProblemId?: Prisma.SortOrder
+  hardestProblemId?: Prisma.SortOrder
+  avgTimePerStudent?: Prisma.SortOrder
+  totalTimeSpent?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
@@ -458,20 +625,31 @@ export type GroupOverallStatsMinOrderByAggregateInput = {
   groupId?: Prisma.SortOrder
   totalExams?: Prisma.SortOrder
   totalStudents?: Prisma.SortOrder
+  activeStudents?: Prisma.SortOrder
   avgScoreAllExams?: Prisma.SortOrder
   overallPassRate?: Prisma.SortOrder
+  completionRate?: Prisma.SortOrder
   highestExamAvg?: Prisma.SortOrder
   lowestExamAvg?: Prisma.SortOrder
+  weakestProblemId?: Prisma.SortOrder
+  hardestProblemId?: Prisma.SortOrder
+  avgTimePerStudent?: Prisma.SortOrder
+  totalTimeSpent?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
 export type GroupOverallStatsSumOrderByAggregateInput = {
   totalExams?: Prisma.SortOrder
   totalStudents?: Prisma.SortOrder
+  activeStudents?: Prisma.SortOrder
   avgScoreAllExams?: Prisma.SortOrder
   overallPassRate?: Prisma.SortOrder
+  completionRate?: Prisma.SortOrder
   highestExamAvg?: Prisma.SortOrder
   lowestExamAvg?: Prisma.SortOrder
+  avgTimePerStudent?: Prisma.SortOrder
+  totalTimeSpent?: Prisma.SortOrder
 }
 
 export type GroupOverallStatsCreateNestedOneWithoutGroupInput = {
@@ -518,10 +696,17 @@ export type GroupOverallStatsCreateWithoutGroupInput = {
   id?: string
   totalExams: number
   totalStudents: number
+  activeStudents?: number
   avgScoreAllExams: number
   overallPassRate: number
+  completionRate?: number
   highestExamAvg: number
   lowestExamAvg: number
+  weakestProblemId?: string | null
+  hardestProblemId?: string | null
+  avgTimePerStudent?: number
+  totalTimeSpent?: number
+  createdAt?: Date | string
   updatedAt?: Date | string
 }
 
@@ -529,10 +714,17 @@ export type GroupOverallStatsUncheckedCreateWithoutGroupInput = {
   id?: string
   totalExams: number
   totalStudents: number
+  activeStudents?: number
   avgScoreAllExams: number
   overallPassRate: number
+  completionRate?: number
   highestExamAvg: number
   lowestExamAvg: number
+  weakestProblemId?: string | null
+  hardestProblemId?: string | null
+  avgTimePerStudent?: number
+  totalTimeSpent?: number
+  createdAt?: Date | string
   updatedAt?: Date | string
 }
 
@@ -556,10 +748,17 @@ export type GroupOverallStatsUpdateWithoutGroupInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   totalExams?: Prisma.IntFieldUpdateOperationsInput | number
   totalStudents?: Prisma.IntFieldUpdateOperationsInput | number
+  activeStudents?: Prisma.IntFieldUpdateOperationsInput | number
   avgScoreAllExams?: Prisma.FloatFieldUpdateOperationsInput | number
   overallPassRate?: Prisma.FloatFieldUpdateOperationsInput | number
+  completionRate?: Prisma.FloatFieldUpdateOperationsInput | number
   highestExamAvg?: Prisma.FloatFieldUpdateOperationsInput | number
   lowestExamAvg?: Prisma.FloatFieldUpdateOperationsInput | number
+  weakestProblemId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hardestProblemId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avgTimePerStudent?: Prisma.FloatFieldUpdateOperationsInput | number
+  totalTimeSpent?: Prisma.FloatFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -567,10 +766,17 @@ export type GroupOverallStatsUncheckedUpdateWithoutGroupInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   totalExams?: Prisma.IntFieldUpdateOperationsInput | number
   totalStudents?: Prisma.IntFieldUpdateOperationsInput | number
+  activeStudents?: Prisma.IntFieldUpdateOperationsInput | number
   avgScoreAllExams?: Prisma.FloatFieldUpdateOperationsInput | number
   overallPassRate?: Prisma.FloatFieldUpdateOperationsInput | number
+  completionRate?: Prisma.FloatFieldUpdateOperationsInput | number
   highestExamAvg?: Prisma.FloatFieldUpdateOperationsInput | number
   lowestExamAvg?: Prisma.FloatFieldUpdateOperationsInput | number
+  weakestProblemId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hardestProblemId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avgTimePerStudent?: Prisma.FloatFieldUpdateOperationsInput | number
+  totalTimeSpent?: Prisma.FloatFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -581,10 +787,17 @@ export type GroupOverallStatsSelect<ExtArgs extends runtime.Types.Extensions.Int
   groupId?: boolean
   totalExams?: boolean
   totalStudents?: boolean
+  activeStudents?: boolean
   avgScoreAllExams?: boolean
   overallPassRate?: boolean
+  completionRate?: boolean
   highestExamAvg?: boolean
   lowestExamAvg?: boolean
+  weakestProblemId?: boolean
+  hardestProblemId?: boolean
+  avgTimePerStudent?: boolean
+  totalTimeSpent?: boolean
+  createdAt?: boolean
   updatedAt?: boolean
   group?: boolean | Prisma.GroupDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["groupOverallStats"]>
@@ -594,10 +807,17 @@ export type GroupOverallStatsSelectCreateManyAndReturn<ExtArgs extends runtime.T
   groupId?: boolean
   totalExams?: boolean
   totalStudents?: boolean
+  activeStudents?: boolean
   avgScoreAllExams?: boolean
   overallPassRate?: boolean
+  completionRate?: boolean
   highestExamAvg?: boolean
   lowestExamAvg?: boolean
+  weakestProblemId?: boolean
+  hardestProblemId?: boolean
+  avgTimePerStudent?: boolean
+  totalTimeSpent?: boolean
+  createdAt?: boolean
   updatedAt?: boolean
   group?: boolean | Prisma.GroupDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["groupOverallStats"]>
@@ -607,10 +827,17 @@ export type GroupOverallStatsSelectUpdateManyAndReturn<ExtArgs extends runtime.T
   groupId?: boolean
   totalExams?: boolean
   totalStudents?: boolean
+  activeStudents?: boolean
   avgScoreAllExams?: boolean
   overallPassRate?: boolean
+  completionRate?: boolean
   highestExamAvg?: boolean
   lowestExamAvg?: boolean
+  weakestProblemId?: boolean
+  hardestProblemId?: boolean
+  avgTimePerStudent?: boolean
+  totalTimeSpent?: boolean
+  createdAt?: boolean
   updatedAt?: boolean
   group?: boolean | Prisma.GroupDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["groupOverallStats"]>
@@ -620,14 +847,21 @@ export type GroupOverallStatsSelectScalar = {
   groupId?: boolean
   totalExams?: boolean
   totalStudents?: boolean
+  activeStudents?: boolean
   avgScoreAllExams?: boolean
   overallPassRate?: boolean
+  completionRate?: boolean
   highestExamAvg?: boolean
   lowestExamAvg?: boolean
+  weakestProblemId?: boolean
+  hardestProblemId?: boolean
+  avgTimePerStudent?: boolean
+  totalTimeSpent?: boolean
+  createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type GroupOverallStatsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "groupId" | "totalExams" | "totalStudents" | "avgScoreAllExams" | "overallPassRate" | "highestExamAvg" | "lowestExamAvg" | "updatedAt", ExtArgs["result"]["groupOverallStats"]>
+export type GroupOverallStatsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "groupId" | "totalExams" | "totalStudents" | "activeStudents" | "avgScoreAllExams" | "overallPassRate" | "completionRate" | "highestExamAvg" | "lowestExamAvg" | "weakestProblemId" | "hardestProblemId" | "avgTimePerStudent" | "totalTimeSpent" | "createdAt" | "updatedAt", ExtArgs["result"]["groupOverallStats"]>
 export type GroupOverallStatsInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   group?: boolean | Prisma.GroupDefaultArgs<ExtArgs>
 }
@@ -648,10 +882,17 @@ export type $GroupOverallStatsPayload<ExtArgs extends runtime.Types.Extensions.I
     groupId: string
     totalExams: number
     totalStudents: number
+    activeStudents: number
     avgScoreAllExams: number
     overallPassRate: number
+    completionRate: number
     highestExamAvg: number
     lowestExamAvg: number
+    weakestProblemId: string | null
+    hardestProblemId: string | null
+    avgTimePerStudent: number
+    totalTimeSpent: number
+    createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["groupOverallStats"]>
   composites: {}
@@ -1081,10 +1322,17 @@ export interface GroupOverallStatsFieldRefs {
   readonly groupId: Prisma.FieldRef<"GroupOverallStats", 'String'>
   readonly totalExams: Prisma.FieldRef<"GroupOverallStats", 'Int'>
   readonly totalStudents: Prisma.FieldRef<"GroupOverallStats", 'Int'>
+  readonly activeStudents: Prisma.FieldRef<"GroupOverallStats", 'Int'>
   readonly avgScoreAllExams: Prisma.FieldRef<"GroupOverallStats", 'Float'>
   readonly overallPassRate: Prisma.FieldRef<"GroupOverallStats", 'Float'>
+  readonly completionRate: Prisma.FieldRef<"GroupOverallStats", 'Float'>
   readonly highestExamAvg: Prisma.FieldRef<"GroupOverallStats", 'Float'>
   readonly lowestExamAvg: Prisma.FieldRef<"GroupOverallStats", 'Float'>
+  readonly weakestProblemId: Prisma.FieldRef<"GroupOverallStats", 'String'>
+  readonly hardestProblemId: Prisma.FieldRef<"GroupOverallStats", 'String'>
+  readonly avgTimePerStudent: Prisma.FieldRef<"GroupOverallStats", 'Float'>
+  readonly totalTimeSpent: Prisma.FieldRef<"GroupOverallStats", 'Float'>
+  readonly createdAt: Prisma.FieldRef<"GroupOverallStats", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"GroupOverallStats", 'DateTime'>
 }
     

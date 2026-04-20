@@ -9,15 +9,6 @@
 * 🟢 You can import this file directly.
 */
 
-export const UserRole = {
-  TEACHER: 'TEACHER',
-  STUDENT: 'STUDENT',
-  ADMIN: 'ADMIN'
-} as const
-
-export type UserRole = (typeof UserRole)[keyof typeof UserRole]
-
-
 export const expectedComplexity = {
   LOGN: 'LOGN',
   N: 'N',
@@ -39,13 +30,14 @@ export const problemDifficulty = {
 export type problemDifficulty = (typeof problemDifficulty)[keyof typeof problemDifficulty]
 
 
-export const submissionStatus = {
-  ACCEPTED: 'ACCEPTED',
-  BAD_SCALING: 'BAD_SCALING',
-  BAD_ALGORITHM: 'BAD_ALGORITHM'
+export const ProgrammingLanguage = {
+  c: 'c',
+  cpp: 'cpp',
+  python: 'python',
+  java: 'java'
 } as const
 
-export type submissionStatus = (typeof submissionStatus)[keyof typeof submissionStatus]
+export type ProgrammingLanguage = (typeof ProgrammingLanguage)[keyof typeof ProgrammingLanguage]
 
 
 export const GeneratorType = {
@@ -88,7 +80,7 @@ export const AiProcessingStatus = {
 export type AiProcessingStatus = (typeof AiProcessingStatus)[keyof typeof AiProcessingStatus]
 
 
-export const SubmissionStatus = {
+export const ExecutionStatus = {
   PENDING: 'PENDING',
   RUNNING: 'RUNNING',
   ACCEPTED: 'ACCEPTED',
@@ -98,10 +90,11 @@ export const SubmissionStatus = {
   MEMORY_LIMIT: 'MEMORY_LIMIT',
   RUNTIME_ERROR: 'RUNTIME_ERROR',
   COMPILE_ERROR: 'COMPILE_ERROR',
-  INTERNAL_ERROR: 'INTERNAL_ERROR'
+  INTERNAL_ERROR: 'INTERNAL_ERROR',
+  BAD_SCALING: 'BAD_SCALING'
 } as const
 
-export type SubmissionStatus = (typeof SubmissionStatus)[keyof typeof SubmissionStatus]
+export type ExecutionStatus = (typeof ExecutionStatus)[keyof typeof ExecutionStatus]
 
 
 export const ExamAttemptStatus = {
@@ -123,6 +116,16 @@ export const groupType = {
 export type groupType = (typeof groupType)[keyof typeof groupType]
 
 
+export const RoleScope = {
+  GROUP: 'GROUP',
+  DEPARTMENT: 'DEPARTMENT',
+  ORGANIZATION: 'ORGANIZATION',
+  PLATFORM: 'PLATFORM'
+} as const
+
+export type RoleScope = (typeof RoleScope)[keyof typeof RoleScope]
+
+
 export const AIRole = {
   USER: 'USER',
   ASSISTANT: 'ASSISTANT',
@@ -130,3 +133,23 @@ export const AIRole = {
 } as const
 
 export type AIRole = (typeof AIRole)[keyof typeof AIRole]
+
+
+export const NotificationType = {
+  EXAM: 'EXAM',
+  ANNOUNCEMENT: 'ANNOUNCEMENT',
+  SYSTEM: 'SYSTEM',
+  REMINDER: 'REMINDER'
+} as const
+
+export type NotificationType = (typeof NotificationType)[keyof typeof NotificationType]
+
+
+export const NotificationPriority = {
+  LOW: 'LOW',
+  NORMAL: 'NORMAL',
+  HIGH: 'HIGH',
+  URGENT: 'URGENT'
+} as const
+
+export type NotificationPriority = (typeof NotificationPriority)[keyof typeof NotificationPriority]

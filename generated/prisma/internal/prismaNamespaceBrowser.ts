@@ -73,6 +73,9 @@ export const ModelName = {
   AiEvaluation: 'AiEvaluation',
   Group: 'Group',
   GroupMember: 'GroupMember',
+  Role: 'Role',
+  Permission: 'Permission',
+  RolePermission: 'RolePermission',
   Tag: 'Tag',
   ProblemTag: 'ProblemTag',
   AIConversation: 'AIConversation',
@@ -81,7 +84,11 @@ export const ModelName = {
   GroupOverallStats: 'GroupOverallStats',
   StudentOverallStats: 'StudentOverallStats',
   GroupProblemStats: 'GroupProblemStats',
-  StudentProblemStats: 'StudentProblemStats'
+  StudentProblemStats: 'StudentProblemStats',
+  OrganizationAnalytics: 'OrganizationAnalytics',
+  ExamAnalytics: 'ExamAnalytics',
+  Notification: 'Notification',
+  NotificationRecipient: 'NotificationRecipient'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -104,12 +111,12 @@ export const UserScalarFieldEnum = {
   id: 'id',
   name: 'name',
   email: 'email',
-  role: 'role',
   isOnboarded: 'isOnboarded',
   emailVerified: 'emailVerified',
   image: 'image',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  globalRoleId: 'globalRoleId'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -166,7 +173,8 @@ export const ProblemScalarFieldEnum = {
   title: 'title',
   description: 'description',
   difficulty: 'difficulty',
-  source: 'source'
+  source: 'source',
+  isPublished: 'isPublished'
 } as const
 
 export type ProblemScalarFieldEnum = (typeof ProblemScalarFieldEnum)[keyof typeof ProblemScalarFieldEnum]
@@ -197,7 +205,7 @@ export type ComplexityTestingCasesScalarFieldEnum = (typeof ComplexityTestingCas
 
 export const DriverCodeScalarFieldEnum = {
   id: 'id',
-  languageId: 'languageId',
+  language: 'language',
   header: 'header',
   template: 'template',
   footer: 'footer',
@@ -211,7 +219,7 @@ export type DriverCodeScalarFieldEnum = (typeof DriverCodeScalarFieldEnum)[keyof
 
 export const ReferenceSolutionScalarFieldEnum = {
   id: 'id',
-  languageId: 'languageId',
+  language: 'language',
   code: 'code',
   problemId: 'problemId'
 } as const
@@ -232,10 +240,13 @@ export type RunTestCaseScalarFieldEnum = (typeof RunTestCaseScalarFieldEnum)[key
 
 export const SelfSubmissionScalarFieldEnum = {
   id: 'id',
-  code: 'code',
+  sourceCode: 'sourceCode',
   language: 'language',
-  noOfPassedCases: 'noOfPassedCases',
-  failedCase: 'failedCase',
+  passedTestcases: 'passedTestcases',
+  totalTestcases: 'totalTestcases',
+  executionTime: 'executionTime',
+  memory: 'memory',
+  stderr: 'stderr',
   createdAt: 'createdAt',
   status: 'status',
   userId: 'userId',
@@ -308,6 +319,7 @@ export const SubmissionScalarFieldEnum = {
   totalTestcases: 'totalTestcases',
   executionTime: 'executionTime',
   memory: 'memory',
+  stderr: 'stderr',
   isFinal: 'isFinal',
   aiQueued: 'aiQueued',
   aiStatus: 'aiStatus',
@@ -393,11 +405,40 @@ export type GroupScalarFieldEnum = (typeof GroupScalarFieldEnum)[keyof typeof Gr
 export const GroupMemberScalarFieldEnum = {
   id: 'id',
   groupId: 'groupId',
-  studentId: 'studentId',
+  userId: 'userId',
+  roleId: 'roleId',
   addedAt: 'addedAt'
 } as const
 
 export type GroupMemberScalarFieldEnum = (typeof GroupMemberScalarFieldEnum)[keyof typeof GroupMemberScalarFieldEnum]
+
+
+export const RoleScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  scope: 'scope',
+  createdAt: 'createdAt'
+} as const
+
+export type RoleScalarFieldEnum = (typeof RoleScalarFieldEnum)[keyof typeof RoleScalarFieldEnum]
+
+
+export const PermissionScalarFieldEnum = {
+  id: 'id',
+  key: 'key',
+  description: 'description'
+} as const
+
+export type PermissionScalarFieldEnum = (typeof PermissionScalarFieldEnum)[keyof typeof PermissionScalarFieldEnum]
+
+
+export const RolePermissionScalarFieldEnum = {
+  roleId: 'roleId',
+  permissionId: 'permissionId'
+} as const
+
+export type RolePermissionScalarFieldEnum = (typeof RolePermissionScalarFieldEnum)[keyof typeof RolePermissionScalarFieldEnum]
 
 
 export const TagScalarFieldEnum = {
@@ -460,10 +501,17 @@ export const GroupOverallStatsScalarFieldEnum = {
   groupId: 'groupId',
   totalExams: 'totalExams',
   totalStudents: 'totalStudents',
+  activeStudents: 'activeStudents',
   avgScoreAllExams: 'avgScoreAllExams',
   overallPassRate: 'overallPassRate',
+  completionRate: 'completionRate',
   highestExamAvg: 'highestExamAvg',
   lowestExamAvg: 'lowestExamAvg',
+  weakestProblemId: 'weakestProblemId',
+  hardestProblemId: 'hardestProblemId',
+  avgTimePerStudent: 'avgTimePerStudent',
+  totalTimeSpent: 'totalTimeSpent',
+  createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
@@ -477,7 +525,17 @@ export const StudentOverallStatsScalarFieldEnum = {
   totalScore: 'totalScore',
   totalExams: 'totalExams',
   avgScore: 'avgScore',
+  completionPercentage: 'completionPercentage',
   totalAttempts: 'totalAttempts',
+  avgAttemptsPerProblem: 'avgAttemptsPerProblem',
+  weakTopics: 'weakTopics',
+  strongTopics: 'strongTopics',
+  lastActive: 'lastActive',
+  scoreTrend: 'scoreTrend',
+  scoreTrendValue: 'scoreTrendValue',
+  avgTimePerProblem: 'avgTimePerProblem',
+  totalTimeSpent: 'totalTimeSpent',
+  createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
@@ -492,8 +550,13 @@ export const GroupProblemStatsScalarFieldEnum = {
   attemptedCount: 'attemptedCount',
   acceptedCount: 'acceptedCount',
   totalAttempts: 'totalAttempts',
+  successRate: 'successRate',
   avgRuntime: 'avgRuntime',
   avgMemory: 'avgMemory',
+  avgTime: 'avgTime',
+  difficultyTier: 'difficultyTier',
+  failureRate: 'failureRate',
+  createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
@@ -506,10 +569,97 @@ export const StudentProblemStatsScalarFieldEnum = {
   groupId: 'groupId',
   problemId: 'problemId',
   attempts: 'attempts',
-  solved: 'solved'
+  solved: 'solved',
+  isWeak: 'isWeak',
+  successRate: 'successRate',
+  avgTime: 'avgTime',
+  totalTime: 'totalTime',
+  lastAttemptAt: 'lastAttemptAt',
+  firstAttemptAt: 'firstAttemptAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 } as const
 
 export type StudentProblemStatsScalarFieldEnum = (typeof StudentProblemStatsScalarFieldEnum)[keyof typeof StudentProblemStatsScalarFieldEnum]
+
+
+export const OrganizationAnalyticsScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  totalGroups: 'totalGroups',
+  activeGroups: 'activeGroups',
+  totalStudents: 'totalStudents',
+  activeStudents: 'activeStudents',
+  avgScore: 'avgScore',
+  overallPassRate: 'overallPassRate',
+  completionRate: 'completionRate',
+  totalProblems: 'totalProblems',
+  weakestProblemIds: 'weakestProblemIds',
+  hardestProblemIds: 'hardestProblemIds',
+  avgTimePerStudent: 'avgTimePerStudent',
+  totalTimeSpent: 'totalTimeSpent',
+  scoreDistribution: 'scoreDistribution',
+  performanceTrend: 'performanceTrend',
+  participationRate: 'participationRate',
+  avgSubmissionsPerStudent: 'avgSubmissionsPerStudent',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type OrganizationAnalyticsScalarFieldEnum = (typeof OrganizationAnalyticsScalarFieldEnum)[keyof typeof OrganizationAnalyticsScalarFieldEnum]
+
+
+export const ExamAnalyticsScalarFieldEnum = {
+  id: 'id',
+  examId: 'examId',
+  totalEnrolled: 'totalEnrolled',
+  totalAttempted: 'totalAttempted',
+  totalCompleted: 'totalCompleted',
+  completionRate: 'completionRate',
+  avgScore: 'avgScore',
+  highestScore: 'highestScore',
+  lowestScore: 'lowestScore',
+  medianScore: 'medianScore',
+  scoreDistribution: 'scoreDistribution',
+  problemDifficulties: 'problemDifficulties',
+  avgTimeToComplete: 'avgTimeToComplete',
+  avgAttempts: 'avgAttempts',
+  totalSubmissions: 'totalSubmissions',
+  acceptedCount: 'acceptedCount',
+  partialCount: 'partialCount',
+  failedCount: 'failedCount',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ExamAnalyticsScalarFieldEnum = (typeof ExamAnalyticsScalarFieldEnum)[keyof typeof ExamAnalyticsScalarFieldEnum]
+
+
+export const NotificationScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  message: 'message',
+  type: 'type',
+  createdAt: 'createdAt',
+  senderId: 'senderId',
+  groupId: 'groupId',
+  examId: 'examId',
+  priority: 'priority'
+} as const
+
+export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[keyof typeof NotificationScalarFieldEnum]
+
+
+export const NotificationRecipientScalarFieldEnum = {
+  id: 'id',
+  notificationId: 'notificationId',
+  userId: 'userId',
+  isRead: 'isRead',
+  readAt: 'readAt',
+  createdAt: 'createdAt'
+} as const
+
+export type NotificationRecipientScalarFieldEnum = (typeof NotificationRecipientScalarFieldEnum)[keyof typeof NotificationRecipientScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -525,14 +675,6 @@ export const JsonNullValueInput = {
 } as const
 
 export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
-
-
-export const NullableJsonNullValueInput = {
-  DbNull: DbNull,
-  JsonNull: JsonNull
-} as const
-
-export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
 
 
 export const QueryMode = {

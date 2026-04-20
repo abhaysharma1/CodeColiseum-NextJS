@@ -31,8 +31,11 @@ export type GroupProblemStatsAvgAggregateOutputType = {
   attemptedCount: number | null
   acceptedCount: number | null
   totalAttempts: number | null
+  successRate: number | null
   avgRuntime: number | null
   avgMemory: number | null
+  avgTime: number | null
+  failureRate: number | null
 }
 
 export type GroupProblemStatsSumAggregateOutputType = {
@@ -40,8 +43,11 @@ export type GroupProblemStatsSumAggregateOutputType = {
   attemptedCount: number | null
   acceptedCount: number | null
   totalAttempts: number | null
+  successRate: number | null
   avgRuntime: number | null
   avgMemory: number | null
+  avgTime: number | null
+  failureRate: number | null
 }
 
 export type GroupProblemStatsMinAggregateOutputType = {
@@ -52,8 +58,13 @@ export type GroupProblemStatsMinAggregateOutputType = {
   attemptedCount: number | null
   acceptedCount: number | null
   totalAttempts: number | null
+  successRate: number | null
   avgRuntime: number | null
   avgMemory: number | null
+  avgTime: number | null
+  difficultyTier: string | null
+  failureRate: number | null
+  createdAt: Date | null
   updatedAt: Date | null
 }
 
@@ -65,8 +76,13 @@ export type GroupProblemStatsMaxAggregateOutputType = {
   attemptedCount: number | null
   acceptedCount: number | null
   totalAttempts: number | null
+  successRate: number | null
   avgRuntime: number | null
   avgMemory: number | null
+  avgTime: number | null
+  difficultyTier: string | null
+  failureRate: number | null
+  createdAt: Date | null
   updatedAt: Date | null
 }
 
@@ -78,8 +94,13 @@ export type GroupProblemStatsCountAggregateOutputType = {
   attemptedCount: number
   acceptedCount: number
   totalAttempts: number
+  successRate: number
   avgRuntime: number
   avgMemory: number
+  avgTime: number
+  difficultyTier: number
+  failureRate: number
+  createdAt: number
   updatedAt: number
   _all: number
 }
@@ -90,8 +111,11 @@ export type GroupProblemStatsAvgAggregateInputType = {
   attemptedCount?: true
   acceptedCount?: true
   totalAttempts?: true
+  successRate?: true
   avgRuntime?: true
   avgMemory?: true
+  avgTime?: true
+  failureRate?: true
 }
 
 export type GroupProblemStatsSumAggregateInputType = {
@@ -99,8 +123,11 @@ export type GroupProblemStatsSumAggregateInputType = {
   attemptedCount?: true
   acceptedCount?: true
   totalAttempts?: true
+  successRate?: true
   avgRuntime?: true
   avgMemory?: true
+  avgTime?: true
+  failureRate?: true
 }
 
 export type GroupProblemStatsMinAggregateInputType = {
@@ -111,8 +138,13 @@ export type GroupProblemStatsMinAggregateInputType = {
   attemptedCount?: true
   acceptedCount?: true
   totalAttempts?: true
+  successRate?: true
   avgRuntime?: true
   avgMemory?: true
+  avgTime?: true
+  difficultyTier?: true
+  failureRate?: true
+  createdAt?: true
   updatedAt?: true
 }
 
@@ -124,8 +156,13 @@ export type GroupProblemStatsMaxAggregateInputType = {
   attemptedCount?: true
   acceptedCount?: true
   totalAttempts?: true
+  successRate?: true
   avgRuntime?: true
   avgMemory?: true
+  avgTime?: true
+  difficultyTier?: true
+  failureRate?: true
+  createdAt?: true
   updatedAt?: true
 }
 
@@ -137,8 +174,13 @@ export type GroupProblemStatsCountAggregateInputType = {
   attemptedCount?: true
   acceptedCount?: true
   totalAttempts?: true
+  successRate?: true
   avgRuntime?: true
   avgMemory?: true
+  avgTime?: true
+  difficultyTier?: true
+  failureRate?: true
+  createdAt?: true
   updatedAt?: true
   _all?: true
 }
@@ -237,8 +279,13 @@ export type GroupProblemStatsGroupByOutputType = {
   attemptedCount: number
   acceptedCount: number
   totalAttempts: number
+  successRate: number
   avgRuntime: number
   avgMemory: number
+  avgTime: number
+  difficultyTier: string
+  failureRate: number
+  createdAt: Date
   updatedAt: Date
   _count: GroupProblemStatsCountAggregateOutputType | null
   _avg: GroupProblemStatsAvgAggregateOutputType | null
@@ -273,8 +320,13 @@ export type GroupProblemStatsWhereInput = {
   attemptedCount?: Prisma.IntFilter<"GroupProblemStats"> | number
   acceptedCount?: Prisma.IntFilter<"GroupProblemStats"> | number
   totalAttempts?: Prisma.IntFilter<"GroupProblemStats"> | number
+  successRate?: Prisma.FloatFilter<"GroupProblemStats"> | number
   avgRuntime?: Prisma.FloatFilter<"GroupProblemStats"> | number
   avgMemory?: Prisma.FloatFilter<"GroupProblemStats"> | number
+  avgTime?: Prisma.FloatFilter<"GroupProblemStats"> | number
+  difficultyTier?: Prisma.StringFilter<"GroupProblemStats"> | string
+  failureRate?: Prisma.FloatFilter<"GroupProblemStats"> | number
+  createdAt?: Prisma.DateTimeFilter<"GroupProblemStats"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"GroupProblemStats"> | Date | string
   group?: Prisma.XOR<Prisma.GroupScalarRelationFilter, Prisma.GroupWhereInput>
   problem?: Prisma.XOR<Prisma.ProblemScalarRelationFilter, Prisma.ProblemWhereInput>
@@ -288,8 +340,13 @@ export type GroupProblemStatsOrderByWithRelationInput = {
   attemptedCount?: Prisma.SortOrder
   acceptedCount?: Prisma.SortOrder
   totalAttempts?: Prisma.SortOrder
+  successRate?: Prisma.SortOrder
   avgRuntime?: Prisma.SortOrder
   avgMemory?: Prisma.SortOrder
+  avgTime?: Prisma.SortOrder
+  difficultyTier?: Prisma.SortOrder
+  failureRate?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   group?: Prisma.GroupOrderByWithRelationInput
   problem?: Prisma.ProblemOrderByWithRelationInput
@@ -307,8 +364,13 @@ export type GroupProblemStatsWhereUniqueInput = Prisma.AtLeast<{
   attemptedCount?: Prisma.IntFilter<"GroupProblemStats"> | number
   acceptedCount?: Prisma.IntFilter<"GroupProblemStats"> | number
   totalAttempts?: Prisma.IntFilter<"GroupProblemStats"> | number
+  successRate?: Prisma.FloatFilter<"GroupProblemStats"> | number
   avgRuntime?: Prisma.FloatFilter<"GroupProblemStats"> | number
   avgMemory?: Prisma.FloatFilter<"GroupProblemStats"> | number
+  avgTime?: Prisma.FloatFilter<"GroupProblemStats"> | number
+  difficultyTier?: Prisma.StringFilter<"GroupProblemStats"> | string
+  failureRate?: Prisma.FloatFilter<"GroupProblemStats"> | number
+  createdAt?: Prisma.DateTimeFilter<"GroupProblemStats"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"GroupProblemStats"> | Date | string
   group?: Prisma.XOR<Prisma.GroupScalarRelationFilter, Prisma.GroupWhereInput>
   problem?: Prisma.XOR<Prisma.ProblemScalarRelationFilter, Prisma.ProblemWhereInput>
@@ -322,8 +384,13 @@ export type GroupProblemStatsOrderByWithAggregationInput = {
   attemptedCount?: Prisma.SortOrder
   acceptedCount?: Prisma.SortOrder
   totalAttempts?: Prisma.SortOrder
+  successRate?: Prisma.SortOrder
   avgRuntime?: Prisma.SortOrder
   avgMemory?: Prisma.SortOrder
+  avgTime?: Prisma.SortOrder
+  difficultyTier?: Prisma.SortOrder
+  failureRate?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.GroupProblemStatsCountOrderByAggregateInput
   _avg?: Prisma.GroupProblemStatsAvgOrderByAggregateInput
@@ -343,8 +410,13 @@ export type GroupProblemStatsScalarWhereWithAggregatesInput = {
   attemptedCount?: Prisma.IntWithAggregatesFilter<"GroupProblemStats"> | number
   acceptedCount?: Prisma.IntWithAggregatesFilter<"GroupProblemStats"> | number
   totalAttempts?: Prisma.IntWithAggregatesFilter<"GroupProblemStats"> | number
+  successRate?: Prisma.FloatWithAggregatesFilter<"GroupProblemStats"> | number
   avgRuntime?: Prisma.FloatWithAggregatesFilter<"GroupProblemStats"> | number
   avgMemory?: Prisma.FloatWithAggregatesFilter<"GroupProblemStats"> | number
+  avgTime?: Prisma.FloatWithAggregatesFilter<"GroupProblemStats"> | number
+  difficultyTier?: Prisma.StringWithAggregatesFilter<"GroupProblemStats"> | string
+  failureRate?: Prisma.FloatWithAggregatesFilter<"GroupProblemStats"> | number
+  createdAt?: Prisma.DateTimeWithAggregatesFilter<"GroupProblemStats"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"GroupProblemStats"> | Date | string
 }
 
@@ -354,8 +426,13 @@ export type GroupProblemStatsCreateInput = {
   attemptedCount: number
   acceptedCount: number
   totalAttempts: number
+  successRate?: number
   avgRuntime: number
   avgMemory: number
+  avgTime?: number
+  difficultyTier?: string
+  failureRate?: number
+  createdAt?: Date | string
   updatedAt?: Date | string
   group: Prisma.GroupCreateNestedOneWithoutGroupProblemStatsInput
   problem: Prisma.ProblemCreateNestedOneWithoutGroupProblemStatsInput
@@ -369,8 +446,13 @@ export type GroupProblemStatsUncheckedCreateInput = {
   attemptedCount: number
   acceptedCount: number
   totalAttempts: number
+  successRate?: number
   avgRuntime: number
   avgMemory: number
+  avgTime?: number
+  difficultyTier?: string
+  failureRate?: number
+  createdAt?: Date | string
   updatedAt?: Date | string
 }
 
@@ -380,8 +462,13 @@ export type GroupProblemStatsUpdateInput = {
   attemptedCount?: Prisma.IntFieldUpdateOperationsInput | number
   acceptedCount?: Prisma.IntFieldUpdateOperationsInput | number
   totalAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  successRate?: Prisma.FloatFieldUpdateOperationsInput | number
   avgRuntime?: Prisma.FloatFieldUpdateOperationsInput | number
   avgMemory?: Prisma.FloatFieldUpdateOperationsInput | number
+  avgTime?: Prisma.FloatFieldUpdateOperationsInput | number
+  difficultyTier?: Prisma.StringFieldUpdateOperationsInput | string
+  failureRate?: Prisma.FloatFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   group?: Prisma.GroupUpdateOneRequiredWithoutGroupProblemStatsNestedInput
   problem?: Prisma.ProblemUpdateOneRequiredWithoutGroupProblemStatsNestedInput
@@ -395,8 +482,13 @@ export type GroupProblemStatsUncheckedUpdateInput = {
   attemptedCount?: Prisma.IntFieldUpdateOperationsInput | number
   acceptedCount?: Prisma.IntFieldUpdateOperationsInput | number
   totalAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  successRate?: Prisma.FloatFieldUpdateOperationsInput | number
   avgRuntime?: Prisma.FloatFieldUpdateOperationsInput | number
   avgMemory?: Prisma.FloatFieldUpdateOperationsInput | number
+  avgTime?: Prisma.FloatFieldUpdateOperationsInput | number
+  difficultyTier?: Prisma.StringFieldUpdateOperationsInput | string
+  failureRate?: Prisma.FloatFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -408,8 +500,13 @@ export type GroupProblemStatsCreateManyInput = {
   attemptedCount: number
   acceptedCount: number
   totalAttempts: number
+  successRate?: number
   avgRuntime: number
   avgMemory: number
+  avgTime?: number
+  difficultyTier?: string
+  failureRate?: number
+  createdAt?: Date | string
   updatedAt?: Date | string
 }
 
@@ -419,8 +516,13 @@ export type GroupProblemStatsUpdateManyMutationInput = {
   attemptedCount?: Prisma.IntFieldUpdateOperationsInput | number
   acceptedCount?: Prisma.IntFieldUpdateOperationsInput | number
   totalAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  successRate?: Prisma.FloatFieldUpdateOperationsInput | number
   avgRuntime?: Prisma.FloatFieldUpdateOperationsInput | number
   avgMemory?: Prisma.FloatFieldUpdateOperationsInput | number
+  avgTime?: Prisma.FloatFieldUpdateOperationsInput | number
+  difficultyTier?: Prisma.StringFieldUpdateOperationsInput | string
+  failureRate?: Prisma.FloatFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -432,8 +534,13 @@ export type GroupProblemStatsUncheckedUpdateManyInput = {
   attemptedCount?: Prisma.IntFieldUpdateOperationsInput | number
   acceptedCount?: Prisma.IntFieldUpdateOperationsInput | number
   totalAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  successRate?: Prisma.FloatFieldUpdateOperationsInput | number
   avgRuntime?: Prisma.FloatFieldUpdateOperationsInput | number
   avgMemory?: Prisma.FloatFieldUpdateOperationsInput | number
+  avgTime?: Prisma.FloatFieldUpdateOperationsInput | number
+  difficultyTier?: Prisma.StringFieldUpdateOperationsInput | string
+  failureRate?: Prisma.FloatFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -460,8 +567,13 @@ export type GroupProblemStatsCountOrderByAggregateInput = {
   attemptedCount?: Prisma.SortOrder
   acceptedCount?: Prisma.SortOrder
   totalAttempts?: Prisma.SortOrder
+  successRate?: Prisma.SortOrder
   avgRuntime?: Prisma.SortOrder
   avgMemory?: Prisma.SortOrder
+  avgTime?: Prisma.SortOrder
+  difficultyTier?: Prisma.SortOrder
+  failureRate?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
@@ -470,8 +582,11 @@ export type GroupProblemStatsAvgOrderByAggregateInput = {
   attemptedCount?: Prisma.SortOrder
   acceptedCount?: Prisma.SortOrder
   totalAttempts?: Prisma.SortOrder
+  successRate?: Prisma.SortOrder
   avgRuntime?: Prisma.SortOrder
   avgMemory?: Prisma.SortOrder
+  avgTime?: Prisma.SortOrder
+  failureRate?: Prisma.SortOrder
 }
 
 export type GroupProblemStatsMaxOrderByAggregateInput = {
@@ -482,8 +597,13 @@ export type GroupProblemStatsMaxOrderByAggregateInput = {
   attemptedCount?: Prisma.SortOrder
   acceptedCount?: Prisma.SortOrder
   totalAttempts?: Prisma.SortOrder
+  successRate?: Prisma.SortOrder
   avgRuntime?: Prisma.SortOrder
   avgMemory?: Prisma.SortOrder
+  avgTime?: Prisma.SortOrder
+  difficultyTier?: Prisma.SortOrder
+  failureRate?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
@@ -495,8 +615,13 @@ export type GroupProblemStatsMinOrderByAggregateInput = {
   attemptedCount?: Prisma.SortOrder
   acceptedCount?: Prisma.SortOrder
   totalAttempts?: Prisma.SortOrder
+  successRate?: Prisma.SortOrder
   avgRuntime?: Prisma.SortOrder
   avgMemory?: Prisma.SortOrder
+  avgTime?: Prisma.SortOrder
+  difficultyTier?: Prisma.SortOrder
+  failureRate?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
@@ -505,8 +630,11 @@ export type GroupProblemStatsSumOrderByAggregateInput = {
   attemptedCount?: Prisma.SortOrder
   acceptedCount?: Prisma.SortOrder
   totalAttempts?: Prisma.SortOrder
+  successRate?: Prisma.SortOrder
   avgRuntime?: Prisma.SortOrder
   avgMemory?: Prisma.SortOrder
+  avgTime?: Prisma.SortOrder
+  failureRate?: Prisma.SortOrder
 }
 
 export type GroupProblemStatsCreateNestedManyWithoutProblemInput = {
@@ -599,8 +727,13 @@ export type GroupProblemStatsCreateWithoutProblemInput = {
   attemptedCount: number
   acceptedCount: number
   totalAttempts: number
+  successRate?: number
   avgRuntime: number
   avgMemory: number
+  avgTime?: number
+  difficultyTier?: string
+  failureRate?: number
+  createdAt?: Date | string
   updatedAt?: Date | string
   group: Prisma.GroupCreateNestedOneWithoutGroupProblemStatsInput
 }
@@ -612,8 +745,13 @@ export type GroupProblemStatsUncheckedCreateWithoutProblemInput = {
   attemptedCount: number
   acceptedCount: number
   totalAttempts: number
+  successRate?: number
   avgRuntime: number
   avgMemory: number
+  avgTime?: number
+  difficultyTier?: string
+  failureRate?: number
+  createdAt?: Date | string
   updatedAt?: Date | string
 }
 
@@ -654,8 +792,13 @@ export type GroupProblemStatsScalarWhereInput = {
   attemptedCount?: Prisma.IntFilter<"GroupProblemStats"> | number
   acceptedCount?: Prisma.IntFilter<"GroupProblemStats"> | number
   totalAttempts?: Prisma.IntFilter<"GroupProblemStats"> | number
+  successRate?: Prisma.FloatFilter<"GroupProblemStats"> | number
   avgRuntime?: Prisma.FloatFilter<"GroupProblemStats"> | number
   avgMemory?: Prisma.FloatFilter<"GroupProblemStats"> | number
+  avgTime?: Prisma.FloatFilter<"GroupProblemStats"> | number
+  difficultyTier?: Prisma.StringFilter<"GroupProblemStats"> | string
+  failureRate?: Prisma.FloatFilter<"GroupProblemStats"> | number
+  createdAt?: Prisma.DateTimeFilter<"GroupProblemStats"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"GroupProblemStats"> | Date | string
 }
 
@@ -665,8 +808,13 @@ export type GroupProblemStatsCreateWithoutGroupInput = {
   attemptedCount: number
   acceptedCount: number
   totalAttempts: number
+  successRate?: number
   avgRuntime: number
   avgMemory: number
+  avgTime?: number
+  difficultyTier?: string
+  failureRate?: number
+  createdAt?: Date | string
   updatedAt?: Date | string
   problem: Prisma.ProblemCreateNestedOneWithoutGroupProblemStatsInput
 }
@@ -678,8 +826,13 @@ export type GroupProblemStatsUncheckedCreateWithoutGroupInput = {
   attemptedCount: number
   acceptedCount: number
   totalAttempts: number
+  successRate?: number
   avgRuntime: number
   avgMemory: number
+  avgTime?: number
+  difficultyTier?: string
+  failureRate?: number
+  createdAt?: Date | string
   updatedAt?: Date | string
 }
 
@@ -716,8 +869,13 @@ export type GroupProblemStatsCreateManyProblemInput = {
   attemptedCount: number
   acceptedCount: number
   totalAttempts: number
+  successRate?: number
   avgRuntime: number
   avgMemory: number
+  avgTime?: number
+  difficultyTier?: string
+  failureRate?: number
+  createdAt?: Date | string
   updatedAt?: Date | string
 }
 
@@ -727,8 +885,13 @@ export type GroupProblemStatsUpdateWithoutProblemInput = {
   attemptedCount?: Prisma.IntFieldUpdateOperationsInput | number
   acceptedCount?: Prisma.IntFieldUpdateOperationsInput | number
   totalAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  successRate?: Prisma.FloatFieldUpdateOperationsInput | number
   avgRuntime?: Prisma.FloatFieldUpdateOperationsInput | number
   avgMemory?: Prisma.FloatFieldUpdateOperationsInput | number
+  avgTime?: Prisma.FloatFieldUpdateOperationsInput | number
+  difficultyTier?: Prisma.StringFieldUpdateOperationsInput | string
+  failureRate?: Prisma.FloatFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   group?: Prisma.GroupUpdateOneRequiredWithoutGroupProblemStatsNestedInput
 }
@@ -740,8 +903,13 @@ export type GroupProblemStatsUncheckedUpdateWithoutProblemInput = {
   attemptedCount?: Prisma.IntFieldUpdateOperationsInput | number
   acceptedCount?: Prisma.IntFieldUpdateOperationsInput | number
   totalAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  successRate?: Prisma.FloatFieldUpdateOperationsInput | number
   avgRuntime?: Prisma.FloatFieldUpdateOperationsInput | number
   avgMemory?: Prisma.FloatFieldUpdateOperationsInput | number
+  avgTime?: Prisma.FloatFieldUpdateOperationsInput | number
+  difficultyTier?: Prisma.StringFieldUpdateOperationsInput | string
+  failureRate?: Prisma.FloatFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -752,8 +920,13 @@ export type GroupProblemStatsUncheckedUpdateManyWithoutProblemInput = {
   attemptedCount?: Prisma.IntFieldUpdateOperationsInput | number
   acceptedCount?: Prisma.IntFieldUpdateOperationsInput | number
   totalAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  successRate?: Prisma.FloatFieldUpdateOperationsInput | number
   avgRuntime?: Prisma.FloatFieldUpdateOperationsInput | number
   avgMemory?: Prisma.FloatFieldUpdateOperationsInput | number
+  avgTime?: Prisma.FloatFieldUpdateOperationsInput | number
+  difficultyTier?: Prisma.StringFieldUpdateOperationsInput | string
+  failureRate?: Prisma.FloatFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -764,8 +937,13 @@ export type GroupProblemStatsCreateManyGroupInput = {
   attemptedCount: number
   acceptedCount: number
   totalAttempts: number
+  successRate?: number
   avgRuntime: number
   avgMemory: number
+  avgTime?: number
+  difficultyTier?: string
+  failureRate?: number
+  createdAt?: Date | string
   updatedAt?: Date | string
 }
 
@@ -775,8 +953,13 @@ export type GroupProblemStatsUpdateWithoutGroupInput = {
   attemptedCount?: Prisma.IntFieldUpdateOperationsInput | number
   acceptedCount?: Prisma.IntFieldUpdateOperationsInput | number
   totalAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  successRate?: Prisma.FloatFieldUpdateOperationsInput | number
   avgRuntime?: Prisma.FloatFieldUpdateOperationsInput | number
   avgMemory?: Prisma.FloatFieldUpdateOperationsInput | number
+  avgTime?: Prisma.FloatFieldUpdateOperationsInput | number
+  difficultyTier?: Prisma.StringFieldUpdateOperationsInput | string
+  failureRate?: Prisma.FloatFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   problem?: Prisma.ProblemUpdateOneRequiredWithoutGroupProblemStatsNestedInput
 }
@@ -788,8 +971,13 @@ export type GroupProblemStatsUncheckedUpdateWithoutGroupInput = {
   attemptedCount?: Prisma.IntFieldUpdateOperationsInput | number
   acceptedCount?: Prisma.IntFieldUpdateOperationsInput | number
   totalAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  successRate?: Prisma.FloatFieldUpdateOperationsInput | number
   avgRuntime?: Prisma.FloatFieldUpdateOperationsInput | number
   avgMemory?: Prisma.FloatFieldUpdateOperationsInput | number
+  avgTime?: Prisma.FloatFieldUpdateOperationsInput | number
+  difficultyTier?: Prisma.StringFieldUpdateOperationsInput | string
+  failureRate?: Prisma.FloatFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -800,8 +988,13 @@ export type GroupProblemStatsUncheckedUpdateManyWithoutGroupInput = {
   attemptedCount?: Prisma.IntFieldUpdateOperationsInput | number
   acceptedCount?: Prisma.IntFieldUpdateOperationsInput | number
   totalAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  successRate?: Prisma.FloatFieldUpdateOperationsInput | number
   avgRuntime?: Prisma.FloatFieldUpdateOperationsInput | number
   avgMemory?: Prisma.FloatFieldUpdateOperationsInput | number
+  avgTime?: Prisma.FloatFieldUpdateOperationsInput | number
+  difficultyTier?: Prisma.StringFieldUpdateOperationsInput | string
+  failureRate?: Prisma.FloatFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -815,8 +1008,13 @@ export type GroupProblemStatsSelect<ExtArgs extends runtime.Types.Extensions.Int
   attemptedCount?: boolean
   acceptedCount?: boolean
   totalAttempts?: boolean
+  successRate?: boolean
   avgRuntime?: boolean
   avgMemory?: boolean
+  avgTime?: boolean
+  difficultyTier?: boolean
+  failureRate?: boolean
+  createdAt?: boolean
   updatedAt?: boolean
   group?: boolean | Prisma.GroupDefaultArgs<ExtArgs>
   problem?: boolean | Prisma.ProblemDefaultArgs<ExtArgs>
@@ -830,8 +1028,13 @@ export type GroupProblemStatsSelectCreateManyAndReturn<ExtArgs extends runtime.T
   attemptedCount?: boolean
   acceptedCount?: boolean
   totalAttempts?: boolean
+  successRate?: boolean
   avgRuntime?: boolean
   avgMemory?: boolean
+  avgTime?: boolean
+  difficultyTier?: boolean
+  failureRate?: boolean
+  createdAt?: boolean
   updatedAt?: boolean
   group?: boolean | Prisma.GroupDefaultArgs<ExtArgs>
   problem?: boolean | Prisma.ProblemDefaultArgs<ExtArgs>
@@ -845,8 +1048,13 @@ export type GroupProblemStatsSelectUpdateManyAndReturn<ExtArgs extends runtime.T
   attemptedCount?: boolean
   acceptedCount?: boolean
   totalAttempts?: boolean
+  successRate?: boolean
   avgRuntime?: boolean
   avgMemory?: boolean
+  avgTime?: boolean
+  difficultyTier?: boolean
+  failureRate?: boolean
+  createdAt?: boolean
   updatedAt?: boolean
   group?: boolean | Prisma.GroupDefaultArgs<ExtArgs>
   problem?: boolean | Prisma.ProblemDefaultArgs<ExtArgs>
@@ -860,12 +1068,17 @@ export type GroupProblemStatsSelectScalar = {
   attemptedCount?: boolean
   acceptedCount?: boolean
   totalAttempts?: boolean
+  successRate?: boolean
   avgRuntime?: boolean
   avgMemory?: boolean
+  avgTime?: boolean
+  difficultyTier?: boolean
+  failureRate?: boolean
+  createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type GroupProblemStatsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "groupId" | "problemId" | "totalStudents" | "attemptedCount" | "acceptedCount" | "totalAttempts" | "avgRuntime" | "avgMemory" | "updatedAt", ExtArgs["result"]["groupProblemStats"]>
+export type GroupProblemStatsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "groupId" | "problemId" | "totalStudents" | "attemptedCount" | "acceptedCount" | "totalAttempts" | "successRate" | "avgRuntime" | "avgMemory" | "avgTime" | "difficultyTier" | "failureRate" | "createdAt" | "updatedAt", ExtArgs["result"]["groupProblemStats"]>
 export type GroupProblemStatsInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   group?: boolean | Prisma.GroupDefaultArgs<ExtArgs>
   problem?: boolean | Prisma.ProblemDefaultArgs<ExtArgs>
@@ -893,8 +1106,13 @@ export type $GroupProblemStatsPayload<ExtArgs extends runtime.Types.Extensions.I
     attemptedCount: number
     acceptedCount: number
     totalAttempts: number
+    successRate: number
     avgRuntime: number
     avgMemory: number
+    avgTime: number
+    difficultyTier: string
+    failureRate: number
+    createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["groupProblemStats"]>
   composites: {}
@@ -1328,8 +1546,13 @@ export interface GroupProblemStatsFieldRefs {
   readonly attemptedCount: Prisma.FieldRef<"GroupProblemStats", 'Int'>
   readonly acceptedCount: Prisma.FieldRef<"GroupProblemStats", 'Int'>
   readonly totalAttempts: Prisma.FieldRef<"GroupProblemStats", 'Int'>
+  readonly successRate: Prisma.FieldRef<"GroupProblemStats", 'Float'>
   readonly avgRuntime: Prisma.FieldRef<"GroupProblemStats", 'Float'>
   readonly avgMemory: Prisma.FieldRef<"GroupProblemStats", 'Float'>
+  readonly avgTime: Prisma.FieldRef<"GroupProblemStats", 'Float'>
+  readonly difficultyTier: Prisma.FieldRef<"GroupProblemStats", 'String'>
+  readonly failureRate: Prisma.FieldRef<"GroupProblemStats", 'Float'>
+  readonly createdAt: Prisma.FieldRef<"GroupProblemStats", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"GroupProblemStats", 'DateTime'>
 }
     

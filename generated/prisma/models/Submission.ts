@@ -50,10 +50,11 @@ export type SubmissionMinAggregateOutputType = {
   totalTestcases: number | null
   executionTime: number | null
   memory: number | null
+  stderr: string | null
   isFinal: boolean | null
   aiQueued: boolean | null
   aiStatus: $Enums.AiProcessingStatus | null
-  status: $Enums.SubmissionStatus | null
+  status: $Enums.ExecutionStatus | null
   createdAt: Date | null
   updatedAt: Date | null
   userId: string | null
@@ -70,10 +71,11 @@ export type SubmissionMaxAggregateOutputType = {
   totalTestcases: number | null
   executionTime: number | null
   memory: number | null
+  stderr: string | null
   isFinal: boolean | null
   aiQueued: boolean | null
   aiStatus: $Enums.AiProcessingStatus | null
-  status: $Enums.SubmissionStatus | null
+  status: $Enums.ExecutionStatus | null
   createdAt: Date | null
   updatedAt: Date | null
   userId: string | null
@@ -90,6 +92,7 @@ export type SubmissionCountAggregateOutputType = {
   totalTestcases: number
   executionTime: number
   memory: number
+  stderr: number
   isFinal: number
   aiQueued: number
   aiStatus: number
@@ -126,6 +129,7 @@ export type SubmissionMinAggregateInputType = {
   totalTestcases?: true
   executionTime?: true
   memory?: true
+  stderr?: true
   isFinal?: true
   aiQueued?: true
   aiStatus?: true
@@ -146,6 +150,7 @@ export type SubmissionMaxAggregateInputType = {
   totalTestcases?: true
   executionTime?: true
   memory?: true
+  stderr?: true
   isFinal?: true
   aiQueued?: true
   aiStatus?: true
@@ -166,6 +171,7 @@ export type SubmissionCountAggregateInputType = {
   totalTestcases?: true
   executionTime?: true
   memory?: true
+  stderr?: true
   isFinal?: true
   aiQueued?: true
   aiStatus?: true
@@ -273,10 +279,11 @@ export type SubmissionGroupByOutputType = {
   totalTestcases: number
   executionTime: number | null
   memory: number | null
+  stderr: string | null
   isFinal: boolean
   aiQueued: boolean
   aiStatus: $Enums.AiProcessingStatus
-  status: $Enums.SubmissionStatus
+  status: $Enums.ExecutionStatus
   createdAt: Date
   updatedAt: Date
   userId: string | null
@@ -314,12 +321,13 @@ export type SubmissionWhereInput = {
   sourceCode?: Prisma.StringFilter<"Submission"> | string
   passedTestcases?: Prisma.IntFilter<"Submission"> | number
   totalTestcases?: Prisma.IntFilter<"Submission"> | number
-  executionTime?: Prisma.IntNullableFilter<"Submission"> | number | null
-  memory?: Prisma.IntNullableFilter<"Submission"> | number | null
+  executionTime?: Prisma.FloatNullableFilter<"Submission"> | number | null
+  memory?: Prisma.FloatNullableFilter<"Submission"> | number | null
+  stderr?: Prisma.StringNullableFilter<"Submission"> | string | null
   isFinal?: Prisma.BoolFilter<"Submission"> | boolean
   aiQueued?: Prisma.BoolFilter<"Submission"> | boolean
   aiStatus?: Prisma.EnumAiProcessingStatusFilter<"Submission"> | $Enums.AiProcessingStatus
-  status?: Prisma.EnumSubmissionStatusFilter<"Submission"> | $Enums.SubmissionStatus
+  status?: Prisma.EnumExecutionStatusFilter<"Submission"> | $Enums.ExecutionStatus
   createdAt?: Prisma.DateTimeFilter<"Submission"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Submission"> | Date | string
   userId?: Prisma.StringNullableFilter<"Submission"> | string | null
@@ -341,6 +349,7 @@ export type SubmissionOrderByWithRelationInput = {
   totalTestcases?: Prisma.SortOrder
   executionTime?: Prisma.SortOrderInput | Prisma.SortOrder
   memory?: Prisma.SortOrderInput | Prisma.SortOrder
+  stderr?: Prisma.SortOrderInput | Prisma.SortOrder
   isFinal?: Prisma.SortOrder
   aiQueued?: Prisma.SortOrder
   aiStatus?: Prisma.SortOrder
@@ -367,12 +376,13 @@ export type SubmissionWhereUniqueInput = Prisma.AtLeast<{
   sourceCode?: Prisma.StringFilter<"Submission"> | string
   passedTestcases?: Prisma.IntFilter<"Submission"> | number
   totalTestcases?: Prisma.IntFilter<"Submission"> | number
-  executionTime?: Prisma.IntNullableFilter<"Submission"> | number | null
-  memory?: Prisma.IntNullableFilter<"Submission"> | number | null
+  executionTime?: Prisma.FloatNullableFilter<"Submission"> | number | null
+  memory?: Prisma.FloatNullableFilter<"Submission"> | number | null
+  stderr?: Prisma.StringNullableFilter<"Submission"> | string | null
   isFinal?: Prisma.BoolFilter<"Submission"> | boolean
   aiQueued?: Prisma.BoolFilter<"Submission"> | boolean
   aiStatus?: Prisma.EnumAiProcessingStatusFilter<"Submission"> | $Enums.AiProcessingStatus
-  status?: Prisma.EnumSubmissionStatusFilter<"Submission"> | $Enums.SubmissionStatus
+  status?: Prisma.EnumExecutionStatusFilter<"Submission"> | $Enums.ExecutionStatus
   createdAt?: Prisma.DateTimeFilter<"Submission"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Submission"> | Date | string
   userId?: Prisma.StringNullableFilter<"Submission"> | string | null
@@ -394,6 +404,7 @@ export type SubmissionOrderByWithAggregationInput = {
   totalTestcases?: Prisma.SortOrder
   executionTime?: Prisma.SortOrderInput | Prisma.SortOrder
   memory?: Prisma.SortOrderInput | Prisma.SortOrder
+  stderr?: Prisma.SortOrderInput | Prisma.SortOrder
   isFinal?: Prisma.SortOrder
   aiQueued?: Prisma.SortOrder
   aiStatus?: Prisma.SortOrder
@@ -420,12 +431,13 @@ export type SubmissionScalarWhereWithAggregatesInput = {
   sourceCode?: Prisma.StringWithAggregatesFilter<"Submission"> | string
   passedTestcases?: Prisma.IntWithAggregatesFilter<"Submission"> | number
   totalTestcases?: Prisma.IntWithAggregatesFilter<"Submission"> | number
-  executionTime?: Prisma.IntNullableWithAggregatesFilter<"Submission"> | number | null
-  memory?: Prisma.IntNullableWithAggregatesFilter<"Submission"> | number | null
+  executionTime?: Prisma.FloatNullableWithAggregatesFilter<"Submission"> | number | null
+  memory?: Prisma.FloatNullableWithAggregatesFilter<"Submission"> | number | null
+  stderr?: Prisma.StringNullableWithAggregatesFilter<"Submission"> | string | null
   isFinal?: Prisma.BoolWithAggregatesFilter<"Submission"> | boolean
   aiQueued?: Prisma.BoolWithAggregatesFilter<"Submission"> | boolean
   aiStatus?: Prisma.EnumAiProcessingStatusWithAggregatesFilter<"Submission"> | $Enums.AiProcessingStatus
-  status?: Prisma.EnumSubmissionStatusWithAggregatesFilter<"Submission"> | $Enums.SubmissionStatus
+  status?: Prisma.EnumExecutionStatusWithAggregatesFilter<"Submission"> | $Enums.ExecutionStatus
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Submission"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Submission"> | Date | string
   userId?: Prisma.StringNullableWithAggregatesFilter<"Submission"> | string | null
@@ -440,10 +452,11 @@ export type SubmissionCreateInput = {
   totalTestcases?: number
   executionTime?: number | null
   memory?: number | null
+  stderr?: string | null
   isFinal?: boolean
   aiQueued?: boolean
   aiStatus?: $Enums.AiProcessingStatus
-  status: $Enums.SubmissionStatus
+  status: $Enums.ExecutionStatus
   createdAt?: Date | string
   updatedAt?: Date | string
   attempt: Prisma.ExamAttemptCreateNestedOneWithoutSubmissionsInput
@@ -463,10 +476,11 @@ export type SubmissionUncheckedCreateInput = {
   totalTestcases?: number
   executionTime?: number | null
   memory?: number | null
+  stderr?: string | null
   isFinal?: boolean
   aiQueued?: boolean
   aiStatus?: $Enums.AiProcessingStatus
-  status: $Enums.SubmissionStatus
+  status: $Enums.ExecutionStatus
   createdAt?: Date | string
   updatedAt?: Date | string
   userId?: string | null
@@ -480,12 +494,13 @@ export type SubmissionUpdateInput = {
   sourceCode?: Prisma.StringFieldUpdateOperationsInput | string
   passedTestcases?: Prisma.IntFieldUpdateOperationsInput | number
   totalTestcases?: Prisma.IntFieldUpdateOperationsInput | number
-  executionTime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  memory?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  executionTime?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  memory?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  stderr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isFinal?: Prisma.BoolFieldUpdateOperationsInput | boolean
   aiQueued?: Prisma.BoolFieldUpdateOperationsInput | boolean
   aiStatus?: Prisma.EnumAiProcessingStatusFieldUpdateOperationsInput | $Enums.AiProcessingStatus
-  status?: Prisma.EnumSubmissionStatusFieldUpdateOperationsInput | $Enums.SubmissionStatus
+  status?: Prisma.EnumExecutionStatusFieldUpdateOperationsInput | $Enums.ExecutionStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   attempt?: Prisma.ExamAttemptUpdateOneRequiredWithoutSubmissionsNestedInput
@@ -503,12 +518,13 @@ export type SubmissionUncheckedUpdateInput = {
   sourceCode?: Prisma.StringFieldUpdateOperationsInput | string
   passedTestcases?: Prisma.IntFieldUpdateOperationsInput | number
   totalTestcases?: Prisma.IntFieldUpdateOperationsInput | number
-  executionTime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  memory?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  executionTime?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  memory?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  stderr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isFinal?: Prisma.BoolFieldUpdateOperationsInput | boolean
   aiQueued?: Prisma.BoolFieldUpdateOperationsInput | boolean
   aiStatus?: Prisma.EnumAiProcessingStatusFieldUpdateOperationsInput | $Enums.AiProcessingStatus
-  status?: Prisma.EnumSubmissionStatusFieldUpdateOperationsInput | $Enums.SubmissionStatus
+  status?: Prisma.EnumExecutionStatusFieldUpdateOperationsInput | $Enums.ExecutionStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -526,10 +542,11 @@ export type SubmissionCreateManyInput = {
   totalTestcases?: number
   executionTime?: number | null
   memory?: number | null
+  stderr?: string | null
   isFinal?: boolean
   aiQueued?: boolean
   aiStatus?: $Enums.AiProcessingStatus
-  status: $Enums.SubmissionStatus
+  status: $Enums.ExecutionStatus
   createdAt?: Date | string
   updatedAt?: Date | string
   userId?: string | null
@@ -542,12 +559,13 @@ export type SubmissionUpdateManyMutationInput = {
   sourceCode?: Prisma.StringFieldUpdateOperationsInput | string
   passedTestcases?: Prisma.IntFieldUpdateOperationsInput | number
   totalTestcases?: Prisma.IntFieldUpdateOperationsInput | number
-  executionTime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  memory?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  executionTime?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  memory?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  stderr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isFinal?: Prisma.BoolFieldUpdateOperationsInput | boolean
   aiQueued?: Prisma.BoolFieldUpdateOperationsInput | boolean
   aiStatus?: Prisma.EnumAiProcessingStatusFieldUpdateOperationsInput | $Enums.AiProcessingStatus
-  status?: Prisma.EnumSubmissionStatusFieldUpdateOperationsInput | $Enums.SubmissionStatus
+  status?: Prisma.EnumExecutionStatusFieldUpdateOperationsInput | $Enums.ExecutionStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -560,12 +578,13 @@ export type SubmissionUncheckedUpdateManyInput = {
   sourceCode?: Prisma.StringFieldUpdateOperationsInput | string
   passedTestcases?: Prisma.IntFieldUpdateOperationsInput | number
   totalTestcases?: Prisma.IntFieldUpdateOperationsInput | number
-  executionTime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  memory?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  executionTime?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  memory?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  stderr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isFinal?: Prisma.BoolFieldUpdateOperationsInput | boolean
   aiQueued?: Prisma.BoolFieldUpdateOperationsInput | boolean
   aiStatus?: Prisma.EnumAiProcessingStatusFieldUpdateOperationsInput | $Enums.AiProcessingStatus
-  status?: Prisma.EnumSubmissionStatusFieldUpdateOperationsInput | $Enums.SubmissionStatus
+  status?: Prisma.EnumExecutionStatusFieldUpdateOperationsInput | $Enums.ExecutionStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -592,6 +611,7 @@ export type SubmissionCountOrderByAggregateInput = {
   totalTestcases?: Prisma.SortOrder
   executionTime?: Prisma.SortOrder
   memory?: Prisma.SortOrder
+  stderr?: Prisma.SortOrder
   isFinal?: Prisma.SortOrder
   aiQueued?: Prisma.SortOrder
   aiStatus?: Prisma.SortOrder
@@ -619,6 +639,7 @@ export type SubmissionMaxOrderByAggregateInput = {
   totalTestcases?: Prisma.SortOrder
   executionTime?: Prisma.SortOrder
   memory?: Prisma.SortOrder
+  stderr?: Prisma.SortOrder
   isFinal?: Prisma.SortOrder
   aiQueued?: Prisma.SortOrder
   aiStatus?: Prisma.SortOrder
@@ -639,6 +660,7 @@ export type SubmissionMinOrderByAggregateInput = {
   totalTestcases?: Prisma.SortOrder
   executionTime?: Prisma.SortOrder
   memory?: Prisma.SortOrder
+  stderr?: Prisma.SortOrder
   isFinal?: Prisma.SortOrder
   aiQueued?: Prisma.SortOrder
   aiStatus?: Prisma.SortOrder
@@ -787,20 +809,8 @@ export type SubmissionUncheckedUpdateManyWithoutExamNestedInput = {
   deleteMany?: Prisma.SubmissionScalarWhereInput | Prisma.SubmissionScalarWhereInput[]
 }
 
-export type NullableIntFieldUpdateOperationsInput = {
-  set?: number | null
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
-}
-
 export type EnumAiProcessingStatusFieldUpdateOperationsInput = {
   set?: $Enums.AiProcessingStatus
-}
-
-export type EnumSubmissionStatusFieldUpdateOperationsInput = {
-  set?: $Enums.SubmissionStatus
 }
 
 export type SubmissionCreateNestedManyWithoutAttemptInput = {
@@ -867,10 +877,11 @@ export type SubmissionCreateWithoutUserInput = {
   totalTestcases?: number
   executionTime?: number | null
   memory?: number | null
+  stderr?: string | null
   isFinal?: boolean
   aiQueued?: boolean
   aiStatus?: $Enums.AiProcessingStatus
-  status: $Enums.SubmissionStatus
+  status: $Enums.ExecutionStatus
   createdAt?: Date | string
   updatedAt?: Date | string
   attempt: Prisma.ExamAttemptCreateNestedOneWithoutSubmissionsInput
@@ -889,10 +900,11 @@ export type SubmissionUncheckedCreateWithoutUserInput = {
   totalTestcases?: number
   executionTime?: number | null
   memory?: number | null
+  stderr?: string | null
   isFinal?: boolean
   aiQueued?: boolean
   aiStatus?: $Enums.AiProcessingStatus
-  status: $Enums.SubmissionStatus
+  status: $Enums.ExecutionStatus
   createdAt?: Date | string
   updatedAt?: Date | string
   examId?: string | null
@@ -936,12 +948,13 @@ export type SubmissionScalarWhereInput = {
   sourceCode?: Prisma.StringFilter<"Submission"> | string
   passedTestcases?: Prisma.IntFilter<"Submission"> | number
   totalTestcases?: Prisma.IntFilter<"Submission"> | number
-  executionTime?: Prisma.IntNullableFilter<"Submission"> | number | null
-  memory?: Prisma.IntNullableFilter<"Submission"> | number | null
+  executionTime?: Prisma.FloatNullableFilter<"Submission"> | number | null
+  memory?: Prisma.FloatNullableFilter<"Submission"> | number | null
+  stderr?: Prisma.StringNullableFilter<"Submission"> | string | null
   isFinal?: Prisma.BoolFilter<"Submission"> | boolean
   aiQueued?: Prisma.BoolFilter<"Submission"> | boolean
   aiStatus?: Prisma.EnumAiProcessingStatusFilter<"Submission"> | $Enums.AiProcessingStatus
-  status?: Prisma.EnumSubmissionStatusFilter<"Submission"> | $Enums.SubmissionStatus
+  status?: Prisma.EnumExecutionStatusFilter<"Submission"> | $Enums.ExecutionStatus
   createdAt?: Prisma.DateTimeFilter<"Submission"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Submission"> | Date | string
   userId?: Prisma.StringNullableFilter<"Submission"> | string | null
@@ -956,10 +969,11 @@ export type SubmissionCreateWithoutProblemInput = {
   totalTestcases?: number
   executionTime?: number | null
   memory?: number | null
+  stderr?: string | null
   isFinal?: boolean
   aiQueued?: boolean
   aiStatus?: $Enums.AiProcessingStatus
-  status: $Enums.SubmissionStatus
+  status: $Enums.ExecutionStatus
   createdAt?: Date | string
   updatedAt?: Date | string
   attempt: Prisma.ExamAttemptCreateNestedOneWithoutSubmissionsInput
@@ -977,10 +991,11 @@ export type SubmissionUncheckedCreateWithoutProblemInput = {
   totalTestcases?: number
   executionTime?: number | null
   memory?: number | null
+  stderr?: string | null
   isFinal?: boolean
   aiQueued?: boolean
   aiStatus?: $Enums.AiProcessingStatus
-  status: $Enums.SubmissionStatus
+  status: $Enums.ExecutionStatus
   createdAt?: Date | string
   updatedAt?: Date | string
   userId?: string | null
@@ -1022,10 +1037,11 @@ export type SubmissionCreateWithoutExamInput = {
   totalTestcases?: number
   executionTime?: number | null
   memory?: number | null
+  stderr?: string | null
   isFinal?: boolean
   aiQueued?: boolean
   aiStatus?: $Enums.AiProcessingStatus
-  status: $Enums.SubmissionStatus
+  status: $Enums.ExecutionStatus
   createdAt?: Date | string
   updatedAt?: Date | string
   attempt: Prisma.ExamAttemptCreateNestedOneWithoutSubmissionsInput
@@ -1044,10 +1060,11 @@ export type SubmissionUncheckedCreateWithoutExamInput = {
   totalTestcases?: number
   executionTime?: number | null
   memory?: number | null
+  stderr?: string | null
   isFinal?: boolean
   aiQueued?: boolean
   aiStatus?: $Enums.AiProcessingStatus
-  status: $Enums.SubmissionStatus
+  status: $Enums.ExecutionStatus
   createdAt?: Date | string
   updatedAt?: Date | string
   userId?: string | null
@@ -1088,10 +1105,11 @@ export type SubmissionCreateWithoutAttemptInput = {
   totalTestcases?: number
   executionTime?: number | null
   memory?: number | null
+  stderr?: string | null
   isFinal?: boolean
   aiQueued?: boolean
   aiStatus?: $Enums.AiProcessingStatus
-  status: $Enums.SubmissionStatus
+  status: $Enums.ExecutionStatus
   createdAt?: Date | string
   updatedAt?: Date | string
   problem: Prisma.ProblemCreateNestedOneWithoutSubmissionsInput
@@ -1109,10 +1127,11 @@ export type SubmissionUncheckedCreateWithoutAttemptInput = {
   totalTestcases?: number
   executionTime?: number | null
   memory?: number | null
+  stderr?: string | null
   isFinal?: boolean
   aiQueued?: boolean
   aiStatus?: $Enums.AiProcessingStatus
-  status: $Enums.SubmissionStatus
+  status: $Enums.ExecutionStatus
   createdAt?: Date | string
   updatedAt?: Date | string
   userId?: string | null
@@ -1154,10 +1173,11 @@ export type SubmissionCreateWithoutAiEvaluationInput = {
   totalTestcases?: number
   executionTime?: number | null
   memory?: number | null
+  stderr?: string | null
   isFinal?: boolean
   aiQueued?: boolean
   aiStatus?: $Enums.AiProcessingStatus
-  status: $Enums.SubmissionStatus
+  status: $Enums.ExecutionStatus
   createdAt?: Date | string
   updatedAt?: Date | string
   attempt: Prisma.ExamAttemptCreateNestedOneWithoutSubmissionsInput
@@ -1176,10 +1196,11 @@ export type SubmissionUncheckedCreateWithoutAiEvaluationInput = {
   totalTestcases?: number
   executionTime?: number | null
   memory?: number | null
+  stderr?: string | null
   isFinal?: boolean
   aiQueued?: boolean
   aiStatus?: $Enums.AiProcessingStatus
-  status: $Enums.SubmissionStatus
+  status: $Enums.ExecutionStatus
   createdAt?: Date | string
   updatedAt?: Date | string
   userId?: string | null
@@ -1208,12 +1229,13 @@ export type SubmissionUpdateWithoutAiEvaluationInput = {
   sourceCode?: Prisma.StringFieldUpdateOperationsInput | string
   passedTestcases?: Prisma.IntFieldUpdateOperationsInput | number
   totalTestcases?: Prisma.IntFieldUpdateOperationsInput | number
-  executionTime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  memory?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  executionTime?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  memory?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  stderr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isFinal?: Prisma.BoolFieldUpdateOperationsInput | boolean
   aiQueued?: Prisma.BoolFieldUpdateOperationsInput | boolean
   aiStatus?: Prisma.EnumAiProcessingStatusFieldUpdateOperationsInput | $Enums.AiProcessingStatus
-  status?: Prisma.EnumSubmissionStatusFieldUpdateOperationsInput | $Enums.SubmissionStatus
+  status?: Prisma.EnumExecutionStatusFieldUpdateOperationsInput | $Enums.ExecutionStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   attempt?: Prisma.ExamAttemptUpdateOneRequiredWithoutSubmissionsNestedInput
@@ -1230,12 +1252,13 @@ export type SubmissionUncheckedUpdateWithoutAiEvaluationInput = {
   sourceCode?: Prisma.StringFieldUpdateOperationsInput | string
   passedTestcases?: Prisma.IntFieldUpdateOperationsInput | number
   totalTestcases?: Prisma.IntFieldUpdateOperationsInput | number
-  executionTime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  memory?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  executionTime?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  memory?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  stderr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isFinal?: Prisma.BoolFieldUpdateOperationsInput | boolean
   aiQueued?: Prisma.BoolFieldUpdateOperationsInput | boolean
   aiStatus?: Prisma.EnumAiProcessingStatusFieldUpdateOperationsInput | $Enums.AiProcessingStatus
-  status?: Prisma.EnumSubmissionStatusFieldUpdateOperationsInput | $Enums.SubmissionStatus
+  status?: Prisma.EnumExecutionStatusFieldUpdateOperationsInput | $Enums.ExecutionStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1252,10 +1275,11 @@ export type SubmissionCreateManyUserInput = {
   totalTestcases?: number
   executionTime?: number | null
   memory?: number | null
+  stderr?: string | null
   isFinal?: boolean
   aiQueued?: boolean
   aiStatus?: $Enums.AiProcessingStatus
-  status: $Enums.SubmissionStatus
+  status: $Enums.ExecutionStatus
   createdAt?: Date | string
   updatedAt?: Date | string
   examId?: string | null
@@ -1267,12 +1291,13 @@ export type SubmissionUpdateWithoutUserInput = {
   sourceCode?: Prisma.StringFieldUpdateOperationsInput | string
   passedTestcases?: Prisma.IntFieldUpdateOperationsInput | number
   totalTestcases?: Prisma.IntFieldUpdateOperationsInput | number
-  executionTime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  memory?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  executionTime?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  memory?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  stderr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isFinal?: Prisma.BoolFieldUpdateOperationsInput | boolean
   aiQueued?: Prisma.BoolFieldUpdateOperationsInput | boolean
   aiStatus?: Prisma.EnumAiProcessingStatusFieldUpdateOperationsInput | $Enums.AiProcessingStatus
-  status?: Prisma.EnumSubmissionStatusFieldUpdateOperationsInput | $Enums.SubmissionStatus
+  status?: Prisma.EnumExecutionStatusFieldUpdateOperationsInput | $Enums.ExecutionStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   attempt?: Prisma.ExamAttemptUpdateOneRequiredWithoutSubmissionsNestedInput
@@ -1289,12 +1314,13 @@ export type SubmissionUncheckedUpdateWithoutUserInput = {
   sourceCode?: Prisma.StringFieldUpdateOperationsInput | string
   passedTestcases?: Prisma.IntFieldUpdateOperationsInput | number
   totalTestcases?: Prisma.IntFieldUpdateOperationsInput | number
-  executionTime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  memory?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  executionTime?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  memory?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  stderr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isFinal?: Prisma.BoolFieldUpdateOperationsInput | boolean
   aiQueued?: Prisma.BoolFieldUpdateOperationsInput | boolean
   aiStatus?: Prisma.EnumAiProcessingStatusFieldUpdateOperationsInput | $Enums.AiProcessingStatus
-  status?: Prisma.EnumSubmissionStatusFieldUpdateOperationsInput | $Enums.SubmissionStatus
+  status?: Prisma.EnumExecutionStatusFieldUpdateOperationsInput | $Enums.ExecutionStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   examId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1309,12 +1335,13 @@ export type SubmissionUncheckedUpdateManyWithoutUserInput = {
   sourceCode?: Prisma.StringFieldUpdateOperationsInput | string
   passedTestcases?: Prisma.IntFieldUpdateOperationsInput | number
   totalTestcases?: Prisma.IntFieldUpdateOperationsInput | number
-  executionTime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  memory?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  executionTime?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  memory?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  stderr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isFinal?: Prisma.BoolFieldUpdateOperationsInput | boolean
   aiQueued?: Prisma.BoolFieldUpdateOperationsInput | boolean
   aiStatus?: Prisma.EnumAiProcessingStatusFieldUpdateOperationsInput | $Enums.AiProcessingStatus
-  status?: Prisma.EnumSubmissionStatusFieldUpdateOperationsInput | $Enums.SubmissionStatus
+  status?: Prisma.EnumExecutionStatusFieldUpdateOperationsInput | $Enums.ExecutionStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   examId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1329,10 +1356,11 @@ export type SubmissionCreateManyProblemInput = {
   totalTestcases?: number
   executionTime?: number | null
   memory?: number | null
+  stderr?: string | null
   isFinal?: boolean
   aiQueued?: boolean
   aiStatus?: $Enums.AiProcessingStatus
-  status: $Enums.SubmissionStatus
+  status: $Enums.ExecutionStatus
   createdAt?: Date | string
   updatedAt?: Date | string
   userId?: string | null
@@ -1345,12 +1373,13 @@ export type SubmissionUpdateWithoutProblemInput = {
   sourceCode?: Prisma.StringFieldUpdateOperationsInput | string
   passedTestcases?: Prisma.IntFieldUpdateOperationsInput | number
   totalTestcases?: Prisma.IntFieldUpdateOperationsInput | number
-  executionTime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  memory?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  executionTime?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  memory?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  stderr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isFinal?: Prisma.BoolFieldUpdateOperationsInput | boolean
   aiQueued?: Prisma.BoolFieldUpdateOperationsInput | boolean
   aiStatus?: Prisma.EnumAiProcessingStatusFieldUpdateOperationsInput | $Enums.AiProcessingStatus
-  status?: Prisma.EnumSubmissionStatusFieldUpdateOperationsInput | $Enums.SubmissionStatus
+  status?: Prisma.EnumExecutionStatusFieldUpdateOperationsInput | $Enums.ExecutionStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   attempt?: Prisma.ExamAttemptUpdateOneRequiredWithoutSubmissionsNestedInput
@@ -1366,12 +1395,13 @@ export type SubmissionUncheckedUpdateWithoutProblemInput = {
   sourceCode?: Prisma.StringFieldUpdateOperationsInput | string
   passedTestcases?: Prisma.IntFieldUpdateOperationsInput | number
   totalTestcases?: Prisma.IntFieldUpdateOperationsInput | number
-  executionTime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  memory?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  executionTime?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  memory?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  stderr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isFinal?: Prisma.BoolFieldUpdateOperationsInput | boolean
   aiQueued?: Prisma.BoolFieldUpdateOperationsInput | boolean
   aiStatus?: Prisma.EnumAiProcessingStatusFieldUpdateOperationsInput | $Enums.AiProcessingStatus
-  status?: Prisma.EnumSubmissionStatusFieldUpdateOperationsInput | $Enums.SubmissionStatus
+  status?: Prisma.EnumExecutionStatusFieldUpdateOperationsInput | $Enums.ExecutionStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1386,12 +1416,13 @@ export type SubmissionUncheckedUpdateManyWithoutProblemInput = {
   sourceCode?: Prisma.StringFieldUpdateOperationsInput | string
   passedTestcases?: Prisma.IntFieldUpdateOperationsInput | number
   totalTestcases?: Prisma.IntFieldUpdateOperationsInput | number
-  executionTime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  memory?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  executionTime?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  memory?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  stderr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isFinal?: Prisma.BoolFieldUpdateOperationsInput | boolean
   aiQueued?: Prisma.BoolFieldUpdateOperationsInput | boolean
   aiStatus?: Prisma.EnumAiProcessingStatusFieldUpdateOperationsInput | $Enums.AiProcessingStatus
-  status?: Prisma.EnumSubmissionStatusFieldUpdateOperationsInput | $Enums.SubmissionStatus
+  status?: Prisma.EnumExecutionStatusFieldUpdateOperationsInput | $Enums.ExecutionStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1408,10 +1439,11 @@ export type SubmissionCreateManyExamInput = {
   totalTestcases?: number
   executionTime?: number | null
   memory?: number | null
+  stderr?: string | null
   isFinal?: boolean
   aiQueued?: boolean
   aiStatus?: $Enums.AiProcessingStatus
-  status: $Enums.SubmissionStatus
+  status: $Enums.ExecutionStatus
   createdAt?: Date | string
   updatedAt?: Date | string
   userId?: string | null
@@ -1423,12 +1455,13 @@ export type SubmissionUpdateWithoutExamInput = {
   sourceCode?: Prisma.StringFieldUpdateOperationsInput | string
   passedTestcases?: Prisma.IntFieldUpdateOperationsInput | number
   totalTestcases?: Prisma.IntFieldUpdateOperationsInput | number
-  executionTime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  memory?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  executionTime?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  memory?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  stderr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isFinal?: Prisma.BoolFieldUpdateOperationsInput | boolean
   aiQueued?: Prisma.BoolFieldUpdateOperationsInput | boolean
   aiStatus?: Prisma.EnumAiProcessingStatusFieldUpdateOperationsInput | $Enums.AiProcessingStatus
-  status?: Prisma.EnumSubmissionStatusFieldUpdateOperationsInput | $Enums.SubmissionStatus
+  status?: Prisma.EnumExecutionStatusFieldUpdateOperationsInput | $Enums.ExecutionStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   attempt?: Prisma.ExamAttemptUpdateOneRequiredWithoutSubmissionsNestedInput
@@ -1445,12 +1478,13 @@ export type SubmissionUncheckedUpdateWithoutExamInput = {
   sourceCode?: Prisma.StringFieldUpdateOperationsInput | string
   passedTestcases?: Prisma.IntFieldUpdateOperationsInput | number
   totalTestcases?: Prisma.IntFieldUpdateOperationsInput | number
-  executionTime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  memory?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  executionTime?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  memory?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  stderr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isFinal?: Prisma.BoolFieldUpdateOperationsInput | boolean
   aiQueued?: Prisma.BoolFieldUpdateOperationsInput | boolean
   aiStatus?: Prisma.EnumAiProcessingStatusFieldUpdateOperationsInput | $Enums.AiProcessingStatus
-  status?: Prisma.EnumSubmissionStatusFieldUpdateOperationsInput | $Enums.SubmissionStatus
+  status?: Prisma.EnumExecutionStatusFieldUpdateOperationsInput | $Enums.ExecutionStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1465,12 +1499,13 @@ export type SubmissionUncheckedUpdateManyWithoutExamInput = {
   sourceCode?: Prisma.StringFieldUpdateOperationsInput | string
   passedTestcases?: Prisma.IntFieldUpdateOperationsInput | number
   totalTestcases?: Prisma.IntFieldUpdateOperationsInput | number
-  executionTime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  memory?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  executionTime?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  memory?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  stderr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isFinal?: Prisma.BoolFieldUpdateOperationsInput | boolean
   aiQueued?: Prisma.BoolFieldUpdateOperationsInput | boolean
   aiStatus?: Prisma.EnumAiProcessingStatusFieldUpdateOperationsInput | $Enums.AiProcessingStatus
-  status?: Prisma.EnumSubmissionStatusFieldUpdateOperationsInput | $Enums.SubmissionStatus
+  status?: Prisma.EnumExecutionStatusFieldUpdateOperationsInput | $Enums.ExecutionStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1485,10 +1520,11 @@ export type SubmissionCreateManyAttemptInput = {
   totalTestcases?: number
   executionTime?: number | null
   memory?: number | null
+  stderr?: string | null
   isFinal?: boolean
   aiQueued?: boolean
   aiStatus?: $Enums.AiProcessingStatus
-  status: $Enums.SubmissionStatus
+  status: $Enums.ExecutionStatus
   createdAt?: Date | string
   updatedAt?: Date | string
   userId?: string | null
@@ -1501,12 +1537,13 @@ export type SubmissionUpdateWithoutAttemptInput = {
   sourceCode?: Prisma.StringFieldUpdateOperationsInput | string
   passedTestcases?: Prisma.IntFieldUpdateOperationsInput | number
   totalTestcases?: Prisma.IntFieldUpdateOperationsInput | number
-  executionTime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  memory?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  executionTime?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  memory?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  stderr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isFinal?: Prisma.BoolFieldUpdateOperationsInput | boolean
   aiQueued?: Prisma.BoolFieldUpdateOperationsInput | boolean
   aiStatus?: Prisma.EnumAiProcessingStatusFieldUpdateOperationsInput | $Enums.AiProcessingStatus
-  status?: Prisma.EnumSubmissionStatusFieldUpdateOperationsInput | $Enums.SubmissionStatus
+  status?: Prisma.EnumExecutionStatusFieldUpdateOperationsInput | $Enums.ExecutionStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   problem?: Prisma.ProblemUpdateOneRequiredWithoutSubmissionsNestedInput
@@ -1522,12 +1559,13 @@ export type SubmissionUncheckedUpdateWithoutAttemptInput = {
   sourceCode?: Prisma.StringFieldUpdateOperationsInput | string
   passedTestcases?: Prisma.IntFieldUpdateOperationsInput | number
   totalTestcases?: Prisma.IntFieldUpdateOperationsInput | number
-  executionTime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  memory?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  executionTime?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  memory?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  stderr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isFinal?: Prisma.BoolFieldUpdateOperationsInput | boolean
   aiQueued?: Prisma.BoolFieldUpdateOperationsInput | boolean
   aiStatus?: Prisma.EnumAiProcessingStatusFieldUpdateOperationsInput | $Enums.AiProcessingStatus
-  status?: Prisma.EnumSubmissionStatusFieldUpdateOperationsInput | $Enums.SubmissionStatus
+  status?: Prisma.EnumExecutionStatusFieldUpdateOperationsInput | $Enums.ExecutionStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1542,12 +1580,13 @@ export type SubmissionUncheckedUpdateManyWithoutAttemptInput = {
   sourceCode?: Prisma.StringFieldUpdateOperationsInput | string
   passedTestcases?: Prisma.IntFieldUpdateOperationsInput | number
   totalTestcases?: Prisma.IntFieldUpdateOperationsInput | number
-  executionTime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  memory?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  executionTime?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  memory?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  stderr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isFinal?: Prisma.BoolFieldUpdateOperationsInput | boolean
   aiQueued?: Prisma.BoolFieldUpdateOperationsInput | boolean
   aiStatus?: Prisma.EnumAiProcessingStatusFieldUpdateOperationsInput | $Enums.AiProcessingStatus
-  status?: Prisma.EnumSubmissionStatusFieldUpdateOperationsInput | $Enums.SubmissionStatus
+  status?: Prisma.EnumExecutionStatusFieldUpdateOperationsInput | $Enums.ExecutionStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1566,6 +1605,7 @@ export type SubmissionSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   totalTestcases?: boolean
   executionTime?: boolean
   memory?: boolean
+  stderr?: boolean
   isFinal?: boolean
   aiQueued?: boolean
   aiStatus?: boolean
@@ -1591,6 +1631,7 @@ export type SubmissionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ex
   totalTestcases?: boolean
   executionTime?: boolean
   memory?: boolean
+  stderr?: boolean
   isFinal?: boolean
   aiQueued?: boolean
   aiStatus?: boolean
@@ -1615,6 +1656,7 @@ export type SubmissionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ex
   totalTestcases?: boolean
   executionTime?: boolean
   memory?: boolean
+  stderr?: boolean
   isFinal?: boolean
   aiQueued?: boolean
   aiStatus?: boolean
@@ -1639,6 +1681,7 @@ export type SubmissionSelectScalar = {
   totalTestcases?: boolean
   executionTime?: boolean
   memory?: boolean
+  stderr?: boolean
   isFinal?: boolean
   aiQueued?: boolean
   aiStatus?: boolean
@@ -1649,7 +1692,7 @@ export type SubmissionSelectScalar = {
   examId?: boolean
 }
 
-export type SubmissionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "attemptId" | "problemId" | "language" | "sourceCode" | "passedTestcases" | "totalTestcases" | "executionTime" | "memory" | "isFinal" | "aiQueued" | "aiStatus" | "status" | "createdAt" | "updatedAt" | "userId" | "examId", ExtArgs["result"]["submission"]>
+export type SubmissionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "attemptId" | "problemId" | "language" | "sourceCode" | "passedTestcases" | "totalTestcases" | "executionTime" | "memory" | "stderr" | "isFinal" | "aiQueued" | "aiStatus" | "status" | "createdAt" | "updatedAt" | "userId" | "examId", ExtArgs["result"]["submission"]>
 export type SubmissionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   attempt?: boolean | Prisma.ExamAttemptDefaultArgs<ExtArgs>
   problem?: boolean | Prisma.ProblemDefaultArgs<ExtArgs>
@@ -1689,10 +1732,11 @@ export type $SubmissionPayload<ExtArgs extends runtime.Types.Extensions.Internal
     totalTestcases: number
     executionTime: number | null
     memory: number | null
+    stderr: string | null
     isFinal: boolean
     aiQueued: boolean
     aiStatus: $Enums.AiProcessingStatus
-    status: $Enums.SubmissionStatus
+    status: $Enums.ExecutionStatus
     createdAt: Date
     updatedAt: Date
     userId: string | null
@@ -2132,12 +2176,13 @@ export interface SubmissionFieldRefs {
   readonly sourceCode: Prisma.FieldRef<"Submission", 'String'>
   readonly passedTestcases: Prisma.FieldRef<"Submission", 'Int'>
   readonly totalTestcases: Prisma.FieldRef<"Submission", 'Int'>
-  readonly executionTime: Prisma.FieldRef<"Submission", 'Int'>
-  readonly memory: Prisma.FieldRef<"Submission", 'Int'>
+  readonly executionTime: Prisma.FieldRef<"Submission", 'Float'>
+  readonly memory: Prisma.FieldRef<"Submission", 'Float'>
+  readonly stderr: Prisma.FieldRef<"Submission", 'String'>
   readonly isFinal: Prisma.FieldRef<"Submission", 'Boolean'>
   readonly aiQueued: Prisma.FieldRef<"Submission", 'Boolean'>
   readonly aiStatus: Prisma.FieldRef<"Submission", 'AiProcessingStatus'>
-  readonly status: Prisma.FieldRef<"Submission", 'SubmissionStatus'>
+  readonly status: Prisma.FieldRef<"Submission", 'ExecutionStatus'>
   readonly createdAt: Prisma.FieldRef<"Submission", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Submission", 'DateTime'>
   readonly userId: Prisma.FieldRef<"Submission", 'String'>

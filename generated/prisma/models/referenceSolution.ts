@@ -20,68 +20,50 @@ export type referenceSolutionModel = runtime.Types.Result.DefaultSelection<Prism
 
 export type AggregateReferenceSolution = {
   _count: ReferenceSolutionCountAggregateOutputType | null
-  _avg: ReferenceSolutionAvgAggregateOutputType | null
-  _sum: ReferenceSolutionSumAggregateOutputType | null
   _min: ReferenceSolutionMinAggregateOutputType | null
   _max: ReferenceSolutionMaxAggregateOutputType | null
 }
 
-export type ReferenceSolutionAvgAggregateOutputType = {
-  languageId: number | null
-}
-
-export type ReferenceSolutionSumAggregateOutputType = {
-  languageId: number | null
-}
-
 export type ReferenceSolutionMinAggregateOutputType = {
   id: string | null
-  languageId: number | null
+  language: $Enums.ProgrammingLanguage | null
   code: string | null
   problemId: string | null
 }
 
 export type ReferenceSolutionMaxAggregateOutputType = {
   id: string | null
-  languageId: number | null
+  language: $Enums.ProgrammingLanguage | null
   code: string | null
   problemId: string | null
 }
 
 export type ReferenceSolutionCountAggregateOutputType = {
   id: number
-  languageId: number
+  language: number
   code: number
   problemId: number
   _all: number
 }
 
 
-export type ReferenceSolutionAvgAggregateInputType = {
-  languageId?: true
-}
-
-export type ReferenceSolutionSumAggregateInputType = {
-  languageId?: true
-}
-
 export type ReferenceSolutionMinAggregateInputType = {
   id?: true
-  languageId?: true
+  language?: true
   code?: true
   problemId?: true
 }
 
 export type ReferenceSolutionMaxAggregateInputType = {
   id?: true
-  languageId?: true
+  language?: true
   code?: true
   problemId?: true
 }
 
 export type ReferenceSolutionCountAggregateInputType = {
   id?: true
-  languageId?: true
+  language?: true
   code?: true
   problemId?: true
   _all?: true
@@ -125,18 +107,6 @@ export type ReferenceSolutionAggregateArgs<ExtArgs extends runtime.Types.Extensi
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
-   * Select which fields to average
-  **/
-  _avg?: ReferenceSolutionAvgAggregateInputType
-  /**
-   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-   * 
-   * Select which fields to sum
-  **/
-  _sum?: ReferenceSolutionSumAggregateInputType
-  /**
-   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-   * 
    * Select which fields to find the minimum value
   **/
   _min?: ReferenceSolutionMinAggregateInputType
@@ -167,20 +137,16 @@ export type referenceSolutionGroupByArgs<ExtArgs extends runtime.Types.Extension
   take?: number
   skip?: number
   _count?: ReferenceSolutionCountAggregateInputType | true
-  _avg?: ReferenceSolutionAvgAggregateInputType
-  _sum?: ReferenceSolutionSumAggregateInputType
   _min?: ReferenceSolutionMinAggregateInputType
   _max?: ReferenceSolutionMaxAggregateInputType
 }
 
 export type ReferenceSolutionGroupByOutputType = {
   id: string
-  languageId: number
+  language: $Enums.ProgrammingLanguage
   code: string
   problemId: string
   _count: ReferenceSolutionCountAggregateOutputType | null
-  _avg: ReferenceSolutionAvgAggregateOutputType | null
-  _sum: ReferenceSolutionSumAggregateOutputType | null
   _min: ReferenceSolutionMinAggregateOutputType | null
   _max: ReferenceSolutionMaxAggregateOutputType | null
 }
@@ -205,7 +171,7 @@ export type referenceSolutionWhereInput = {
   OR?: Prisma.referenceSolutionWhereInput[]
   NOT?: Prisma.referenceSolutionWhereInput | Prisma.referenceSolutionWhereInput[]
   id?: Prisma.StringFilter<"referenceSolution"> | string
-  languageId?: Prisma.IntFilter<"referenceSolution"> | number
+  language?: Prisma.EnumProgrammingLanguageFilter<"referenceSolution"> | $Enums.ProgrammingLanguage
   code?: Prisma.StringFilter<"referenceSolution"> | string
   problemId?: Prisma.StringFilter<"referenceSolution"> | string
   problem?: Prisma.XOR<Prisma.ProblemScalarRelationFilter, Prisma.ProblemWhereInput>
@@ -213,7 +179,7 @@ export type referenceSolutionWhereInput = {
 
 export type referenceSolutionOrderByWithRelationInput = {
   id?: Prisma.SortOrder
-  languageId?: Prisma.SortOrder
+  language?: Prisma.SortOrder
   code?: Prisma.SortOrder
   problemId?: Prisma.SortOrder
   problem?: Prisma.ProblemOrderByWithRelationInput
@@ -224,7 +190,7 @@ export type referenceSolutionWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.referenceSolutionWhereInput | Prisma.referenceSolutionWhereInput[]
   OR?: Prisma.referenceSolutionWhereInput[]
   NOT?: Prisma.referenceSolutionWhereInput | Prisma.referenceSolutionWhereInput[]
-  languageId?: Prisma.IntFilter<"referenceSolution"> | number
+  language?: Prisma.EnumProgrammingLanguageFilter<"referenceSolution"> | $Enums.ProgrammingLanguage
   code?: Prisma.StringFilter<"referenceSolution"> | string
   problemId?: Prisma.StringFilter<"referenceSolution"> | string
   problem?: Prisma.XOR<Prisma.ProblemScalarRelationFilter, Prisma.ProblemWhereInput>
@@ -232,14 +198,12 @@ export type referenceSolutionWhereUniqueInput = Prisma.AtLeast<{
 
 export type referenceSolutionOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
-  languageId?: Prisma.SortOrder
+  language?: Prisma.SortOrder
   code?: Prisma.SortOrder
   problemId?: Prisma.SortOrder
   _count?: Prisma.referenceSolutionCountOrderByAggregateInput
-  _avg?: Prisma.referenceSolutionAvgOrderByAggregateInput
   _max?: Prisma.referenceSolutionMaxOrderByAggregateInput
   _min?: Prisma.referenceSolutionMinOrderByAggregateInput
-  _sum?: Prisma.referenceSolutionSumOrderByAggregateInput
 }
 
 export type referenceSolutionScalarWhereWithAggregatesInput = {
@@ -247,55 +211,55 @@ export type referenceSolutionScalarWhereWithAggregatesInput = {
   OR?: Prisma.referenceSolutionScalarWhereWithAggregatesInput[]
   NOT?: Prisma.referenceSolutionScalarWhereWithAggregatesInput | Prisma.referenceSolutionScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"referenceSolution"> | string
-  languageId?: Prisma.IntWithAggregatesFilter<"referenceSolution"> | number
+  language?: Prisma.EnumProgrammingLanguageWithAggregatesFilter<"referenceSolution"> | $Enums.ProgrammingLanguage
   code?: Prisma.StringWithAggregatesFilter<"referenceSolution"> | string
   problemId?: Prisma.StringWithAggregatesFilter<"referenceSolution"> | string
 }
 
 export type referenceSolutionCreateInput = {
   id?: string
-  languageId: number
+  language: $Enums.ProgrammingLanguage
   code: string
   problem: Prisma.ProblemCreateNestedOneWithoutReferenceSolutionsInput
 }
 
 export type referenceSolutionUncheckedCreateInput = {
   id?: string
-  languageId: number
+  language: $Enums.ProgrammingLanguage
   code: string
   problemId: string
 }
 
 export type referenceSolutionUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  languageId?: Prisma.IntFieldUpdateOperationsInput | number
+  language?: Prisma.EnumProgrammingLanguageFieldUpdateOperationsInput | $Enums.ProgrammingLanguage
   code?: Prisma.StringFieldUpdateOperationsInput | string
   problem?: Prisma.ProblemUpdateOneRequiredWithoutReferenceSolutionsNestedInput
 }
 
 export type referenceSolutionUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  languageId?: Prisma.IntFieldUpdateOperationsInput | number
+  language?: Prisma.EnumProgrammingLanguageFieldUpdateOperationsInput | $Enums.ProgrammingLanguage
   code?: Prisma.StringFieldUpdateOperationsInput | string
   problemId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type referenceSolutionCreateManyInput = {
   id?: string
-  languageId: number
+  language: $Enums.ProgrammingLanguage
   code: string
   problemId: string
 }
 
 export type referenceSolutionUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  languageId?: Prisma.IntFieldUpdateOperationsInput | number
+  language?: Prisma.EnumProgrammingLanguageFieldUpdateOperationsInput | $Enums.ProgrammingLanguage
   code?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type referenceSolutionUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  languageId?: Prisma.IntFieldUpdateOperationsInput | number
+  language?: Prisma.EnumProgrammingLanguageFieldUpdateOperationsInput | $Enums.ProgrammingLanguage
   code?: Prisma.StringFieldUpdateOperationsInput | string
   problemId?: Prisma.StringFieldUpdateOperationsInput | string
 }
@@ -312,31 +276,23 @@ export type referenceSolutionOrderByRelationAggregateInput = {
 
 export type referenceSolutionCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  languageId?: Prisma.SortOrder
+  language?: Prisma.SortOrder
   code?: Prisma.SortOrder
   problemId?: Prisma.SortOrder
 }
 
-export type referenceSolutionAvgOrderByAggregateInput = {
-  languageId?: Prisma.SortOrder
-}
-
 export type referenceSolutionMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  languageId?: Prisma.SortOrder
+  language?: Prisma.SortOrder
   code?: Prisma.SortOrder
   problemId?: Prisma.SortOrder
 }
 
 export type referenceSolutionMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  languageId?: Prisma.SortOrder
+  language?: Prisma.SortOrder
   code?: Prisma.SortOrder
   problemId?: Prisma.SortOrder
-}
-
-export type referenceSolutionSumOrderByAggregateInput = {
-  languageId?: Prisma.SortOrder
 }
 
 export type referenceSolutionCreateNestedManyWithoutProblemInput = {
@@ -383,13 +339,13 @@ export type referenceSolutionUncheckedUpdateManyWithoutProblemNestedInput = {
 
 export type referenceSolutionCreateWithoutProblemInput = {
   id?: string
-  languageId: number
+  language: $Enums.ProgrammingLanguage
   code: string
 }
 
 export type referenceSolutionUncheckedCreateWithoutProblemInput = {
   id?: string
-  languageId: number
+  language: $Enums.ProgrammingLanguage
   code: string
 }
 
@@ -424,32 +380,32 @@ export type referenceSolutionScalarWhereInput = {
   OR?: Prisma.referenceSolutionScalarWhereInput[]
   NOT?: Prisma.referenceSolutionScalarWhereInput | Prisma.referenceSolutionScalarWhereInput[]
   id?: Prisma.StringFilter<"referenceSolution"> | string
-  languageId?: Prisma.IntFilter<"referenceSolution"> | number
+  language?: Prisma.EnumProgrammingLanguageFilter<"referenceSolution"> | $Enums.ProgrammingLanguage
   code?: Prisma.StringFilter<"referenceSolution"> | string
   problemId?: Prisma.StringFilter<"referenceSolution"> | string
 }
 
 export type referenceSolutionCreateManyProblemInput = {
   id?: string
-  languageId: number
+  language: $Enums.ProgrammingLanguage
   code: string
 }
 
 export type referenceSolutionUpdateWithoutProblemInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  languageId?: Prisma.IntFieldUpdateOperationsInput | number
+  language?: Prisma.EnumProgrammingLanguageFieldUpdateOperationsInput | $Enums.ProgrammingLanguage
   code?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type referenceSolutionUncheckedUpdateWithoutProblemInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  languageId?: Prisma.IntFieldUpdateOperationsInput | number
+  language?: Prisma.EnumProgrammingLanguageFieldUpdateOperationsInput | $Enums.ProgrammingLanguage
   code?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type referenceSolutionUncheckedUpdateManyWithoutProblemInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  languageId?: Prisma.IntFieldUpdateOperationsInput | number
+  language?: Prisma.EnumProgrammingLanguageFieldUpdateOperationsInput | $Enums.ProgrammingLanguage
   code?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
@@ -457,7 +413,7 @@ export type referenceSolutionUncheckedUpdateManyWithoutProblemInput = {
 
 export type referenceSolutionSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  languageId?: boolean
+  language?: boolean
   code?: boolean
   problemId?: boolean
   problem?: boolean | Prisma.ProblemDefaultArgs<ExtArgs>
@@ -465,7 +421,7 @@ export type referenceSolutionSelect<ExtArgs extends runtime.Types.Extensions.Int
 
 export type referenceSolutionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  languageId?: boolean
+  language?: boolean
   code?: boolean
   problemId?: boolean
   problem?: boolean | Prisma.ProblemDefaultArgs<ExtArgs>
@@ -473,7 +429,7 @@ export type referenceSolutionSelectCreateManyAndReturn<ExtArgs extends runtime.T
 
 export type referenceSolutionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  languageId?: boolean
+  language?: boolean
   code?: boolean
   problemId?: boolean
   problem?: boolean | Prisma.ProblemDefaultArgs<ExtArgs>
@@ -481,12 +437,12 @@ export type referenceSolutionSelectUpdateManyAndReturn<ExtArgs extends runtime.T
 
 export type referenceSolutionSelectScalar = {
   id?: boolean
-  languageId?: boolean
+  language?: boolean
   code?: boolean
   problemId?: boolean
 }
 
-export type referenceSolutionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "languageId" | "code" | "problemId", ExtArgs["result"]["referenceSolution"]>
+export type referenceSolutionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "language" | "code" | "problemId", ExtArgs["result"]["referenceSolution"]>
 export type referenceSolutionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   problem?: boolean | Prisma.ProblemDefaultArgs<ExtArgs>
 }
@@ -504,7 +460,7 @@ export type $referenceSolutionPayload<ExtArgs extends runtime.Types.Extensions.I
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
-    languageId: number
+    language: $Enums.ProgrammingLanguage
     code: string
     problemId: string
   }, ExtArgs["result"]["referenceSolution"]>
@@ -932,7 +888,7 @@ export interface Prisma__referenceSolutionClient<T, Null = never, ExtArgs extend
  */
 export interface referenceSolutionFieldRefs {
   readonly id: Prisma.FieldRef<"referenceSolution", 'String'>
-  readonly languageId: Prisma.FieldRef<"referenceSolution", 'Int'>
+  readonly language: Prisma.FieldRef<"referenceSolution", 'ProgrammingLanguage'>
   readonly code: Prisma.FieldRef<"referenceSolution", 'String'>
   readonly problemId: Prisma.FieldRef<"referenceSolution", 'String'>
 }

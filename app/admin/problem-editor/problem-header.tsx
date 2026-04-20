@@ -33,6 +33,7 @@ interface ProblemHeaderProps {
   onRemoveTag: (value: string) => void;
   onSaveDraft: () => void;
   onPublish: () => void;
+  publishDisabled?: boolean;
   isSubmitting: boolean;
   availableProblems?: Array<{
     id: string;
@@ -54,6 +55,7 @@ export function ProblemHeader(props: ProblemHeaderProps) {
     onRemoveTag,
     onSaveDraft,
     onPublish,
+    publishDisabled = false,
     isSubmitting,
     availableProblems = [],
     onSelectProblem,
@@ -124,7 +126,7 @@ export function ProblemHeader(props: ProblemHeaderProps) {
                     <ComboboxSeparator />
 
                     {drafts.length > 0 && (
-                      <ComboboxGroup >
+                      <ComboboxGroup>
                         {drafts
                           .filter((p) =>
                             p.title
@@ -258,7 +260,7 @@ export function ProblemHeader(props: ProblemHeaderProps) {
             <Button
               type="submit"
               size="sm"
-              disabled={isSubmitting}
+              disabled={isSubmitting || publishDisabled}
               className="gap-2"
             >
               <UploadCloud className="h-4 w-4" />

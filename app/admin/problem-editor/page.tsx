@@ -272,6 +272,7 @@ function ProblemEditorContent() {
             onRemoveTag={handleRemoveTag}
             onSaveDraft={handleSaveDraft}
             onPublish={handlePublish}
+            publishDisabled={!state.solutions.some((s) => s.code.trim())}
             isSubmitting={isSubmitting}
             availableProblems={availableProblems}
             onSelectProblem={(id) => {

@@ -128,6 +128,21 @@ export type Group = Prisma.GroupModel
  */
 export type GroupMember = Prisma.GroupMemberModel
 /**
+ * Model Role
+ * 
+ */
+export type Role = Prisma.RoleModel
+/**
+ * Model Permission
+ * 
+ */
+export type Permission = Prisma.PermissionModel
+/**
+ * Model RolePermission
+ * 
+ */
+export type RolePermission = Prisma.RolePermissionModel
+/**
  * Model Tag
  * 
  */
@@ -172,3 +187,23 @@ export type GroupProblemStats = Prisma.GroupProblemStatsModel
  * 
  */
 export type StudentProblemStats = Prisma.StudentProblemStatsModel
+/**
+ * Model OrganizationAnalytics
+ * 
+ */
+export type OrganizationAnalytics = Prisma.OrganizationAnalyticsModel
+/**
+ * Model ExamAnalytics
+ * 
+ */
+export type ExamAnalytics = Prisma.ExamAnalyticsModel
+/**
+ * Model Notification
+ * 
+ */
+export type Notification = Prisma.NotificationModel
+/**
+ * Model NotificationRecipient
+ * 
+ */
+export type NotificationRecipient = Prisma.NotificationRecipientModel

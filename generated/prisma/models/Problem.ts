@@ -41,6 +41,7 @@ export type ProblemMinAggregateOutputType = {
   description: string | null
   difficulty: $Enums.problemDifficulty | null
   source: string | null
+  isPublished: boolean | null
 }
 
 export type ProblemMaxAggregateOutputType = {
@@ -50,6 +51,7 @@ export type ProblemMaxAggregateOutputType = {
   description: string | null
   difficulty: $Enums.problemDifficulty | null
   source: string | null
+  isPublished: boolean | null
 }
 
 export type ProblemCountAggregateOutputType = {
@@ -59,6 +61,7 @@ export type ProblemCountAggregateOutputType = {
   description: number
   difficulty: number
   source: number
+  isPublished: number
   _all: number
 }
 
@@ -78,6 +81,7 @@ export type ProblemMinAggregateInputType = {
   description?: true
   difficulty?: true
   source?: true
+  isPublished?: true
 }
 
 export type ProblemMaxAggregateInputType = {
@@ -87,6 +91,7 @@ export type ProblemMaxAggregateInputType = {
   description?: true
   difficulty?: true
   source?: true
+  isPublished?: true
 }
 
 export type ProblemCountAggregateInputType = {
@@ -96,6 +101,7 @@ export type ProblemCountAggregateInputType = {
   description?: true
   difficulty?: true
   source?: true
+  isPublished?: true
   _all?: true
 }
 
@@ -192,6 +198,7 @@ export type ProblemGroupByOutputType = {
   description: string
   difficulty: $Enums.problemDifficulty
   source: string
+  isPublished: boolean
   _count: ProblemCountAggregateOutputType | null
   _avg: ProblemAvgAggregateOutputType | null
   _sum: ProblemSumAggregateOutputType | null
@@ -224,6 +231,7 @@ export type ProblemWhereInput = {
   description?: Prisma.StringFilter<"Problem"> | string
   difficulty?: Prisma.EnumproblemDifficultyFilter<"Problem"> | $Enums.problemDifficulty
   source?: Prisma.StringFilter<"Problem"> | string
+  isPublished?: Prisma.BoolFilter<"Problem"> | boolean
   examProblems?: Prisma.ExamProblemListRelationFilter
   tags?: Prisma.ProblemTagListRelationFilter
   testCase?: Prisma.XOR<Prisma.TestCaseNullableScalarRelationFilter, Prisma.TestCaseWhereInput> | null
@@ -247,6 +255,7 @@ export type ProblemOrderByWithRelationInput = {
   description?: Prisma.SortOrder
   difficulty?: Prisma.SortOrder
   source?: Prisma.SortOrder
+  isPublished?: Prisma.SortOrder
   examProblems?: Prisma.ExamProblemOrderByRelationAggregateInput
   tags?: Prisma.ProblemTagOrderByRelationAggregateInput
   testCase?: Prisma.TestCaseOrderByWithRelationInput
@@ -273,6 +282,7 @@ export type ProblemWhereUniqueInput = Prisma.AtLeast<{
   description?: Prisma.StringFilter<"Problem"> | string
   difficulty?: Prisma.EnumproblemDifficultyFilter<"Problem"> | $Enums.problemDifficulty
   source?: Prisma.StringFilter<"Problem"> | string
+  isPublished?: Prisma.BoolFilter<"Problem"> | boolean
   examProblems?: Prisma.ExamProblemListRelationFilter
   tags?: Prisma.ProblemTagListRelationFilter
   testCase?: Prisma.XOR<Prisma.TestCaseNullableScalarRelationFilter, Prisma.TestCaseWhereInput> | null
@@ -296,6 +306,7 @@ export type ProblemOrderByWithAggregationInput = {
   description?: Prisma.SortOrder
   difficulty?: Prisma.SortOrder
   source?: Prisma.SortOrder
+  isPublished?: Prisma.SortOrder
   _count?: Prisma.ProblemCountOrderByAggregateInput
   _avg?: Prisma.ProblemAvgOrderByAggregateInput
   _max?: Prisma.ProblemMaxOrderByAggregateInput
@@ -313,6 +324,7 @@ export type ProblemScalarWhereWithAggregatesInput = {
   description?: Prisma.StringWithAggregatesFilter<"Problem"> | string
   difficulty?: Prisma.EnumproblemDifficultyWithAggregatesFilter<"Problem"> | $Enums.problemDifficulty
   source?: Prisma.StringWithAggregatesFilter<"Problem"> | string
+  isPublished?: Prisma.BoolWithAggregatesFilter<"Problem"> | boolean
 }
 
 export type ProblemCreateInput = {
@@ -322,6 +334,7 @@ export type ProblemCreateInput = {
   description: string
   difficulty: $Enums.problemDifficulty
   source?: string
+  isPublished?: boolean
   examProblems?: Prisma.ExamProblemCreateNestedManyWithoutProblemInput
   tags?: Prisma.ProblemTagCreateNestedManyWithoutProblemInput
   testCase?: Prisma.TestCaseCreateNestedOneWithoutProblemInput
@@ -345,6 +358,7 @@ export type ProblemUncheckedCreateInput = {
   description: string
   difficulty: $Enums.problemDifficulty
   source?: string
+  isPublished?: boolean
   examProblems?: Prisma.ExamProblemUncheckedCreateNestedManyWithoutProblemInput
   tags?: Prisma.ProblemTagUncheckedCreateNestedManyWithoutProblemInput
   testCase?: Prisma.TestCaseUncheckedCreateNestedOneWithoutProblemInput
@@ -368,6 +382,7 @@ export type ProblemUpdateInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   difficulty?: Prisma.EnumproblemDifficultyFieldUpdateOperationsInput | $Enums.problemDifficulty
   source?: Prisma.StringFieldUpdateOperationsInput | string
+  isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   examProblems?: Prisma.ExamProblemUpdateManyWithoutProblemNestedInput
   tags?: Prisma.ProblemTagUpdateManyWithoutProblemNestedInput
   testCase?: Prisma.TestCaseUpdateOneWithoutProblemNestedInput
@@ -391,6 +406,7 @@ export type ProblemUncheckedUpdateInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   difficulty?: Prisma.EnumproblemDifficultyFieldUpdateOperationsInput | $Enums.problemDifficulty
   source?: Prisma.StringFieldUpdateOperationsInput | string
+  isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   examProblems?: Prisma.ExamProblemUncheckedUpdateManyWithoutProblemNestedInput
   tags?: Prisma.ProblemTagUncheckedUpdateManyWithoutProblemNestedInput
   testCase?: Prisma.TestCaseUncheckedUpdateOneWithoutProblemNestedInput
@@ -414,6 +430,7 @@ export type ProblemCreateManyInput = {
   description: string
   difficulty: $Enums.problemDifficulty
   source?: string
+  isPublished?: boolean
 }
 
 export type ProblemUpdateManyMutationInput = {
@@ -423,6 +440,7 @@ export type ProblemUpdateManyMutationInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   difficulty?: Prisma.EnumproblemDifficultyFieldUpdateOperationsInput | $Enums.problemDifficulty
   source?: Prisma.StringFieldUpdateOperationsInput | string
+  isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type ProblemUncheckedUpdateManyInput = {
@@ -432,6 +450,7 @@ export type ProblemUncheckedUpdateManyInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   difficulty?: Prisma.EnumproblemDifficultyFieldUpdateOperationsInput | $Enums.problemDifficulty
   source?: Prisma.StringFieldUpdateOperationsInput | string
+  isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type ProblemCountOrderByAggregateInput = {
@@ -441,6 +460,7 @@ export type ProblemCountOrderByAggregateInput = {
   description?: Prisma.SortOrder
   difficulty?: Prisma.SortOrder
   source?: Prisma.SortOrder
+  isPublished?: Prisma.SortOrder
 }
 
 export type ProblemAvgOrderByAggregateInput = {
@@ -454,6 +474,7 @@ export type ProblemMaxOrderByAggregateInput = {
   description?: Prisma.SortOrder
   difficulty?: Prisma.SortOrder
   source?: Prisma.SortOrder
+  isPublished?: Prisma.SortOrder
 }
 
 export type ProblemMinOrderByAggregateInput = {
@@ -463,6 +484,7 @@ export type ProblemMinOrderByAggregateInput = {
   description?: Prisma.SortOrder
   difficulty?: Prisma.SortOrder
   source?: Prisma.SortOrder
+  isPublished?: Prisma.SortOrder
 }
 
 export type ProblemSumOrderByAggregateInput = {
@@ -689,6 +711,7 @@ export type ProblemCreateWithoutTestCaseInput = {
   description: string
   difficulty: $Enums.problemDifficulty
   source?: string
+  isPublished?: boolean
   examProblems?: Prisma.ExamProblemCreateNestedManyWithoutProblemInput
   tags?: Prisma.ProblemTagCreateNestedManyWithoutProblemInput
   runTestCase?: Prisma.RunTestCaseCreateNestedOneWithoutProblemInput
@@ -711,6 +734,7 @@ export type ProblemUncheckedCreateWithoutTestCaseInput = {
   description: string
   difficulty: $Enums.problemDifficulty
   source?: string
+  isPublished?: boolean
   examProblems?: Prisma.ExamProblemUncheckedCreateNestedManyWithoutProblemInput
   tags?: Prisma.ProblemTagUncheckedCreateNestedManyWithoutProblemInput
   runTestCase?: Prisma.RunTestCaseUncheckedCreateNestedOneWithoutProblemInput
@@ -749,6 +773,7 @@ export type ProblemUpdateWithoutTestCaseInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   difficulty?: Prisma.EnumproblemDifficultyFieldUpdateOperationsInput | $Enums.problemDifficulty
   source?: Prisma.StringFieldUpdateOperationsInput | string
+  isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   examProblems?: Prisma.ExamProblemUpdateManyWithoutProblemNestedInput
   tags?: Prisma.ProblemTagUpdateManyWithoutProblemNestedInput
   runTestCase?: Prisma.RunTestCaseUpdateOneWithoutProblemNestedInput
@@ -771,6 +796,7 @@ export type ProblemUncheckedUpdateWithoutTestCaseInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   difficulty?: Prisma.EnumproblemDifficultyFieldUpdateOperationsInput | $Enums.problemDifficulty
   source?: Prisma.StringFieldUpdateOperationsInput | string
+  isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   examProblems?: Prisma.ExamProblemUncheckedUpdateManyWithoutProblemNestedInput
   tags?: Prisma.ProblemTagUncheckedUpdateManyWithoutProblemNestedInput
   runTestCase?: Prisma.RunTestCaseUncheckedUpdateOneWithoutProblemNestedInput
@@ -793,6 +819,7 @@ export type ProblemCreateWithoutComplexityTestingCasesInput = {
   description: string
   difficulty: $Enums.problemDifficulty
   source?: string
+  isPublished?: boolean
   examProblems?: Prisma.ExamProblemCreateNestedManyWithoutProblemInput
   tags?: Prisma.ProblemTagCreateNestedManyWithoutProblemInput
   testCase?: Prisma.TestCaseCreateNestedOneWithoutProblemInput
@@ -815,6 +842,7 @@ export type ProblemUncheckedCreateWithoutComplexityTestingCasesInput = {
   description: string
   difficulty: $Enums.problemDifficulty
   source?: string
+  isPublished?: boolean
   examProblems?: Prisma.ExamProblemUncheckedCreateNestedManyWithoutProblemInput
   tags?: Prisma.ProblemTagUncheckedCreateNestedManyWithoutProblemInput
   testCase?: Prisma.TestCaseUncheckedCreateNestedOneWithoutProblemInput
@@ -853,6 +881,7 @@ export type ProblemUpdateWithoutComplexityTestingCasesInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   difficulty?: Prisma.EnumproblemDifficultyFieldUpdateOperationsInput | $Enums.problemDifficulty
   source?: Prisma.StringFieldUpdateOperationsInput | string
+  isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   examProblems?: Prisma.ExamProblemUpdateManyWithoutProblemNestedInput
   tags?: Prisma.ProblemTagUpdateManyWithoutProblemNestedInput
   testCase?: Prisma.TestCaseUpdateOneWithoutProblemNestedInput
@@ -875,6 +904,7 @@ export type ProblemUncheckedUpdateWithoutComplexityTestingCasesInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   difficulty?: Prisma.EnumproblemDifficultyFieldUpdateOperationsInput | $Enums.problemDifficulty
   source?: Prisma.StringFieldUpdateOperationsInput | string
+  isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   examProblems?: Prisma.ExamProblemUncheckedUpdateManyWithoutProblemNestedInput
   tags?: Prisma.ProblemTagUncheckedUpdateManyWithoutProblemNestedInput
   testCase?: Prisma.TestCaseUncheckedUpdateOneWithoutProblemNestedInput
@@ -897,6 +927,7 @@ export type ProblemCreateWithoutDriverCodeInput = {
   description: string
   difficulty: $Enums.problemDifficulty
   source?: string
+  isPublished?: boolean
   examProblems?: Prisma.ExamProblemCreateNestedManyWithoutProblemInput
   tags?: Prisma.ProblemTagCreateNestedManyWithoutProblemInput
   testCase?: Prisma.TestCaseCreateNestedOneWithoutProblemInput
@@ -919,6 +950,7 @@ export type ProblemUncheckedCreateWithoutDriverCodeInput = {
   description: string
   difficulty: $Enums.problemDifficulty
   source?: string
+  isPublished?: boolean
   examProblems?: Prisma.ExamProblemUncheckedCreateNestedManyWithoutProblemInput
   tags?: Prisma.ProblemTagUncheckedCreateNestedManyWithoutProblemInput
   testCase?: Prisma.TestCaseUncheckedCreateNestedOneWithoutProblemInput
@@ -957,6 +989,7 @@ export type ProblemUpdateWithoutDriverCodeInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   difficulty?: Prisma.EnumproblemDifficultyFieldUpdateOperationsInput | $Enums.problemDifficulty
   source?: Prisma.StringFieldUpdateOperationsInput | string
+  isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   examProblems?: Prisma.ExamProblemUpdateManyWithoutProblemNestedInput
   tags?: Prisma.ProblemTagUpdateManyWithoutProblemNestedInput
   testCase?: Prisma.TestCaseUpdateOneWithoutProblemNestedInput
@@ -979,6 +1012,7 @@ export type ProblemUncheckedUpdateWithoutDriverCodeInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   difficulty?: Prisma.EnumproblemDifficultyFieldUpdateOperationsInput | $Enums.problemDifficulty
   source?: Prisma.StringFieldUpdateOperationsInput | string
+  isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   examProblems?: Prisma.ExamProblemUncheckedUpdateManyWithoutProblemNestedInput
   tags?: Prisma.ProblemTagUncheckedUpdateManyWithoutProblemNestedInput
   testCase?: Prisma.TestCaseUncheckedUpdateOneWithoutProblemNestedInput
@@ -1001,6 +1035,7 @@ export type ProblemCreateWithoutReferenceSolutionsInput = {
   description: string
   difficulty: $Enums.problemDifficulty
   source?: string
+  isPublished?: boolean
   examProblems?: Prisma.ExamProblemCreateNestedManyWithoutProblemInput
   tags?: Prisma.ProblemTagCreateNestedManyWithoutProblemInput
   testCase?: Prisma.TestCaseCreateNestedOneWithoutProblemInput
@@ -1023,6 +1058,7 @@ export type ProblemUncheckedCreateWithoutReferenceSolutionsInput = {
   description: string
   difficulty: $Enums.problemDifficulty
   source?: string
+  isPublished?: boolean
   examProblems?: Prisma.ExamProblemUncheckedCreateNestedManyWithoutProblemInput
   tags?: Prisma.ProblemTagUncheckedCreateNestedManyWithoutProblemInput
   testCase?: Prisma.TestCaseUncheckedCreateNestedOneWithoutProblemInput
@@ -1061,6 +1097,7 @@ export type ProblemUpdateWithoutReferenceSolutionsInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   difficulty?: Prisma.EnumproblemDifficultyFieldUpdateOperationsInput | $Enums.problemDifficulty
   source?: Prisma.StringFieldUpdateOperationsInput | string
+  isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   examProblems?: Prisma.ExamProblemUpdateManyWithoutProblemNestedInput
   tags?: Prisma.ProblemTagUpdateManyWithoutProblemNestedInput
   testCase?: Prisma.TestCaseUpdateOneWithoutProblemNestedInput
@@ -1083,6 +1120,7 @@ export type ProblemUncheckedUpdateWithoutReferenceSolutionsInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   difficulty?: Prisma.EnumproblemDifficultyFieldUpdateOperationsInput | $Enums.problemDifficulty
   source?: Prisma.StringFieldUpdateOperationsInput | string
+  isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   examProblems?: Prisma.ExamProblemUncheckedUpdateManyWithoutProblemNestedInput
   tags?: Prisma.ProblemTagUncheckedUpdateManyWithoutProblemNestedInput
   testCase?: Prisma.TestCaseUncheckedUpdateOneWithoutProblemNestedInput
@@ -1105,6 +1143,7 @@ export type ProblemCreateWithoutRunTestCaseInput = {
   description: string
   difficulty: $Enums.problemDifficulty
   source?: string
+  isPublished?: boolean
   examProblems?: Prisma.ExamProblemCreateNestedManyWithoutProblemInput
   tags?: Prisma.ProblemTagCreateNestedManyWithoutProblemInput
   testCase?: Prisma.TestCaseCreateNestedOneWithoutProblemInput
@@ -1127,6 +1166,7 @@ export type ProblemUncheckedCreateWithoutRunTestCaseInput = {
   description: string
   difficulty: $Enums.problemDifficulty
   source?: string
+  isPublished?: boolean
   examProblems?: Prisma.ExamProblemUncheckedCreateNestedManyWithoutProblemInput
   tags?: Prisma.ProblemTagUncheckedCreateNestedManyWithoutProblemInput
   testCase?: Prisma.TestCaseUncheckedCreateNestedOneWithoutProblemInput
@@ -1165,6 +1205,7 @@ export type ProblemUpdateWithoutRunTestCaseInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   difficulty?: Prisma.EnumproblemDifficultyFieldUpdateOperationsInput | $Enums.problemDifficulty
   source?: Prisma.StringFieldUpdateOperationsInput | string
+  isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   examProblems?: Prisma.ExamProblemUpdateManyWithoutProblemNestedInput
   tags?: Prisma.ProblemTagUpdateManyWithoutProblemNestedInput
   testCase?: Prisma.TestCaseUpdateOneWithoutProblemNestedInput
@@ -1187,6 +1228,7 @@ export type ProblemUncheckedUpdateWithoutRunTestCaseInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   difficulty?: Prisma.EnumproblemDifficultyFieldUpdateOperationsInput | $Enums.problemDifficulty
   source?: Prisma.StringFieldUpdateOperationsInput | string
+  isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   examProblems?: Prisma.ExamProblemUncheckedUpdateManyWithoutProblemNestedInput
   tags?: Prisma.ProblemTagUncheckedUpdateManyWithoutProblemNestedInput
   testCase?: Prisma.TestCaseUncheckedUpdateOneWithoutProblemNestedInput
@@ -1209,6 +1251,7 @@ export type ProblemCreateWithoutSelfSubmissionsInput = {
   description: string
   difficulty: $Enums.problemDifficulty
   source?: string
+  isPublished?: boolean
   examProblems?: Prisma.ExamProblemCreateNestedManyWithoutProblemInput
   tags?: Prisma.ProblemTagCreateNestedManyWithoutProblemInput
   testCase?: Prisma.TestCaseCreateNestedOneWithoutProblemInput
@@ -1231,6 +1274,7 @@ export type ProblemUncheckedCreateWithoutSelfSubmissionsInput = {
   description: string
   difficulty: $Enums.problemDifficulty
   source?: string
+  isPublished?: boolean
   examProblems?: Prisma.ExamProblemUncheckedCreateNestedManyWithoutProblemInput
   tags?: Prisma.ProblemTagUncheckedCreateNestedManyWithoutProblemInput
   testCase?: Prisma.TestCaseUncheckedCreateNestedOneWithoutProblemInput
@@ -1269,6 +1313,7 @@ export type ProblemUpdateWithoutSelfSubmissionsInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   difficulty?: Prisma.EnumproblemDifficultyFieldUpdateOperationsInput | $Enums.problemDifficulty
   source?: Prisma.StringFieldUpdateOperationsInput | string
+  isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   examProblems?: Prisma.ExamProblemUpdateManyWithoutProblemNestedInput
   tags?: Prisma.ProblemTagUpdateManyWithoutProblemNestedInput
   testCase?: Prisma.TestCaseUpdateOneWithoutProblemNestedInput
@@ -1291,6 +1336,7 @@ export type ProblemUncheckedUpdateWithoutSelfSubmissionsInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   difficulty?: Prisma.EnumproblemDifficultyFieldUpdateOperationsInput | $Enums.problemDifficulty
   source?: Prisma.StringFieldUpdateOperationsInput | string
+  isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   examProblems?: Prisma.ExamProblemUncheckedUpdateManyWithoutProblemNestedInput
   tags?: Prisma.ProblemTagUncheckedUpdateManyWithoutProblemNestedInput
   testCase?: Prisma.TestCaseUncheckedUpdateOneWithoutProblemNestedInput
@@ -1313,6 +1359,7 @@ export type ProblemCreateWithoutProblemTestGeneratorsInput = {
   description: string
   difficulty: $Enums.problemDifficulty
   source?: string
+  isPublished?: boolean
   examProblems?: Prisma.ExamProblemCreateNestedManyWithoutProblemInput
   tags?: Prisma.ProblemTagCreateNestedManyWithoutProblemInput
   testCase?: Prisma.TestCaseCreateNestedOneWithoutProblemInput
@@ -1335,6 +1382,7 @@ export type ProblemUncheckedCreateWithoutProblemTestGeneratorsInput = {
   description: string
   difficulty: $Enums.problemDifficulty
   source?: string
+  isPublished?: boolean
   examProblems?: Prisma.ExamProblemUncheckedCreateNestedManyWithoutProblemInput
   tags?: Prisma.ProblemTagUncheckedCreateNestedManyWithoutProblemInput
   testCase?: Prisma.TestCaseUncheckedCreateNestedOneWithoutProblemInput
@@ -1373,6 +1421,7 @@ export type ProblemUpdateWithoutProblemTestGeneratorsInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   difficulty?: Prisma.EnumproblemDifficultyFieldUpdateOperationsInput | $Enums.problemDifficulty
   source?: Prisma.StringFieldUpdateOperationsInput | string
+  isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   examProblems?: Prisma.ExamProblemUpdateManyWithoutProblemNestedInput
   tags?: Prisma.ProblemTagUpdateManyWithoutProblemNestedInput
   testCase?: Prisma.TestCaseUpdateOneWithoutProblemNestedInput
@@ -1395,6 +1444,7 @@ export type ProblemUncheckedUpdateWithoutProblemTestGeneratorsInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   difficulty?: Prisma.EnumproblemDifficultyFieldUpdateOperationsInput | $Enums.problemDifficulty
   source?: Prisma.StringFieldUpdateOperationsInput | string
+  isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   examProblems?: Prisma.ExamProblemUncheckedUpdateManyWithoutProblemNestedInput
   tags?: Prisma.ProblemTagUncheckedUpdateManyWithoutProblemNestedInput
   testCase?: Prisma.TestCaseUncheckedUpdateOneWithoutProblemNestedInput
@@ -1417,6 +1467,7 @@ export type ProblemCreateWithoutExamProblemsInput = {
   description: string
   difficulty: $Enums.problemDifficulty
   source?: string
+  isPublished?: boolean
   tags?: Prisma.ProblemTagCreateNestedManyWithoutProblemInput
   testCase?: Prisma.TestCaseCreateNestedOneWithoutProblemInput
   runTestCase?: Prisma.RunTestCaseCreateNestedOneWithoutProblemInput
@@ -1439,6 +1490,7 @@ export type ProblemUncheckedCreateWithoutExamProblemsInput = {
   description: string
   difficulty: $Enums.problemDifficulty
   source?: string
+  isPublished?: boolean
   tags?: Prisma.ProblemTagUncheckedCreateNestedManyWithoutProblemInput
   testCase?: Prisma.TestCaseUncheckedCreateNestedOneWithoutProblemInput
   runTestCase?: Prisma.RunTestCaseUncheckedCreateNestedOneWithoutProblemInput
@@ -1477,6 +1529,7 @@ export type ProblemUpdateWithoutExamProblemsInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   difficulty?: Prisma.EnumproblemDifficultyFieldUpdateOperationsInput | $Enums.problemDifficulty
   source?: Prisma.StringFieldUpdateOperationsInput | string
+  isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   tags?: Prisma.ProblemTagUpdateManyWithoutProblemNestedInput
   testCase?: Prisma.TestCaseUpdateOneWithoutProblemNestedInput
   runTestCase?: Prisma.RunTestCaseUpdateOneWithoutProblemNestedInput
@@ -1499,6 +1552,7 @@ export type ProblemUncheckedUpdateWithoutExamProblemsInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   difficulty?: Prisma.EnumproblemDifficultyFieldUpdateOperationsInput | $Enums.problemDifficulty
   source?: Prisma.StringFieldUpdateOperationsInput | string
+  isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   tags?: Prisma.ProblemTagUncheckedUpdateManyWithoutProblemNestedInput
   testCase?: Prisma.TestCaseUncheckedUpdateOneWithoutProblemNestedInput
   runTestCase?: Prisma.RunTestCaseUncheckedUpdateOneWithoutProblemNestedInput
@@ -1521,6 +1575,7 @@ export type ProblemCreateWithoutSubmissionsInput = {
   description: string
   difficulty: $Enums.problemDifficulty
   source?: string
+  isPublished?: boolean
   examProblems?: Prisma.ExamProblemCreateNestedManyWithoutProblemInput
   tags?: Prisma.ProblemTagCreateNestedManyWithoutProblemInput
   testCase?: Prisma.TestCaseCreateNestedOneWithoutProblemInput
@@ -1543,6 +1598,7 @@ export type ProblemUncheckedCreateWithoutSubmissionsInput = {
   description: string
   difficulty: $Enums.problemDifficulty
   source?: string
+  isPublished?: boolean
   examProblems?: Prisma.ExamProblemUncheckedCreateNestedManyWithoutProblemInput
   tags?: Prisma.ProblemTagUncheckedCreateNestedManyWithoutProblemInput
   testCase?: Prisma.TestCaseUncheckedCreateNestedOneWithoutProblemInput
@@ -1581,6 +1637,7 @@ export type ProblemUpdateWithoutSubmissionsInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   difficulty?: Prisma.EnumproblemDifficultyFieldUpdateOperationsInput | $Enums.problemDifficulty
   source?: Prisma.StringFieldUpdateOperationsInput | string
+  isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   examProblems?: Prisma.ExamProblemUpdateManyWithoutProblemNestedInput
   tags?: Prisma.ProblemTagUpdateManyWithoutProblemNestedInput
   testCase?: Prisma.TestCaseUpdateOneWithoutProblemNestedInput
@@ -1603,6 +1660,7 @@ export type ProblemUncheckedUpdateWithoutSubmissionsInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   difficulty?: Prisma.EnumproblemDifficultyFieldUpdateOperationsInput | $Enums.problemDifficulty
   source?: Prisma.StringFieldUpdateOperationsInput | string
+  isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   examProblems?: Prisma.ExamProblemUncheckedUpdateManyWithoutProblemNestedInput
   tags?: Prisma.ProblemTagUncheckedUpdateManyWithoutProblemNestedInput
   testCase?: Prisma.TestCaseUncheckedUpdateOneWithoutProblemNestedInput
@@ -1625,6 +1683,7 @@ export type ProblemCreateWithoutTagsInput = {
   description: string
   difficulty: $Enums.problemDifficulty
   source?: string
+  isPublished?: boolean
   examProblems?: Prisma.ExamProblemCreateNestedManyWithoutProblemInput
   testCase?: Prisma.TestCaseCreateNestedOneWithoutProblemInput
   runTestCase?: Prisma.RunTestCaseCreateNestedOneWithoutProblemInput
@@ -1647,6 +1706,7 @@ export type ProblemUncheckedCreateWithoutTagsInput = {
   description: string
   difficulty: $Enums.problemDifficulty
   source?: string
+  isPublished?: boolean
   examProblems?: Prisma.ExamProblemUncheckedCreateNestedManyWithoutProblemInput
   testCase?: Prisma.TestCaseUncheckedCreateNestedOneWithoutProblemInput
   runTestCase?: Prisma.RunTestCaseUncheckedCreateNestedOneWithoutProblemInput
@@ -1685,6 +1745,7 @@ export type ProblemUpdateWithoutTagsInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   difficulty?: Prisma.EnumproblemDifficultyFieldUpdateOperationsInput | $Enums.problemDifficulty
   source?: Prisma.StringFieldUpdateOperationsInput | string
+  isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   examProblems?: Prisma.ExamProblemUpdateManyWithoutProblemNestedInput
   testCase?: Prisma.TestCaseUpdateOneWithoutProblemNestedInput
   runTestCase?: Prisma.RunTestCaseUpdateOneWithoutProblemNestedInput
@@ -1707,6 +1768,7 @@ export type ProblemUncheckedUpdateWithoutTagsInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   difficulty?: Prisma.EnumproblemDifficultyFieldUpdateOperationsInput | $Enums.problemDifficulty
   source?: Prisma.StringFieldUpdateOperationsInput | string
+  isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   examProblems?: Prisma.ExamProblemUncheckedUpdateManyWithoutProblemNestedInput
   testCase?: Prisma.TestCaseUncheckedUpdateOneWithoutProblemNestedInput
   runTestCase?: Prisma.RunTestCaseUncheckedUpdateOneWithoutProblemNestedInput
@@ -1729,6 +1791,7 @@ export type ProblemCreateWithoutAiconversationsInput = {
   description: string
   difficulty: $Enums.problemDifficulty
   source?: string
+  isPublished?: boolean
   examProblems?: Prisma.ExamProblemCreateNestedManyWithoutProblemInput
   tags?: Prisma.ProblemTagCreateNestedManyWithoutProblemInput
   testCase?: Prisma.TestCaseCreateNestedOneWithoutProblemInput
@@ -1751,6 +1814,7 @@ export type ProblemUncheckedCreateWithoutAiconversationsInput = {
   description: string
   difficulty: $Enums.problemDifficulty
   source?: string
+  isPublished?: boolean
   examProblems?: Prisma.ExamProblemUncheckedCreateNestedManyWithoutProblemInput
   tags?: Prisma.ProblemTagUncheckedCreateNestedManyWithoutProblemInput
   testCase?: Prisma.TestCaseUncheckedCreateNestedOneWithoutProblemInput
@@ -1789,6 +1853,7 @@ export type ProblemUpdateWithoutAiconversationsInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   difficulty?: Prisma.EnumproblemDifficultyFieldUpdateOperationsInput | $Enums.problemDifficulty
   source?: Prisma.StringFieldUpdateOperationsInput | string
+  isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   examProblems?: Prisma.ExamProblemUpdateManyWithoutProblemNestedInput
   tags?: Prisma.ProblemTagUpdateManyWithoutProblemNestedInput
   testCase?: Prisma.TestCaseUpdateOneWithoutProblemNestedInput
@@ -1811,6 +1876,7 @@ export type ProblemUncheckedUpdateWithoutAiconversationsInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   difficulty?: Prisma.EnumproblemDifficultyFieldUpdateOperationsInput | $Enums.problemDifficulty
   source?: Prisma.StringFieldUpdateOperationsInput | string
+  isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   examProblems?: Prisma.ExamProblemUncheckedUpdateManyWithoutProblemNestedInput
   tags?: Prisma.ProblemTagUncheckedUpdateManyWithoutProblemNestedInput
   testCase?: Prisma.TestCaseUncheckedUpdateOneWithoutProblemNestedInput
@@ -1833,6 +1899,7 @@ export type ProblemCreateWithoutAirateLimitsInput = {
   description: string
   difficulty: $Enums.problemDifficulty
   source?: string
+  isPublished?: boolean
   examProblems?: Prisma.ExamProblemCreateNestedManyWithoutProblemInput
   tags?: Prisma.ProblemTagCreateNestedManyWithoutProblemInput
   testCase?: Prisma.TestCaseCreateNestedOneWithoutProblemInput
@@ -1855,6 +1922,7 @@ export type ProblemUncheckedCreateWithoutAirateLimitsInput = {
   description: string
   difficulty: $Enums.problemDifficulty
   source?: string
+  isPublished?: boolean
   examProblems?: Prisma.ExamProblemUncheckedCreateNestedManyWithoutProblemInput
   tags?: Prisma.ProblemTagUncheckedCreateNestedManyWithoutProblemInput
   testCase?: Prisma.TestCaseUncheckedCreateNestedOneWithoutProblemInput
@@ -1893,6 +1961,7 @@ export type ProblemUpdateWithoutAirateLimitsInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   difficulty?: Prisma.EnumproblemDifficultyFieldUpdateOperationsInput | $Enums.problemDifficulty
   source?: Prisma.StringFieldUpdateOperationsInput | string
+  isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   examProblems?: Prisma.ExamProblemUpdateManyWithoutProblemNestedInput
   tags?: Prisma.ProblemTagUpdateManyWithoutProblemNestedInput
   testCase?: Prisma.TestCaseUpdateOneWithoutProblemNestedInput
@@ -1915,6 +1984,7 @@ export type ProblemUncheckedUpdateWithoutAirateLimitsInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   difficulty?: Prisma.EnumproblemDifficultyFieldUpdateOperationsInput | $Enums.problemDifficulty
   source?: Prisma.StringFieldUpdateOperationsInput | string
+  isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   examProblems?: Prisma.ExamProblemUncheckedUpdateManyWithoutProblemNestedInput
   tags?: Prisma.ProblemTagUncheckedUpdateManyWithoutProblemNestedInput
   testCase?: Prisma.TestCaseUncheckedUpdateOneWithoutProblemNestedInput
@@ -1937,6 +2007,7 @@ export type ProblemCreateWithoutGroupProblemStatsInput = {
   description: string
   difficulty: $Enums.problemDifficulty
   source?: string
+  isPublished?: boolean
   examProblems?: Prisma.ExamProblemCreateNestedManyWithoutProblemInput
   tags?: Prisma.ProblemTagCreateNestedManyWithoutProblemInput
   testCase?: Prisma.TestCaseCreateNestedOneWithoutProblemInput
@@ -1959,6 +2030,7 @@ export type ProblemUncheckedCreateWithoutGroupProblemStatsInput = {
   description: string
   difficulty: $Enums.problemDifficulty
   source?: string
+  isPublished?: boolean
   examProblems?: Prisma.ExamProblemUncheckedCreateNestedManyWithoutProblemInput
   tags?: Prisma.ProblemTagUncheckedCreateNestedManyWithoutProblemInput
   testCase?: Prisma.TestCaseUncheckedCreateNestedOneWithoutProblemInput
@@ -1997,6 +2069,7 @@ export type ProblemUpdateWithoutGroupProblemStatsInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   difficulty?: Prisma.EnumproblemDifficultyFieldUpdateOperationsInput | $Enums.problemDifficulty
   source?: Prisma.StringFieldUpdateOperationsInput | string
+  isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   examProblems?: Prisma.ExamProblemUpdateManyWithoutProblemNestedInput
   tags?: Prisma.ProblemTagUpdateManyWithoutProblemNestedInput
   testCase?: Prisma.TestCaseUpdateOneWithoutProblemNestedInput
@@ -2019,6 +2092,7 @@ export type ProblemUncheckedUpdateWithoutGroupProblemStatsInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   difficulty?: Prisma.EnumproblemDifficultyFieldUpdateOperationsInput | $Enums.problemDifficulty
   source?: Prisma.StringFieldUpdateOperationsInput | string
+  isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   examProblems?: Prisma.ExamProblemUncheckedUpdateManyWithoutProblemNestedInput
   tags?: Prisma.ProblemTagUncheckedUpdateManyWithoutProblemNestedInput
   testCase?: Prisma.TestCaseUncheckedUpdateOneWithoutProblemNestedInput
@@ -2041,6 +2115,7 @@ export type ProblemCreateWithoutStudentProblemStatsInput = {
   description: string
   difficulty: $Enums.problemDifficulty
   source?: string
+  isPublished?: boolean
   examProblems?: Prisma.ExamProblemCreateNestedManyWithoutProblemInput
   tags?: Prisma.ProblemTagCreateNestedManyWithoutProblemInput
   testCase?: Prisma.TestCaseCreateNestedOneWithoutProblemInput
@@ -2063,6 +2138,7 @@ export type ProblemUncheckedCreateWithoutStudentProblemStatsInput = {
   description: string
   difficulty: $Enums.problemDifficulty
   source?: string
+  isPublished?: boolean
   examProblems?: Prisma.ExamProblemUncheckedCreateNestedManyWithoutProblemInput
   tags?: Prisma.ProblemTagUncheckedCreateNestedManyWithoutProblemInput
   testCase?: Prisma.TestCaseUncheckedCreateNestedOneWithoutProblemInput
@@ -2101,6 +2177,7 @@ export type ProblemUpdateWithoutStudentProblemStatsInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   difficulty?: Prisma.EnumproblemDifficultyFieldUpdateOperationsInput | $Enums.problemDifficulty
   source?: Prisma.StringFieldUpdateOperationsInput | string
+  isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   examProblems?: Prisma.ExamProblemUpdateManyWithoutProblemNestedInput
   tags?: Prisma.ProblemTagUpdateManyWithoutProblemNestedInput
   testCase?: Prisma.TestCaseUpdateOneWithoutProblemNestedInput
@@ -2123,6 +2200,7 @@ export type ProblemUncheckedUpdateWithoutStudentProblemStatsInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   difficulty?: Prisma.EnumproblemDifficultyFieldUpdateOperationsInput | $Enums.problemDifficulty
   source?: Prisma.StringFieldUpdateOperationsInput | string
+  isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   examProblems?: Prisma.ExamProblemUncheckedUpdateManyWithoutProblemNestedInput
   tags?: Prisma.ProblemTagUncheckedUpdateManyWithoutProblemNestedInput
   testCase?: Prisma.TestCaseUncheckedUpdateOneWithoutProblemNestedInput
@@ -2257,6 +2335,7 @@ export type ProblemSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   description?: boolean
   difficulty?: boolean
   source?: boolean
+  isPublished?: boolean
   examProblems?: boolean | Prisma.Problem$examProblemsArgs<ExtArgs>
   tags?: boolean | Prisma.Problem$tagsArgs<ExtArgs>
   testCase?: boolean | Prisma.Problem$testCaseArgs<ExtArgs>
@@ -2281,6 +2360,7 @@ export type ProblemSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   description?: boolean
   difficulty?: boolean
   source?: boolean
+  isPublished?: boolean
 }, ExtArgs["result"]["problem"]>
 
 export type ProblemSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -2290,6 +2370,7 @@ export type ProblemSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   description?: boolean
   difficulty?: boolean
   source?: boolean
+  isPublished?: boolean
 }, ExtArgs["result"]["problem"]>
 
 export type ProblemSelectScalar = {
@@ -2299,9 +2380,10 @@ export type ProblemSelectScalar = {
   description?: boolean
   difficulty?: boolean
   source?: boolean
+  isPublished?: boolean
 }
 
-export type ProblemOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "number" | "title" | "description" | "difficulty" | "source", ExtArgs["result"]["problem"]>
+export type ProblemOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "number" | "title" | "description" | "difficulty" | "source" | "isPublished", ExtArgs["result"]["problem"]>
 export type ProblemInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   examProblems?: boolean | Prisma.Problem$examProblemsArgs<ExtArgs>
   tags?: boolean | Prisma.Problem$tagsArgs<ExtArgs>
@@ -2347,6 +2429,7 @@ export type $ProblemPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     description: string
     difficulty: $Enums.problemDifficulty
     source: string
+    isPublished: boolean
   }, ExtArgs["result"]["problem"]>
   composites: {}
 }
@@ -2790,6 +2873,7 @@ export interface ProblemFieldRefs {
   readonly description: Prisma.FieldRef<"Problem", 'String'>
   readonly difficulty: Prisma.FieldRef<"Problem", 'problemDifficulty'>
   readonly source: Prisma.FieldRef<"Problem", 'String'>
+  readonly isPublished: Prisma.FieldRef<"Problem", 'Boolean'>
 }
     
 

@@ -4,10 +4,11 @@ import Editor from "@monaco-editor/react";
 import { useTheme } from "next-themes";
 import { Card } from "@/components/ui/card";
 import { DescriptionSections } from "./types";
-import MarkdownRenderer from "@/components/ui/markdown-renderer";
-import { useMemo } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Type, Ruler, ArrowRightToLine, ArrowLeftFromLine } from "lucide-react";
+import Markdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import rehypeHighlight from "rehype-highlight";
 
 interface DescriptionTabProps {
   sections: DescriptionSections;
@@ -31,8 +32,95 @@ export function DescriptionTab(props: DescriptionTabProps) {
     return parts.join("");
   }, [sections]);
 
-  const handleChange = (key: keyof DescriptionSections, value: string) => {
-    onChangeSections({ ...sections, [key]: value });
+  const [markdown, setMarkdown] = useState(combinedMarkdown);
+  const lastEmittedSectionsRef = useRef<DescriptionSections | null>(null);
+
+  useEffect(() => {
+    const last = lastEmittedSectionsRef.current;
+    if (
+      last &&
+      sections.description === last.description &&
+      sections.constraints === last.constraints &&
+      sections.inputFormat === last.inputFormat &&
+      sections.outputFormat === last.outputFormat
+    ) {
+      return;
+    }
+
+    setMarkdown(combinedMarkdown);
+  }, [combinedMarkdown, sections]);
+
+  const parseMarkdownToSections = (raw: string): DescriptionSections => {
+    const text = (raw || "").replace(/\r\n/g, "\n");
+
+    const out: DescriptionSections = {
+      description: "",
+      constraints: "",
+      inputFormat: "",
+      outputFormat: "",
+    };
+
+    const headingRe =
+      /^##\s*(description|constraints|input format|output format)\s*$/gim;
+    const headings: Array<{
+      key: keyof DescriptionSections;
+      headingStart: number;
+      contentStart: number;
+    }> = [];
+
+    let match: RegExpExecArray | null;
+    while ((match = headingRe.exec(text)) !== null) {
+      const headingStart = match.index;
+      const headingText = (match[1] || "").toLowerCase();
+      const key: keyof DescriptionSections =
+        headingText === "description"
+          ? "description"
+          : headingText === "constraints"
+            ? "constraints"
+            : headingText === "input format"
+              ? "inputFormat"
+              : "outputFormat";
+
+      const lineBreakIdx = text.indexOf("\n", headingRe.lastIndex);
+      const contentStart = lineBreakIdx === -1 ? text.length : lineBreakIdx + 1;
+
+      headings.push({ key, headingStart, contentStart });
+    }
+
+    if (headings.length === 0) {
+      out.description = text.trim();
+      return out;
+    }
+
+    headings.sort((a, b) => a.headingStart - b.headingStart);
+
+    const preface = text.slice(0, headings[0].headingStart).trim();
+    if (preface) {
+      out.description = preface;
+    }
+
+    for (let i = 0; i < headings.length; i++) {
+      const curr = headings[i];
+      const nextHeadingStart =
+        i + 1 < headings.length ? headings[i + 1].headingStart : text.length;
+      const content = text.slice(curr.contentStart, nextHeadingStart).trim();
+
+      if ((out[curr.key] || "").length > 0) {
+        continue;
+      }
+      out[curr.key] = content;
+    }
+
+    return out;
+  };
+
+  const handleMarkdownChange = (value?: string) => {
+    const next = value ?? "";
+    setMarkdown(next);
+
+    const parsed = parseMarkdownToSections(next);
+    lastEmittedSectionsRef.current = parsed;
+    onChangeSections(parsed);
   };
 
   const commonEditorOptions = {
@@ -50,90 +138,27 @@ export function DescriptionTab(props: DescriptionTabProps) {
   return (
     <div className="grid gap-6 lg:grid-cols-2 xl:grid-cols-[1.5fr_1fr] items-start">
       <div className="flex flex-col gap-6">
-        {/* Description Section */}
         <section className="space-y-3">
-          <div className="flex items-center gap-2 px-1">
-            <Type className="h-4 w-4 text-purple-500" />
+          <div className="flex items-center justify-between px-1">
             <h3 className="text-sm font-semibold tracking-tight">
-              Main Description
+              Description
             </h3>
+            <span className="text-xs text-muted-foreground bg-muted px-2 py-0.5 rounded-full">
+              Markdown
+            </span>
           </div>
           <Card className="overflow-hidden border-muted-foreground/20 focus-within:ring-1 focus-within:ring-ring focus-within:border-ring transition-all">
             <Editor
-              height="250px"
+              height="550px"
               language="markdown"
               theme={editorTheme}
-              value={sections.description}
-              onChange={(value) => handleChange("description", value || "")}
+              value={markdown}
+              onChange={handleMarkdownChange}
               options={commonEditorOptions}
               className="py-3 px-2"
             />
           </Card>
         </section>
-
-        {/* Constraints Section */}
-        <section className="space-y-3">
-          <div className="flex items-center gap-2 px-1">
-            <Ruler className="h-4 w-4 text-blue-500" />
-            <h3 className="text-sm font-semibold tracking-tight">
-              Constraints
-            </h3>
-          </div>
-          <Card className="overflow-hidden border-muted-foreground/20 focus-within:ring-1 focus-within:ring-ring focus-within:border-ring transition-all">
-            <Editor
-              height="150px"
-              language="markdown"
-              theme={editorTheme}
-              value={sections.constraints}
-              onChange={(value) => handleChange("constraints", value || "")}
-              options={commonEditorOptions}
-              className="py-3 px-2"
-            />
-          </Card>
-        </section>
-
-        {/* Input/Output Row */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <section className="space-y-3">
-            <div className="flex items-center gap-2 px-1">
-              <ArrowRightToLine className="h-4 w-4 text-green-500" />
-              <h3 className="text-sm font-semibold tracking-tight">
-                Input Format
-              </h3>
-            </div>
-            <Card className="overflow-hidden border-muted-foreground/20 focus-within:ring-1 focus-within:ring-ring focus-within:border-ring transition-all">
-              <Editor
-                height="150px"
-                language="markdown"
-                theme={editorTheme}
-                value={sections.inputFormat}
-                onChange={(value) => handleChange("inputFormat", value || "")}
-                options={commonEditorOptions}
-                className="py-3 px-2"
-              />
-            </Card>
-          </section>
-
-          <section className="space-y-3">
-            <div className="flex items-center gap-2 px-1">
-              <ArrowLeftFromLine className="h-4 w-4 text-orange-500" />
-              <h3 className="text-sm font-semibold tracking-tight">
-                Output Format
-              </h3>
-            </div>
-            <Card className="overflow-hidden border-muted-foreground/20 focus-within:ring-1 focus-within:ring-ring focus-within:border-ring transition-all">
-              <Editor
-                height="150px"
-                language="markdown"
-                theme={editorTheme}
-                value={sections.outputFormat}
-                onChange={(value) => handleChange("outputFormat", value || "")}
-                options={commonEditorOptions}
-                className="py-3 px-2"
-              />
-            </Card>
-          </section>
-        </div>
       </div>
 
       {/* Sticky Preview */}
@@ -152,7 +177,12 @@ export function DescriptionTab(props: DescriptionTabProps) {
         <Card className="overflow-hidden bg-card/50 backdrop-blur-sm shadow-sm border-muted-foreground/20">
           <ScrollArea className="h-[calc(100vh-14rem)] p-6">
             <div className="prose prose-sm dark:prose-invert max-w-none prose-headings:font-semibold prose-pre:bg-muted/50 prose-pre:text-foreground">
-              <MarkdownRenderer>{combinedMarkdown}</MarkdownRenderer>
+              <Markdown
+                remarkPlugins={[remarkGfm]}
+                rehypePlugins={[rehypeHighlight]}
+              >
+                {markdown}
+              </Markdown>
             </div>
           </ScrollArea>
         </Card>

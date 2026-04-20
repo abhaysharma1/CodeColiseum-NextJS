@@ -130,7 +130,6 @@ export function SignupForm({
                     <DropdownMenuTrigger asChild>
                       <Button
                         variant="outline"
-                        className="text-white/90"
                       >
                         {RBAC_ROLE_OPTIONS.find((opt) => opt.value === roleId)
                           ?.label ?? "Student"}

@@ -20,23 +20,13 @@ export type driverCodeModel = runtime.Types.Result.DefaultSelection<Prisma.$driv
 
 export type AggregateDriverCode = {
   _count: DriverCodeCountAggregateOutputType | null
-  _avg: DriverCodeAvgAggregateOutputType | null
-  _sum: DriverCodeSumAggregateOutputType | null
   _min: DriverCodeMinAggregateOutputType | null
   _max: DriverCodeMaxAggregateOutputType | null
 }
 
-export type DriverCodeAvgAggregateOutputType = {
-  languageId: number | null
-}
-
-export type DriverCodeSumAggregateOutputType = {
-  languageId: number | null
-}
-
 export type DriverCodeMinAggregateOutputType = {
   id: string | null
-  languageId: number | null
+  language: $Enums.ProgrammingLanguage | null
   header: string | null
   template: string | null
   footer: string | null
@@ -47,7 +37,7 @@ export type DriverCodeMinAggregateOutputType = {
 
 export type DriverCodeMaxAggregateOutputType = {
   id: string | null
-  languageId: number | null
+  language: $Enums.ProgrammingLanguage | null
   header: string | null
   template: string | null
   footer: string | null
@@ -58,7 +48,7 @@ export type DriverCodeMaxAggregateOutputType = {
 
 export type DriverCodeCountAggregateOutputType = {
   id: number
-  languageId: number
+  language: number
   header: number
   template: number
   footer: number
@@ -69,17 +59,9 @@ export type DriverCodeCountAggregateOutputType = {
 }
 
 
-export type DriverCodeAvgAggregateInputType = {
-  languageId?: true
-}
-
-export type DriverCodeSumAggregateInputType = {
-  languageId?: true
-}
-
 export type DriverCodeMinAggregateInputType = {
   id?: true
-  languageId?: true
+  language?: true
   header?: true
   template?: true
   footer?: true
@@ -90,7 +72,7 @@ export type DriverCodeMinAggregateInputType = {
 
 export type DriverCodeMaxAggregateInputType = {
   id?: true
-  languageId?: true
+  language?: true
   header?: true
   template?: true
   footer?: true
@@ -101,7 +83,7 @@ export type DriverCodeMaxAggregateInputType = {
 
 export type DriverCodeCountAggregateInputType = {
   id?: true
-  languageId?: true
+  language?: true
   header?: true
   template?: true
   footer?: true
@@ -149,18 +131,6 @@ export type DriverCodeAggregateArgs<ExtArgs extends runtime.Types.Extensions.Int
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
-   * Select which fields to average
-  **/
-  _avg?: DriverCodeAvgAggregateInputType
-  /**
-   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-   * 
-   * Select which fields to sum
-  **/
-  _sum?: DriverCodeSumAggregateInputType
-  /**
-   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-   * 
    * Select which fields to find the minimum value
   **/
   _min?: DriverCodeMinAggregateInputType
@@ -191,15 +161,13 @@ export type driverCodeGroupByArgs<ExtArgs extends runtime.Types.Extensions.Inter
   take?: number
   skip?: number
   _count?: DriverCodeCountAggregateInputType | true
-  _avg?: DriverCodeAvgAggregateInputType
-  _sum?: DriverCodeSumAggregateInputType
   _min?: DriverCodeMinAggregateInputType
   _max?: DriverCodeMaxAggregateInputType
 }
 
 export type DriverCodeGroupByOutputType = {
   id: string
-  languageId: number
+  language: $Enums.ProgrammingLanguage
   header: string | null
   template: string | null
   footer: string | null
@@ -207,8 +175,6 @@ export type DriverCodeGroupByOutputType = {
   createdAt: Date
   updatedAt: Date
   _count: DriverCodeCountAggregateOutputType | null
-  _avg: DriverCodeAvgAggregateOutputType | null
-  _sum: DriverCodeSumAggregateOutputType | null
   _min: DriverCodeMinAggregateOutputType | null
   _max: DriverCodeMaxAggregateOutputType | null
 }
@@ -233,7 +199,7 @@ export type driverCodeWhereInput = {
   OR?: Prisma.driverCodeWhereInput[]
   NOT?: Prisma.driverCodeWhereInput | Prisma.driverCodeWhereInput[]
   id?: Prisma.StringFilter<"driverCode"> | string
-  languageId?: Prisma.IntFilter<"driverCode"> | number
+  language?: Prisma.EnumProgrammingLanguageFilter<"driverCode"> | $Enums.ProgrammingLanguage
   header?: Prisma.StringNullableFilter<"driverCode"> | string | null
   template?: Prisma.StringNullableFilter<"driverCode"> | string | null
   footer?: Prisma.StringNullableFilter<"driverCode"> | string | null
@@ -245,7 +211,7 @@ export type driverCodeWhereInput = {
 
 export type driverCodeOrderByWithRelationInput = {
   id?: Prisma.SortOrder
-  languageId?: Prisma.SortOrder
+  language?: Prisma.SortOrder
   header?: Prisma.SortOrderInput | Prisma.SortOrder
   template?: Prisma.SortOrderInput | Prisma.SortOrder
   footer?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -257,11 +223,11 @@ export type driverCodeOrderByWithRelationInput = {
 
 export type driverCodeWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  languageId_problemId?: Prisma.driverCodeLanguageIdProblemIdCompoundUniqueInput
+  language_problemId?: Prisma.driverCodeLanguageProblemIdCompoundUniqueInput
   AND?: Prisma.driverCodeWhereInput | Prisma.driverCodeWhereInput[]
   OR?: Prisma.driverCodeWhereInput[]
   NOT?: Prisma.driverCodeWhereInput | Prisma.driverCodeWhereInput[]
-  languageId?: Prisma.IntFilter<"driverCode"> | number
+  language?: Prisma.EnumProgrammingLanguageFilter<"driverCode"> | $Enums.ProgrammingLanguage
   header?: Prisma.StringNullableFilter<"driverCode"> | string | null
   template?: Prisma.StringNullableFilter<"driverCode"> | string | null
   footer?: Prisma.StringNullableFilter<"driverCode"> | string | null
@@ -269,11 +235,11 @@ export type driverCodeWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"driverCode"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"driverCode"> | Date | string
   problem?: Prisma.XOR<Prisma.ProblemScalarRelationFilter, Prisma.ProblemWhereInput>
-}, "id" | "languageId_problemId">
+}, "id" | "language_problemId">
 
 export type driverCodeOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
-  languageId?: Prisma.SortOrder
+  language?: Prisma.SortOrder
   header?: Prisma.SortOrderInput | Prisma.SortOrder
   template?: Prisma.SortOrderInput | Prisma.SortOrder
   footer?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -281,10 +247,8 @@ export type driverCodeOrderByWithAggregationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.driverCodeCountOrderByAggregateInput
-  _avg?: Prisma.driverCodeAvgOrderByAggregateInput
   _max?: Prisma.driverCodeMaxOrderByAggregateInput
   _min?: Prisma.driverCodeMinOrderByAggregateInput
-  _sum?: Prisma.driverCodeSumOrderByAggregateInput
 }
 
 export type driverCodeScalarWhereWithAggregatesInput = {
@@ -292,7 +256,7 @@ export type driverCodeScalarWhereWithAggregatesInput = {
   OR?: Prisma.driverCodeScalarWhereWithAggregatesInput[]
   NOT?: Prisma.driverCodeScalarWhereWithAggregatesInput | Prisma.driverCodeScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"driverCode"> | string
-  languageId?: Prisma.IntWithAggregatesFilter<"driverCode"> | number
+  language?: Prisma.EnumProgrammingLanguageWithAggregatesFilter<"driverCode"> | $Enums.ProgrammingLanguage
   header?: Prisma.StringNullableWithAggregatesFilter<"driverCode"> | string | null
   template?: Prisma.StringNullableWithAggregatesFilter<"driverCode"> | string | null
   footer?: Prisma.StringNullableWithAggregatesFilter<"driverCode"> | string | null
@@ -303,7 +267,7 @@ export type driverCodeScalarWhereWithAggregatesInput = {
 
 export type driverCodeCreateInput = {
   id?: string
-  languageId: number
+  language: $Enums.ProgrammingLanguage
   header?: string | null
   template?: string | null
   footer?: string | null
@@ -314,7 +278,7 @@ export type driverCodeCreateInput = {
 
 export type driverCodeUncheckedCreateInput = {
   id?: string
-  languageId: number
+  language: $Enums.ProgrammingLanguage
   header?: string | null
   template?: string | null
   footer?: string | null
@@ -325,7 +289,7 @@ export type driverCodeUncheckedCreateInput = {
 
 export type driverCodeUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  languageId?: Prisma.IntFieldUpdateOperationsInput | number
+  language?: Prisma.EnumProgrammingLanguageFieldUpdateOperationsInput | $Enums.ProgrammingLanguage
   header?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   template?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   footer?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -336,7 +300,7 @@ export type driverCodeUpdateInput = {
 
 export type driverCodeUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  languageId?: Prisma.IntFieldUpdateOperationsInput | number
+  language?: Prisma.EnumProgrammingLanguageFieldUpdateOperationsInput | $Enums.ProgrammingLanguage
   header?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   template?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   footer?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -347,7 +311,7 @@ export type driverCodeUncheckedUpdateInput = {
 
 export type driverCodeCreateManyInput = {
   id?: string
-  languageId: number
+  language: $Enums.ProgrammingLanguage
   header?: string | null
   template?: string | null
   footer?: string | null
@@ -358,7 +322,7 @@ export type driverCodeCreateManyInput = {
 
 export type driverCodeUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  languageId?: Prisma.IntFieldUpdateOperationsInput | number
+  language?: Prisma.EnumProgrammingLanguageFieldUpdateOperationsInput | $Enums.ProgrammingLanguage
   header?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   template?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   footer?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -368,7 +332,7 @@ export type driverCodeUpdateManyMutationInput = {
 
 export type driverCodeUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  languageId?: Prisma.IntFieldUpdateOperationsInput | number
+  language?: Prisma.EnumProgrammingLanguageFieldUpdateOperationsInput | $Enums.ProgrammingLanguage
   header?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   template?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   footer?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -387,14 +351,14 @@ export type driverCodeOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
-export type driverCodeLanguageIdProblemIdCompoundUniqueInput = {
-  languageId: number
+export type driverCodeLanguageProblemIdCompoundUniqueInput = {
+  language: $Enums.ProgrammingLanguage
   problemId: string
 }
 
 export type driverCodeCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  languageId?: Prisma.SortOrder
+  language?: Prisma.SortOrder
   header?: Prisma.SortOrder
   template?: Prisma.SortOrder
   footer?: Prisma.SortOrder
@@ -403,13 +367,9 @@ export type driverCodeCountOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
 }
 
-export type driverCodeAvgOrderByAggregateInput = {
-  languageId?: Prisma.SortOrder
-}
-
 export type driverCodeMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  languageId?: Prisma.SortOrder
+  language?: Prisma.SortOrder
   header?: Prisma.SortOrder
   template?: Prisma.SortOrder
   footer?: Prisma.SortOrder
@@ -420,17 +380,13 @@ export type driverCodeMaxOrderByAggregateInput = {
 
 export type driverCodeMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  languageId?: Prisma.SortOrder
+  language?: Prisma.SortOrder
   header?: Prisma.SortOrder
   template?: Prisma.SortOrder
   footer?: Prisma.SortOrder
   problemId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-}
-
-export type driverCodeSumOrderByAggregateInput = {
-  languageId?: Prisma.SortOrder
 }
 
 export type driverCodeCreateNestedManyWithoutProblemInput = {
@@ -475,9 +431,13 @@ export type driverCodeUncheckedUpdateManyWithoutProblemNestedInput = {
   deleteMany?: Prisma.driverCodeScalarWhereInput | Prisma.driverCodeScalarWhereInput[]
 }
 
+export type EnumProgrammingLanguageFieldUpdateOperationsInput = {
+  set?: $Enums.ProgrammingLanguage
+}
+
 export type driverCodeCreateWithoutProblemInput = {
   id?: string
-  languageId: number
+  language: $Enums.ProgrammingLanguage
   header?: string | null
   template?: string | null
   footer?: string | null
@@ -487,7 +447,7 @@ export type driverCodeCreateWithoutProblemInput = {
 
 export type driverCodeUncheckedCreateWithoutProblemInput = {
   id?: string
-  languageId: number
+  language: $Enums.ProgrammingLanguage
   header?: string | null
   template?: string | null
   footer?: string | null
@@ -526,7 +486,7 @@ export type driverCodeScalarWhereInput = {
   OR?: Prisma.driverCodeScalarWhereInput[]
   NOT?: Prisma.driverCodeScalarWhereInput | Prisma.driverCodeScalarWhereInput[]
   id?: Prisma.StringFilter<"driverCode"> | string
-  languageId?: Prisma.IntFilter<"driverCode"> | number
+  language?: Prisma.EnumProgrammingLanguageFilter<"driverCode"> | $Enums.ProgrammingLanguage
   header?: Prisma.StringNullableFilter<"driverCode"> | string | null
   template?: Prisma.StringNullableFilter<"driverCode"> | string | null
   footer?: Prisma.StringNullableFilter<"driverCode"> | string | null
@@ -537,7 +497,7 @@ export type driverCodeScalarWhereInput = {
 
 export type driverCodeCreateManyProblemInput = {
   id?: string
-  languageId: number
+  language: $Enums.ProgrammingLanguage
   header?: string | null
   template?: string | null
   footer?: string | null
@@ -547,7 +507,7 @@ export type driverCodeCreateManyProblemInput = {
 
 export type driverCodeUpdateWithoutProblemInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  languageId?: Prisma.IntFieldUpdateOperationsInput | number
+  language?: Prisma.EnumProgrammingLanguageFieldUpdateOperationsInput | $Enums.ProgrammingLanguage
   header?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   template?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   footer?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -557,7 +517,7 @@ export type driverCodeUpdateWithoutProblemInput = {
 
 export type driverCodeUncheckedUpdateWithoutProblemInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  languageId?: Prisma.IntFieldUpdateOperationsInput | number
+  language?: Prisma.EnumProgrammingLanguageFieldUpdateOperationsInput | $Enums.ProgrammingLanguage
   header?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   template?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   footer?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -567,7 +527,7 @@ export type driverCodeUncheckedUpdateWithoutProblemInput = {
 
 export type driverCodeUncheckedUpdateManyWithoutProblemInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  languageId?: Prisma.IntFieldUpdateOperationsInput | number
+  language?: Prisma.EnumProgrammingLanguageFieldUpdateOperationsInput | $Enums.ProgrammingLanguage
   header?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   template?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   footer?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -579,7 +539,7 @@ export type driverCodeUncheckedUpdateManyWithoutProblemInput = {
 
 export type driverCodeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  languageId?: boolean
+  language?: boolean
   header?: boolean
   template?: boolean
   footer?: boolean
@@ -591,7 +551,7 @@ export type driverCodeSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
 
 export type driverCodeSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  languageId?: boolean
+  language?: boolean
   header?: boolean
   template?: boolean
   footer?: boolean
@@ -603,7 +563,7 @@ export type driverCodeSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ex
 
 export type driverCodeSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  languageId?: boolean
+  language?: boolean
   header?: boolean
   template?: boolean
   footer?: boolean
@@ -615,7 +575,7 @@ export type driverCodeSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ex
 
 export type driverCodeSelectScalar = {
   id?: boolean
-  languageId?: boolean
+  language?: boolean
   header?: boolean
   template?: boolean
   footer?: boolean
@@ -624,7 +584,7 @@ export type driverCodeSelectScalar = {
   updatedAt?: boolean
 }
 
-export type driverCodeOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "languageId" | "header" | "template" | "footer" | "problemId" | "createdAt" | "updatedAt", ExtArgs["result"]["driverCode"]>
+export type driverCodeOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "language" | "header" | "template" | "footer" | "problemId" | "createdAt" | "updatedAt", ExtArgs["result"]["driverCode"]>
 export type driverCodeInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   problem?: boolean | Prisma.ProblemDefaultArgs<ExtArgs>
 }
@@ -642,7 +602,7 @@ export type $driverCodePayload<ExtArgs extends runtime.Types.Extensions.Internal
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
-    languageId: number
+    language: $Enums.ProgrammingLanguage
     header: string | null
     template: string | null
     footer: string | null
@@ -1074,7 +1034,7 @@ export interface Prisma__driverCodeClient<T, Null = never, ExtArgs extends runti
  */
 export interface driverCodeFieldRefs {
   readonly id: Prisma.FieldRef<"driverCode", 'String'>
-  readonly languageId: Prisma.FieldRef<"driverCode", 'Int'>
+  readonly language: Prisma.FieldRef<"driverCode", 'ProgrammingLanguage'>
   readonly header: Prisma.FieldRef<"driverCode", 'String'>
   readonly template: Prisma.FieldRef<"driverCode", 'String'>
   readonly footer: Prisma.FieldRef<"driverCode", 'String'>

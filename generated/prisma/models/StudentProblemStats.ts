@@ -28,10 +28,16 @@ export type AggregateStudentProblemStats = {
 
 export type StudentProblemStatsAvgAggregateOutputType = {
   attempts: number | null
+  successRate: number | null
+  avgTime: number | null
+  totalTime: number | null
 }
 
 export type StudentProblemStatsSumAggregateOutputType = {
   attempts: number | null
+  successRate: number | null
+  avgTime: number | null
+  totalTime: number | null
 }
 
 export type StudentProblemStatsMinAggregateOutputType = {
@@ -41,6 +47,14 @@ export type StudentProblemStatsMinAggregateOutputType = {
   problemId: string | null
   attempts: number | null
   solved: boolean | null
+  isWeak: boolean | null
+  successRate: number | null
+  avgTime: number | null
+  totalTime: number | null
+  lastAttemptAt: Date | null
+  firstAttemptAt: Date | null
+  createdAt: Date | null
+  updatedAt: Date | null
 }
 
 export type StudentProblemStatsMaxAggregateOutputType = {
@@ -50,6 +64,14 @@ export type StudentProblemStatsMaxAggregateOutputType = {
   problemId: string | null
   attempts: number | null
   solved: boolean | null
+  isWeak: boolean | null
+  successRate: number | null
+  avgTime: number | null
+  totalTime: number | null
+  lastAttemptAt: Date | null
+  firstAttemptAt: Date | null
+  createdAt: Date | null
+  updatedAt: Date | null
 }
 
 export type StudentProblemStatsCountAggregateOutputType = {
@@ -59,16 +81,30 @@ export type StudentProblemStatsCountAggregateOutputType = {
   problemId: number
   attempts: number
   solved: number
+  isWeak: number
+  successRate: number
+  avgTime: number
+  totalTime: number
+  lastAttemptAt: number
+  firstAttemptAt: number
+  createdAt: number
+  updatedAt: number
   _all: number
 }
 
 
 export type StudentProblemStatsAvgAggregateInputType = {
   attempts?: true
+  successRate?: true
+  avgTime?: true
+  totalTime?: true
 }
 
 export type StudentProblemStatsSumAggregateInputType = {
   attempts?: true
+  successRate?: true
+  avgTime?: true
+  totalTime?: true
 }
 
 export type StudentProblemStatsMinAggregateInputType = {
@@ -78,6 +114,14 @@ export type StudentProblemStatsMinAggregateInputType = {
   problemId?: true
   attempts?: true
   solved?: true
+  isWeak?: true
+  successRate?: true
+  avgTime?: true
+  totalTime?: true
+  lastAttemptAt?: true
+  firstAttemptAt?: true
+  createdAt?: true
+  updatedAt?: true
 }
 
 export type StudentProblemStatsMaxAggregateInputType = {
@@ -87,6 +131,14 @@ export type StudentProblemStatsMaxAggregateInputType = {
   problemId?: true
   attempts?: true
   solved?: true
+  isWeak?: true
+  successRate?: true
+  avgTime?: true
+  totalTime?: true
+  lastAttemptAt?: true
+  firstAttemptAt?: true
+  createdAt?: true
+  updatedAt?: true
 }
 
 export type StudentProblemStatsCountAggregateInputType = {
@@ -96,6 +148,14 @@ export type StudentProblemStatsCountAggregateInputType = {
   problemId?: true
   attempts?: true
   solved?: true
+  isWeak?: true
+  successRate?: true
+  avgTime?: true
+  totalTime?: true
+  lastAttemptAt?: true
+  firstAttemptAt?: true
+  createdAt?: true
+  updatedAt?: true
   _all?: true
 }
 
@@ -192,6 +252,14 @@ export type StudentProblemStatsGroupByOutputType = {
   problemId: string
   attempts: number
   solved: boolean
+  isWeak: boolean
+  successRate: number
+  avgTime: number
+  totalTime: number
+  lastAttemptAt: Date | null
+  firstAttemptAt: Date
+  createdAt: Date
+  updatedAt: Date
   _count: StudentProblemStatsCountAggregateOutputType | null
   _avg: StudentProblemStatsAvgAggregateOutputType | null
   _sum: StudentProblemStatsSumAggregateOutputType | null
@@ -224,6 +292,14 @@ export type StudentProblemStatsWhereInput = {
   problemId?: Prisma.StringFilter<"StudentProblemStats"> | string
   attempts?: Prisma.IntFilter<"StudentProblemStats"> | number
   solved?: Prisma.BoolFilter<"StudentProblemStats"> | boolean
+  isWeak?: Prisma.BoolFilter<"StudentProblemStats"> | boolean
+  successRate?: Prisma.FloatFilter<"StudentProblemStats"> | number
+  avgTime?: Prisma.FloatFilter<"StudentProblemStats"> | number
+  totalTime?: Prisma.FloatFilter<"StudentProblemStats"> | number
+  lastAttemptAt?: Prisma.DateTimeNullableFilter<"StudentProblemStats"> | Date | string | null
+  firstAttemptAt?: Prisma.DateTimeFilter<"StudentProblemStats"> | Date | string
+  createdAt?: Prisma.DateTimeFilter<"StudentProblemStats"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"StudentProblemStats"> | Date | string
   group?: Prisma.XOR<Prisma.GroupScalarRelationFilter, Prisma.GroupWhereInput>
   student?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   problem?: Prisma.XOR<Prisma.ProblemScalarRelationFilter, Prisma.ProblemWhereInput>
@@ -236,6 +312,14 @@ export type StudentProblemStatsOrderByWithRelationInput = {
   problemId?: Prisma.SortOrder
   attempts?: Prisma.SortOrder
   solved?: Prisma.SortOrder
+  isWeak?: Prisma.SortOrder
+  successRate?: Prisma.SortOrder
+  avgTime?: Prisma.SortOrder
+  totalTime?: Prisma.SortOrder
+  lastAttemptAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  firstAttemptAt?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   group?: Prisma.GroupOrderByWithRelationInput
   student?: Prisma.UserOrderByWithRelationInput
   problem?: Prisma.ProblemOrderByWithRelationInput
@@ -252,6 +336,14 @@ export type StudentProblemStatsWhereUniqueInput = Prisma.AtLeast<{
   problemId?: Prisma.StringFilter<"StudentProblemStats"> | string
   attempts?: Prisma.IntFilter<"StudentProblemStats"> | number
   solved?: Prisma.BoolFilter<"StudentProblemStats"> | boolean
+  isWeak?: Prisma.BoolFilter<"StudentProblemStats"> | boolean
+  successRate?: Prisma.FloatFilter<"StudentProblemStats"> | number
+  avgTime?: Prisma.FloatFilter<"StudentProblemStats"> | number
+  totalTime?: Prisma.FloatFilter<"StudentProblemStats"> | number
+  lastAttemptAt?: Prisma.DateTimeNullableFilter<"StudentProblemStats"> | Date | string | null
+  firstAttemptAt?: Prisma.DateTimeFilter<"StudentProblemStats"> | Date | string
+  createdAt?: Prisma.DateTimeFilter<"StudentProblemStats"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"StudentProblemStats"> | Date | string
   group?: Prisma.XOR<Prisma.GroupScalarRelationFilter, Prisma.GroupWhereInput>
   student?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   problem?: Prisma.XOR<Prisma.ProblemScalarRelationFilter, Prisma.ProblemWhereInput>
@@ -264,6 +356,14 @@ export type StudentProblemStatsOrderByWithAggregationInput = {
   problemId?: Prisma.SortOrder
   attempts?: Prisma.SortOrder
   solved?: Prisma.SortOrder
+  isWeak?: Prisma.SortOrder
+  successRate?: Prisma.SortOrder
+  avgTime?: Prisma.SortOrder
+  totalTime?: Prisma.SortOrder
+  lastAttemptAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  firstAttemptAt?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   _count?: Prisma.StudentProblemStatsCountOrderByAggregateInput
   _avg?: Prisma.StudentProblemStatsAvgOrderByAggregateInput
   _max?: Prisma.StudentProblemStatsMaxOrderByAggregateInput
@@ -281,12 +381,28 @@ export type StudentProblemStatsScalarWhereWithAggregatesInput = {
   problemId?: Prisma.StringWithAggregatesFilter<"StudentProblemStats"> | string
   attempts?: Prisma.IntWithAggregatesFilter<"StudentProblemStats"> | number
   solved?: Prisma.BoolWithAggregatesFilter<"StudentProblemStats"> | boolean
+  isWeak?: Prisma.BoolWithAggregatesFilter<"StudentProblemStats"> | boolean
+  successRate?: Prisma.FloatWithAggregatesFilter<"StudentProblemStats"> | number
+  avgTime?: Prisma.FloatWithAggregatesFilter<"StudentProblemStats"> | number
+  totalTime?: Prisma.FloatWithAggregatesFilter<"StudentProblemStats"> | number
+  lastAttemptAt?: Prisma.DateTimeNullableWithAggregatesFilter<"StudentProblemStats"> | Date | string | null
+  firstAttemptAt?: Prisma.DateTimeWithAggregatesFilter<"StudentProblemStats"> | Date | string
+  createdAt?: Prisma.DateTimeWithAggregatesFilter<"StudentProblemStats"> | Date | string
+  updatedAt?: Prisma.DateTimeWithAggregatesFilter<"StudentProblemStats"> | Date | string
 }
 
 export type StudentProblemStatsCreateInput = {
   id?: string
   attempts: number
   solved: boolean
+  isWeak?: boolean
+  successRate?: number
+  avgTime?: number
+  totalTime?: number
+  lastAttemptAt?: Date | string | null
+  firstAttemptAt?: Date | string
+  createdAt?: Date | string
+  updatedAt?: Date | string
   group: Prisma.GroupCreateNestedOneWithoutStudentProblemStatsInput
   student: Prisma.UserCreateNestedOneWithoutStudentProblemStatsInput
   problem: Prisma.ProblemCreateNestedOneWithoutStudentProblemStatsInput
@@ -299,12 +415,28 @@ export type StudentProblemStatsUncheckedCreateInput = {
   problemId: string
   attempts: number
   solved: boolean
+  isWeak?: boolean
+  successRate?: number
+  avgTime?: number
+  totalTime?: number
+  lastAttemptAt?: Date | string | null
+  firstAttemptAt?: Date | string
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type StudentProblemStatsUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   attempts?: Prisma.IntFieldUpdateOperationsInput | number
   solved?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isWeak?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  successRate?: Prisma.FloatFieldUpdateOperationsInput | number
+  avgTime?: Prisma.FloatFieldUpdateOperationsInput | number
+  totalTime?: Prisma.FloatFieldUpdateOperationsInput | number
+  lastAttemptAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  firstAttemptAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   group?: Prisma.GroupUpdateOneRequiredWithoutStudentProblemStatsNestedInput
   student?: Prisma.UserUpdateOneRequiredWithoutStudentProblemStatsNestedInput
   problem?: Prisma.ProblemUpdateOneRequiredWithoutStudentProblemStatsNestedInput
@@ -317,6 +449,14 @@ export type StudentProblemStatsUncheckedUpdateInput = {
   problemId?: Prisma.StringFieldUpdateOperationsInput | string
   attempts?: Prisma.IntFieldUpdateOperationsInput | number
   solved?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isWeak?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  successRate?: Prisma.FloatFieldUpdateOperationsInput | number
+  avgTime?: Prisma.FloatFieldUpdateOperationsInput | number
+  totalTime?: Prisma.FloatFieldUpdateOperationsInput | number
+  lastAttemptAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  firstAttemptAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type StudentProblemStatsCreateManyInput = {
@@ -326,12 +466,28 @@ export type StudentProblemStatsCreateManyInput = {
   problemId: string
   attempts: number
   solved: boolean
+  isWeak?: boolean
+  successRate?: number
+  avgTime?: number
+  totalTime?: number
+  lastAttemptAt?: Date | string | null
+  firstAttemptAt?: Date | string
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type StudentProblemStatsUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   attempts?: Prisma.IntFieldUpdateOperationsInput | number
   solved?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isWeak?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  successRate?: Prisma.FloatFieldUpdateOperationsInput | number
+  avgTime?: Prisma.FloatFieldUpdateOperationsInput | number
+  totalTime?: Prisma.FloatFieldUpdateOperationsInput | number
+  lastAttemptAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  firstAttemptAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type StudentProblemStatsUncheckedUpdateManyInput = {
@@ -341,6 +497,14 @@ export type StudentProblemStatsUncheckedUpdateManyInput = {
   problemId?: Prisma.StringFieldUpdateOperationsInput | string
   attempts?: Prisma.IntFieldUpdateOperationsInput | number
   solved?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isWeak?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  successRate?: Prisma.FloatFieldUpdateOperationsInput | number
+  avgTime?: Prisma.FloatFieldUpdateOperationsInput | number
+  totalTime?: Prisma.FloatFieldUpdateOperationsInput | number
+  lastAttemptAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  firstAttemptAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type StudentProblemStatsListRelationFilter = {
@@ -366,10 +530,21 @@ export type StudentProblemStatsCountOrderByAggregateInput = {
   problemId?: Prisma.SortOrder
   attempts?: Prisma.SortOrder
   solved?: Prisma.SortOrder
+  isWeak?: Prisma.SortOrder
+  successRate?: Prisma.SortOrder
+  avgTime?: Prisma.SortOrder
+  totalTime?: Prisma.SortOrder
+  lastAttemptAt?: Prisma.SortOrder
+  firstAttemptAt?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 export type StudentProblemStatsAvgOrderByAggregateInput = {
   attempts?: Prisma.SortOrder
+  successRate?: Prisma.SortOrder
+  avgTime?: Prisma.SortOrder
+  totalTime?: Prisma.SortOrder
 }
 
 export type StudentProblemStatsMaxOrderByAggregateInput = {
@@ -379,6 +554,14 @@ export type StudentProblemStatsMaxOrderByAggregateInput = {
   problemId?: Prisma.SortOrder
   attempts?: Prisma.SortOrder
   solved?: Prisma.SortOrder
+  isWeak?: Prisma.SortOrder
+  successRate?: Prisma.SortOrder
+  avgTime?: Prisma.SortOrder
+  totalTime?: Prisma.SortOrder
+  lastAttemptAt?: Prisma.SortOrder
+  firstAttemptAt?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 export type StudentProblemStatsMinOrderByAggregateInput = {
@@ -388,10 +571,21 @@ export type StudentProblemStatsMinOrderByAggregateInput = {
   problemId?: Prisma.SortOrder
   attempts?: Prisma.SortOrder
   solved?: Prisma.SortOrder
+  isWeak?: Prisma.SortOrder
+  successRate?: Prisma.SortOrder
+  avgTime?: Prisma.SortOrder
+  totalTime?: Prisma.SortOrder
+  lastAttemptAt?: Prisma.SortOrder
+  firstAttemptAt?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 export type StudentProblemStatsSumOrderByAggregateInput = {
   attempts?: Prisma.SortOrder
+  successRate?: Prisma.SortOrder
+  avgTime?: Prisma.SortOrder
+  totalTime?: Prisma.SortOrder
 }
 
 export type StudentProblemStatsCreateNestedManyWithoutStudentInput = {
@@ -524,6 +718,14 @@ export type StudentProblemStatsCreateWithoutStudentInput = {
   id?: string
   attempts: number
   solved: boolean
+  isWeak?: boolean
+  successRate?: number
+  avgTime?: number
+  totalTime?: number
+  lastAttemptAt?: Date | string | null
+  firstAttemptAt?: Date | string
+  createdAt?: Date | string
+  updatedAt?: Date | string
   group: Prisma.GroupCreateNestedOneWithoutStudentProblemStatsInput
   problem: Prisma.ProblemCreateNestedOneWithoutStudentProblemStatsInput
 }
@@ -534,6 +736,14 @@ export type StudentProblemStatsUncheckedCreateWithoutStudentInput = {
   problemId: string
   attempts: number
   solved: boolean
+  isWeak?: boolean
+  successRate?: number
+  avgTime?: number
+  totalTime?: number
+  lastAttemptAt?: Date | string | null
+  firstAttemptAt?: Date | string
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type StudentProblemStatsCreateOrConnectWithoutStudentInput = {
@@ -572,12 +782,28 @@ export type StudentProblemStatsScalarWhereInput = {
   problemId?: Prisma.StringFilter<"StudentProblemStats"> | string
   attempts?: Prisma.IntFilter<"StudentProblemStats"> | number
   solved?: Prisma.BoolFilter<"StudentProblemStats"> | boolean
+  isWeak?: Prisma.BoolFilter<"StudentProblemStats"> | boolean
+  successRate?: Prisma.FloatFilter<"StudentProblemStats"> | number
+  avgTime?: Prisma.FloatFilter<"StudentProblemStats"> | number
+  totalTime?: Prisma.FloatFilter<"StudentProblemStats"> | number
+  lastAttemptAt?: Prisma.DateTimeNullableFilter<"StudentProblemStats"> | Date | string | null
+  firstAttemptAt?: Prisma.DateTimeFilter<"StudentProblemStats"> | Date | string
+  createdAt?: Prisma.DateTimeFilter<"StudentProblemStats"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"StudentProblemStats"> | Date | string
 }
 
 export type StudentProblemStatsCreateWithoutProblemInput = {
   id?: string
   attempts: number
   solved: boolean
+  isWeak?: boolean
+  successRate?: number
+  avgTime?: number
+  totalTime?: number
+  lastAttemptAt?: Date | string | null
+  firstAttemptAt?: Date | string
+  createdAt?: Date | string
+  updatedAt?: Date | string
   group: Prisma.GroupCreateNestedOneWithoutStudentProblemStatsInput
   student: Prisma.UserCreateNestedOneWithoutStudentProblemStatsInput
 }
@@ -588,6 +814,14 @@ export type StudentProblemStatsUncheckedCreateWithoutProblemInput = {
   groupId: string
   attempts: number
   solved: boolean
+  isWeak?: boolean
+  successRate?: number
+  avgTime?: number
+  totalTime?: number
+  lastAttemptAt?: Date | string | null
+  firstAttemptAt?: Date | string
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type StudentProblemStatsCreateOrConnectWithoutProblemInput = {
@@ -620,6 +854,14 @@ export type StudentProblemStatsCreateWithoutGroupInput = {
   id?: string
   attempts: number
   solved: boolean
+  isWeak?: boolean
+  successRate?: number
+  avgTime?: number
+  totalTime?: number
+  lastAttemptAt?: Date | string | null
+  firstAttemptAt?: Date | string
+  createdAt?: Date | string
+  updatedAt?: Date | string
   student: Prisma.UserCreateNestedOneWithoutStudentProblemStatsInput
   problem: Prisma.ProblemCreateNestedOneWithoutStudentProblemStatsInput
 }
@@ -630,6 +872,14 @@ export type StudentProblemStatsUncheckedCreateWithoutGroupInput = {
   problemId: string
   attempts: number
   solved: boolean
+  isWeak?: boolean
+  successRate?: number
+  avgTime?: number
+  totalTime?: number
+  lastAttemptAt?: Date | string | null
+  firstAttemptAt?: Date | string
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type StudentProblemStatsCreateOrConnectWithoutGroupInput = {
@@ -664,12 +914,28 @@ export type StudentProblemStatsCreateManyStudentInput = {
   problemId: string
   attempts: number
   solved: boolean
+  isWeak?: boolean
+  successRate?: number
+  avgTime?: number
+  totalTime?: number
+  lastAttemptAt?: Date | string | null
+  firstAttemptAt?: Date | string
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type StudentProblemStatsUpdateWithoutStudentInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   attempts?: Prisma.IntFieldUpdateOperationsInput | number
   solved?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isWeak?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  successRate?: Prisma.FloatFieldUpdateOperationsInput | number
+  avgTime?: Prisma.FloatFieldUpdateOperationsInput | number
+  totalTime?: Prisma.FloatFieldUpdateOperationsInput | number
+  lastAttemptAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  firstAttemptAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   group?: Prisma.GroupUpdateOneRequiredWithoutStudentProblemStatsNestedInput
   problem?: Prisma.ProblemUpdateOneRequiredWithoutStudentProblemStatsNestedInput
 }
@@ -680,6 +946,14 @@ export type StudentProblemStatsUncheckedUpdateWithoutStudentInput = {
   problemId?: Prisma.StringFieldUpdateOperationsInput | string
   attempts?: Prisma.IntFieldUpdateOperationsInput | number
   solved?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isWeak?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  successRate?: Prisma.FloatFieldUpdateOperationsInput | number
+  avgTime?: Prisma.FloatFieldUpdateOperationsInput | number
+  totalTime?: Prisma.FloatFieldUpdateOperationsInput | number
+  lastAttemptAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  firstAttemptAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type StudentProblemStatsUncheckedUpdateManyWithoutStudentInput = {
@@ -688,6 +962,14 @@ export type StudentProblemStatsUncheckedUpdateManyWithoutStudentInput = {
   problemId?: Prisma.StringFieldUpdateOperationsInput | string
   attempts?: Prisma.IntFieldUpdateOperationsInput | number
   solved?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isWeak?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  successRate?: Prisma.FloatFieldUpdateOperationsInput | number
+  avgTime?: Prisma.FloatFieldUpdateOperationsInput | number
+  totalTime?: Prisma.FloatFieldUpdateOperationsInput | number
+  lastAttemptAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  firstAttemptAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type StudentProblemStatsCreateManyProblemInput = {
@@ -696,12 +978,28 @@ export type StudentProblemStatsCreateManyProblemInput = {
   groupId: string
   attempts: number
   solved: boolean
+  isWeak?: boolean
+  successRate?: number
+  avgTime?: number
+  totalTime?: number
+  lastAttemptAt?: Date | string | null
+  firstAttemptAt?: Date | string
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type StudentProblemStatsUpdateWithoutProblemInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   attempts?: Prisma.IntFieldUpdateOperationsInput | number
   solved?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isWeak?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  successRate?: Prisma.FloatFieldUpdateOperationsInput | number
+  avgTime?: Prisma.FloatFieldUpdateOperationsInput | number
+  totalTime?: Prisma.FloatFieldUpdateOperationsInput | number
+  lastAttemptAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  firstAttemptAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   group?: Prisma.GroupUpdateOneRequiredWithoutStudentProblemStatsNestedInput
   student?: Prisma.UserUpdateOneRequiredWithoutStudentProblemStatsNestedInput
 }
@@ -712,6 +1010,14 @@ export type StudentProblemStatsUncheckedUpdateWithoutProblemInput = {
   groupId?: Prisma.StringFieldUpdateOperationsInput | string
   attempts?: Prisma.IntFieldUpdateOperationsInput | number
   solved?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isWeak?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  successRate?: Prisma.FloatFieldUpdateOperationsInput | number
+  avgTime?: Prisma.FloatFieldUpdateOperationsInput | number
+  totalTime?: Prisma.FloatFieldUpdateOperationsInput | number
+  lastAttemptAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  firstAttemptAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type StudentProblemStatsUncheckedUpdateManyWithoutProblemInput = {
@@ -720,6 +1026,14 @@ export type StudentProblemStatsUncheckedUpdateManyWithoutProblemInput = {
   groupId?: Prisma.StringFieldUpdateOperationsInput | string
   attempts?: Prisma.IntFieldUpdateOperationsInput | number
   solved?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isWeak?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  successRate?: Prisma.FloatFieldUpdateOperationsInput | number
+  avgTime?: Prisma.FloatFieldUpdateOperationsInput | number
+  totalTime?: Prisma.FloatFieldUpdateOperationsInput | number
+  lastAttemptAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  firstAttemptAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type StudentProblemStatsCreateManyGroupInput = {
@@ -728,12 +1042,28 @@ export type StudentProblemStatsCreateManyGroupInput = {
   problemId: string
   attempts: number
   solved: boolean
+  isWeak?: boolean
+  successRate?: number
+  avgTime?: number
+  totalTime?: number
+  lastAttemptAt?: Date | string | null
+  firstAttemptAt?: Date | string
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type StudentProblemStatsUpdateWithoutGroupInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   attempts?: Prisma.IntFieldUpdateOperationsInput | number
   solved?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isWeak?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  successRate?: Prisma.FloatFieldUpdateOperationsInput | number
+  avgTime?: Prisma.FloatFieldUpdateOperationsInput | number
+  totalTime?: Prisma.FloatFieldUpdateOperationsInput | number
+  lastAttemptAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  firstAttemptAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   student?: Prisma.UserUpdateOneRequiredWithoutStudentProblemStatsNestedInput
   problem?: Prisma.ProblemUpdateOneRequiredWithoutStudentProblemStatsNestedInput
 }
@@ -744,6 +1074,14 @@ export type StudentProblemStatsUncheckedUpdateWithoutGroupInput = {
   problemId?: Prisma.StringFieldUpdateOperationsInput | string
   attempts?: Prisma.IntFieldUpdateOperationsInput | number
   solved?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isWeak?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  successRate?: Prisma.FloatFieldUpdateOperationsInput | number
+  avgTime?: Prisma.FloatFieldUpdateOperationsInput | number
+  totalTime?: Prisma.FloatFieldUpdateOperationsInput | number
+  lastAttemptAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  firstAttemptAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type StudentProblemStatsUncheckedUpdateManyWithoutGroupInput = {
@@ -752,6 +1090,14 @@ export type StudentProblemStatsUncheckedUpdateManyWithoutGroupInput = {
   problemId?: Prisma.StringFieldUpdateOperationsInput | string
   attempts?: Prisma.IntFieldUpdateOperationsInput | number
   solved?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isWeak?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  successRate?: Prisma.FloatFieldUpdateOperationsInput | number
+  avgTime?: Prisma.FloatFieldUpdateOperationsInput | number
+  totalTime?: Prisma.FloatFieldUpdateOperationsInput | number
+  lastAttemptAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  firstAttemptAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 
@@ -763,6 +1109,14 @@ export type StudentProblemStatsSelect<ExtArgs extends runtime.Types.Extensions.I
   problemId?: boolean
   attempts?: boolean
   solved?: boolean
+  isWeak?: boolean
+  successRate?: boolean
+  avgTime?: boolean
+  totalTime?: boolean
+  lastAttemptAt?: boolean
+  firstAttemptAt?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
   group?: boolean | Prisma.GroupDefaultArgs<ExtArgs>
   student?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   problem?: boolean | Prisma.ProblemDefaultArgs<ExtArgs>
@@ -775,6 +1129,14 @@ export type StudentProblemStatsSelectCreateManyAndReturn<ExtArgs extends runtime
   problemId?: boolean
   attempts?: boolean
   solved?: boolean
+  isWeak?: boolean
+  successRate?: boolean
+  avgTime?: boolean
+  totalTime?: boolean
+  lastAttemptAt?: boolean
+  firstAttemptAt?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
   group?: boolean | Prisma.GroupDefaultArgs<ExtArgs>
   student?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   problem?: boolean | Prisma.ProblemDefaultArgs<ExtArgs>
@@ -787,6 +1149,14 @@ export type StudentProblemStatsSelectUpdateManyAndReturn<ExtArgs extends runtime
   problemId?: boolean
   attempts?: boolean
   solved?: boolean
+  isWeak?: boolean
+  successRate?: boolean
+  avgTime?: boolean
+  totalTime?: boolean
+  lastAttemptAt?: boolean
+  firstAttemptAt?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
   group?: boolean | Prisma.GroupDefaultArgs<ExtArgs>
   student?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   problem?: boolean | Prisma.ProblemDefaultArgs<ExtArgs>
@@ -799,9 +1169,17 @@ export type StudentProblemStatsSelectScalar = {
   problemId?: boolean
   attempts?: boolean
   solved?: boolean
+  isWeak?: boolean
+  successRate?: boolean
+  avgTime?: boolean
+  totalTime?: boolean
+  lastAttemptAt?: boolean
+  firstAttemptAt?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
 }
 
-export type StudentProblemStatsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "studentId" | "groupId" | "problemId" | "attempts" | "solved", ExtArgs["result"]["studentProblemStats"]>
+export type StudentProblemStatsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "studentId" | "groupId" | "problemId" | "attempts" | "solved" | "isWeak" | "successRate" | "avgTime" | "totalTime" | "lastAttemptAt" | "firstAttemptAt" | "createdAt" | "updatedAt", ExtArgs["result"]["studentProblemStats"]>
 export type StudentProblemStatsInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   group?: boolean | Prisma.GroupDefaultArgs<ExtArgs>
   student?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -832,6 +1210,14 @@ export type $StudentProblemStatsPayload<ExtArgs extends runtime.Types.Extensions
     problemId: string
     attempts: number
     solved: boolean
+    isWeak: boolean
+    successRate: number
+    avgTime: number
+    totalTime: number
+    lastAttemptAt: Date | null
+    firstAttemptAt: Date
+    createdAt: Date
+    updatedAt: Date
   }, ExtArgs["result"]["studentProblemStats"]>
   composites: {}
 }
@@ -1264,6 +1650,14 @@ export interface StudentProblemStatsFieldRefs {
   readonly problemId: Prisma.FieldRef<"StudentProblemStats", 'String'>
   readonly attempts: Prisma.FieldRef<"StudentProblemStats", 'Int'>
   readonly solved: Prisma.FieldRef<"StudentProblemStats", 'Boolean'>
+  readonly isWeak: Prisma.FieldRef<"StudentProblemStats", 'Boolean'>
+  readonly successRate: Prisma.FieldRef<"StudentProblemStats", 'Float'>
+  readonly avgTime: Prisma.FieldRef<"StudentProblemStats", 'Float'>
+  readonly totalTime: Prisma.FieldRef<"StudentProblemStats", 'Float'>
+  readonly lastAttemptAt: Prisma.FieldRef<"StudentProblemStats", 'DateTime'>
+  readonly firstAttemptAt: Prisma.FieldRef<"StudentProblemStats", 'DateTime'>
+  readonly createdAt: Prisma.FieldRef<"StudentProblemStats", 'DateTime'>
+  readonly updatedAt: Prisma.FieldRef<"StudentProblemStats", 'DateTime'>
 }
     
 

@@ -122,6 +122,7 @@ export function ProblemTabs(props: ProblemTabsProps) {
           >
             <ReferenceSolutionTab
               solutions={state.solutions}
+              testCases={state.testCases}
               onChangeSolutions={onChangeSolutions}
             />
           </TabsContent>

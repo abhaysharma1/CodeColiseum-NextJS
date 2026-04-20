@@ -4,6 +4,9 @@ import Editor from "@monaco-editor/react";
 import { useTheme } from "next-themes";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { getBackendURL } from "@/utils/utilities";
+import { getLanguageId } from "@/utils/getLanguageId";
+import axios from "axios";
 import {
   Select,
   SelectContent,
@@ -11,12 +14,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { LanguageId, ReferenceSolution } from "./types";
-import { Plus, Trash2, CodeSquare, CheckCircle } from "lucide-react";
+import { LanguageId, ReferenceSolution, TestCaseGroups } from "./types";
+import { Plus, Trash2, CodeSquare, CheckCircle, Play } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { toast } from "sonner";
+import { useMemo, useState } from "react";
 
 interface ReferenceSolutionTabProps {
   solutions: ReferenceSolution[];
+  testCases: TestCaseGroups;
   onChangeSolutions: (solutions: ReferenceSolution[]) => void;
 }
 
@@ -29,8 +35,48 @@ const languageOptions: { value: LanguageId; label: string; monaco: string }[] =
   ];
 
 export function ReferenceSolutionTab(props: ReferenceSolutionTabProps) {
-  const { solutions, onChangeSolutions } = props;
+  const { solutions, testCases, onChangeSolutions } = props;
   const { theme } = useTheme();
+
+  type RunResult = {
+    responses: Array<{
+      language: string;
+      version: string;
+      run: {
+        stdout: string;
+        stderr: string;
+        output: string;
+        code: number | null;
+        signal: string | null;
+      };
+      compile?: {
+        stdout: string;
+        stderr: string;
+        output: string;
+        code: number | null;
+        signal: string | null;
+      };
+    }>;
+    cases: Array<{ input: string; output: string }>;
+    results: Array<{
+      input: string;
+      expectedOutput: string;
+      actualOutput: string;
+      passed: boolean;
+    }>;
+    passedCount: number;
+    totalCount: number;
+  };
+
+  const [runningId, setRunningId] = useState<string | null>(null);
+  const [runResults, setRunResults] = useState<Record<string, RunResult>>({});
+
+  const runnableCases = useMemo(() => {
+    const all = [...(testCases.public ?? []), ...(testCases.hidden ?? [])];
+    return all
+      .map((t) => ({ input: t.input ?? "", output: t.output ?? "" }))
+      .filter((t) => t.input.trim().length > 0 && t.output.trim().length > 0);
+  }, [testCases.hidden, testCases.public]);
 
   const editorTheme = theme === "dark" ? "vs-dark" : "vs-light";
 
@@ -67,6 +113,51 @@ export function ReferenceSolutionTab(props: ReferenceSolutionTabProps) {
     renderLineHighlight: "none" as const,
     hideCursorInOverviewRuler: true,
     padding: { top: 16, bottom: 16 },
+  };
+
+  const runSolution = async (solution: ReferenceSolution) => {
+    if (!solution.code.trim()) {
+      toast.error("Add code before running.");
+      return;
+    }
+
+    if (runnableCases.length === 0) {
+      toast.error("No test cases available to run.");
+      return;
+    }
+
+    const languageId = getLanguageId(solution.language);
+    if (!languageId) {
+      toast.error("Unsupported language.");
+      return;
+    }
+
+    setRunningId(solution.id);
+    try {
+      const res = await axios.post(
+        `${getBackendURL()}/admin/problems/run-reference-solution`,
+        {
+          languageId,
+          code: solution.code,
+          cases: runnableCases,
+        },
+        { withCredentials: true }
+      );
+
+      setRunResults((prev) => ({
+        ...prev,
+        [solution.id]: res.data as RunResult,
+      }));
+    } catch (error: any) {
+      const message =
+        error?.response?.data?.message ||
+        error?.response?.data?.error ||
+        error?.message ||
+        "Failed to run solution";
+      toast.error(message);
+    } finally {
+      setRunningId((prev) => (prev === solution.id ? null : prev));
+    }
   };
 
   return (
@@ -146,16 +237,35 @@ export function ReferenceSolutionTab(props: ReferenceSolutionTabProps) {
                     )}
                   </div>
 
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="icon"
-                    className="h-8 w-8 text-muted-foreground hover:text-destructive hover:bg-destructive/10 opacity-0 group-hover:opacity-100 transition-opacity"
-                    onClick={() => deleteSolution(solution.id)}
-                    title="Delete Solution"
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
+                  <div className="flex items-center gap-2">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      className="h-8 gap-2"
+                      onClick={() => void runSolution(solution)}
+                      disabled={runningId === solution.id}
+                      title={
+                        runnableCases.length === 0
+                          ? "Add test cases first"
+                          : "Run solution against test cases"
+                      }
+                    >
+                      <Play className="h-4 w-4" />
+                      {runningId === solution.id ? "Running..." : "Run"}
+                    </Button>
+
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon"
+                      className="h-8 w-8 text-muted-foreground hover:text-destructive hover:bg-destructive/10 opacity-0 group-hover:opacity-100 transition-opacity"
+                      onClick={() => deleteSolution(solution.id)}
+                      title="Delete Solution"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
                 </div>
 
                 <Editor
@@ -169,6 +279,77 @@ export function ReferenceSolutionTab(props: ReferenceSolutionTabProps) {
                   options={commonEditorOptions}
                   className="w-full"
                 />
+
+                {runResults[solution.id] && (
+                  <div className="border-t border-muted-foreground/10 bg-background px-4 py-3">
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <div className="text-sm font-medium">
+                        Result: {runResults[solution.id].passedCount}/
+                        {runResults[solution.id].totalCount} passed
+                      </div>
+                      <Badge
+                        variant="outline"
+                        className={
+                          runResults[solution.id].passedCount ===
+                          runResults[solution.id].totalCount
+                            ? "bg-green-500/10 text-green-600 border-green-500/20"
+                            : "bg-red-500/10 text-red-600 border-red-500/20"
+                        }
+                      >
+                        {runResults[solution.id].passedCount ===
+                        runResults[solution.id].totalCount
+                          ? "Accepted"
+                          : "Failed"}
+                      </Badge>
+                    </div>
+
+                    {(() => {
+                      const first = runResults[solution.id].responses?.[0];
+                      const compileErr = first?.compile?.stderr?.trim();
+                      const runtimeErr = first?.run?.stderr?.trim();
+
+                      if (compileErr) {
+                        return (
+                          <pre className="mt-3 whitespace-pre-wrap break-words rounded-md bg-red-500/10 p-3 text-xs text-red-700 dark:text-red-300">
+                            {compileErr}
+                          </pre>
+                        );
+                      }
+
+                      if (runtimeErr) {
+                        return (
+                          <pre className="mt-3 whitespace-pre-wrap break-words rounded-md bg-red-500/10 p-3 text-xs text-red-700 dark:text-red-300">
+                            {runtimeErr}
+                          </pre>
+                        );
+                      }
+
+                      const failed = runResults[solution.id].results?.find(
+                        (r) => !r.passed
+                      );
+                      if (!failed) {
+                        return null;
+                      }
+
+                      return (
+                        <div className="mt-3 grid grid-cols-1 gap-2 md:grid-cols-2">
+                          <div className="rounded-md bg-muted/40 p-3 text-xs whitespace-pre-wrap break-words">
+                            <div className="mb-1 text-[11px] font-semibold uppercase text-muted-foreground">
+                              Expected
+                            </div>
+                            {failed.expectedOutput || "(empty)"}
+                          </div>
+                          <div className="rounded-md bg-muted/40 p-3 text-xs whitespace-pre-wrap break-words">
+                            <div className="mb-1 text-[11px] font-semibold uppercase text-muted-foreground">
+                              Actual
+                            </div>
+                            {failed.actualOutput || "(empty)"}
+                          </div>
+                        </div>
+                      );
+                    })()}
+                  </div>
+                )}
               </Card>
             );
           })}
