@@ -719,9 +719,6 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
                                     Verified
                                   </Badge>
                                 )}
-                                <Badge variant="outline" className="text-xs">
-                                  {member.role}
-                                </Badge>
                                 <Button
                                   asChild
                                   variant="outline"

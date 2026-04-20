@@ -44,7 +44,7 @@ import { Spinner } from "@/components/ui/shadcn-io/spinner";
 import {
   ExamStatus,
   ExamAttemptStatus,
-  SubmissionStatus,
+  ExecutionStatus,
 } from "@/generated/prisma/enums";
 import { IoReload } from "react-icons/io5";
 import axios from "axios";
@@ -89,7 +89,7 @@ export type TeacherTestResultsResponse = {
       problemNumber: number;
       bestScore: number;
       attempts: number;
-      latestStatus: SubmissionStatus | null;
+      latestStatus: ExecutionStatus | null;
       passedTestcases: number;
       totalTestcases: number;
       sourceCode: string | null;
@@ -289,43 +289,47 @@ function TestResultsPage({
     );
   };
 
-  const getSubmissionStatusBadge = (status: SubmissionStatus | null) => {
+  const getSubmissionStatusBadge = (status: ExecutionStatus | null) => {
     if (!status) return <Badge variant="outline">No Submission</Badge>;
 
     const statusMap: Record<
-      SubmissionStatus,
+      ExecutionStatus,
       {
         variant: "default" | "secondary" | "destructive" | "outline";
         label: string;
       }
     > = {
-      [SubmissionStatus.ACCEPTED]: { variant: "default", label: "Accepted" },
-      [SubmissionStatus.PARTIAL]: { variant: "secondary", label: "Partial" },
-      [SubmissionStatus.WRONG_ANSWER]: {
+      [ExecutionStatus.ACCEPTED]: { variant: "default", label: "Accepted" },
+      [ExecutionStatus.PARTIAL]: { variant: "secondary", label: "Partial" },
+      [ExecutionStatus.WRONG_ANSWER]: {
         variant: "destructive",
         label: "Wrong Answer",
       },
-      [SubmissionStatus.TIME_LIMIT]: {
+      [ExecutionStatus.TIME_LIMIT]: {
         variant: "destructive",
         label: "Time Limit",
       },
-      [SubmissionStatus.MEMORY_LIMIT]: {
+      [ExecutionStatus.MEMORY_LIMIT]: {
         variant: "destructive",
         label: "Memory Limit",
       },
-      [SubmissionStatus.RUNTIME_ERROR]: {
+      [ExecutionStatus.RUNTIME_ERROR]: {
         variant: "destructive",
         label: "Runtime Error",
       },
-      [SubmissionStatus.COMPILE_ERROR]: {
+      [ExecutionStatus.COMPILE_ERROR]: {
         variant: "destructive",
         label: "Compile Error",
       },
-      [SubmissionStatus.PENDING]: { variant: "outline", label: "Pending" },
-      [SubmissionStatus.RUNNING]: { variant: "outline", label: "Running" },
-      [SubmissionStatus.INTERNAL_ERROR]: {
+      [ExecutionStatus.PENDING]: { variant: "outline", label: "Pending" },
+      [ExecutionStatus.RUNNING]: { variant: "outline", label: "Running" },
+      [ExecutionStatus.INTERNAL_ERROR]: {
         variant: "destructive",
         label: "Internal Error",
+      },
+      [ExecutionStatus.BAD_SCALING]: {
+        variant: "destructive",
+        label: "Bad Scaling",
       },
     };
 
