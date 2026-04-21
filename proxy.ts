@@ -75,6 +75,8 @@ export async function proxy(req: NextRequest) {
         path: "/",
         domain: ".codecoliseum.in",
       });
+
+      console.log(response.cookies);
       return response;
     }
   }
