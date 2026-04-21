@@ -301,7 +301,7 @@ export function TestCasesTab(props: TestCasesTabProps) {
                     handleChangeCase(activeCase.id, "input", e.target.value)
                   }
                   placeholder="Enter inputs exactly as the program should read them..."
-                  className="flex-1 font-mono text-sm resize-none focus-visible:ring-1 focus-visible:ring-ring border-muted-foreground/20"
+                  className="flex-1 font-mono text-sm resize-y focus-visible:ring-1 focus-visible:ring-ring border-muted-foreground/20"
                 />
               </div>
               <div className="flex flex-col space-y-2 h-full">
@@ -314,7 +314,7 @@ export function TestCasesTab(props: TestCasesTabProps) {
                     handleChangeCase(activeCase.id, "output", e.target.value)
                   }
                   placeholder="Enter the exact expected output..."
-                  className="flex-1 font-mono text-sm resize-none focus-visible:ring-1 focus-visible:ring-ring border-muted-foreground/20"
+                  className="flex-1 font-mono text-sm resize-y focus-visible:ring-1 focus-visible:ring-ring border-muted-foreground/20"
                 />
               </div>
             </div>

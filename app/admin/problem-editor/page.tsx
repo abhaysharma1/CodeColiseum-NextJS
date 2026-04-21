@@ -260,7 +260,7 @@ function ProblemEditorContent() {
   return (
     <div className="flex w-full flex-col min-h-screen bg-background">
       {/* Sticky Header */}
-      <div className="sticky top-0 z-30 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <div className="top-0 z-30 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="mx-auto max-w-[1400px]">
           <ProblemHeader
             title={state.title}
