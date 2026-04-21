@@ -16,6 +16,7 @@ function Page({ params }: { params: Promise<{ "exam-id": string }> }) {
   const [error, setError] = useState<any>();
 
   const [examDetails, setExamDetails] = useState<Exam | undefined>();
+  
   const [loading, setLoading] = useState(true);
 
   const router = useRouter();
