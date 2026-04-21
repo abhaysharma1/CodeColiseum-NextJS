@@ -54,9 +54,15 @@ export async function proxy(req: NextRequest) {
     return NextResponse.redirect(new URL("/login", req.url));
   }
 
-  if (pathname.startsWith("/tests/start")) {
+  if (pathname.startsWith("/tests/start/")) {
     const sebHash = req.headers.get("x-safeexambrowser-reqhash");
     const configHash = req.headers.get("x-safeexambrowser-configkeyhash");
+
+    console.log({
+        pathname,
+        sebHash,
+        allHeaders: Object.fromEntries(req.headers.entries())
+    });
 
     if (sebHash && configHash) {
       // verify hash against your SEB config key
