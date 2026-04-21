@@ -70,7 +70,7 @@ export async function proxy(req: NextRequest) {
       response.cookies.set("seb-hash", sebHash, {
         httpOnly: true,
         secure: true,
-        sameSite: "lax",
+        sameSite: "none",
         maxAge: 120, // 2 mins — only needed until start-exam is called
         path: "/",
         domain: ".codecoliseum.in",
