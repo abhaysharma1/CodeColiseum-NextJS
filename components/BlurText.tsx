@@ -18,6 +18,7 @@ type BlurTextProps = {
   animationTo?: Array<Record<string, string | number>>;
   easing?: Easing | Easing[];
   onAnimationComplete?: () => void;
+  
   stepDuration?: number;
   /** Map of word text to additional className/style. Applies to ALL occurrences of that word. */
   wordStyles?: Record<string, WordStyle>;
