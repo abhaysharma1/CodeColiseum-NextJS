@@ -54,38 +54,38 @@ export async function proxy(req: NextRequest) {
     return NextResponse.redirect(new URL("/login", req.url));
   }
 
-  if (pathname.startsWith("/tests/start/")) {
-    const sebHash = req.headers.get("x-safeexambrowser-reqhash");
-    const configHash = req.headers.get("x-safeexambrowser-configkeyhash");
+  // if (pathname.startsWith("/tests/start/")) {
+  //   const sebHash = req.headers.get("x-safeexambrowser-reqhash");
+  //   const configHash = req.headers.get("x-safeexambrowser-configkeyhash");
 
-    console.log({
-        pathname,
-        sebHash,
-        allHeaders: Object.fromEntries(req.headers.entries())
-    });
+  //   console.log({
+  //       pathname,
+  //       sebHash,
+  //       allHeaders: Object.fromEntries(req.headers.entries())
+  //   });
 
-    if (sebHash && configHash) {
-      // verify hash against your SEB config key
-      const isValid = verifyExamHash(req.url, sebHash);
-      if (!isValid) {
-        return NextResponse.redirect(new URL("/not-allowed", req.url));
-      }
+  //   if (sebHash && configHash) {
+  //     // verify hash against your SEB config key
+  //     const isValid = verifyExamHash(req.url, sebHash);
+  //     if (!isValid) {
+  //       return NextResponse.redirect(new URL("/not-allowed", req.url));
+  //     }
 
-      const response = NextResponse.next();
-      // httpOnly so JS can't tamper with it
-      response.cookies.set("seb-hash", sebHash, {
-        httpOnly: true,
-        secure: true,
-        sameSite: "none",
-        maxAge: 120, // 2 mins — only needed until start-exam is called
-        path: "/",
-        domain: ".codecoliseum.in",
-      });
+  //     const response = NextResponse.next();
+  //     // httpOnly so JS can't tamper with it
+  //     response.cookies.set("seb-hash", sebHash, {
+  //       httpOnly: true,
+  //       secure: true,
+  //       sameSite: "none",
+  //       maxAge: 120, // 2 mins — only needed until start-exam is called
+  //       path: "/",
+  //       domain: ".codecoliseum.in",
+  //     });
 
-      console.log(response.cookies);
-      return response;
-    }
-  }
+  //     console.log(response.cookies);
+  //     return response;
+  //   }
+  // }
 
   try {
     const { payload }: any = await jwtVerify(token, secret);
