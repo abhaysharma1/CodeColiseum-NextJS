@@ -73,6 +73,7 @@ export async function proxy(req: NextRequest) {
         sameSite: "lax",
         maxAge: 120, // 2 mins — only needed until start-exam is called
         path: "/",
+        domain: ".codecoliseum.in",
       });
       return response;
     }
