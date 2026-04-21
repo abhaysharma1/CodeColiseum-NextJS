@@ -29,6 +29,7 @@ function Page({ params }: { params: Promise<{ "exam-id": string }> }) {
           `${getBackendURL()}/student/exam/exam-details?examId=${examId}`,
           { withCredentials: true }
         );
+        
         const det = res.data as Exam;
         setExamDetails(det);
       } catch (err: any) {
