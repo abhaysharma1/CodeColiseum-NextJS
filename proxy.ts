@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getBackendURL } from "./utils/utilities";
 import { jwtVerify } from "jose";
+import { verifyExamHash } from "./utils/sebUtils";
 
 const secret = new TextEncoder().encode(process.env.BETTER_AUTH_SECRET);
 
@@ -51,6 +52,30 @@ export async function proxy(req: NextRequest) {
 
   if (!token) {
     return NextResponse.redirect(new URL("/login", req.url));
+  }
+
+  if (pathname.startsWith("/tests/start")) {
+    const sebHash = req.headers.get("x-safeexambrowser-reqhash");
+    const configHash = req.headers.get("x-safeexambrowser-configkeyhash");
+
+    if (sebHash && configHash) {
+      // verify hash against your SEB config key
+      const isValid = verifyExamHash(req.url, sebHash);
+      if (!isValid) {
+        return NextResponse.redirect(new URL("/not-allowed", req.url));
+      }
+
+      const response = NextResponse.next();
+      // httpOnly so JS can't tamper with it
+      response.cookies.set("seb-hash", sebHash, {
+        httpOnly: true,
+        secure: true,
+        sameSite: "lax",
+        maxAge: 120, // 2 mins — only needed until start-exam is called
+        path: "/",
+      });
+      return response;
+    }
   }
 
   try {
