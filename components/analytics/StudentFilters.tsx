@@ -1,6 +1,12 @@
 "use client";
 
-import React, { useCallback, useMemo, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -27,6 +33,7 @@ interface StudentFiltersProps {
   topics?: string[];
   isLoading?: boolean;
   groups?: Array<{ id: string; name: string }>;
+  searchDebounceMs?: number;
 }
 
 export const StudentFilters: React.FC<StudentFiltersProps> = ({
@@ -34,6 +41,7 @@ export const StudentFilters: React.FC<StudentFiltersProps> = ({
   topics = [],
   isLoading = false,
   groups = [],
+  searchDebounceMs = 350,
 }) => {
   const [filters, setFilters] = useState<FilterState>({
     search: "",
@@ -43,16 +51,44 @@ export const StudentFilters: React.FC<StudentFiltersProps> = ({
     weakTopic: "",
   });
 
+  const searchDebounceTimer = useRef<ReturnType<typeof setTimeout> | null>(
+    null
+  );
+
+  const clearSearchTimer = useCallback(() => {
+    if (searchDebounceTimer.current) {
+      clearTimeout(searchDebounceTimer.current);
+      searchDebounceTimer.current = null;
+    }
+  }, []);
+
   const applyFilterPatch = useCallback(
     (patch: Partial<FilterState>) => {
       setFilters((prev) => {
         const next = { ...prev, ...patch };
-        onFilterChange(next);
+
+        if (Object.prototype.hasOwnProperty.call(patch, "search")) {
+          clearSearchTimer();
+          searchDebounceTimer.current = setTimeout(() => {
+            onFilterChange(next);
+          }, searchDebounceMs);
+        } else {
+          // If a non-search filter changes, apply immediately and cancel any pending debounced search update.
+          clearSearchTimer();
+          onFilterChange(next);
+        }
+
         return next;
       });
     },
-    [onFilterChange]
+    [clearSearchTimer, onFilterChange, searchDebounceMs]
   );
+
+  useEffect(() => {
+    return () => {
+      clearSearchTimer();
+    };
+  }, [clearSearchTimer]);
 
   const activeFilters = useMemo(() => {
     let count = 0;
@@ -74,6 +110,7 @@ export const StudentFilters: React.FC<StudentFiltersProps> = ({
               variant="ghost"
               size="sm"
               onClick={() => {
+                clearSearchTimer();
                 const reset: FilterState = {
                   search: "",
                   scoreMin: 0,
@@ -98,7 +135,8 @@ export const StudentFilters: React.FC<StudentFiltersProps> = ({
           placeholder="Search name or email"
           value={filters.search}
           onChange={(e) => applyFilterPatch({ search: e.target.value })}
-          disabled={isLoading}
+          // Keep search enabled while loading to prevent losing focus during background fetches.
+          disabled={false}
         />
 
         <Input

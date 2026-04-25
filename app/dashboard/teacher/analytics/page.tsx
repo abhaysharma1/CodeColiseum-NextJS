@@ -26,6 +26,25 @@ import {
 import { StudentTable, StudentData } from "@/components/analytics/StudentTable";
 import { StudentExpandedRow } from "@/components/analytics/StudentExpandedRow";
 import { AnalyticsPagination } from "@/components/analytics/AnalyticsPagination";
+import {
+  ProblemFilters,
+  ProblemFilterState,
+} from "@/components/analytics/ProblemFilters";
+import { ProblemTable, ProblemRow } from "@/components/analytics/ProblemTable";
+import {
+  ProblemExpandedRow,
+  ProblemDetailResponse,
+  ProblemStudentsResponse,
+} from "@/components/analytics/ProblemExpandedRow";
+import {
+  ExamFilters,
+  ExamFilterState,
+} from "@/components/analytics/ExamFilters";
+import { ExamTable, ExamRow } from "@/components/analytics/ExamTable";
+import {
+  ExamExpandedRow,
+  ExamDetailsResponse,
+} from "@/components/analytics/ExamExpandedRow";
 
 type GroupStatsResponse = {
   groupId: string;
@@ -89,6 +108,26 @@ type StudentDetailResponse = {
   }>;
 };
 
+type ProblemsResponse = {
+  data: ProblemRow[];
+  pagination: {
+    page: number;
+    limit: number;
+    total: number;
+    pages: number;
+  };
+};
+
+type ExamsResponse = {
+  data: ExamRow[];
+  pagination: {
+    page: number;
+    limit: number;
+    total: number;
+    pages: number;
+  };
+};
+
 type TeacherGroup = {
   id: string;
   name: string;
@@ -118,9 +157,21 @@ export default function TeacherAnalyticsPage() {
   const [isLoadingStudents, setIsLoadingStudents] = useState(false);
   const [isLoadingStudentDetail, setIsLoadingStudentDetail] = useState(false);
 
+  const [isLoadingProblems, setIsLoadingProblems] = useState(false);
+  const [isLoadingProblemDetail, setIsLoadingProblemDetail] = useState(false);
+
+  const [isLoadingExams, setIsLoadingExams] = useState(false);
+  const [isLoadingExamDetail, setIsLoadingExamDetail] = useState(false);
+
   const [groupStats, setGroupStats] = useState<GroupStatsResponse | null>(null);
   const [students, setStudents] = useState<StudentData[]>([]);
   const [totalStudents, setTotalStudents] = useState(0);
+
+  const [problems, setProblems] = useState<ProblemRow[]>([]);
+  const [totalProblems, setTotalProblems] = useState(0);
+
+  const [exams, setExams] = useState<ExamRow[]>([]);
+  const [totalExams, setTotalExams] = useState(0);
 
   const [filters, setFilters] = useState<FilterState>({
     search: "",
@@ -133,11 +184,46 @@ export default function TeacherAnalyticsPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(25);
 
+  const [problemFilters, setProblemFilters] = useState<ProblemFilterState>({
+    search: "",
+    difficultyTier: "all",
+    sortBy: "attemptedCount",
+    sortOrder: "desc",
+  });
+  const [problemPage, setProblemPage] = useState(1);
+  const [problemPageSize, setProblemPageSize] = useState(25);
+
+  const [examFilters, setExamFilters] = useState<ExamFilterState>({
+    search: "",
+    status: "all",
+    sortBy: "endDate",
+    sortOrder: "desc",
+    dateFrom: "",
+    dateTo: "",
+  });
+  const [examPage, setExamPage] = useState(1);
+  const [examPageSize, setExamPageSize] = useState(25);
+
   const [expandedStudentId, setExpandedStudentId] = useState<string | null>(
     null
   );
   const [expandedStudentData, setExpandedStudentData] = useState<
     StudentDetailResponse | undefined
+  >();
+
+  const [expandedProblemId, setExpandedProblemId] = useState<string | null>(
+    null
+  );
+  const [expandedProblemDetails, setExpandedProblemDetails] = useState<
+    ProblemDetailResponse | undefined
+  >();
+  const [expandedProblemStudents, setExpandedProblemStudents] = useState<
+    ProblemStudentsResponse | undefined
+  >();
+
+  const [expandedExamId, setExpandedExamId] = useState<string | null>(null);
+  const [expandedExamData, setExpandedExamData] = useState<
+    ExamDetailsResponse | undefined
   >();
 
   const updateUrlGroupId = useCallback(
@@ -237,6 +323,118 @@ export default function TeacherAnalyticsPage() {
     }
   }, [selectedGroupId, currentPage, pageSize, filters]);
 
+  const fetchProblems = useCallback(async () => {
+    if (!selectedGroupId || !canViewAnalytics) return;
+    setIsLoadingProblems(true);
+    try {
+      const res = await axios.get<ProblemsResponse>(
+        `${BACKEND_URL}/teacher/analytics/problems`,
+        {
+          params: {
+            groupId: selectedGroupId,
+            page: problemPage,
+            limit: problemPageSize,
+            search: problemFilters.search,
+            difficultyTier: problemFilters.difficultyTier,
+            sortBy: problemFilters.sortBy,
+            sortOrder: problemFilters.sortOrder,
+          },
+          withCredentials: true,
+        }
+      );
+
+      setProblems(res.data.data);
+      setTotalProblems(res.data.pagination.total);
+    } finally {
+      setIsLoadingProblems(false);
+    }
+  }, [
+    selectedGroupId,
+    canViewAnalytics,
+    problemPage,
+    problemPageSize,
+    problemFilters,
+  ]);
+
+  const fetchProblemDetails = useCallback(
+    async (problemId: string) => {
+      if (!selectedGroupId || !canViewAnalytics) return;
+      const res = await axios.get<ProblemDetailResponse>(
+        `${BACKEND_URL}/teacher/analytics/problems/${problemId}/details`,
+        {
+          params: { groupId: selectedGroupId },
+          withCredentials: true,
+        }
+      );
+      setExpandedProblemDetails(res.data);
+    },
+    [selectedGroupId, canViewAnalytics]
+  );
+
+  const fetchProblemStudents = useCallback(
+    async (problemId: string) => {
+      if (!selectedGroupId || !canViewAnalytics) return;
+      const res = await axios.get<ProblemStudentsResponse>(
+        `${BACKEND_URL}/teacher/analytics/problems/${problemId}/students`,
+        {
+          params: {
+            groupId: selectedGroupId,
+            page: 1,
+            limit: 10,
+            solvedStatus: "all",
+          },
+          withCredentials: true,
+        }
+      );
+      setExpandedProblemStudents(res.data);
+    },
+    [selectedGroupId, canViewAnalytics]
+  );
+
+  const fetchExams = useCallback(async () => {
+    if (!selectedGroupId || !canViewAnalytics) return;
+    setIsLoadingExams(true);
+    try {
+      const res = await axios.get<ExamsResponse>(
+        `${BACKEND_URL}/teacher/analytics/exams`,
+        {
+          params: {
+            groupId: selectedGroupId,
+            page: examPage,
+            limit: examPageSize,
+            search: examFilters.search,
+            status: examFilters.status,
+            dateFrom: examFilters.dateFrom || undefined,
+            dateTo: examFilters.dateTo || undefined,
+            sortBy: examFilters.sortBy,
+            sortOrder: examFilters.sortOrder,
+          },
+          withCredentials: true,
+        }
+      );
+
+      setExams(res.data.data);
+      setTotalExams(res.data.pagination.total);
+    } finally {
+      setIsLoadingExams(false);
+    }
+  }, [selectedGroupId, canViewAnalytics, examPage, examPageSize, examFilters]);
+
+  const fetchExamDetails = useCallback(
+    async (examId: string) => {
+      if (!selectedGroupId || !canViewAnalytics) return;
+      const res = await axios.get<ExamDetailsResponse>(
+        `${BACKEND_URL}/teacher/analytics/exams/${examId}/details`,
+        {
+          params: { groupId: selectedGroupId },
+          withCredentials: true,
+        }
+      );
+      setExpandedExamData(res.data);
+    },
+    [selectedGroupId, canViewAnalytics]
+  );
+
   const fetchStudentDetail = useCallback(
     async (studentId: string) => {
       if (!selectedGroupId) return;
@@ -278,6 +476,14 @@ export default function TeacherAnalyticsPage() {
   useEffect(() => {
     fetchStudents();
   }, [fetchStudents]);
+
+  useEffect(() => {
+    fetchProblems();
+  }, [fetchProblems]);
+
+  useEffect(() => {
+    fetchExams();
+  }, [fetchExams]);
 
   const chartData = useMemo(() => {
     if (!students.length) return undefined;
@@ -348,8 +554,54 @@ export default function TeacherAnalyticsPage() {
     await fetchStudentDetail(studentId);
   };
 
+  const handleProblemExpand = async (problemId: string) => {
+    if (expandedProblemId === problemId) {
+      setExpandedProblemId(null);
+      setExpandedProblemDetails(undefined);
+      setExpandedProblemStudents(undefined);
+      return;
+    }
+
+    setExpandedProblemId(problemId);
+    setExpandedProblemDetails(undefined);
+    setExpandedProblemStudents(undefined);
+    setIsLoadingProblemDetail(true);
+    try {
+      await Promise.all([
+        fetchProblemDetails(problemId),
+        fetchProblemStudents(problemId),
+      ]);
+    } finally {
+      setIsLoadingProblemDetail(false);
+    }
+  };
+
+  const handleExamExpand = async (examId: string) => {
+    if (expandedExamId === examId) {
+      setExpandedExamId(null);
+      setExpandedExamData(undefined);
+      return;
+    }
+
+    setExpandedExamId(examId);
+    setExpandedExamData(undefined);
+    setIsLoadingExamDetail(true);
+    try {
+      await fetchExamDetails(examId);
+    } finally {
+      setIsLoadingExamDetail(false);
+    }
+  };
+
   const selectedStudentName =
     students.find((s) => s.id === expandedStudentId)?.name ?? "Student";
+
+  const selectedProblemName =
+    problems.find((p) => p.problemId === expandedProblemId)?.problemTitle ??
+    "Problem";
+
+  const selectedExamName =
+    exams.find((e) => e.examId === expandedExamId)?.examTitle ?? "Exam";
 
   const canRender = !!selectedGroupId && canViewAnalytics;
 
@@ -367,8 +619,15 @@ export default function TeacherAnalyticsPage() {
             value={selectedGroupId || undefined}
             onValueChange={(value) => {
               setCurrentPage(1);
+              setProblemPage(1);
+              setExamPage(1);
               setExpandedStudentId(null);
               setExpandedStudentData(undefined);
+              setExpandedProblemId(null);
+              setExpandedProblemDetails(undefined);
+              setExpandedProblemStudents(undefined);
+              setExpandedExamId(null);
+              setExpandedExamData(undefined);
               setSelectedGroupId(value);
               updateUrlGroupId(value);
             }}
@@ -485,26 +744,74 @@ export default function TeacherAnalyticsPage() {
           </TabsContent>
 
           <TabsContent value="problems">
-            <Card>
-              <CardHeader>
-                <CardTitle>Problem Analytics</CardTitle>
-              </CardHeader>
-              <CardContent>
-                Problem-level analytics is wired in backend and can be added
-                here next.
-              </CardContent>
-            </Card>
+            <div className="space-y-4">
+              <ProblemFilters
+                onFilterChange={(next) => {
+                  setProblemPage(1);
+                  setProblemFilters(next);
+                }}
+                isLoading={isLoadingProblems}
+              />
+
+              <ProblemTable
+                data={problems}
+                isLoading={isLoadingProblems}
+                onRowExpand={handleProblemExpand}
+              />
+
+              {expandedProblemId && (
+                <ProblemExpandedRow
+                  problemName={selectedProblemName}
+                  isLoading={isLoadingProblemDetail}
+                  details={expandedProblemDetails}
+                  students={expandedProblemStudents}
+                />
+              )}
+
+              <AnalyticsPagination
+                currentPage={problemPage}
+                pageSize={problemPageSize}
+                totalItems={totalProblems}
+                onPageChange={setProblemPage}
+                onPageSizeChange={setProblemPageSize}
+                isLoading={isLoadingProblems}
+              />
+            </div>
           </TabsContent>
 
           <TabsContent value="exams">
-            <Card>
-              <CardHeader>
-                <CardTitle>Exam Analytics</CardTitle>
-              </CardHeader>
-              <CardContent>
-                Exam-level analytics can be added here next.
-              </CardContent>
-            </Card>
+            <div className="space-y-4">
+              <ExamFilters
+                onFilterChange={(next) => {
+                  setExamPage(1);
+                  setExamFilters(next);
+                }}
+                isLoading={isLoadingExams}
+              />
+
+              <ExamTable
+                data={exams}
+                isLoading={isLoadingExams}
+                onRowExpand={handleExamExpand}
+              />
+
+              {expandedExamId && (
+                <ExamExpandedRow
+                  examName={selectedExamName}
+                  isLoading={isLoadingExamDetail}
+                  data={expandedExamData}
+                />
+              )}
+
+              <AnalyticsPagination
+                currentPage={examPage}
+                pageSize={examPageSize}
+                totalItems={totalExams}
+                onPageChange={setExamPage}
+                onPageSizeChange={setExamPageSize}
+                isLoading={isLoadingExams}
+              />
+            </div>
           </TabsContent>
         </Tabs>
       )}

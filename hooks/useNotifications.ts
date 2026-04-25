@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useAuth } from "@/context/authcontext";
+import { useTabFocus } from "@/hooks/useTabFocus";
 import {
   FetchNotificationsParams,
   NotificationItem,
@@ -22,6 +23,7 @@ export type UseNotificationsOptions = {
 
 export function useNotifications(options: UseNotificationsOptions = {}) {
   const { user, loading: authLoading } = useAuth();
+  const isTabFocused = useTabFocus();
   const [data, setData] = useState<NotificationListResponse | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
@@ -36,6 +38,7 @@ export function useNotifications(options: UseNotificationsOptions = {}) {
   } = options;
 
   const canFetch = !!user && !authLoading;
+  const canPoll = canFetch && isTabFocused;
 
   const params: FetchNotificationsParams = useMemo(
     () => ({ page, limit, isRead, type, priority }),
@@ -63,14 +66,14 @@ export function useNotifications(options: UseNotificationsOptions = {}) {
   }, [load]);
 
   useEffect(() => {
-    if (!canFetch || !pollIntervalMs) return;
+    if (!canPoll || !pollIntervalMs) return;
 
     const id = setInterval(() => {
       load();
     }, pollIntervalMs);
 
     return () => clearInterval(id);
-  }, [canFetch, pollIntervalMs, load]);
+  }, [canPoll, pollIntervalMs, load]);
 
   const markAsRead = useCallback(
     async (recipientId: string) => {

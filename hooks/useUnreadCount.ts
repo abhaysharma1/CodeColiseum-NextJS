@@ -2,14 +2,17 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { useAuth } from "@/context/authcontext";
+import { useTabFocus } from "@/hooks/useTabFocus";
 import { fetchNotifications } from "@/lib/notifications";
 
 export function useUnreadCount(pollIntervalMs: number = 30000) {
   const { user, loading: authLoading } = useAuth();
+  const isTabFocused = useTabFocus();
   const [unreadCount, setUnreadCount] = useState(0);
   const [loading, setLoading] = useState(false);
 
   const canFetch = !!user && !authLoading;
+  const canPoll = canFetch && isTabFocused;
 
   const load = useCallback(async () => {
     if (!canFetch) return;
@@ -29,14 +32,14 @@ export function useUnreadCount(pollIntervalMs: number = 30000) {
   }, [load]);
 
   useEffect(() => {
-    if (!canFetch || !pollIntervalMs) return;
+    if (!canPoll || !pollIntervalMs) return;
 
     const id = setInterval(() => {
       load();
     }, pollIntervalMs);
 
     return () => clearInterval(id);
-  }, [canFetch, pollIntervalMs, load]);
+  }, [canPoll, pollIntervalMs, load]);
 
   return { unreadCount, loading, refresh: load };
 }

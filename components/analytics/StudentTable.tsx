@@ -12,6 +12,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Eye } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
@@ -62,19 +63,19 @@ export const StudentTable: React.FC<StudentTableProps> = ({
           Student Performance ({data.length})
         </CardTitle>
       </CardHeader>
-      <CardContent className="p-0">
-        <div className="overflow-x-auto">
+      <CardContent className="px-7">
+        <div className="overflow-x-auto ">
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Rank</TableHead>
+                <TableHead className="whitespace-nowrap">Rank</TableHead>
                 <TableHead>Student</TableHead>
-                <TableHead>Score</TableHead>
-                <TableHead>Attempts</TableHead>
-                <TableHead>Avg Time</TableHead>
+                <TableHead className="whitespace-nowrap">Score</TableHead>
+                <TableHead className="whitespace-nowrap">Attempts</TableHead>
+                <TableHead className="whitespace-nowrap">Avg Time</TableHead>
                 <TableHead>Weak Topics</TableHead>
                 <TableHead>Completion</TableHead>
-                <TableHead>Last Active</TableHead>
+                <TableHead className="whitespace-nowrap">Last Active</TableHead>
                 <TableHead></TableHead>
               </TableRow>
             </TableHeader>
@@ -100,26 +101,71 @@ export const StudentTable: React.FC<StudentTableProps> = ({
                         </span>
                       </div>
                     </TableCell>
-                    <TableCell>{row.avgScore.toFixed(1)}%</TableCell>
-                    <TableCell>{row.totalAttempts}</TableCell>
                     <TableCell>
-                      {Math.round(row.avgTimePerProblem)} min
+                      <Badge
+                        variant={
+                          row.avgScore < 50
+                            ? "destructive"
+                            : row.avgScore < 80
+                              ? "secondary"
+                              : "default"
+                        }
+                        className="whitespace-nowrap"
+                      >
+                        {row.avgScore.toFixed(1)}%
+                      </Badge>
                     </TableCell>
                     <TableCell>
-                      <div className="flex flex-wrap gap-1">
-                        {(row.weakTopics || []).slice(0, 2).map((topic) => (
-                          <Badge
-                            key={topic}
-                            variant="destructive"
-                            className="text-xs"
-                          >
-                            {topic}
-                          </Badge>
-                        ))}
+                      <div className="flex flex-col">
+                        <span className="tabular-nums">
+                          {row.totalAttempts}
+                        </span>
+                        <span className="text-xs text-muted-foreground whitespace-nowrap">
+                          avg {row.avgAttemptsPerProblem.toFixed(1)}/problem
+                        </span>
                       </div>
                     </TableCell>
                     <TableCell>
-                      {Math.round(row.completionPercentage)}%
+                      <span className="whitespace-nowrap tabular-nums">
+                        {Math.round(row.avgTimePerProblem)} min
+                      </span>
+                    </TableCell>
+                    <TableCell>
+                      {row.weakTopics?.length ? (
+                        <div className="flex flex-wrap gap-1">
+                          {row.weakTopics.slice(0, 2).map((topic) => (
+                            <Badge
+                              key={topic}
+                              variant="destructive"
+                              className="text-xs"
+                            >
+                              {topic}
+                            </Badge>
+                          ))}
+                          {row.weakTopics.length > 2 && (
+                            <Badge variant="outline" className="text-xs">
+                              +{row.weakTopics.length - 2}
+                            </Badge>
+                          )}
+                        </div>
+                      ) : (
+                        <span className="text-xs text-muted-foreground">-</span>
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      <div className="min-w-[120px]">
+                        <div className="flex items-center justify-between gap-2">
+                          <span className="text-xs text-muted-foreground">
+                            {Math.round(row.completionPercentage)}%
+                          </span>
+                        </div>
+                        <Progress
+                          value={Math.max(
+                            0,
+                            Math.min(100, row.completionPercentage)
+                          )}
+                        />
+                      </div>
                     </TableCell>
                     <TableCell>
                       {row.lastActive
