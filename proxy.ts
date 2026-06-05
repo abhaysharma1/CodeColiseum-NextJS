@@ -46,9 +46,13 @@ export async function proxy(req: NextRequest) {
     return response;
   }
 
+  // `__Secure-` prefixed cookies are never sent over HTTP (RFC requirement).
+  // In development on localhost the non-secure name is used instead.
   const token =
-    req.cookies.get("__Secure-better-auth.session_data")?.value ||
-    req.cookies.get("better-auth.session_data")?.value;
+    process.env.NODE_ENV === "development"
+      ? req.cookies.get("better-auth.session_data")?.value
+      : (req.cookies.get("__Secure-better-auth.session_data")?.value ||
+          req.cookies.get("better-auth.session_data")?.value);
 
   if (!token) {
     return NextResponse.redirect(new URL("/login", req.url));

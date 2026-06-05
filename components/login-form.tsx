@@ -5,7 +5,6 @@ import { Label } from "@/components/ui/label";
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { authClient } from "@/lib/auth-client";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/authcontext";
 
 interface props {
@@ -23,12 +22,11 @@ export function LoginForm({ className, setShowVerifyBox, ...props }: props) {
   const [loading, setLoading] = useState(false);
 
   const { user } = useAuth();
-  const router = useRouter();
 
   useEffect(() => {
     if (user) {
       toast.success("Aleady Logged In Redirecting...");
-      router.replace("/dashboard");
+      window.location.href = "/dashboard";
     }
   }, [user]);
 
@@ -74,9 +72,20 @@ export function LoginForm({ className, setShowVerifyBox, ...props }: props) {
       return;
     }
 
-    await new Promise((r) => setTimeout(r, 50));
+    // Poll for the session cookie to ensure it's written before navigating.
+    // Under heavy load the cookie write can lag behind the API response.
+    for (let i = 0; i < 30; i++) {
+      if (
+        document.cookie.includes("__Secure-better-auth.session_data") ||
+        document.cookie.includes("better-auth.session_data")
+      )
+        break;
+      await new Promise((r) => setTimeout(r, 100));
+    }
 
-    router.push("/dashboard");
+    // Hard navigation ensures the proxy middleware runs fresh with the new cookie
+    // and all client state is re-initialised (avoids stale AuthProvider session).
+    window.location.href = "/dashboard";
   };
 
   const verifybox = (event: React.MouseEvent<HTMLButtonElement>) => {

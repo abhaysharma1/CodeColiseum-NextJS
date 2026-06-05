@@ -11,9 +11,16 @@ export default function TeacherLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
   const path = usePathname();
   const [page, setPage] = useState("");
+
+  // Client-side cross-role guard: if a non-teacher lands here, redirect away.
+  useEffect(() => {
+    if (user && !loading && user.globalRoleId !== "role_org_teacher") {
+      window.location.href = "/dashboard";
+    }
+  }, [user, loading]);
 
   useEffect(() => {
     if (path == "/dashboard/teacher") {

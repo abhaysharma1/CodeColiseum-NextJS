@@ -2,9 +2,25 @@
 
 import { Spinner } from "@/components/ui/shadcn-io/spinner";
 import { useAuth } from "@/context/authcontext";
+import { useEffect } from "react";
+
+const ROLE_DESTINATIONS: Record<string, string> = {
+  role_platform_admin: "/admin/dashboard",
+  role_org_teacher: "/dashboard/teacher",
+  role_org_student: "/dashboard/student",
+};
 
 export default function Dashboard() {
   const { user, loading } = useAuth();
+
+  useEffect(() => {
+    if (!user?.globalRoleId || loading) return;
+
+    const dest = ROLE_DESTINATIONS[user.globalRoleId];
+    if (dest) {
+      window.location.href = dest;
+    }
+  }, [user, loading]);
 
   if (loading || !user?.id) {
     return (

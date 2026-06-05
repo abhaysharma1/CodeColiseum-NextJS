@@ -11,9 +11,16 @@ export default function StudentLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
   const path = usePathname();
   const [page, setPage] = useState("");
+
+  // Client-side cross-role guard: if a non-student lands here, redirect away.
+  useEffect(() => {
+    if (user && !loading && user.globalRoleId !== "role_org_student") {
+      window.location.href = "/dashboard";
+    }
+  }, [user, loading]);
 
   useEffect(() => {
     if (path === "/dashboard/student") {

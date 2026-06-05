@@ -9,13 +9,11 @@ import VerifyEmailForm from "@/components/verifyEmailForm";
 import Link from "next/link";
 import Image from "next/image";
 import { useAuth } from "@/context/authcontext";
-import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 
 export default function LoginPage() {
   const [showVerifyBox, setShowVerifyBox] = useState(false);
   const { user } = useAuth();
-  const router = useRouter();
 
   return (
     <div className="">
@@ -38,7 +36,7 @@ export default function LoginPage() {
                   <Button
                     variant="outline"
                     className="w-full"
-                    onClick={() => router.push("/dashboard")}
+                    onClick={() => window.location.href = "/dashboard"}
                   >
                     Go to Dashboard
                   </Button>
