@@ -32,6 +32,8 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import axios from "axios";
 import { getBackendURL } from "@/utils/utilities";
+import { useIsSEB } from "@/hooks/useIsSEB";
+import { launchSEB } from "@/lib/utils";
 
 function Page({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
@@ -46,6 +48,9 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
 
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
+
+  const isSecureBrowser = useIsSEB();
+
   const itemsPerPage = 5;
 
   const router = useRouter();
@@ -422,17 +427,27 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
                                 See Result
                               </Button>
                             ) : startDate && startDate < now ? (
-                              <Button
-                                variant={"default"}
-                                className="h-7"
-                                onClick={() => {
-                                  router.push(`/tests/start/${exam.id}`);
-                                }}
-                              >
-                                Start Exam
-                              </Button>
+                              exam.sebEnabled && !isSecureBrowser ? (
+                                <Button
+                                  variant={"default"}
+                                  className="h-7"
+                                  onClick={launchSEB}
+                                >
+                                  Launch SEB
+                                </Button>
+                              ) : (
+                                <Button
+                                  variant={"default"}
+                                  className="h-7"
+                                  onClick={() => {
+                                    router.push(`/tests/start/${exam.id}`);
+                                  }}
+                                >
+                                  Start Exam
+                                </Button>
+                              )
                             ) : (
-                              "Hmmm"
+                              "Not Started"
                             )}
                           </TableCell>
                         </TableRow>

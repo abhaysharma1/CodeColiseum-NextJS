@@ -20,7 +20,10 @@ const DASHBOARD_ROLE_PREFIXES: Record<string, string> = {
 export async function proxy(req: NextRequest) {
   const pathname = req.nextUrl.pathname;
 
-  const backendDomain = getBackendURL();
+  const backendDomain =
+    process.env.NODE_ENV != "development"
+       ? getBackendURL()
+      : "http://localhost:5000";
 
   const cspHeader = `
     default-src 'self';
@@ -51,8 +54,8 @@ export async function proxy(req: NextRequest) {
   const token =
     process.env.NODE_ENV === "development"
       ? req.cookies.get("better-auth.session_data")?.value
-      : (req.cookies.get("__Secure-better-auth.session_data")?.value ||
-          req.cookies.get("better-auth.session_data")?.value);
+      : req.cookies.get("__Secure-better-auth.session_data")?.value ||
+        req.cookies.get("better-auth.session_data")?.value;
 
   if (!token) {
     return NextResponse.redirect(new URL("/login", req.url));

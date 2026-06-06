@@ -1,5 +1,6 @@
 export function getBackendURL() {
   return (
-    process.env.NEXT_PUBLIC_BACKEND_DOMAIN || "https://codecoliseum.in/api"
+    process.env.NEXT_PUBLIC_BACKEND_DOMAIN ||
+    "https://codecoliseum.in/api"
   );
 }
