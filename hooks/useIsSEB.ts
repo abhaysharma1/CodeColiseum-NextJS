@@ -33,10 +33,6 @@ export function useIsSEB(): boolean {
     // 3. Check for the modern Safe Exam Browser JavaScript API object
     const hasSEBObject = typeof window.SafeExamBrowser !== "undefined";
 
-    console.log(userAgentContainsSEB || hasSEBObject);
-
-    console.log(navigator.userAgent);
-    console.log(window.SafeExamBrowser);
 
     // Update state if either condition is true
     setIsSEB(userAgentContainsSEB || hasSEBObject);
