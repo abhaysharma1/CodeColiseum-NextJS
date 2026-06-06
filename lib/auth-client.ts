@@ -5,6 +5,6 @@ import { getBackendURL } from "@/utils/utilities";
 
 export const authClient = createAuthClient({
   /** The base URL of the server (optional if you're using the same domain) */
-  baseURL: getBackendURL() || "https://api.codecoliseum.in",
+  baseURL: "https://codecoliseum.in/api/auth",
   plugins: [inferAdditionalFields<typeof auth>()],
 });
