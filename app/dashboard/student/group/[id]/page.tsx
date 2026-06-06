@@ -423,6 +423,9 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
                                     `/dashboard/student/results/${exam.id}`
                                   )
                                 }
+
+
+                                
                               >
                                 See Result
                               </Button>
