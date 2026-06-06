@@ -102,7 +102,7 @@ export default function TeacherAnnouncementsPage() {
     try {
       setSending(true);
       await axios.post(
-        `${getBackendURL()}/api/notifications`,
+        `${getBackendURL()}/notifications`,
         {
           title: title.trim(),
           message: message.trim(),

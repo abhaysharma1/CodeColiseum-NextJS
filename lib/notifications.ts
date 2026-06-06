@@ -74,7 +74,7 @@ export async function fetchNotifications(
   if (params.type) searchParams.set("type", params.type);
   if (params.priority) searchParams.set("priority", params.priority);
 
-  const url = `${backendUrl}/api/notifications?${searchParams.toString()}`;
+  const url = `${backendUrl}/notifications?${searchParams.toString()}`;
 
   const res = await axios.get<NotificationListResponse>(url, {
     withCredentials: true,
@@ -98,7 +98,7 @@ export async function fetchSentNotifications(
   if (params.limit) searchParams.set("limit", String(params.limit));
   if (params.type) searchParams.set("type", params.type);
 
-  const url = `${backendUrl}/api/notifications/sent?${searchParams.toString()}`;
+  const url = `${backendUrl}/notifications/sent?${searchParams.toString()}`;
 
   const res = await axios.get<SentNotificationListResponse>(url, {
     withCredentials: true,
@@ -109,7 +109,7 @@ export async function fetchSentNotifications(
 
 export async function markNotificationsRead(recipientIds: string[]) {
   const backendUrl = getBackendURL();
-  const url = `${backendUrl}/api/notifications/read`;
+  const url = `${backendUrl}/notifications/read`;
 
   const res = await axios.patch<{ updatedCount: number; unreadCount: number }>(
     url,
@@ -122,7 +122,7 @@ export async function markNotificationsRead(recipientIds: string[]) {
 
 export async function markAllNotificationsRead() {
   const backendUrl = getBackendURL();
-  const url = `${backendUrl}/api/notifications/read-all`;
+  const url = `${backendUrl}/notifications/read-all`;
 
   const res = await axios.patch<{ updatedCount: number; unreadCount: number }>(
     url,
