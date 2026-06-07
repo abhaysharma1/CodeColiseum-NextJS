@@ -21,6 +21,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 type GeneratorPatternOption = "RANDOM" | "SORTED" | "REVERSE" | "CONSTANT";
 
@@ -179,9 +189,11 @@ function Page() {
   const [jsTimeLimitMs, setJsTimeLimitMs] = useState<string>("3000");
   const [memoryLimitMB, setMemoryLimitMB] = useState<string>("256");
 
+  const [hasExistingGenerator, setHasExistingGenerator] = useState(false);
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
   const [isLoadingGenerator, setIsLoadingGenerator] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   useEffect(() => {
@@ -237,6 +249,7 @@ function Page() {
     try {
       const existing = await fetchGenerator(p.id);
       if (existing) {
+        setHasExistingGenerator(true);
         setPattern(existing.pattern);
         setMinValue(String(existing.minValue));
         setMaxValue(String(existing.maxValue));
@@ -247,10 +260,12 @@ function Page() {
         setJsTimeLimitMs(String(existing.jsTimeLimitMs));
         setMemoryLimitMB(String(existing.memoryLimitMB));
       } else {
+        setHasExistingGenerator(false);
         resetForm();
       }
     } catch (err) {
       console.error(err);
+      setHasExistingGenerator(false);
       resetForm();
       setFieldErrors({ form: "Failed to load existing generator" });
     } finally {
@@ -330,6 +345,33 @@ function Page() {
         memoryLimitMB: Number(memoryLimitMB),
       },
     };
+  };
+
+  const handleDelete = async () => {
+    if (!problem) return;
+
+    try {
+      setIsDeleting(true);
+      setFieldErrors({});
+      setSuccessMessage(null);
+
+      await axios.delete(`${getBackendURL()}/admin/problem-test-generator`, {
+        params: { problemId: problem.id },
+        withCredentials: true,
+      });
+
+      setHasExistingGenerator(false);
+      resetForm();
+      setSuccessMessage("Generator configuration deleted successfully.");
+    } catch (err: any) {
+      const msg =
+        err?.response?.data?.error ||
+        err?.message ||
+        "Failed to delete generator";
+      setFieldErrors({ form: msg });
+    } finally {
+      setIsDeleting(false);
+    }
   };
 
   const handleSubmit = async (event: React.FormEvent) => {
@@ -602,12 +644,45 @@ function Page() {
                   problem &&
                   "Loading existing generator..."}
               </div>
-              <Button
-                type="submit"
-                disabled={!problem || isSaving || isLoadingGenerator}
-              >
-                {isSaving ? "Saving..." : "Save Generator"}
-              </Button>
+              <div className="flex items-center gap-3">
+                {hasExistingGenerator && problem && (
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <Button
+                        type="button"
+                        variant="destructive"
+                        disabled={isDeleting || isLoadingGenerator}
+                      >
+                        {isDeleting ? "Deleting..." : "Delete Generator"}
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent>
+                      <DialogHeader>
+                        <DialogTitle>Delete Generator</DialogTitle>
+                        <DialogDescription>
+                          Are you sure you want to delete the complexity
+                          generator for <strong>#{problem.number} {problem.title}</strong>?
+                          This action cannot be undone.
+                        </DialogDescription>
+                      </DialogHeader>
+                      <DialogFooter>
+                        <DialogClose asChild>
+                          <Button type="button" variant="outline">Cancel</Button>
+                        </DialogClose>
+                        <Button type="button" variant="destructive" onClick={handleDelete}>
+                          Delete
+                        </Button>
+                      </DialogFooter>
+                    </DialogContent>
+                  </Dialog>
+                )}
+                <Button
+                  type="submit"
+                  disabled={!problem || isSaving || isLoadingGenerator}
+                >
+                  {isSaving ? "Saving..." : "Save Generator"}
+                </Button>
+              </div>
             </CardFooter>
           </form>
         </CardContent>
