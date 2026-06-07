@@ -24,14 +24,11 @@ import {
 
 type GeneratorPatternOption = "RANDOM" | "SORTED" | "REVERSE" | "CONSTANT";
 
-type ExpectedComplexityOption = "LOGN" | "N" | "NLOGN" | "N2" | "N3" | "EXP";
-
 type GeneratorData = {
   pattern: GeneratorPatternOption;
   minValue: number;
   maxValue: number;
   sizes: number[];
-  expectedComplexity: ExpectedComplexityOption;
 };
 
 type FieldErrors = {
@@ -39,7 +36,6 @@ type FieldErrors = {
   minValue?: string;
   maxValue?: string;
   sizes?: string;
-  expectedComplexity?: string;
   form?: string;
 };
 
@@ -75,7 +71,6 @@ async function fetchGenerator(
         minValue: number;
         maxValue: number;
         sizes: number[];
-        expectedComplexity?: ExpectedComplexityOption | null;
       } | null;
     };
     if (!data || !data.generator) return null;
@@ -85,7 +80,6 @@ async function fetchGenerator(
       minValue: data.generator.minValue,
       maxValue: data.generator.maxValue,
       sizes: data.generator.sizes,
-      expectedComplexity: data.generator.expectedComplexity ?? "N",
     };
   } catch (error) {
     throw new Error("Failed to load generator");
@@ -98,7 +92,8 @@ async function saveGenerator(payload: {
   minValue: number;
   maxValue: number;
   sizes: number[];
-  expectedComplexity: ExpectedComplexityOption;
+  timeLimitMs: number;
+  memoryLimitMB: number;
 }) {
   try {
     const res = await axios.post(
@@ -110,7 +105,8 @@ async function saveGenerator(payload: {
         minValue: payload.minValue,
         maxValue: payload.maxValue,
         sizes: payload.sizes,
-        expectedComplexity: payload.expectedComplexity,
+        timeLimitMs: payload.timeLimitMs,
+        memoryLimitMB: payload.memoryLimitMB,
       },
       { withCredentials: true }
     );
@@ -127,35 +123,23 @@ async function saveGenerator(payload: {
 }
 
 function parseSizes(value: string): { sizes: number[]; error?: string } {
-  const parts = value
-    .split(",")
-    .map((p) => p.trim())
-    .filter((p) => p.length > 0);
+  const trimmed = value.trim();
 
-  if (parts.length < 3) {
-    return { sizes: [], error: "Provide at least 3 sizes" };
+  if (!trimmed) {
+    return { sizes: [], error: "Size is required" };
   }
 
-  const sizes = parts.map((p) => Number(p));
+  const n = Number(trimmed);
 
-  if (sizes.some((n) => !Number.isFinite(n) || !Number.isInteger(n))) {
-    return { sizes: [], error: "Sizes must be valid integers" };
+  if (!Number.isFinite(n) || !Number.isInteger(n)) {
+    return { sizes: [], error: "Size must be a valid integer" };
   }
 
-  if (sizes.some((n) => n <= 0)) {
-    return { sizes: [], error: "Sizes must be greater than 0" };
+  if (n <= 0) {
+    return { sizes: [], error: "Size must be greater than 0" };
   }
 
-  for (let i = 1; i < sizes.length; i++) {
-    if (sizes[i] <= sizes[i - 1]) {
-      return {
-        sizes: [],
-        error: "Sizes must be strictly increasing (e.g. 1000,2000,4000)",
-      };
-    }
-  }
-
-  return { sizes };
+  return { sizes: [n] };
 }
 
 function Page() {
@@ -165,11 +149,11 @@ function Page() {
   const [problem, setProblem] = useState<Problem | null>(null);
 
   const [pattern, setPattern] = useState<GeneratorPatternOption>("RANDOM");
-  const [expectedComplexity, setExpectedComplexity] =
-    useState<ExpectedComplexityOption>("N");
   const [minValue, setMinValue] = useState<string>("");
   const [maxValue, setMaxValue] = useState<string>("");
-  const [sizesInput, setSizesInput] = useState<string>("");
+  const [sizeInput, setSizeInput] = useState<string>("");
+  const [timeLimitMs, setTimeLimitMs] = useState<string>("1000");
+  const [memoryLimitMB, setMemoryLimitMB] = useState<string>("256");
 
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
   const [isLoadingGenerator, setIsLoadingGenerator] = useState(false);
@@ -209,10 +193,11 @@ function Page() {
 
   const resetForm = () => {
     setPattern("RANDOM");
-    setExpectedComplexity("N");
     setMinValue("");
     setMaxValue("");
-    setSizesInput("");
+    setSizeInput("");
+    setTimeLimitMs("1000");
+    setMemoryLimitMB("256");
     setFieldErrors({});
     setSuccessMessage(null);
   };
@@ -228,8 +213,7 @@ function Page() {
         setPattern(existing.pattern);
         setMinValue(String(existing.minValue));
         setMaxValue(String(existing.maxValue));
-        setSizesInput(existing.sizes.join(","));
-        setExpectedComplexity(existing.expectedComplexity);
+        setSizeInput(String(existing.sizes[0] ?? ""));
       } else {
         resetForm();
       }
@@ -254,7 +238,8 @@ function Page() {
       minValue: number;
       maxValue: number;
       sizes: number[];
-      expectedComplexity: ExpectedComplexityOption;
+      timeLimitMs: number;
+      memoryLimitMB: number;
     };
   } => {
     const errors: FieldErrors = {};
@@ -285,7 +270,7 @@ function Page() {
       hasError = true;
     }
 
-    const { sizes, error } = parseSizes(sizesInput);
+    const { sizes, error } = parseSizes(sizeInput);
     if (error) {
       errors.sizes = error;
       hasError = true;
@@ -303,7 +288,8 @@ function Page() {
         minValue: min,
         maxValue: max,
         sizes,
-        expectedComplexity,
+        timeLimitMs: Number(timeLimitMs),
+        memoryLimitMB: Number(memoryLimitMB),
       },
     };
   };
@@ -329,7 +315,8 @@ function Page() {
         minValue: payload.minValue,
         maxValue: payload.maxValue,
         sizes: payload.sizes,
-        expectedComplexity: payload.expectedComplexity,
+        timeLimitMs: payload.timeLimitMs,
+        memoryLimitMB: payload.memoryLimitMB,
       });
 
       setSuccessMessage("Generator configuration saved successfully.");
@@ -466,37 +453,6 @@ function Page() {
                 </div>
               </div>
 
-              <div className="mt-4 space-y-2 mb-4">
-                <Label className="mb-2">Expected Time Complexity</Label>
-                <Select
-                  value={expectedComplexity}
-                  onValueChange={(value) =>
-                    setExpectedComplexity(value as ExpectedComplexityOption)
-                  }
-                >
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Select expected complexity" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="LOGN">O(log N)</SelectItem>
-                    <SelectItem value="N">O(N)</SelectItem>
-                    <SelectItem value="NLOGN">O(N log N)</SelectItem>
-                    <SelectItem value="N2">O(N^2)</SelectItem>
-                    <SelectItem value="N3">O(N^3)</SelectItem>
-                    <SelectItem value="EXP">Exponential</SelectItem>
-                  </SelectContent>
-                </Select>
-                <p className="mt-1 text-xs text-gray-500">
-                  Used when checking if the observed scaling of the user&apos;s
-                  solution matches this expected complexity.
-                </p>
-                {fieldErrors.expectedComplexity && (
-                  <p className="mt-1 text-xs text-red-600">
-                    {fieldErrors.expectedComplexity}
-                  </p>
-                )}
-              </div>
-
               <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                 <div className="space-y-2">
                   <Label className="mb-2">Min Value</Label>
@@ -529,18 +485,45 @@ function Page() {
                 </div>
               </div>
 
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                <div className="space-y-2">
+                  <Label className="mb-2">Time Limit (ms)</Label>
+                  <Input
+                    type="number"
+                    value={timeLimitMs}
+                    onChange={(e) => setTimeLimitMs(e.target.value)}
+                    min={1}
+                  />
+                  <p className="mt-1 text-xs text-gray-500">
+                    Execution time limit in milliseconds.
+                  </p>
+                </div>
+
+                <div className="space-y-2">
+                  <Label className="mb-2">Memory Limit (MB)</Label>
+                  <Input
+                    type="number"
+                    value={memoryLimitMB}
+                    onChange={(e) => setMemoryLimitMB(e.target.value)}
+                    min={1}
+                  />
+                  <p className="mt-1 text-xs text-gray-500">
+                    Memory limit in megabytes.
+                  </p>
+                </div>
+              </div>
+
               <div className="mt-2 space-y-2">
-                <Label className="mb-2">Sizes</Label>
+                <Label className="mb-2">Size</Label>
                 <Input
-                  type="text"
-                  value={sizesInput}
-                  onChange={(e) => setSizesInput(e.target.value)}
-                  placeholder="e.g. 1000,2000,4000"
+                  type="number"
+                  value={sizeInput}
+                  onChange={(e) => setSizeInput(e.target.value)}
+                  placeholder="e.g. 1000000"
                   aria-invalid={!!fieldErrors.sizes}
                 />
                 <p className="mt-1 text-xs text-gray-500">
-                  Comma-separated list of input sizes. Must be at least 3
-                  numbers, all &gt; 0 and strictly increasing.
+                  The length of the complexity test case input.
                 </p>
                 {fieldErrors.sizes && (
                   <p className="mt-1 text-xs text-red-600">
