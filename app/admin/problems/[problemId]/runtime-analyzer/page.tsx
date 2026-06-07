@@ -67,11 +67,18 @@ interface AnalysisResult {
   compilationError?: string;
 }
 
+interface DriverCodeEntry {
+  header: string;
+  template: string;
+  footer: string;
+}
+
 interface ProblemInfo {
   id: string;
   number: number;
   title: string;
   difficulty: string;
+  driverCode: Record<string, DriverCodeEntry>;
 }
 
 const languageOptions = [
@@ -121,6 +128,7 @@ export default function RuntimeAnalyzerPage() {
   const [loading, setLoading] = useState(true);
   const [language, setLanguage] = useState("cpp");
   const [code, setCode] = useState("");
+  const [templateLoaded, setTemplateLoaded] = useState(false);
   const [running, setRunning] = useState(false);
   const [result, setResult] = useState<AnalysisResult | null>(null);
 
@@ -130,16 +138,25 @@ export default function RuntimeAnalyzerPage() {
       try {
         const res = await axios.get<{
           id: string; number: number; title: string; difficulty: string;
+          driverCode: Record<string, { header: string; template: string; footer: string }>;
         }>(`${getBackendURL()}/admin/problems/${problemId}`, {
           withCredentials: true,
         });
         const data = res.data;
+        const driverCode = data.driverCode ?? {};
         setProblem({
           id: data.id ?? problemId,
           number: data.number,
           title: data.title ?? "Unknown Problem",
           difficulty: data.difficulty ?? "MEDIUM",
+          driverCode,
         });
+        const initialLang = "cpp";
+        const tmpl = driverCode[initialLang]?.template;
+        if (tmpl) {
+          setCode(tmpl);
+          setTemplateLoaded(true);
+        }
       } catch {
         toast.error("Failed to load problem");
       } finally {
@@ -148,6 +165,13 @@ export default function RuntimeAnalyzerPage() {
     };
     fetchProblem();
   }, [problemId]);
+
+  const handleLanguageChange = useCallback((newLang: string) => {
+    setLanguage(newLang);
+    if (problem?.driverCode[newLang]?.template) {
+      setCode(problem.driverCode[newLang].template!);
+    }
+  }, [problem]);
 
   const runAnalysis = useCallback(async () => {
     if (!code.trim()) {
@@ -215,7 +239,7 @@ export default function RuntimeAnalyzerPage() {
               <CardDescription>Write or paste your solution</CardDescription>
             </div>
             <div className="flex items-center gap-3">
-              <Select value={language} onValueChange={setLanguage}>
+              <Select value={language} onValueChange={handleLanguageChange}>
                 <SelectTrigger className="h-8 w-[130px]">
                   <SelectValue placeholder="Language" />
                 </SelectTrigger>
