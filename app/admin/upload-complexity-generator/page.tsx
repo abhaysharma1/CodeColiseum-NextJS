@@ -29,6 +29,11 @@ type GeneratorData = {
   minValue: number;
   maxValue: number;
   sizes: number[];
+  cppTimeLimitMs: number;
+  javaTimeLimitMs: number;
+  pythonTimeLimitMs: number;
+  jsTimeLimitMs: number;
+  memoryLimitMB: number;
 };
 
 type FieldErrors = {
@@ -71,6 +76,11 @@ async function fetchGenerator(
         minValue: number;
         maxValue: number;
         sizes: number[];
+        cppTimeLimitMs: number;
+        javaTimeLimitMs: number;
+        pythonTimeLimitMs: number;
+        jsTimeLimitMs: number;
+        memoryLimitMB: number;
       } | null;
     };
     if (!data || !data.generator) return null;
@@ -80,6 +90,11 @@ async function fetchGenerator(
       minValue: data.generator.minValue,
       maxValue: data.generator.maxValue,
       sizes: data.generator.sizes,
+      cppTimeLimitMs: data.generator.cppTimeLimitMs,
+      javaTimeLimitMs: data.generator.javaTimeLimitMs,
+      pythonTimeLimitMs: data.generator.pythonTimeLimitMs,
+      jsTimeLimitMs: data.generator.jsTimeLimitMs,
+      memoryLimitMB: data.generator.memoryLimitMB,
     };
   } catch (error) {
     throw new Error("Failed to load generator");
@@ -92,7 +107,10 @@ async function saveGenerator(payload: {
   minValue: number;
   maxValue: number;
   sizes: number[];
-  timeLimitMs: number;
+  cppTimeLimitMs: number;
+  javaTimeLimitMs: number;
+  pythonTimeLimitMs: number;
+  jsTimeLimitMs: number;
   memoryLimitMB: number;
 }) {
   try {
@@ -105,7 +123,10 @@ async function saveGenerator(payload: {
         minValue: payload.minValue,
         maxValue: payload.maxValue,
         sizes: payload.sizes,
-        timeLimitMs: payload.timeLimitMs,
+        cppTimeLimitMs: payload.cppTimeLimitMs,
+        javaTimeLimitMs: payload.javaTimeLimitMs,
+        pythonTimeLimitMs: payload.pythonTimeLimitMs,
+        jsTimeLimitMs: payload.jsTimeLimitMs,
         memoryLimitMB: payload.memoryLimitMB,
       },
       { withCredentials: true }
@@ -152,7 +173,10 @@ function Page() {
   const [minValue, setMinValue] = useState<string>("");
   const [maxValue, setMaxValue] = useState<string>("");
   const [sizeInput, setSizeInput] = useState<string>("");
-  const [timeLimitMs, setTimeLimitMs] = useState<string>("1000");
+  const [cppTimeLimitMs, setCppTimeLimitMs] = useState<string>("1000");
+  const [javaTimeLimitMs, setJavaTimeLimitMs] = useState<string>("2000");
+  const [pythonTimeLimitMs, setPythonTimeLimitMs] = useState<string>("4000");
+  const [jsTimeLimitMs, setJsTimeLimitMs] = useState<string>("3000");
   const [memoryLimitMB, setMemoryLimitMB] = useState<string>("256");
 
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
@@ -196,7 +220,10 @@ function Page() {
     setMinValue("");
     setMaxValue("");
     setSizeInput("");
-    setTimeLimitMs("1000");
+    setCppTimeLimitMs("1000");
+    setJavaTimeLimitMs("2000");
+    setPythonTimeLimitMs("4000");
+    setJsTimeLimitMs("3000");
     setMemoryLimitMB("256");
     setFieldErrors({});
     setSuccessMessage(null);
@@ -214,6 +241,11 @@ function Page() {
         setMinValue(String(existing.minValue));
         setMaxValue(String(existing.maxValue));
         setSizeInput(String(existing.sizes[0] ?? ""));
+        setCppTimeLimitMs(String(existing.cppTimeLimitMs));
+        setJavaTimeLimitMs(String(existing.javaTimeLimitMs));
+        setPythonTimeLimitMs(String(existing.pythonTimeLimitMs));
+        setJsTimeLimitMs(String(existing.jsTimeLimitMs));
+        setMemoryLimitMB(String(existing.memoryLimitMB));
       } else {
         resetForm();
       }
@@ -238,7 +270,10 @@ function Page() {
       minValue: number;
       maxValue: number;
       sizes: number[];
-      timeLimitMs: number;
+      cppTimeLimitMs: number;
+      javaTimeLimitMs: number;
+      pythonTimeLimitMs: number;
+      jsTimeLimitMs: number;
       memoryLimitMB: number;
     };
   } => {
@@ -288,7 +323,10 @@ function Page() {
         minValue: min,
         maxValue: max,
         sizes,
-        timeLimitMs: Number(timeLimitMs),
+        cppTimeLimitMs: Number(cppTimeLimitMs),
+        javaTimeLimitMs: Number(javaTimeLimitMs),
+        pythonTimeLimitMs: Number(pythonTimeLimitMs),
+        jsTimeLimitMs: Number(jsTimeLimitMs),
         memoryLimitMB: Number(memoryLimitMB),
       },
     };
@@ -315,7 +353,10 @@ function Page() {
         minValue: payload.minValue,
         maxValue: payload.maxValue,
         sizes: payload.sizes,
-        timeLimitMs: payload.timeLimitMs,
+        cppTimeLimitMs: payload.cppTimeLimitMs,
+        javaTimeLimitMs: payload.javaTimeLimitMs,
+        pythonTimeLimitMs: payload.pythonTimeLimitMs,
+        jsTimeLimitMs: payload.jsTimeLimitMs,
         memoryLimitMB: payload.memoryLimitMB,
       });
 
@@ -485,32 +526,54 @@ function Page() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+              <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label className="mb-2">Time Limit (ms)</Label>
+                  <Label className="mb-2">C++ Time Limit (ms)</Label>
                   <Input
                     type="number"
-                    value={timeLimitMs}
-                    onChange={(e) => setTimeLimitMs(e.target.value)}
+                    value={cppTimeLimitMs}
+                    onChange={(e) => setCppTimeLimitMs(e.target.value)}
                     min={1}
                   />
-                  <p className="mt-1 text-xs text-gray-500">
-                    Execution time limit in milliseconds.
-                  </p>
                 </div>
+                <div className="space-y-2">
+                  <Label className="mb-2">Java Time Limit (ms)</Label>
+                  <Input
+                    type="number"
+                    value={javaTimeLimitMs}
+                    onChange={(e) => setJavaTimeLimitMs(e.target.value)}
+                    min={1}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label className="mb-2">Python Time Limit (ms)</Label>
+                  <Input
+                    type="number"
+                    value={pythonTimeLimitMs}
+                    onChange={(e) => setPythonTimeLimitMs(e.target.value)}
+                    min={1}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label className="mb-2">JS Time Limit (ms)</Label>
+                  <Input
+                    type="number"
+                    value={jsTimeLimitMs}
+                    onChange={(e) => setJsTimeLimitMs(e.target.value)}
+                    min={1}
+                  />
+                </div>
+              </div>
 
-                <div className="space-y-2">
-                  <Label className="mb-2">Memory Limit (MB)</Label>
-                  <Input
-                    type="number"
-                    value={memoryLimitMB}
-                    onChange={(e) => setMemoryLimitMB(e.target.value)}
-                    min={1}
-                  />
-                  <p className="mt-1 text-xs text-gray-500">
-                    Memory limit in megabytes.
-                  </p>
-                </div>
+              <div className="mt-4 space-y-2">
+                <Label className="mb-2">Memory Limit (MB)</Label>
+                <Input
+                  type="number"
+                  value={memoryLimitMB}
+                  onChange={(e) => setMemoryLimitMB(e.target.value)}
+                  min={1}
+                  className="max-w-xs"
+                />
               </div>
 
               <div className="mt-2 space-y-2">
