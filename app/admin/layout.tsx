@@ -9,6 +9,7 @@ import {
   IconSparkles,
   IconUsersPlus,
   IconUserPlus,
+  IconFlask,
 } from "@tabler/icons-react";
 import { usePathname, useRouter } from "next/navigation";
 import { ReactNode } from "react";
@@ -46,6 +47,11 @@ const navigation = [
     name: "Complexity Generator",
     href: "/admin/upload-complexity-generator",
     icon: IconSparkles,
+  },
+  {
+    name: "Runtime Analyzer",
+    href: "/admin/runtime-analyzer",
+    icon: IconFlask,
   },
   {
     name: "Bulk Sign Up",
