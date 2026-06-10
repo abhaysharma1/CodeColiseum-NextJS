@@ -31,6 +31,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { getBackendURL } from "@/utils/utilities";
+import Link from "next/link";
 
 export interface ProblemTag {
   tag: {
@@ -262,52 +263,59 @@ function ProblemsTable() {
                   </TableRow>
                 ) : (
                   problemData?.map((problem) => (
-                    <TableRow
-                      key={problem.id}
-                      className="group cursor-pointer hover:bg-muted/50 transition-all duration-200 active:bg-muted"
-                      onClick={() => router.push(`/problems?id=${problem.id}`)}
-                      tabIndex={0}
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter" || e.key === " ") {
-                          e.preventDefault();
-                          router.push(`/problems?id=${problem.id}`);
-                        }
-                      }}
+                    <Link
+                      href={`/problems?id=${problem.id}`}
+                      className="contents"
                     >
-                      <TableCell className="font-medium text-muted-foreground group-hover:text-foreground transition-colors">
-                        {problem.number}
-                      </TableCell>
-                      <TableCell className="font-medium">
-                        {problem.title}
-                      </TableCell>
-                      <TableCell className="text-center">
-                        <Badge
-                          variant={getDifficultyVariant(problem.difficulty)}
-                        >
-                          {problem.difficulty}
-                        </Badge>
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex flex-wrap gap-1">
-                          {problem?.tags?.map((item) => (
-                            <Badge
-                              key={item.tag.name}
-                              variant="outline"
-                              className="cursor-pointer hover:bg-accent transition-colors"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                e.preventDefault();
-                                setSearchValue(item.tag.name);
-                                setPage(1);
-                              }}
-                            >
-                              {item.tag.name.charAt(0).toUpperCase() +
-                                item.tag.name.slice(1).toLowerCase()}
-                            </Badge>
-                          ))}
-                        </div>
-                      </TableCell>
-                    </TableRow>
+                      <TableRow
+                        key={problem.id}
+                        className="group cursor-pointer hover:bg-muted/50 transition-all duration-200 active:bg-muted"
+                        // onClick={() =>
+                        //   router.push(`/problems?id=${problem.id}`)
+                        // }
+                        tabIndex={0}
+                        // onKeyDown={(e) => {
+                        //   if (e.key === "Enter" || e.key === " ") {
+                        //     e.preventDefault();
+                        //     router.push(`/problems?id=${problem.id}`);
+                        //   }
+                        // }}
+                      >
+                        <TableCell className="font-medium text-muted-foreground group-hover:text-foreground transition-colors">
+                          {problem.number}
+                        </TableCell>
+                        <TableCell className="font-medium">
+                          {problem.title}
+                        </TableCell>
+                        <TableCell className="text-center">
+                          <Badge
+                            variant={getDifficultyVariant(problem.difficulty)}
+                          >
+                            {problem.difficulty}
+                          </Badge>
+                        </TableCell>
+                        <TableCell>
+                          <div className="flex flex-wrap gap-1">
+                            {problem?.tags?.map((item) => (
+                              <Badge
+                                key={item.tag.name}
+                                variant="outline"
+                                className="cursor-pointer hover:bg-accent transition-colors"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  e.preventDefault();
+                                  setSearchValue(item.tag.name);
+                                  setPage(1);
+                                }}
+                              >
+                                {item.tag.name.charAt(0).toUpperCase() +
+                                  item.tag.name.slice(1).toLowerCase()}
+                              </Badge>
+                            ))}
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    </Link>
                   ))
                 )}
               </TableBody>
