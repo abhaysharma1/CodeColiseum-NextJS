@@ -81,9 +81,9 @@ function validateForPublish(state: ProblemEditorState): string[] {
     (section) => section.template.trim().length > 0
   );
 
-  if (!hasTemplate) {
-    errors.push("At least one language must have template driver code.");
-  }
+  // if (!hasTemplate) {
+  //   errors.push("At least one language must have template driver code.");
+  // }
 
   const hasSolution = state.solutions.some((solution) => solution.code.trim());
 

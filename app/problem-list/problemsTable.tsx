@@ -264,11 +264,11 @@ function ProblemsTable() {
                 ) : (
                   problemData?.map((problem) => (
                     <Link
+                      key={problem.id}
                       href={`/problems?id=${problem.id}`}
                       className="contents"
                     >
                       <TableRow
-                        key={problem.id}
                         className="group cursor-pointer hover:bg-muted/50 transition-all duration-200 active:bg-muted"
                         // onClick={() =>
                         //   router.push(`/problems?id=${problem.id}`)
