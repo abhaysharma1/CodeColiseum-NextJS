@@ -70,7 +70,7 @@ function ProblemsTable() {
             searchValue,
             tags,
             difficulty,
-            take: 10,
+            take: 20,
             skip: (page - 1) * 10,
             withDescription: false,
           },
