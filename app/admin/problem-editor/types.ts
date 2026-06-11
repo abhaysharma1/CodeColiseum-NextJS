@@ -4,13 +4,6 @@ export type Difficulty = "EASY" | "MEDIUM" | "HARD";
 
 export type LanguageId = "c" | "cpp" | "python" | "java";
 
-export interface DescriptionSections {
-  description: string;
-  constraints: string;
-  inputFormat: string;
-  outputFormat: string;
-}
-
 export interface TestCase {
   id: string;
   input: string;
@@ -40,7 +33,7 @@ export interface ProblemEditorState {
   title: string;
   difficulty: Difficulty;
   tags: string[];
-  sections: DescriptionSections;
+  description: string;
   testCases: TestCaseGroups;
   driverCode: DriverCodeByLanguage;
   solutions: ReferenceSolution[];

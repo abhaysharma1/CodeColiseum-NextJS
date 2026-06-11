@@ -18,6 +18,22 @@ import {
 } from "./types";
 import { toast } from "sonner";
 
+const NEW_PROBLEM_TEMPLATE = `## Description
+
+(Describe the problem here...)
+
+## Constraints
+
+(List constraints here...)
+
+## Input Format
+
+(Describe input format here...)
+
+## Output Format
+
+(Describe output format here...)`;
+
 const initialDriverCode = (): DriverCodeByLanguage => ({
   c: { header: "", template: "", footer: "" },
   cpp: { header: "", template: "", footer: "" },
@@ -40,12 +56,7 @@ const initialState: ProblemEditorState = {
   title: "",
   difficulty: "EASY",
   tags: [],
-  sections: {
-    description: "",
-    constraints: "",
-    inputFormat: "",
-    outputFormat: "",
-  },
+  description: "",
   testCases: initialTestCases(),
   driverCode: initialDriverCode(),
   solutions: [],
@@ -64,7 +75,7 @@ function validateForPublish(state: ProblemEditorState): string[] {
     errors.push("Difficulty is required.");
   }
 
-  if (!state.sections.description.trim()) {
+  if (!state.description.trim()) {
     errors.push("Problem description is required.");
   }
 
@@ -135,7 +146,9 @@ function ProblemEditorContent() {
         });
     }
   }, [problemId]);
-  const [state, setState] = useState<ProblemEditorState>(initialState);
+  const [state, setState] = useState<ProblemEditorState>(() =>
+    problemId ? initialState : { ...initialState, description: NEW_PROBLEM_TEMPLATE }
+  );
   const [activeTab, setActiveTab] = useState<string>("description");
   const [activeDriverLanguage, setActiveDriverLanguage] =
     useState<LanguageId>("cpp");
@@ -164,8 +177,8 @@ function ProblemEditorContent() {
     }));
   };
 
-  const handleChangeSections = (sections: ProblemEditorState["sections"]) => {
-    setState((prev) => ({ ...prev, sections }));
+  const handleChangeDescription = (value: string) => {
+    setState((prev) => ({ ...prev, description: value }));
   };
 
   const handleChangeTestCases = (testCases: TestCaseGroups) => {
@@ -279,7 +292,7 @@ function ProblemEditorContent() {
             onSelectProblem={(id) => {
               if (id === "new") {
                 router.push("/admin/problem-editor");
-                setState(initialState);
+                setState({ ...initialState, description: NEW_PROBLEM_TEMPLATE });
               } else {
                 router.push(`/admin/problem-editor?id=${id}`);
               }
@@ -295,7 +308,7 @@ function ProblemEditorContent() {
           activeTab={activeTab}
           onTabChange={setActiveTab}
           state={state}
-          onChangeSections={handleChangeSections}
+          onChangeDescription={handleChangeDescription}
           onChangeTestCases={handleChangeTestCases}
           onChangeDriverCode={handleChangeDriverCode}
           onChangeDriverLanguage={handleChangeDriverLanguage}

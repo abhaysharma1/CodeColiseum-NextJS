@@ -18,7 +18,7 @@ interface ProblemTabsProps {
   activeTab: string;
   onTabChange: (value: string) => void;
   state: ProblemEditorState;
-  onChangeSections: (sections: ProblemEditorState["sections"]) => void;
+  onChangeDescription: (value: string) => void;
   onChangeTestCases: (testCases: TestCaseGroups) => void;
   onChangeDriverCode: (
     lang: LanguageId,
@@ -35,7 +35,7 @@ export function ProblemTabs(props: ProblemTabsProps) {
     activeTab,
     onTabChange,
     state,
-    onChangeSections,
+    onChangeDescription,
     onChangeTestCases,
     onChangeDriverCode,
     onChangeDriverLanguage,
@@ -89,8 +89,8 @@ export function ProblemTabs(props: ProblemTabsProps) {
             className="m-0 h-full border-none data-[state=active]:flex data-[state=active]:flex-col"
           >
             <DescriptionTab
-              sections={state.sections}
-              onChangeSections={onChangeSections}
+              description={state.description}
+              onChangeDescription={onChangeDescription}
             />
           </TabsContent>
 
