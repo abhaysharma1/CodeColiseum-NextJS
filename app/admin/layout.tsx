@@ -9,6 +9,8 @@ import {
   IconSparkles,
   IconUsersPlus,
   IconUserPlus,
+  IconUsersGroup,
+  IconBuildingStore,
   IconFlask,
 } from "@tabler/icons-react";
 import { usePathname, useRouter } from "next/navigation";
@@ -54,14 +56,19 @@ const navigation = [
     icon: IconFlask,
   },
   {
-    name: "Bulk Sign Up",
-    href: "/admin/bulk-sign-up",
-    icon: IconUsersPlus,
+    name: "Bulk Signup",
+    href: "/admin/bulk-signups",
+    icon: IconUsersGroup,
   },
   {
     name: "Single Sign Up",
     href: "/admin/single-sign-up",
     icon: IconUserPlus,
+  },
+  {
+    name: "Small Additions",
+    href: "/admin/small-additions",
+    icon: IconBuildingStore,
   },
 ];
 
