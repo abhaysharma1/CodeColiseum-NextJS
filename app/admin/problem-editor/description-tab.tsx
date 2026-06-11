@@ -4,6 +4,7 @@ import Editor from "@monaco-editor/react";
 import { useTheme } from "next-themes";
 import { Card } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { useEffect, useState } from "react";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeHighlight from "rehype-highlight";
@@ -16,6 +17,11 @@ interface DescriptionTabProps {
 export function DescriptionTab(props: DescriptionTabProps) {
   const { description, onChangeDescription } = props;
   const { theme } = useTheme();
+  const [localDescription, setLocalDescription] = useState(description);
+
+  useEffect(() => {
+    setLocalDescription(description);
+  }, [description]);
 
   const editorTheme = theme === "dark" ? "vs-dark" : "vs-light";
 
@@ -29,6 +35,11 @@ export function DescriptionTab(props: DescriptionTabProps) {
     renderLineHighlight: "none" as const,
     overviewRulerLanes: 0,
     hideCursorInOverviewRuler: true,
+  };
+
+  const handleChange = (value?: string) => {
+    setLocalDescription(value ?? "");
+    onChangeDescription(value ?? "");
   };
 
   return (
@@ -48,8 +59,8 @@ export function DescriptionTab(props: DescriptionTabProps) {
               height="550px"
               language="markdown"
               theme={editorTheme}
-              value={description}
-              onChange={(value) => onChangeDescription(value ?? "")}
+              value={localDescription}
+              onChange={handleChange}
               options={commonEditorOptions}
               className="py-3 px-2"
             />
@@ -77,7 +88,7 @@ export function DescriptionTab(props: DescriptionTabProps) {
                   remarkPlugins={[remarkGfm]}
                   rehypePlugins={[rehypeHighlight]}
                 >
-                  {description}
+                  {localDescription}
                 </Markdown>
               </div>
             </div>

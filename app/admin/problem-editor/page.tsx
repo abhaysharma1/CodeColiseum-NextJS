@@ -106,7 +106,7 @@ function validateForPublish(state: ProblemEditorState): string[] {
   return errors;
 }
 
-function ProblemEditorContent() {
+function  ProblemEditorContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const problemId = searchParams.get("id");
