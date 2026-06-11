@@ -45,4 +45,5 @@ export interface ProblemEditorState {
   driverCode: DriverCodeByLanguage;
   solutions: ReferenceSolution[];
   status: ProblemStatus;
+  hidden: boolean;
 }

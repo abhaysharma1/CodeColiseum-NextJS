@@ -70,6 +70,11 @@ const navigation = [
     href: "/admin/small-additions",
     icon: IconBuildingStore,
   },
+  {
+    name: "Problem Visibility",
+    href: "/admin/problem-visibility",
+    icon: IconFlask,
+  },
 ];
 
 export default function Layout({ children }: { children: ReactNode }) {

@@ -50,6 +50,7 @@ const initialState: ProblemEditorState = {
   driverCode: initialDriverCode(),
   solutions: [],
   status: "DRAFT",
+  hidden: false,
 };
 
 function validateForPublish(state: ProblemEditorState): string[] {
