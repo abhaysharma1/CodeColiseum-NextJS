@@ -92,7 +92,7 @@ function ProblemsTestTable({
 
     const data: problemData[] = response.data as problemData[];
 
-    if (data.length < 20) {
+    if (data.length < 10) {
       setHasMore(false);
     } else {
       setHasMore(true);
