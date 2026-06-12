@@ -158,8 +158,6 @@ function Page({ params }: { params: Promise<{ "exam-id": string }> }) {
       endDate: combinedEndDateTime,
     };
 
-    setExamDetails(updatedExamDetails);
-
     if (updatedExamDetails && selectedGroups && selectedProblemsId) {
       try {
         const domain = getBackendURL();
@@ -175,6 +173,7 @@ function Page({ params }: { params: Promise<{ "exam-id": string }> }) {
           }
         );
 
+        setExamDetails(updatedExamDetails);
         toast.success("Draft saved");
       } catch (error) {
         toast.error("Couldn't save the draft");
@@ -207,8 +206,6 @@ function Page({ params }: { params: Promise<{ "exam-id": string }> }) {
       endDate: combinedEndDateTime,
     };
 
-    setExamDetails(updatedExamDetails);
-
     if (updatedExamDetails && selectedGroups && selectedProblemsId) {
       try {
         const domain = getBackendURL();
@@ -223,6 +220,7 @@ function Page({ params }: { params: Promise<{ "exam-id": string }> }) {
             withCredentials: true,
           }
         );
+        setExamDetails(updatedExamDetails);
         toast.success("Test Published");
         router.push("/dashboard");
       } catch (error) {
@@ -291,52 +289,45 @@ function Page({ params }: { params: Promise<{ "exam-id": string }> }) {
         setLoadingGroups(false);
       }
     }
-    getExamDetails();
-    getGroups();
-  }, []);
-
-  useEffect(() => {
     async function fetchSelectedGroups() {
-      if (examDetails && examDetails.id) {
-        const domain = getBackendURL();
-        const res = await axios.get(`${domain}/teacher/exam/getallexamgroups`, {
-          params: {
-            examId: examId,
-          },
-          withCredentials: true,
-        });
-        setSelectedGroups(res.data as Group[]);
-      }
+      const domain = getBackendURL();
+      const res = await axios.get(`${domain}/teacher/exam/getallexamgroups`, {
+        params: {
+          examId: examId,
+        },
+        withCredentials: true,
+      });
+      setSelectedGroups(res.data as Group[]);
     }
 
     async function fetchSelectedProblems() {
-      if (examDetails && examDetails.id) {
-        try {
-          const domain = getBackendURL();
-          const res = await axios.get(
-            `${domain}/teacher/exam/getallexamproblem`,
-            {
-              params: {
-                examId: examId,
-              },
-              withCredentials: true,
-            }
-          );
-
-          const data = res.data as ExamProblem[];
-
-          if (data.length > 0) {
-            const onlyIds = data.map((item: any) => item.problemId);
-            setSelectedProblemsId(onlyIds);
+      try {
+        const domain = getBackendURL();
+        const res = await axios.get(
+          `${domain}/teacher/exam/getallexamproblem`,
+          {
+            params: {
+              examId: examId,
+            },
+            withCredentials: true,
           }
-        } catch (error) {
-          console.log(error);
+        );
+
+        const data = res.data as ExamProblem[];
+
+        if (data.length > 0) {
+          const onlyIds = data.map((item: any) => item.problemId);
+          setSelectedProblemsId(onlyIds);
         }
+      } catch (error) {
+        console.log(error);
       }
     }
-    fetchSelectedProblems();
+    getExamDetails();
+    getGroups();
     fetchSelectedGroups();
-  }, [examDetails]);
+    fetchSelectedProblems();
+  }, []);
 
   return (
     <div className="container ">
