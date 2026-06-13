@@ -1,304 +1,231 @@
 "use client";
-import { Group } from "@/generated/prisma/client";
-import { useEffect, useState } from "react";
-import { toast } from "sonner";
-import Fuse from "fuse.js";
-import { Input } from "@/components/ui/input";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Search, Users, Link as LinkIcon, Calendar, Bot } from "lucide-react";
-import { SiteHeader } from "@/components/site-header";
+import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
-import { getBackendURL } from "@/utils/utilities";
+import { toast } from "sonner";
+import { FlaskConical, Search } from "lucide-react";
+
+import { Input } from "@/components/ui/input";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Badge } from "@/components/ui/badge";
+import { SiteHeader } from "@/components/site-header";
+import { getBackendURL } from "@/utils/utilities";
+import { ProgressCard } from "@/components/labs/progress-card";
 
-interface Creator {
+interface LabData {
   id: string;
-  name: string;
-  email: string;
-  isOnboarded: boolean;
-  emailVerified: boolean;
-  image: string | null;
-  createdAt: Date; // ISO date string
-  updatedAt: Date; // ISO date string
-}
-
-interface GroupT {
-  id: string;
-  name: string;
+  title: string;
   description: string | null;
-  creatorId: string;
-  noOfMembers: number;
-  createdAt: Date; // ISO date string
-  joinByLink: boolean;
-  creator: Creator;
-  aiEnabled: boolean;
+  modulesCount: number;
+  modules: {
+    id: string;
+    title: string;
+    weekNumber: number;
+    completionPercentage: number;
+    moduleStatus: string;
+    dueAt: string | null;
+  }[];
 }
 
-type GroupData = GroupT[];
-
-const options = {
-  // keys to search in the objects
-  keys: [
-    "name", // group name
-    "description", // group description
-    "creator.name", // nested user name
-    "creator.email", // nested user email
-  ],
-  // how sensitive the search is (0.0 = perfect match, 1.0 = very loose)
-  threshold: 0.3,
-  // include the search score in the results
-  includeScore: true,
-};
-
-function Page() {
-  const ITEMS_PER_PAGE = 9;
-
-  const [currentPage, setCurrentPage] = useState(1);
-
-  const [groupsData, setGroupsData] = useState<GroupData | undefined>();
-  const [shownGroups, setShowngroups] = useState<GroupData | undefined>();
-  const [isLoading, setIsLoading] = useState(true);
-
-  const [take, setTake] = useState(ITEMS_PER_PAGE);
-  const [skip, setSkip] = useState(0);
+export default function StudentLabsPage() {
+  const router = useRouter();
+  const [labs, setLabs] = useState<LabData[]>([]);
+  const [filteredLabs, setFilteredLabs] = useState<LabData[]>([]);
+  const [loading, setLoading] = useState(true);
   const [searchValue, setSearchValue] = useState("");
 
-  const router = useRouter();
-
-  const getGroupsFunc = async () => {
+  const fetchLabs = useCallback(async () => {
     try {
-      setIsLoading(true);
-
-      const res = await axios.get(`${getBackendURL()}/student/getgroups`, {
-        params: {
-          take: take,
-          skip: skip,
-          searchValue: searchValue,
-          groupType: "LAB",
-        },
+      setLoading(true);
+      const res = await axios.get(`${getBackendURL()}/student/my-labs`, {
         withCredentials: true,
       });
-      setGroupsData(res.data as GroupData);
+      const data = res.data as LabData[];
+      setLabs(data);
+      setFilteredLabs(data);
     } catch (error: any) {
-      if (typeof error.message === "string") {
-        toast.error(error.message);
-      }
-      console.log(error);
+      toast.error(error?.response?.data?.message || "Failed to fetch labs");
     } finally {
-      setIsLoading(false);
+      setLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
-    if (!groupsData) return;
-    setCurrentPage(1);
-    if (searchValue == "") {
-      setShowngroups(groupsData);
+    fetchLabs();
+  }, [fetchLabs]);
+
+  useEffect(() => {
+    if (!searchValue) {
+      setFilteredLabs(labs);
       return;
     }
-    const fuse = new Fuse(groupsData, options);
-    const results = fuse.search(searchValue);
-    const filteredResult = results.map((item) => item.item);
-    setShowngroups(filteredResult);
-  }, [searchValue, groupsData]);
+    const q = searchValue.toLowerCase();
+    setFilteredLabs(
+      labs.filter(
+        (l) =>
+          l.title.toLowerCase().includes(q) ||
+          (l.description && l.description.toLowerCase().includes(q))
+      )
+    );
+  }, [searchValue, labs]);
 
-  useEffect(() => {
-    getGroupsFunc();
-  }, [take, skip, searchValue]);
-
-  useEffect(() => {
-    if (groupsData) {
-      setShowngroups(groupsData);
-    }
-  }, [groupsData]);
-  const totalPages = Math.ceil((shownGroups?.length || 0) / ITEMS_PER_PAGE);
-
-  const paginatedGroups = shownGroups?.slice(
-    (currentPage - 1) * ITEMS_PER_PAGE,
-    currentPage * ITEMS_PER_PAGE
-  );
-
-  const handleNextPage = () => {
-    if (groupsData && groupsData.length === take) {
-      setSkip((prevSkip) => prevSkip + take);
-    }
-  };
-
-  const handlePreviousPage = () => {
-    if (skip > 0) {
-      setSkip((prevSkip) => Math.max(prevSkip - take, 0));
-    }
-  };
+  const overallProgress = labs.length > 0
+    ? Math.round(
+        labs.reduce((acc, l) => {
+          const avg = l.modules.length > 0
+            ? l.modules.reduce((s, m) => s + m.completionPercentage, 0) / l.modules.length
+            : 0;
+          return acc + avg;
+        }, 0) / labs.length
+      )
+    : 0;
 
   return (
-    <div>
-      <SiteHeader name="Groups" />
-      <div className="container mx-auto py-8 px-4 space-y-6">
-        {/* Header Section */}
-        <div className="space-y-2">
-          <h1 className="text-3xl font-bold tracking-tight">My Groups</h1>
-          <p className="text-muted-foreground">
-            Browse and search through your groups
-          </p>
-        </div>
-
-        {/* Search Bar */}
-        <div className="relative max-w-xl">
-          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-          <Input
-            type="text"
-            placeholder="Search groups by name, description, or creator..."
-            value={searchValue}
-            onChange={(e) => setSearchValue(e.target.value)}
-            className="pl-10"
-          />
-        </div>
-
-        {/* Groups Grid */}
-        {isLoading ? (
-          <div className="space-y-6">
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {[1, 2, 3, 4, 5, 6].map((i) => (
-                <Card key={i}>
-                  <CardHeader>
-                    <Skeleton className="h-6 w-3/4" />
-                    <Skeleton className="h-4 w-full mt-2" />
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div className="flex items-center space-x-3">
-                      <Skeleton className="h-9 w-9 rounded-full" />
-                      <div className="flex-1 space-y-2">
-                        <Skeleton className="h-4 w-24" />
-                        <Skeleton className="h-3 w-32" />
-                      </div>
-                    </div>
-                    <Skeleton className="h-4 w-full" />
-                    <Skeleton className="h-4 w-20" />
-                  </CardContent>
-                </Card>
-              ))}
+    <div className="w-full h-full animate-fade-left animate-once">
+      <SiteHeader name="My Labs" />
+      <div className="flex flex-1 flex-col">
+        <div className="@container/main flex flex-1 flex-col gap-2">
+          <div className="flex flex-col gap-4 py-4 px-10 h-[100%] md:gap-6 md:py-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <h1 className="text-3xl font-bold tracking-tight">My Labs</h1>
+                <p className="text-muted-foreground">
+                  Your assigned lab work and progress
+                </p>
+              </div>
             </div>
-          </div>
-        ) : shownGroups && shownGroups.length > 0 ? (
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {paginatedGroups?.map((group) => (
-              <Card
-                key={group.id}
-                className="hover:shadow-lg transition-shadow hover:bg-accent/60 cursor-pointer"
-                onClick={() =>
-                  router.push(`/dashboard/student/group/${group.id}`)
-                }
-              >
-                <CardHeader>
-                  <div className="flex items-start justify-between">
-                    <div className="space-y-1 flex-1">
-                      <CardTitle className="text-xl">{group.name}</CardTitle>
-                      <CardDescription className="line-clamp-2">
-                        {group.description || "No description provided"}
-                      </CardDescription>
-                    </div>
-                  </div>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  {/* Creator Info */}
-                  <div className="flex items-center space-x-3">
-                    <Avatar className="h-9 w-9">
-                      <AvatarImage src={group.creator.image || undefined} />
-                      <AvatarFallback>
-                        {group.creator.name
-                          .split(" ")
-                          .map((n) => n[0])
-                          .join("")
-                          .toUpperCase()}
-                      </AvatarFallback>
-                    </Avatar>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium truncate">
-                        {group.creator.name}
-                      </p>
-                      <p className="text-xs text-muted-foreground truncate">
-                        {group.creator.email}
-                      </p>
-                    </div>
-                  </div>
 
-                  {/* Group Stats */}
-                  <div className="flex items-center justify-between pt-2 border-t">
-                    <div className="flex items-center space-x-1 text-sm text-muted-foreground">
-                      <Users className="h-4 w-4" />
-                      <span>{group.noOfMembers} members</span>
-                    </div>
-                    {group.aiEnabled === true && (
-                      <Badge
-                        variant="secondary"
-                        className="flex items-center gap-1"
-                      >
-                        <Bot />
-                        <span>AI Enabled</span>
-                      </Badge>
-                    )}
+            {labs.length > 0 && (
+              <Card>
+                <CardContent className="p-4">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-sm font-medium">Overall Progress</span>
+                    <span className="text-sm text-muted-foreground">{overallProgress}%</span>
                   </div>
-
-                  {/* Created Date */}
-                  <div className="flex items-center space-x-1 text-xs text-muted-foreground">
-                    <Calendar className="h-3 w-3" />
-                    <span>
-                      Created {new Date(group.createdAt).toLocaleDateString()}
-                    </span>
+                  <div className="w-full h-2.5 bg-muted rounded-full overflow-hidden">
+                    <div
+                      className={`h-full rounded-full transition-all ${
+                        overallProgress === 100 ? "bg-green-500" : "bg-primary"
+                      }`}
+                      style={{ width: `${overallProgress}%` }}
+                    />
                   </div>
                 </CardContent>
               </Card>
-            ))}
-          </div>
-        ) : (
-          <div className="flex flex-col items-center justify-center py-12 space-y-2">
-            <Search className="h-12 w-12 text-muted-foreground/50" />
-            <p className="text-muted-foreground">
-              {searchValue
-                ? "No groups found matching your search"
-                : "No groups available"}
-            </p>
-          </div>
-        )}
-        {shownGroups && shownGroups.length > ITEMS_PER_PAGE && (
-          <div className="flex items-center justify-center gap-4 pt-6">
-            <Button
-              variant={"outline"}
-              className="px-4 py-2 text-sm "
-              disabled={skip === 0}
-              onClick={handlePreviousPage}
-            >
-              Previous
-            </Button>
+            )}
 
-            <span className="text-sm text-muted-foreground">
-              Showing {skip + 1} - {Math.min(skip + take, shownGroups.length)}{" "}
-              of {shownGroups.length}
-            </span>
+            <div className="relative max-w-xl">
+              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              <Input
+                placeholder="Search labs..."
+                value={searchValue}
+                onChange={(e) => setSearchValue(e.target.value)}
+                className="pl-10"
+              />
+            </div>
 
-            <Button
-              variant={"outline"}
-              className="px-4 py-2 text-sm"
-              disabled={groupsData && groupsData.length < take}
-              onClick={handleNextPage}
-            >
-              Next
-            </Button>
+            {loading ? (
+              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                {[1, 2, 3].map((i) => (
+                  <Card key={i}>
+                    <CardHeader>
+                      <Skeleton className="h-6 w-3/4" />
+                      <Skeleton className="h-4 w-full mt-2" />
+                    </CardHeader>
+                    <CardContent>
+                      <Skeleton className="h-4 w-full mb-2" />
+                      <Skeleton className="h-4 w-2/3" />
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            ) : filteredLabs.length > 0 ? (
+              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                {filteredLabs.map((lab) => {
+                  const currentWeek = lab.modules.find(
+                    (m) => m.moduleStatus === "IN_PROGRESS"
+                  );
+                  const nextDue = lab.modules
+                    .filter((m) => m.dueAt)
+                    .sort(
+                      (a, b) =>
+                        new Date(a.dueAt!).getTime() -
+                        new Date(b.dueAt!).getTime()
+                    )[0];
+
+                  return (
+                    <Card
+                      key={lab.id}
+                      className="hover:shadow-lg transition-all hover:bg-accent/60 cursor-pointer group"
+                      onClick={() =>
+                        router.push(`/dashboard/student/labs/${lab.id}`)
+                      }
+                    >
+                      <CardHeader>
+                        <div className="flex items-start justify-between">
+                          <div className="space-y-1 flex-1">
+                            <CardTitle className="text-xl group-hover:text-primary transition-colors">
+                              {lab.title}
+                            </CardTitle>
+                            {lab.description && (
+                              <CardDescription className="line-clamp-2">
+                                {lab.description}
+                              </CardDescription>
+                            )}
+                          </div>
+                        </div>
+                      </CardHeader>
+                      <CardContent className="space-y-3">
+                        <ProgressCard
+                          completedProblems={lab.modules.reduce(
+                            (s, m) => s + Math.round(m.completionPercentage * m.weekNumber) / 100,
+                            0
+                          )}
+                          totalProblems={lab.modules.length}
+                          completionPercentage={
+                            lab.modules.length > 0
+                              ? Math.round(
+                                  lab.modules.reduce(
+                                    (s, m) => s + m.completionPercentage,
+                                    0
+                                  ) / lab.modules.length
+                                )
+                              : 0
+                          }
+                          showLabel={false}
+                        />
+                        <div className="flex items-center justify-between text-sm">
+                          {currentWeek && (
+                            <Badge variant="secondary" className="bg-yellow-500/10 text-yellow-600">
+                              Week {currentWeek.weekNumber}
+                            </Badge>
+                          )}
+                          {nextDue && (
+                            <span className="text-xs text-muted-foreground ml-auto">
+                              Due {new Date(nextDue.dueAt!).toLocaleDateString()}
+                            </span>
+                          )}
+                        </div>
+                      </CardContent>
+                    </Card>
+                  );
+                })}
+              </div>
+            ) : (
+              <div className="flex flex-col items-center justify-center py-12">
+                <FlaskConical className="h-12 w-12 text-muted-foreground/50 mb-3" />
+                <p className="text-muted-foreground">
+                  {searchValue
+                    ? "No labs match your search"
+                    : "No labs assigned yet"}
+                </p>
+              </div>
+            )}
           </div>
-        )}
+        </div>
       </div>
     </div>
   );
 }
-
-export default Page;

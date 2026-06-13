@@ -1,3 +1,7 @@
+export type ProblemPageMode =
+  | { type: "practice" }
+  | { type: "module"; moduleProblemId: string };
+
 export type ExecutionStatusType =
   | "PENDING"
   | "RUNNING"

@@ -33,6 +33,8 @@ export default function TeacherLayout({
       setPage("PROBLEMS");
     } else if (path.startsWith("/dashboard/teacher/analytics")) {
       setPage("ANALYTICS");
+    } else if (path.startsWith("/dashboard/teacher/labs")) {
+      setPage("LABS");
     } else if (path.startsWith("/dashboard/teacher/announcements")) {
       setPage("ANNOUNCEMENTS");
     } else if (path.startsWith("/dashboard/notifications")) {

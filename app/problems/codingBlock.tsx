@@ -23,7 +23,7 @@ import axios from "axios";
 import { getLanguageId } from "@/utils/getLanguageId";
 import { supportedLanguages } from "@/utils/languageCatalog";
 import { MdFormatAlignLeft } from "react-icons/md";
-import { runTestCaseType, SubmissionResult } from "./interface";
+import { runTestCaseType, SubmissionResult, ProblemPageMode } from "./interface";
 
 // Static theme imports
 import Active4DTheme from "@/utils/themes/Active4D.json";
@@ -147,6 +147,7 @@ const terminalStatuses = new Set([
 ]);
 
 interface CodingBlockProps {
+  mode?: ProblemPageMode;
   questionId: string;
   setRunTestCaseResults: (results: runTestCaseType | undefined) => void;
   setSubmitTestCaseResults: (data: SubmissionResult | undefined) => void;
@@ -158,9 +159,11 @@ interface CodingBlockProps {
   language: string;
   startAiReview: () => void;
   performingAiReview: boolean;
+  onSubmitModuleRefresh?: () => void;
 }
 
 function CodingBlock({
+  mode,
   questionId,
   setRunTestCaseResults,
   setSubmitTestCaseResults,
@@ -172,6 +175,7 @@ function CodingBlock({
   language,
   startAiReview,
   performingAiReview,
+  onSubmitModuleRefresh,
 }: CodingBlockProps) {
   const [editorTheme, setEditorTheme] = useState("Sunburst");
   const [editorInFocus, setEditorInFocus] = useState(false);
@@ -310,11 +314,15 @@ function CodingBlock({
     try {
       const languageId = getLanguageId(language) ?? defaultRuntimeLanguageId;
 
-      const submitCode: sentCode = {
+      const submitCode: sentCode & { moduleProblemId?: string } = {
         questionId,
         languageId,
         code,
       };
+
+      if (mode?.type === "module") {
+        submitCode.moduleProblemId = mode.moduleProblemId;
+      }
 
       const submitCodeResponse = await axios.post(
         `${getBackendURL()}/problems/submitcode`,
@@ -331,11 +339,18 @@ function CodingBlock({
 
       const maxPolls = 90;
       const pollDelayMs = 1000;
+      const moduleProblemIdParam =
+        mode?.type === "module" ? mode.moduleProblemId : undefined;
 
       for (let attempt = 0; attempt < maxPolls; attempt++) {
         const statusResponse = await axios.get(
           `${getBackendURL()}/problems/submission-status/${queuedResult.submissionId}`,
-          { withCredentials: true }
+          {
+            params: moduleProblemIdParam
+              ? { moduleProblemId: moduleProblemIdParam }
+              : undefined,
+            withCredentials: true,
+          }
         );
 
         const latest = statusResponse.data as SubmissionResult;
@@ -349,6 +364,7 @@ function CodingBlock({
       }
 
       setSubmissionRefetch(true);
+      onSubmitModuleRefresh?.();
     } catch (error) {
       console.log(error);
       // toast.error(error as string);

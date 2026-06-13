@@ -1,0 +1,286 @@
+"use client";
+import { useState, useEffect } from "react";
+import { useParams, useRouter } from "next/navigation";
+import axios from "axios";
+import { toast } from "sonner";
+import { ArrowLeft, FlaskConical, BookOpen, Calendar, Clock } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { SiteHeader } from "@/components/site-header";
+import { Spinner } from "@/components/ui/shadcn-io/spinner";
+import { ProgressCard } from "@/components/labs/progress-card";
+import { AssessmentCard } from "@/components/labs/assessment-card";
+import { getBackendURL } from "@/utils/utilities";
+
+interface ProblemData {
+  id: string;
+  moduleId: string;
+  problemId: string;
+  orderIndex: number;
+  problem: {
+    id: string;
+    number: number;
+    title: string;
+    difficulty: string;
+  };
+  progress: {
+    attemptCount: number;
+    isSolved: boolean;
+    lastAttemptAt: string | null;
+  } | null;
+}
+
+interface ModuleData {
+  id: string;
+  title: string;
+  weekNumber: number;
+  unlockAt: string;
+  dueAt: string | null;
+  assessmentExamId: string | null;
+}
+
+interface AssessmentData {
+  examId: string;
+  title: string;
+  startTime: string;
+  endTime: string;
+  durationMinutes: number;
+  status: "UPCOMING" | "ACTIVE" | "COMPLETED";
+  score?: number;
+  rank?: number;
+}
+
+interface ModuleProblemsData {
+  module: ModuleData;
+  completedProblems: number;
+  totalProblems: number;
+  completionPercentage: number;
+  assessment: {
+    examId: string;
+    title: string;
+    startTime: string;
+    status: string;
+  } | null;
+  problems: ProblemData[];
+}
+
+export default function StudentModuleViewPage() {
+  const { moduleId } = useParams<{ moduleId: string }>();
+  const router = useRouter();
+  const [data, setData] = useState<ModuleProblemsData | null>(null);
+  const [assessmentData, setAssessmentData] = useState<AssessmentData | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetch = async () => {
+      try {
+        setLoading(true);
+        const res = await axios.get(
+          `${getBackendURL()}/student/modules/${moduleId}/problems`,
+          { withCredentials: true }
+        );
+        const moduleData = res.data as ModuleProblemsData;
+        setData(moduleData);
+      } catch (error: any) {
+        if (error?.response?.status === 403) {
+          toast.error("This module is locked");
+        } else {
+          toast.error("Failed to load module");
+        }
+        router.back();
+        return;
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetch();
+  }, [moduleId]);
+
+  useEffect(() => {
+    if (!data?.module.assessmentExamId) return;
+    const fetchAssessment = async () => {
+      try {
+        const res = await axios.get(
+          `${getBackendURL()}/student/modules/${moduleId}/assessment`,
+          { withCredentials: true }
+        );
+        setAssessmentData(res.data as AssessmentData);
+      } catch {
+        // Assessment not available
+      }
+    };
+    fetchAssessment();
+  }, [moduleId, data?.module.assessmentExamId]);
+
+  if (loading) {
+    return (
+      <div className="w-full h-full animate-fade-left animate-once">
+        <SiteHeader name="Module" />
+        <div className="flex items-center justify-center py-20">
+          <Spinner variant="infinite" />
+        </div>
+      </div>
+    );
+  }
+
+  if (!data) return null;
+
+  return (
+    <div className="w-full h-full animate-fade-left animate-once">
+      <SiteHeader name={data.module.title} />
+      <div className="flex flex-1 flex-col">
+        <div className="@container/main flex flex-1 flex-col gap-2">
+          <div className="flex flex-col gap-4 py-4 px-10 h-[100%] md:gap-6 md:py-6">
+            <div className="flex items-center gap-4">
+              <Button variant="ghost" size="icon" onClick={() => router.back()}>
+                <ArrowLeft className="h-5 w-5" />
+              </Button>
+              <div>
+                <div className="flex items-center gap-2">
+                  <h1 className="text-2xl font-bold">{data.module.title}</h1>
+                  <Badge variant="secondary">Week {data.module.weekNumber}</Badge>
+                </div>
+                <p className="text-sm text-muted-foreground">
+                  {data.module.dueAt
+                    ? `Due ${new Date(data.module.dueAt).toLocaleDateString()}`
+                    : "No due date"}
+                </p>
+              </div>
+            </div>
+
+            <ProgressCard
+              completedProblems={data.completedProblems}
+              totalProblems={data.totalProblems}
+              completionPercentage={data.completionPercentage}
+            />
+
+            <h2 className="text-lg font-semibold flex items-center gap-2">
+              <BookOpen className="h-5 w-5" />
+              Problems
+            </h2>
+
+            {data.problems.length === 0 ? (
+              <Card>
+                <CardContent className="flex flex-col items-center justify-center py-12">
+                  <BookOpen className="h-12 w-12 text-muted-foreground/50 mb-3" />
+                  <p className="text-muted-foreground">No problems in this module</p>
+                </CardContent>
+              </Card>
+            ) : (
+              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                {data.problems
+                  .sort((a, b) => a.orderIndex - b.orderIndex)
+                  .map((p) => {
+                    const status = p.progress?.isSolved
+                      ? "solved"
+                      : p.progress && p.progress.attemptCount > 0
+                      ? "attempted"
+                      : "not_started";
+
+                    const statusColors = {
+                      solved:
+                        "border-green-500/30 bg-green-500/5 hover:bg-green-500/10",
+                      attempted:
+                        "border-yellow-500/30 bg-yellow-500/5 hover:bg-yellow-500/10",
+                      not_started: "hover:bg-accent/60",
+                    };
+
+                    const statusIcons = {
+                      solved: <span className="text-green-500 font-bold">✓</span>,
+                      attempted: <span className="text-yellow-500">🟡</span>,
+                      not_started: (
+                        <span className="text-muted-foreground">○</span>
+                      ),
+                    };
+
+                    return (
+                      <Card
+                        key={p.id}
+                        className={`cursor-pointer transition-all hover:shadow-md ${statusColors[status]}`}
+                        onClick={() =>
+                          router.push(`/problems?id=${p.problemId}&moduleProblemId=${p.id}`)
+                        }
+                      >
+                        <CardContent className="p-4">
+                          <div className="flex items-start gap-3">
+                            <div className="mt-0.5">
+                              {statusIcons[status]}
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <p className="font-medium text-sm truncate">
+                                {p.problem.number}. {p.problem.title}
+                              </p>
+                              <div className="flex items-center gap-2 mt-1">
+                                <Badge
+                                  variant="outline"
+                                  className={`text-xs ${
+                                    p.problem.difficulty === "EASY"
+                                      ? "text-green-600"
+                                      : p.problem.difficulty === "MEDIUM"
+                                      ? "text-yellow-600"
+                                      : "text-red-600"
+                                  }`}
+                                >
+                                  {p.problem.difficulty}
+                                </Badge>
+                                <span className="text-xs text-muted-foreground">
+                                  {status === "solved"
+                                    ? "Solved"
+                                    : status === "attempted"
+                                    ? `${p.progress!.attemptCount} attempt${
+                                        p.progress!.attemptCount !== 1 ? "s" : ""
+                                      }`
+                                    : "Not started"}
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    );
+                  })}
+              </div>
+            )}
+
+            {data.assessment && (
+              <div className="mt-6">
+                <h2 className="text-lg font-semibold flex items-center gap-2 mb-3">
+                  <FlaskConical className="h-5 w-5" />
+                  Assessment
+                </h2>
+                <AssessmentCard
+                  title={data.assessment.title}
+                  startTime={data.assessment.startTime}
+                  status={data.assessment.status}
+                  durationMinutes={assessmentData?.durationMinutes}
+                  score={assessmentData?.score}
+                  rank={assessmentData?.rank}
+                  onEnter={() => {
+                    if (assessmentData?.status === "ACTIVE") {
+                      router.push(`/tests/start/${data.assessment!.examId}`);
+                    } else if (assessmentData?.status === "UPCOMING") {
+                      router.push(`/tests/start/${data.assessment!.examId}`);
+                    }
+                  }}
+                  onViewResult={() =>
+                    router.push(
+                      `/dashboard/student/results/${data.assessment!.examId}`
+                    )
+                  }
+                />
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

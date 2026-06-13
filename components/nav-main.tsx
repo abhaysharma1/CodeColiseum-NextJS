@@ -12,7 +12,7 @@ import { useRouter } from "next/navigation";
 import { MdLibraryBooks, MdOutlineSpaceDashboard } from "react-icons/md";
 import { PiStudentBold } from "react-icons/pi";
 import { IoAnalytics } from "react-icons/io5";
-import { BookOpen, Megaphone } from "lucide-react";
+import { BookOpen, FlaskConical, Megaphone } from "lucide-react";
 
 export function NavMain({ page }: { page: string }) {
   const router = useRouter();
@@ -51,6 +51,21 @@ export function NavMain({ page }: { page: string }) {
               <SidebarMenuButton tooltip={"Tests & Exams"}>
                 <BookOpen />
                 <span>Tests & Exams</span>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          )}
+          {canViewGroups && (
+            <SidebarMenuItem
+              className={
+                page == "LABS"
+                  ? "bg-primary text-primary-foreground rounded-md"
+                  : ""
+              }
+              onClick={() => router.push("/dashboard/teacher/labs")}
+            >
+              <SidebarMenuButton tooltip={"Labs"}>
+                <FlaskConical />
+                <span>Labs</span>
               </SidebarMenuButton>
             </SidebarMenuItem>
           )}

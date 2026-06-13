@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { AuthProvider } from "@/context/authcontext";
 import { ThemeProvider } from "@/components/theme-provider";
 import { RbacProvider } from "@/context/rbacContext";
+import { Providers } from "./providers";
 
 const caveat = Caveat({
   variable: "--font-caveat",
@@ -58,7 +59,9 @@ export default function RootLayout({
         >
           <AuthProvider>
             <RbacProvider>
-              <main>{children}</main>
+              <Providers>
+                <main>{children}</main>
+              </Providers>
               <Toaster />
             </RbacProvider>
           </AuthProvider>
