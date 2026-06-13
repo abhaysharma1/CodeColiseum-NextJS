@@ -412,7 +412,7 @@ function CodingBlock({
 
   return (
     <div>
-      <div className="w-[calc(60vw-2.5rem)] h-[calc(100vh-6.5rem)] outline-1 m-5 outline-offset-8 rounded-md py-3 px-5 shadow-2xl">
+      <div className="flex-1 min-w-3xl h-[calc(100vh-6.5rem)] outline-1 m-5 outline-offset-8 rounded-md py-3 px-5 shadow-2xl">
         <div
           className={`rounded-md overflow-hidden border-2 h-full flex flex-col min-h-[300px] ${
             editorInFocus && "border-1 border-foreground/15"

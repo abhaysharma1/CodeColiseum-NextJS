@@ -1,9 +1,10 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
+import { motion } from "framer-motion";
 import axios from "axios";
 import { toast } from "sonner";
-import { ArrowLeft, FlaskConical, BookOpen, Calendar, Clock } from "lucide-react";
+import { ArrowLeft, FlaskConical, BookOpen, Calendar, Clock, CheckCircle2, AlertCircle, Circle } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -72,6 +73,33 @@ interface ModuleProblemsData {
   problems: ProblemData[];
 }
 
+const difficultyStyles: Record<string, { bg: string; text: string; border: string; label: string }> = {
+  EASY: {
+    bg: "bg-green-500/5",
+    text: "text-green-600",
+    border: "border-green-500/20",
+    label: "Easy",
+  },
+  MEDIUM: {
+    bg: "bg-yellow-500/5",
+    text: "text-yellow-600",
+    border: "border-yellow-500/20",
+    label: "Medium",
+  },
+  HARD: {
+    bg: "bg-red-500/5",
+    text: "text-red-600",
+    border: "border-red-500/20",
+    label: "Hard",
+  },
+};
+
+const statusConfig = {
+  solved: { icon: CheckCircle2, color: "text-green-500", bg: "bg-green-500/10", label: "Solved", border: "border-green-500/30" },
+  attempted: { icon: AlertCircle, color: "text-yellow-500", bg: "bg-yellow-500/10", label: "Attempted", border: "border-yellow-500/30" },
+  not_started: { icon: Circle, color: "text-muted-foreground", bg: "bg-transparent", label: "Not started", border: "border-muted" },
+};
+
 export default function StudentModuleViewPage() {
   const { moduleId } = useParams<{ moduleId: string }>();
   const router = useRouter();
@@ -122,7 +150,7 @@ export default function StudentModuleViewPage() {
 
   if (loading) {
     return (
-      <div className="w-full h-full animate-fade-left animate-once">
+      <div className="w-full h-full">
         <SiteHeader name="Module" />
         <div className="flex items-center justify-center py-20">
           <Spinner variant="infinite" />
@@ -134,128 +162,148 @@ export default function StudentModuleViewPage() {
   if (!data) return null;
 
   return (
-    <div className="w-full h-full animate-fade-left animate-once">
+    <div className="w-full h-full">
       <SiteHeader name={data.module.title} />
       <div className="flex flex-1 flex-col">
         <div className="@container/main flex flex-1 flex-col gap-2">
           <div className="flex flex-col gap-4 py-4 px-10 h-[100%] md:gap-6 md:py-6">
-            <div className="flex items-center gap-4">
+            <motion.div
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="flex items-center gap-4"
+            >
               <Button variant="ghost" size="icon" onClick={() => router.back()}>
                 <ArrowLeft className="h-5 w-5" />
               </Button>
-              <div>
+              <div className="flex-1">
                 <div className="flex items-center gap-2">
-                  <h1 className="text-2xl font-bold">{data.module.title}</h1>
-                  <Badge variant="secondary">Week {data.module.weekNumber}</Badge>
+                  <h1 className="text-2xl font-bold tracking-tight">{data.module.title}</h1>
+                  <Badge variant="secondary" className="text-xs">
+                    Week {data.module.weekNumber}
+                  </Badge>
                 </div>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-sm text-muted-foreground mt-0.5">
                   {data.module.dueAt
                     ? `Due ${new Date(data.module.dueAt).toLocaleDateString()}`
                     : "No due date"}
                 </p>
               </div>
-            </div>
+              <div className="flex-shrink-0">
+                <ProgressCard
+                  completedProblems={data.completedProblems}
+                  totalProblems={data.totalProblems}
+                  completionPercentage={data.completionPercentage}
+                  showLabel={false}
+                  size="sm"
+                />
+              </div>
+            </motion.div>
 
-            <ProgressCard
-              completedProblems={data.completedProblems}
-              totalProblems={data.totalProblems}
-              completionPercentage={data.completionPercentage}
-            />
-
-            <h2 className="text-lg font-semibold flex items-center gap-2">
-              <BookOpen className="h-5 w-5" />
-              Problems
-            </h2>
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 }}
+              className="flex items-center gap-2"
+            >
+              <BookOpen className="h-5 w-5 text-muted-foreground" />
+              <h2 className="text-lg font-semibold">Problems</h2>
+              <span className="text-sm text-muted-foreground">
+                ({data.completedProblems}/{data.totalProblems} solved)
+              </span>
+            </motion.div>
 
             {data.problems.length === 0 ? (
-              <Card>
-                <CardContent className="flex flex-col items-center justify-center py-12">
-                  <BookOpen className="h-12 w-12 text-muted-foreground/50 mb-3" />
-                  <p className="text-muted-foreground">No problems in this module</p>
-                </CardContent>
-              </Card>
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+              >
+                <Card>
+                  <CardContent className="flex flex-col items-center justify-center py-12">
+                    <BookOpen className="h-12 w-12 text-muted-foreground/50 mb-3" />
+                    <p className="text-muted-foreground">No problems in this module</p>
+                  </CardContent>
+                </Card>
+              </motion.div>
             ) : (
-              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.15 }}
+                className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3"
+              >
                 {data.problems
                   .sort((a, b) => a.orderIndex - b.orderIndex)
-                  .map((p) => {
+                  .map((p, i) => {
                     const status = p.progress?.isSolved
                       ? "solved"
                       : p.progress && p.progress.attemptCount > 0
                       ? "attempted"
                       : "not_started";
-
-                    const statusColors = {
-                      solved:
-                        "border-green-500/30 bg-green-500/5 hover:bg-green-500/10",
-                      attempted:
-                        "border-yellow-500/30 bg-yellow-500/5 hover:bg-yellow-500/10",
-                      not_started: "hover:bg-accent/60",
-                    };
-
-                    const statusIcons = {
-                      solved: <span className="text-green-500 font-bold">✓</span>,
-                      attempted: <span className="text-yellow-500">🟡</span>,
-                      not_started: (
-                        <span className="text-muted-foreground">○</span>
-                      ),
-                    };
+                    const cfg = statusConfig[status];
+                    const StatusIcon = cfg.icon;
+                    const diff = difficultyStyles[p.problem.difficulty] || difficultyStyles.EASY;
 
                     return (
-                      <Card
+                      <motion.div
                         key={p.id}
-                        className={`cursor-pointer transition-all hover:shadow-md ${statusColors[status]}`}
-                        onClick={() =>
-                          router.push(`/problems?id=${p.problemId}&moduleProblemId=${p.id}`)
-                        }
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ duration: 0.25, delay: i * 0.03 }}
+                        whileHover={{ y: -2, scale: 1.01 }}
                       >
-                        <CardContent className="p-4">
-                          <div className="flex items-start gap-3">
-                            <div className="mt-0.5">
-                              {statusIcons[status]}
-                            </div>
-                            <div className="flex-1 min-w-0">
-                              <p className="font-medium text-sm truncate">
-                                {p.problem.number}. {p.problem.title}
-                              </p>
-                              <div className="flex items-center gap-2 mt-1">
-                                <Badge
-                                  variant="outline"
-                                  className={`text-xs ${
-                                    p.problem.difficulty === "EASY"
-                                      ? "text-green-600"
-                                      : p.problem.difficulty === "MEDIUM"
-                                      ? "text-yellow-600"
-                                      : "text-red-600"
-                                  }`}
-                                >
-                                  {p.problem.difficulty}
-                                </Badge>
-                                <span className="text-xs text-muted-foreground">
-                                  {status === "solved"
-                                    ? "Solved"
-                                    : status === "attempted"
-                                    ? `${p.progress!.attemptCount} attempt${
-                                        p.progress!.attemptCount !== 1 ? "s" : ""
-                                      }`
-                                    : "Not started"}
-                                </span>
+                        <Card
+                          className={`cursor-pointer transition-all hover:shadow-md overflow-hidden border-t-2 ${cfg.border}`}
+                          onClick={() =>
+                            router.push(`/problems?id=${p.problemId}&moduleProblemId=${p.id}`)
+                          }
+                        >
+                          <div className={`absolute inset-0 ${cfg.bg} opacity-0 hover:opacity-100 transition-opacity`} />
+                          <CardContent className="p-4 relative">
+                            <div className="flex items-start gap-3">
+                              <div className={`mt-0.5 p-1 rounded-md ${cfg.bg}`}>
+                                <StatusIcon className={`h-4 w-4 ${cfg.color}`} />
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <p className="font-medium text-sm truncate">
+                                  {p.problem.number}. {p.problem.title}
+                                </p>
+                                <div className="flex items-center gap-2 mt-1.5">
+                                  <Badge
+                                    variant="outline"
+                                    className={`text-[10px] px-1.5 py-0 h-5 ${diff.text}`}
+                                  >
+                                    {diff.label}
+                                  </Badge>
+                                  <span className="text-xs text-muted-foreground">
+                                    {status === "solved"
+                                      ? "Solved"
+                                      : status === "attempted"
+                                      ? `${p.progress!.attemptCount} attempt${p.progress!.attemptCount !== 1 ? "s" : ""}`
+                                      : "Not started"}
+                                  </span>
+                                </div>
                               </div>
                             </div>
-                          </div>
-                        </CardContent>
-                      </Card>
+                          </CardContent>
+                        </Card>
+                      </motion.div>
                     );
                   })}
-              </div>
+              </motion.div>
             )}
 
             {data.assessment && (
-              <div className="mt-6">
-                <h2 className="text-lg font-semibold flex items-center gap-2 mb-3">
-                  <FlaskConical className="h-5 w-5" />
-                  Assessment
-                </h2>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 }}
+                className="mt-2"
+              >
+                <div className="flex items-center gap-2 mb-3">
+                  <FlaskConical className="h-5 w-5 text-muted-foreground" />
+                  <h2 className="text-lg font-semibold">Assessment</h2>
+                </div>
                 <AssessmentCard
                   title={data.assessment.title}
                   startTime={data.assessment.startTime}
@@ -276,7 +324,7 @@ export default function StudentModuleViewPage() {
                     )
                   }
                 />
-              </div>
+              </motion.div>
             )}
           </div>
         </div>

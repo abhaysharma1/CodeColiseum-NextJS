@@ -1,7 +1,18 @@
-import { Card, CardContent } from "@/components/ui/card";
+"use client";
+import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Calendar, Clock, FileText, FlaskConical, Lock, Unlock } from "lucide-react";
+import {
+  Calendar,
+  Clock,
+  FileText,
+  FlaskConical,
+  Lock,
+  CheckCircle2,
+  AlertCircle,
+  Circle,
+  ArrowRight,
+} from "lucide-react";
 
 interface ModuleCardProps {
   weekNumber: number;
@@ -17,6 +28,27 @@ interface ModuleCardProps {
   studentStatus?: "LOCKED" | "COMPLETED" | "IN_PROGRESS" | "NOT_STARTED";
   completionPercentage?: number;
 }
+
+const statusIconMap = {
+  LOCKED: Lock,
+  COMPLETED: CheckCircle2,
+  IN_PROGRESS: AlertCircle,
+  NOT_STARTED: Circle,
+};
+
+const statusColorMap = {
+  LOCKED: "text-muted-foreground",
+  COMPLETED: "text-green-500",
+  IN_PROGRESS: "text-yellow-500",
+  NOT_STARTED: "text-muted-foreground",
+};
+
+const statusBgMap = {
+  LOCKED: "bg-muted",
+  COMPLETED: "bg-green-500/10",
+  IN_PROGRESS: "bg-yellow-500/10",
+  NOT_STARTED: "bg-transparent",
+};
 
 export function ModuleCard({
   weekNumber,
@@ -35,52 +67,62 @@ export function ModuleCard({
   const isLocked = studentStatus === "LOCKED";
 
   if (variant === "student") {
-    const statusIcon = {
-      LOCKED: <Lock className="h-5 w-5 text-muted-foreground" />,
-      COMPLETED: <span className="text-green-500 text-lg">✓</span>,
-      IN_PROGRESS: <span className="text-yellow-500 text-lg">🟡</span>,
-      NOT_STARTED: <span className="text-muted-foreground text-lg">○</span>,
-    };
+    const StatusIcon = statusIconMap[studentStatus || "NOT_STARTED"];
+    const statusColor = statusColorMap[studentStatus || "NOT_STARTED"];
+    const statusBg = statusBgMap[studentStatus || "NOT_STARTED"];
 
     return (
-      <Card
-        className={`transition-all ${
-          isLocked
-            ? "opacity-60 cursor-not-allowed"
-            : "hover:shadow-md hover:bg-accent/40 cursor-pointer"
-        }`}
-        onClick={isLocked ? undefined : onView}
+      <motion.div
+        initial={{ opacity: 0, x: -20 }}
+        whileInView={{ opacity: 1, x: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.4 }}
+        whileHover={isLocked ? undefined : { scale: 1.01, x: 4 }}
+        className={`relative pl-10 pb-6 last:pb-0 ${isLocked ? "opacity-60" : ""}`}
       >
-        <CardContent className="p-4">
-          <div className="flex items-center gap-3">
-            <div className="flex-shrink-0 w-8 h-8 flex items-center justify-center">
-              {statusIcon[studentStatus || "NOT_STARTED"]}
-            </div>
+        <div className="absolute left-[15px] top-3 bottom-0 w-px bg-border last:hidden" />
+        <motion.div
+          initial={{ scale: 0 }}
+          whileInView={{ scale: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.3, delay: 0.1 }}
+          className={`absolute left-2 top-3 w-7 h-7 rounded-full flex items-center justify-center z-10 ${statusBg} ${isLocked ? "cursor-not-allowed" : "cursor-pointer"}`}
+          onClick={isLocked ? undefined : onView}
+        >
+          <StatusIcon className={`h-4 w-4 ${statusColor}`} />
+        </motion.div>
+        <div
+          className={`ml-2 rounded-lg border border-border bg-card p-4 shadow-sm transition-all duration-200 ${
+            isLocked ? "" : "hover:shadow-md hover:bg-accent/40 cursor-pointer"
+          }`}
+          onClick={isLocked ? undefined : onView}
+        >
+          <div className="flex items-start gap-3">
             <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-2">
-                <span className="text-sm font-medium text-muted-foreground">
+              <div className="flex items-center gap-2 flex-wrap mb-1">
+                <span className="text-xs font-medium text-muted-foreground">
                   Week {weekNumber}
                 </span>
                 {studentStatus === "COMPLETED" && (
-                  <Badge variant="secondary" className="bg-green-500/10 text-green-600 text-xs">
+                  <Badge variant="secondary" className="bg-green-500/10 text-green-600 text-[10px] h-5">
                     Completed
                   </Badge>
                 )}
                 {studentStatus === "IN_PROGRESS" && (
-                  <Badge variant="secondary" className="bg-yellow-500/10 text-yellow-600 text-xs">
+                  <Badge variant="secondary" className="bg-yellow-500/10 text-yellow-600 text-[10px] h-5">
                     In Progress
                   </Badge>
                 )}
                 {isLocked && (
-                  <Badge variant="secondary" className="text-xs">
-                    Locked
+                  <Badge variant="secondary" className="text-[10px] h-5 gap-1">
+                    <Lock className="h-3 w-3" /> Locked
                   </Badge>
                 )}
               </div>
-              <p className={`font-medium truncate ${isLocked ? "text-muted-foreground" : ""}`}>
+              <h4 className={`font-semibold text-sm tracking-tight ${isLocked ? "text-muted-foreground" : ""}`}>
                 {title}
-              </p>
-              <div className="flex items-center gap-3 mt-1 text-xs text-muted-foreground">
+              </h4>
+              <div className="flex items-center gap-3 mt-1.5 text-xs text-muted-foreground flex-wrap">
                 <div className="flex items-center gap-1">
                   <FileText className="h-3 w-3" />
                   <span>{problemsCount} problems</span>
@@ -93,41 +135,57 @@ export function ModuleCard({
                 )}
               </div>
               {!isLocked && completionPercentage !== undefined && (
-                <div className="mt-2">
-                  <div className="flex items-center justify-between text-xs text-muted-foreground mb-1">
+                <div className="mt-3">
+                  <div className="flex items-center justify-between text-xs text-muted-foreground mb-1.5">
                     <span>{completionPercentage}% complete</span>
                   </div>
-                  <div className="w-full h-1.5 bg-muted rounded-full overflow-hidden">
-                    <div
-                      className="h-full bg-primary rounded-full transition-all"
-                      style={{ width: `${completionPercentage}%` }}
+                  <div className="w-full h-2 bg-muted rounded-full overflow-hidden">
+                    <motion.div
+                      className="h-full rounded-full"
+                      style={{
+                        background: completionPercentage === 100
+                          ? "linear-gradient(90deg, #22c55e, #16a34a)"
+                          : completionPercentage > 50
+                          ? "linear-gradient(90deg, var(--primary), var(--primary))"
+                          : "linear-gradient(90deg, #eab308, #ca8a04)",
+                      }}
+                      initial={{ width: 0 }}
+                      whileInView={{ width: `${completionPercentage}%` }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.8, ease: "easeOut" }}
                     />
                   </div>
                 </div>
               )}
             </div>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </motion.div>
     );
   }
 
   return (
-    <div className="relative pl-8 pb-8 border-l-2 border-muted last:pb-0">
-      <div className="absolute -left-3 top-0 w-6 h-6 rounded-full bg-primary flex items-center justify-center">
-        <span className="text-primary-foreground text-xs font-bold">
-          {weekNumber}
-        </span>
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.3 }}
+      className="relative pl-8 pb-8 last:pb-0"
+    >
+      <div className="absolute left-3 top-0 bottom-0 w-px bg-border last:hidden" />
+      <div className="absolute -left-1 top-0 w-8 h-8 rounded-full bg-primary flex items-center justify-center shadow-sm">
+        <span className="text-primary-foreground text-xs font-bold">{weekNumber}</span>
       </div>
-      <Card className="ml-2">
-        <CardContent className="p-4">
+      <div className="ml-4 rounded-lg border border-border bg-card shadow-sm hover:shadow-md transition-all duration-200 overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent opacity-0 hover:opacity-100 transition-opacity" />
+        <div className="p-4 relative">
           <div className="flex items-start justify-between gap-4">
             <div className="space-y-2 flex-1 min-w-0">
               <div className="flex items-center gap-2 flex-wrap">
-                <h4 className="font-semibold">Week {weekNumber} — {title}</h4>
+                <h4 className="font-semibold tracking-tight">Week {weekNumber} &mdash; {title}</h4>
                 {assessmentStatus && (
-                  <Badge variant="outline" className="text-xs">
-                    <FlaskConical className="h-3 w-3 mr-1" />
+                  <Badge variant="outline" className="text-xs gap-1">
+                    <FlaskConical className="h-3 w-3" />
                     {assessmentStatus}
                   </Badge>
                 )}
@@ -150,8 +208,8 @@ export function ModuleCard({
               </div>
             </div>
             <div className="flex items-center gap-1 flex-shrink-0">
-              <Button variant="ghost" size="sm" onClick={onView}>
-                View
+              <Button variant="ghost" size="sm" onClick={onView} className="gap-1">
+                View <ArrowRight className="h-3 w-3" />
               </Button>
               {onEdit && (
                 <Button variant="ghost" size="sm" onClick={onEdit}>
@@ -165,8 +223,8 @@ export function ModuleCard({
               )}
             </div>
           </div>
-        </CardContent>
-      </Card>
-    </div>
+        </div>
+      </div>
+    </motion.div>
   );
 }

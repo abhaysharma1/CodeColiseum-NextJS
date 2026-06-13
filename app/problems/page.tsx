@@ -1,6 +1,6 @@
 "use client";
 import { useRouter } from "next/navigation";
-import React, { Suspense, useEffect, useState, use } from "react";
+import React, { Suspense, useEffect, useState, use, useCallback } from "react";
 import DetailsBlock from "./detailsBlock";
 import CodingBlock from "./codingBlock";
 import axios from "axios";
@@ -18,9 +18,26 @@ import { getBackendURL } from "@/utils/utilities";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useModuleProblemData } from "@/hooks/use-module-problem";
 import { useModuleProblemsList } from "@/hooks/use-module-problems-list";
-import { ModuleHeader } from "./moduleHeader";
 import { ModuleSidebar } from "./moduleSidebar";
-import { PrevNextNavigation } from "./prevNextNavigation";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import {
+  ArrowLeft,
+  Calendar,
+  ChevronLeft,
+  ChevronRight,
+  PanelRightOpen,
+  PanelRightClose,
+  Circle,
+  CheckCircle2,
+} from "lucide-react";
+import { motion } from "framer-motion";
 
 interface descriptionData {
   id: string;
@@ -45,6 +62,158 @@ export type aiReviewResult = {
     };
   };
 };
+
+function ModuleCenterContent({
+  lab,
+  module: mod,
+  moduleId,
+  completedProblems,
+  totalProblems,
+  completionPercentage,
+  previous,
+  next,
+  currentModuleProblemId,
+  isSidebarOpen,
+  onToggleSidebar,
+}: {
+  lab: { title: string };
+  module: { title: string; weekNumber: number; dueAt: string | null };
+  moduleId: string;
+  completedProblems: number;
+  totalProblems: number;
+  completionPercentage: number;
+  previous: { id: string; problemId: string } | null;
+  next: { id: string; problemId: string } | null;
+  currentModuleProblemId: string;
+  isSidebarOpen: boolean;
+  onToggleSidebar: () => void;
+}) {
+  const router = useRouter();
+
+  const solvedDots = Math.round((completionPercentage / 100) * 3);
+  const remainingDots = 3 - solvedDots;
+
+  return (
+    <div className="flex items-center gap-3 text-sm min-w-0">
+      <TooltipProvider>
+        <div className="flex items-center gap-2 text-muted-foreground min-w-0">
+          <Button
+            variant="ghost"
+            size="icon-xs"
+            className="h-6 w-6 shrink-0"
+            onClick={() =>
+              router.push(`/dashboard/student/modules/${moduleId}`)
+            }
+            title="Back to module"
+          >
+            <ArrowLeft className="h-3.5 w-3.5" />
+          </Button>
+          <span className="hidden sm:inline truncate max-w-[120px] lg:max-w-[200px]">
+            {lab.title}
+          </span>
+          <span className="hidden sm:inline text-muted-foreground/50">›</span>
+          <span className="truncate max-w-[120px] lg:max-w-[240px] font-medium text-foreground">
+            {mod.title}
+          </span>
+        </div>
+      </TooltipProvider>
+
+      <div className="hidden md:flex items-center gap-1.5 text-xs text-muted-foreground">
+        {Array.from({ length: solvedDots }).map((_, i) => (
+          <CheckCircle2 key={`s-${i}`} className="h-3 w-3 text-green-500" />
+        ))}
+        {Array.from({ length: remainingDots }).map((_, i) => (
+          <Circle key={`r-${i}`} className="h-3 w-3" />
+        ))}
+        <span className="tabular-nums ml-1">
+          {completedProblems}/{totalProblems}
+        </span>
+      </div>
+
+      {mod.dueAt && (
+        <Badge
+          variant="outline"
+          className="hidden lg:flex items-center gap-1 text-[11px] px-1.5 py-0 h-5"
+        >
+          <Calendar className="h-3 w-3" />
+          {new Date(mod.dueAt).toLocaleDateString()}
+        </Badge>
+      )}
+
+      <div className="flex items-center gap-0.5 ml-auto">
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              variant="ghost"
+              size="icon-xs"
+              className={`h-7 w-7 ${!previous ? "opacity-30 pointer-events-none" : ""}`}
+              disabled={!previous}
+              onClick={() => {
+                if (previous) {
+                  router.push(
+                    `/problems?id=${previous.problemId}&moduleProblemId=${previous.id}`
+                  );
+                }
+              }}
+            >
+              <ChevronLeft className="h-4 w-4" />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent side="bottom">
+            <p className="text-xs">Alt + Left</p>
+          </TooltipContent>
+        </Tooltip>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              variant="ghost"
+              size="icon-xs"
+              className={`h-7 w-7 ${!next ? "opacity-30 pointer-events-none" : ""}`}
+              disabled={!next}
+              onClick={() => {
+                if (next) {
+                  router.push(
+                    `/problems?id=${next.problemId}&moduleProblemId=${next.id}`
+                  );
+                }
+              }}
+            >
+              <ChevronRight className="h-4 w-4" />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent side="bottom">
+            <p className="text-xs">Alt + Right</p>
+          </TooltipContent>
+        </Tooltip>
+
+        <div className="w-px h-5 bg-border mx-1" />
+
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              variant="ghost"
+              size="icon-xs"
+              className="h-7 w-7"
+              onClick={onToggleSidebar}
+              title={isSidebarOpen ? "Close problem list" : "Open problem list"}
+            >
+              {isSidebarOpen ? (
+                <PanelRightClose className="h-4 w-4" />
+              ) : (
+                <PanelRightOpen className="h-4 w-4" />
+              )}
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent side="bottom">
+            <p className="text-xs">
+              {isSidebarOpen ? "Close" : "Open"} problem list
+            </p>
+          </TooltipContent>
+        </Tooltip>
+      </div>
+    </div>
+  );
+}
 
 function QuestionSolvingPageContent({
   searchParams,
@@ -87,6 +256,7 @@ function QuestionSolvingPageContent({
   >();
   const [code, setCode] = useState<string>("");
   const [language, setLanguage] = useState("cpp");
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const {
     data: descriptionData = [],
@@ -198,87 +368,89 @@ function QuestionSolvingPageContent({
     <div>
       <div>
         <AuthProvider>
-          <Navbar01 />
+          <Navbar01
+            centerContent={
+              mode.type === "module" &&
+              moduleQuery.data &&
+              moduleProblemsQuery.data ? (
+                <ModuleCenterContent
+                  lab={moduleQuery.data.lab}
+                  module={moduleQuery.data.module}
+                  moduleId={moduleQuery.data.module.id}
+                  completedProblems={
+                    moduleProblemsQuery.data.completedProblems
+                  }
+                  totalProblems={moduleProblemsQuery.data.totalProblems}
+                  completionPercentage={
+                    moduleProblemsQuery.data.completionPercentage
+                  }
+                  previous={moduleQuery.data.previousProblem}
+                  next={moduleQuery.data.nextProblem}
+                  currentModuleProblemId={mode.moduleProblemId}
+                  isSidebarOpen={isSidebarOpen}
+                  onToggleSidebar={() =>
+                    setIsSidebarOpen((prev) => !prev)
+                  }
+                />
+              ) : undefined
+            }
+          />
         </AuthProvider>
       </div>
-      {mode.type === "module" && moduleQuery.data && moduleProblemsQuery.data && (
-        <ModuleHeader
-          lab={moduleQuery.data.lab}
-          module={moduleQuery.data.module}
-          completedProblems={moduleProblemsQuery.data.completedProblems}
-          totalProblems={moduleProblemsQuery.data.totalProblems}
-          completionPercentage={moduleProblemsQuery.data.completionPercentage}
-        />
-      )}
-      {(() => {
-        const workspace = (
-          <div className="flex justify-center">
-            <div>
-              <DetailsBlock
-                tabPage={tabPage}
-                setTabPage={setTabPage}
-                data={descriptionData || []}
-                loadingDetails={loadingDetails}
-                runTestCaseResults={runTestCaseResults}
-                submitTestCaseResults={submitTestCaseResults}
-                submissionRefetch={submissionRefetch}
-                setSubmissionRefetch={setSubmissionRefetch}
-                setSubmissions={setSubmissions}
-                submissions={submissions}
-                aiReviewResult={aiReviewResult}
-                performingAiReview={performingAiReview}
-              />
-            </div>
-            <div>
-              <CodingBlock
-                mode={mode}
-                questionId={id ?? ""}
-                setRunTestCaseResults={setRunTestCaseResults}
-                setSubmitTestCaseResults={setSubmitTestCaseResults}
-                setTabPage={setTabPage}
-                setSubmissionRefetch={setSubmissionRefetch}
-                setCode={setCode}
-                code={code}
-                setLanguage={setLanguage}
-                language={language}
-                startAiReview={startAiReview}
-                performingAiReview={performingAiReview}
-                onSubmitModuleRefresh={() => {
-                  if (mode.type === "module") {
-                    queryClient.invalidateQueries({
-                      queryKey: ["module-problem", mode.moduleProblemId],
-                    });
-                    queryClient.invalidateQueries({
-                      queryKey: ["module-problems-list", moduleQuery.data?.module.id],
-                    });
-                  }
-                }}
-              />
-            </div>
+      <div className="relative flex">
+        {mode.type === "module" && moduleProblemsQuery.data && (
+          <ModuleSidebar
+            problems={moduleProblemsQuery.data.problems}
+            currentModuleProblemId={mode.moduleProblemId}
+            isOpen={isSidebarOpen}
+            onClose={() => setIsSidebarOpen(false)}
+          />
+        )}
+        <div className="flex justify-center flex-1 min-w-0">
+          <div>
+            <DetailsBlock
+              tabPage={tabPage}
+              setTabPage={setTabPage}
+              data={descriptionData || []}
+              loadingDetails={loadingDetails}
+              runTestCaseResults={runTestCaseResults}
+              submitTestCaseResults={submitTestCaseResults}
+              submissionRefetch={submissionRefetch}
+              setSubmissionRefetch={setSubmissionRefetch}
+              setSubmissions={setSubmissions}
+              submissions={submissions}
+              aiReviewResult={aiReviewResult}
+              performingAiReview={performingAiReview}
+            />
           </div>
-        );
-
-        if (mode.type === "module" && moduleProblemsQuery.data) {
-          return (
-            <div className="flex items-start">
-              <ModuleSidebar
-                problems={moduleProblemsQuery.data.problems}
-                currentModuleProblemId={mode.moduleProblemId}
-              />
-              <div className="flex-1 min-w-0 overflow-x-auto">
-                {workspace}
-              </div>
-            </div>
-          );
-        }
-        return workspace;
-      })()}
-      {mode.type === "module" && moduleQuery.data && (
-        <PrevNextNavigation
-          previous={moduleQuery.data.previousProblem}
-          next={moduleQuery.data.nextProblem}
-        />
-      )}
+          <div>
+            <CodingBlock
+              mode={mode}
+              questionId={id ?? ""}
+              setRunTestCaseResults={setRunTestCaseResults}
+              setSubmitTestCaseResults={setSubmitTestCaseResults}
+              setTabPage={setTabPage}
+              setSubmissionRefetch={setSubmissionRefetch}
+              setCode={setCode}
+              code={code}
+              setLanguage={setLanguage}
+              language={language}
+              startAiReview={startAiReview}
+              performingAiReview={performingAiReview}
+              onSubmitModuleRefresh={() => {
+                if (mode.type === "module") {
+                  queryClient.invalidateQueries({
+                    queryKey: ["module-problem", mode.moduleProblemId],
+                  });
+                  queryClient.invalidateQueries({
+                    queryKey: ["module-problems-list", moduleQuery.data?.module.id],
+                  });
+                }
+              }}
+            />
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

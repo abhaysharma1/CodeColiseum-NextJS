@@ -1,32 +1,57 @@
 "use client";
 import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
 import axios from "axios";
 import { toast } from "sonner";
-import { FlaskConical, Search } from "lucide-react";
+import { FlaskConical, Search, SlidersHorizontal, X } from "lucide-react";
 
 import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
 import { SiteHeader } from "@/components/site-header";
 import { getBackendURL } from "@/utils/utilities";
 import { ProgressCard } from "@/components/labs/progress-card";
+import { LabCard } from "@/components/labs/lab-card";
+
+interface ModuleInfo {
+  id: string;
+  title: string;
+  weekNumber: number;
+  completionPercentage: number;
+  moduleStatus: string;
+  dueAt: string | null;
+}
 
 interface LabData {
   id: string;
   title: string;
   description: string | null;
   modulesCount: number;
-  modules: {
-    id: string;
-    title: string;
-    weekNumber: number;
-    completionPercentage: number;
-    moduleStatus: string;
-    dueAt: string | null;
-  }[];
+  modules: ModuleInfo[];
+}
+
+function LabCardSkeleton() {
+  return (
+    <Card className="overflow-hidden">
+      <CardContent className="p-4 space-y-3">
+        <div className="flex items-start gap-3">
+          <Skeleton className="h-12 w-12 rounded-full" />
+          <div className="flex-1 space-y-2">
+            <Skeleton className="h-5 w-3/4" />
+            <Skeleton className="h-4 w-full" />
+          </div>
+        </div>
+        <div className="flex gap-3">
+          <Skeleton className="h-3 w-20" />
+          <Skeleton className="h-3 w-20" />
+          <Skeleton className="h-3 w-24" />
+        </div>
+      </CardContent>
+    </Card>
+  );
 }
 
 export default function StudentLabsPage() {
@@ -82,67 +107,94 @@ export default function StudentLabsPage() {
       )
     : 0;
 
+  const getLabStatus = (modules: ModuleInfo[]): "not_started" | "in_progress" | "completed" => {
+    if (modules.every((m) => m.moduleStatus === "COMPLETED")) return "completed";
+    if (modules.some((m) => m.moduleStatus === "IN_PROGRESS")) return "in_progress";
+    return "not_started";
+  };
+
   return (
-    <div className="w-full h-full animate-fade-left animate-once">
+    <div className="w-full h-full">
       <SiteHeader name="My Labs" />
       <div className="flex flex-1 flex-col">
         <div className="@container/main flex flex-1 flex-col gap-2">
           <div className="flex flex-col gap-4 py-4 px-10 h-[100%] md:gap-6 md:py-6">
-            <div className="flex items-center justify-between">
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="flex items-center justify-between"
+            >
               <div>
                 <h1 className="text-3xl font-bold tracking-tight">My Labs</h1>
-                <p className="text-muted-foreground">
+                <p className="text-muted-foreground leading-relaxed">
                   Your assigned lab work and progress
                 </p>
               </div>
-            </div>
+              {labs.length > 0 && (
+                <ProgressCard
+                  completedProblems={labs.reduce(
+                    (s, l) =>
+                      s +
+                      l.modules.reduce(
+                        (ms, m) => ms + Math.round(m.completionPercentage * m.weekNumber) / 100,
+                        0
+                      ),
+                    0
+                  )}
+                  totalProblems={labs.length}
+                  completionPercentage={overallProgress}
+                  showLabel={false}
+                  size="sm"
+                />
+              )}
+            </motion.div>
 
-            {labs.length > 0 && (
-              <Card>
-                <CardContent className="p-4">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm font-medium">Overall Progress</span>
-                    <span className="text-sm text-muted-foreground">{overallProgress}%</span>
-                  </div>
-                  <div className="w-full h-2.5 bg-muted rounded-full overflow-hidden">
-                    <div
-                      className={`h-full rounded-full transition-all ${
-                        overallProgress === 100 ? "bg-green-500" : "bg-primary"
-                      }`}
-                      style={{ width: `${overallProgress}%` }}
-                    />
-                  </div>
-                </CardContent>
-              </Card>
-            )}
-
-            <div className="relative max-w-xl">
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 }}
+              className="relative max-w-xl"
+            >
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <Input
                 placeholder="Search labs..."
                 value={searchValue}
                 onChange={(e) => setSearchValue(e.target.value)}
-                className="pl-10"
+                className="pl-10 pr-10"
+                autoFocus
               />
-            </div>
+              {searchValue && (
+                <button
+                  onClick={() => setSearchValue("")}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              )}
+              {filteredLabs.length < labs.length && (
+                <Badge variant="secondary" className="absolute right-10 top-1/2 -translate-y-1/2 text-[10px] h-5 mr-1">
+                  {filteredLabs.length} results
+                </Badge>
+              )}
+            </motion.div>
 
             {loading ? (
-              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                {[1, 2, 3].map((i) => (
-                  <Card key={i}>
-                    <CardHeader>
-                      <Skeleton className="h-6 w-3/4" />
-                      <Skeleton className="h-4 w-full mt-2" />
-                    </CardHeader>
-                    <CardContent>
-                      <Skeleton className="h-4 w-full mb-2" />
-                      <Skeleton className="h-4 w-2/3" />
-                    </CardContent>
-                  </Card>
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="grid gap-6 md:grid-cols-2 lg:grid-cols-3"
+              >
+                {[1, 2, 3, 4, 5, 6].map((i) => (
+                  <LabCardSkeleton key={i} />
                 ))}
-              </div>
+              </motion.div>
             ) : filteredLabs.length > 0 ? (
-              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ staggerChildren: 0.05 }}
+                className="grid gap-6 md:grid-cols-2 lg:grid-cols-3"
+              >
                 {filteredLabs.map((lab) => {
                   const currentWeek = lab.modules.find(
                     (m) => m.moduleStatus === "IN_PROGRESS"
@@ -154,74 +206,52 @@ export default function StudentLabsPage() {
                         new Date(a.dueAt!).getTime() -
                         new Date(b.dueAt!).getTime()
                     )[0];
+                  const avgPct = lab.modules.length > 0
+                    ? Math.round(
+                        lab.modules.reduce((s, m) => s + m.completionPercentage, 0) /
+                          lab.modules.length
+                      )
+                    : 0;
 
                   return (
-                    <Card
+                    <LabCard
                       key={lab.id}
-                      className="hover:shadow-lg transition-all hover:bg-accent/60 cursor-pointer group"
+                      title={lab.title}
+                      description={lab.description}
+                      modulesCount={lab.modulesCount}
+                      createdAt={new Date().toISOString()}
+                      completionPercentage={avgPct}
+                      status={getLabStatus(lab.modules)}
+                      currentWeek={currentWeek?.weekNumber}
+                      dueDate={nextDue?.dueAt || undefined}
                       onClick={() =>
                         router.push(`/dashboard/student/labs/${lab.id}`)
                       }
-                    >
-                      <CardHeader>
-                        <div className="flex items-start justify-between">
-                          <div className="space-y-1 flex-1">
-                            <CardTitle className="text-xl group-hover:text-primary transition-colors">
-                              {lab.title}
-                            </CardTitle>
-                            {lab.description && (
-                              <CardDescription className="line-clamp-2">
-                                {lab.description}
-                              </CardDescription>
-                            )}
-                          </div>
-                        </div>
-                      </CardHeader>
-                      <CardContent className="space-y-3">
-                        <ProgressCard
-                          completedProblems={lab.modules.reduce(
-                            (s, m) => s + Math.round(m.completionPercentage * m.weekNumber) / 100,
-                            0
-                          )}
-                          totalProblems={lab.modules.length}
-                          completionPercentage={
-                            lab.modules.length > 0
-                              ? Math.round(
-                                  lab.modules.reduce(
-                                    (s, m) => s + m.completionPercentage,
-                                    0
-                                  ) / lab.modules.length
-                                )
-                              : 0
-                          }
-                          showLabel={false}
-                        />
-                        <div className="flex items-center justify-between text-sm">
-                          {currentWeek && (
-                            <Badge variant="secondary" className="bg-yellow-500/10 text-yellow-600">
-                              Week {currentWeek.weekNumber}
-                            </Badge>
-                          )}
-                          {nextDue && (
-                            <span className="text-xs text-muted-foreground ml-auto">
-                              Due {new Date(nextDue.dueAt!).toLocaleDateString()}
-                            </span>
-                          )}
-                        </div>
-                      </CardContent>
-                    </Card>
+                    />
                   );
                 })}
-              </div>
+              </motion.div>
             ) : (
-              <div className="flex flex-col items-center justify-center py-12">
-                <FlaskConical className="h-12 w-12 text-muted-foreground/50 mb-3" />
-                <p className="text-muted-foreground">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="flex flex-col items-center justify-center py-16"
+              >
+                <FlaskConical className="h-16 w-16 text-muted-foreground/30 mb-4" />
+                <h3 className="text-lg font-semibold text-muted-foreground mb-1">
+                  {searchValue ? "No labs match your search" : "No labs assigned yet"}
+                </h3>
+                <p className="text-sm text-muted-foreground/70 mb-4">
                   {searchValue
-                    ? "No labs match your search"
-                    : "No labs assigned yet"}
+                    ? "Try a different search term"
+                    : "Labs will appear here once you're assigned to them"}
                 </p>
-              </div>
+                {searchValue && (
+                  <Button variant="outline" size="sm" onClick={() => setSearchValue("")}>
+                    Clear Search
+                  </Button>
+                )}
+              </motion.div>
             )}
           </div>
         </div>

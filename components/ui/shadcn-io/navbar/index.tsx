@@ -104,6 +104,7 @@ export interface Navbar01Props extends React.HTMLAttributes<HTMLElement> {
   ctaHref?: string;
   onSignInClick?: () => void;
   onCtaClick?: () => void;
+  centerContent?: React.ReactNode;
 }
 
 // Default navigation links
@@ -127,6 +128,7 @@ export const Navbar01 = React.forwardRef<HTMLElement, Navbar01Props>(
       ctaHref = "#get-started",
       onSignInClick,
       onCtaClick,
+      centerContent,
       ...props
     },
     ref
@@ -261,6 +263,12 @@ export const Navbar01 = React.forwardRef<HTMLElement, Navbar01Props>(
               )}
             </div>
           </div>
+          {/* Center content */}
+          {centerContent && (
+            <div className="flex-1 flex items-center justify-center gap-2 overflow-hidden px-2">
+              {centerContent}
+            </div>
+          )}
           {/* Right side */}
           {!user?.id ? (
             <div className="flex items-center gap-3">
