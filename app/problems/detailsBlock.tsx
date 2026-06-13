@@ -53,7 +53,7 @@ function DetailsBlock({
     <div>
       <div
         title="tab navbar"
-        className="flex-1 max-w-2xl min-w-0 h-[calc(100vh-6.5rem)] overflow-y-scroll scroll-smooth m-5 outline-1 outline-offset-8 rounded-md py-3 px-7 box-border bg-accent/30 shadow-2xl"
+        className="flex-1 h-[calc(100vh-6.5rem)] overflow-y-scroll scroll-smooth m-5 outline-1 outline-offset-8 rounded-md py-3 px-7 box-border bg-accent/30 shadow-2xl"
       >
         <Tabs
           defaultValue="description"

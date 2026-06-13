@@ -38,6 +38,7 @@ import {
   CheckCircle2,
 } from "lucide-react";
 import { motion } from "framer-motion";
+import { Group, Panel, Separator } from "react-resizable-panels";
 
 interface descriptionData {
   id: string;
@@ -377,9 +378,7 @@ function QuestionSolvingPageContent({
                   lab={moduleQuery.data.lab}
                   module={moduleQuery.data.module}
                   moduleId={moduleQuery.data.module.id}
-                  completedProblems={
-                    moduleProblemsQuery.data.completedProblems
-                  }
+                  completedProblems={moduleProblemsQuery.data.completedProblems}
                   totalProblems={moduleProblemsQuery.data.totalProblems}
                   completionPercentage={
                     moduleProblemsQuery.data.completionPercentage
@@ -388,9 +387,7 @@ function QuestionSolvingPageContent({
                   next={moduleQuery.data.nextProblem}
                   currentModuleProblemId={mode.moduleProblemId}
                   isSidebarOpen={isSidebarOpen}
-                  onToggleSidebar={() =>
-                    setIsSidebarOpen((prev) => !prev)
-                  }
+                  onToggleSidebar={() => setIsSidebarOpen((prev) => !prev)}
                 />
               ) : undefined
             }
@@ -407,48 +404,58 @@ function QuestionSolvingPageContent({
           />
         )}
         <div className="flex justify-center flex-1 min-w-0">
-          <div>
-            <DetailsBlock
-              tabPage={tabPage}
-              setTabPage={setTabPage}
-              data={descriptionData || []}
-              loadingDetails={loadingDetails}
-              runTestCaseResults={runTestCaseResults}
-              submitTestCaseResults={submitTestCaseResults}
-              submissionRefetch={submissionRefetch}
-              setSubmissionRefetch={setSubmissionRefetch}
-              setSubmissions={setSubmissions}
-              submissions={submissions}
-              aiReviewResult={aiReviewResult}
-              performingAiReview={performingAiReview}
-            />
-          </div>
-          <div>
-            <CodingBlock
-              mode={mode}
-              questionId={id ?? ""}
-              setRunTestCaseResults={setRunTestCaseResults}
-              setSubmitTestCaseResults={setSubmitTestCaseResults}
-              setTabPage={setTabPage}
-              setSubmissionRefetch={setSubmissionRefetch}
-              setCode={setCode}
-              code={code}
-              setLanguage={setLanguage}
-              language={language}
-              startAiReview={startAiReview}
-              performingAiReview={performingAiReview}
-              onSubmitModuleRefresh={() => {
-                if (mode.type === "module") {
-                  queryClient.invalidateQueries({
-                    queryKey: ["module-problem", mode.moduleProblemId],
-                  });
-                  queryClient.invalidateQueries({
-                    queryKey: ["module-problems-list", moduleQuery.data?.module.id],
-                  });
-                }
-              }}
-            />
-          </div>
+          <Group orientation="horizontal" className="h-screen w-screen">
+            <Panel defaultSize={50} minSize={25}>
+              <div>
+                <DetailsBlock
+                  tabPage={tabPage}
+                  setTabPage={setTabPage}
+                  data={descriptionData || []}
+                  loadingDetails={loadingDetails}
+                  runTestCaseResults={runTestCaseResults}
+                  submitTestCaseResults={submitTestCaseResults}
+                  submissionRefetch={submissionRefetch}
+                  setSubmissionRefetch={setSubmissionRefetch}
+                  setSubmissions={setSubmissions}
+                  submissions={submissions}
+                  aiReviewResult={aiReviewResult}
+                  performingAiReview={performingAiReview}
+                />
+              </div>
+            </Panel>
+            <Separator className="resize-handle my-10 mx-2" />
+            <Panel defaultSize={50} minSize={25}>
+              <div>
+                <CodingBlock
+                  mode={mode}
+                  questionId={id ?? ""}
+                  setRunTestCaseResults={setRunTestCaseResults}
+                  setSubmitTestCaseResults={setSubmitTestCaseResults}
+                  setTabPage={setTabPage}
+                  setSubmissionRefetch={setSubmissionRefetch}
+                  setCode={setCode}
+                  code={code}
+                  setLanguage={setLanguage}
+                  language={language}
+                  startAiReview={startAiReview}
+                  performingAiReview={performingAiReview}
+                  onSubmitModuleRefresh={() => {
+                    if (mode.type === "module") {
+                      queryClient.invalidateQueries({
+                        queryKey: ["module-problem", mode.moduleProblemId],
+                      });
+                      queryClient.invalidateQueries({
+                        queryKey: [
+                          "module-problems-list",
+                          moduleQuery.data?.module.id,
+                        ],
+                      });
+                    }
+                  }}
+                />
+              </div>
+            </Panel>
+          </Group>
         </div>
       </div>
     </div>

@@ -299,3 +299,16 @@
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
   overflow: hidden;
 }
+
+.resize-handle {
+  padding-top: 10px;
+  width: 2px;
+  cursor: col-resize;
+  background: #3f3f46;
+}
+
+.resize-handle:hover {
+  width: 4px;
+
+  background: #71717a;
+}
