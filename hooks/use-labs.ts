@@ -11,6 +11,7 @@ export interface TeacherLab {
   createdAt: string;
   updatedAt: string;
   modulesCount: number;
+  assignedGroupsCount?: number;
 }
 
 export interface TeacherLabPagination {
