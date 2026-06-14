@@ -258,11 +258,31 @@ function CreateGroup() {
                         onClick={() =>
                           setNewGroupData((prev) => ({
                             ...prev,
-                            type: "LAB",
+                            type: "BATCH",
                           }))
                         }
                       >
-                        Lab
+                        Batch
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        onClick={() =>
+                          setNewGroupData((prev) => ({
+                            ...prev,
+                            type: "SECTION",
+                          }))
+                        }
+                      >
+                        Section
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        onClick={() =>
+                          setNewGroupData((prev) => ({
+                            ...prev,
+                            type: "CUSTOM",
+                          }))
+                        }
+                      >
+                        Custom
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>

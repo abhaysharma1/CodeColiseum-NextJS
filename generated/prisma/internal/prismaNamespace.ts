@@ -3744,6 +3744,7 @@ export const GroupScalarFieldEnum = {
   creatorId: 'creatorId',
   noOfMembers: 'noOfMembers',
   createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
   joinByLink: 'joinByLink',
   type: 'type',
   aiEnabled: 'aiEnabled',

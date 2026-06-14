@@ -98,7 +98,9 @@ export type ExamAttemptStatus = (typeof ExamAttemptStatus)[keyof typeof ExamAtte
 
 export const groupType = {
   CLASS: 'CLASS',
-  LAB: 'LAB'
+  BATCH: 'BATCH',
+  SECTION: 'SECTION',
+  CUSTOM: 'CUSTOM'
 } as const
 
 export type groupType = (typeof groupType)[keyof typeof groupType]

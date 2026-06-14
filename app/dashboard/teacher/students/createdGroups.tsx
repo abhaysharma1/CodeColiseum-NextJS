@@ -262,8 +262,14 @@ function CreatedGroups() {
             <DropdownMenuItem onClick={() => setGroupType("CLASS")}>
               Class
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setGroupType("LAB")}>
-              Lab
+            <DropdownMenuItem onClick={() => setGroupType("BATCH")}>
+              Batch
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setGroupType("SECTION")}>
+              Section
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setGroupType("CUSTOM")}>
+              Custom
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

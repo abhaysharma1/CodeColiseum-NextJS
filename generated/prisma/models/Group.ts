@@ -45,6 +45,7 @@ export type GroupMinAggregateOutputType = {
   creatorId: string | null
   noOfMembers: number | null
   createdAt: Date | null
+  updatedAt: Date | null
   joinByLink: boolean | null
   type: $Enums.groupType | null
   aiEnabled: boolean | null
@@ -59,6 +60,7 @@ export type GroupMaxAggregateOutputType = {
   creatorId: string | null
   noOfMembers: number | null
   createdAt: Date | null
+  updatedAt: Date | null
   joinByLink: boolean | null
   type: $Enums.groupType | null
   aiEnabled: boolean | null
@@ -73,6 +75,7 @@ export type GroupCountAggregateOutputType = {
   creatorId: number
   noOfMembers: number
   createdAt: number
+  updatedAt: number
   joinByLink: number
   type: number
   aiEnabled: number
@@ -101,6 +104,7 @@ export type GroupMinAggregateInputType = {
   creatorId?: true
   noOfMembers?: true
   createdAt?: true
+  updatedAt?: true
   joinByLink?: true
   type?: true
   aiEnabled?: true
@@ -115,6 +119,7 @@ export type GroupMaxAggregateInputType = {
   creatorId?: true
   noOfMembers?: true
   createdAt?: true
+  updatedAt?: true
   joinByLink?: true
   type?: true
   aiEnabled?: true
@@ -129,6 +134,7 @@ export type GroupCountAggregateInputType = {
   creatorId?: true
   noOfMembers?: true
   createdAt?: true
+  updatedAt?: true
   joinByLink?: true
   type?: true
   aiEnabled?: true
@@ -230,6 +236,7 @@ export type GroupGroupByOutputType = {
   creatorId: string
   noOfMembers: number
   createdAt: Date
+  updatedAt: Date
   joinByLink: boolean
   type: $Enums.groupType
   aiEnabled: boolean
@@ -267,6 +274,7 @@ export type GroupWhereInput = {
   creatorId?: Prisma.StringFilter<"Group"> | string
   noOfMembers?: Prisma.IntFilter<"Group"> | number
   createdAt?: Prisma.DateTimeFilter<"Group"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Group"> | Date | string
   joinByLink?: Prisma.BoolFilter<"Group"> | boolean
   type?: Prisma.EnumgroupTypeFilter<"Group"> | $Enums.groupType
   aiEnabled?: Prisma.BoolFilter<"Group"> | boolean
@@ -290,6 +298,7 @@ export type GroupOrderByWithRelationInput = {
   creatorId?: Prisma.SortOrder
   noOfMembers?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   joinByLink?: Prisma.SortOrder
   type?: Prisma.SortOrder
   aiEnabled?: Prisma.SortOrder
@@ -316,6 +325,7 @@ export type GroupWhereUniqueInput = Prisma.AtLeast<{
   creatorId?: Prisma.StringFilter<"Group"> | string
   noOfMembers?: Prisma.IntFilter<"Group"> | number
   createdAt?: Prisma.DateTimeFilter<"Group"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Group"> | Date | string
   joinByLink?: Prisma.BoolFilter<"Group"> | boolean
   type?: Prisma.EnumgroupTypeFilter<"Group"> | $Enums.groupType
   aiEnabled?: Prisma.BoolFilter<"Group"> | boolean
@@ -339,6 +349,7 @@ export type GroupOrderByWithAggregationInput = {
   creatorId?: Prisma.SortOrder
   noOfMembers?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   joinByLink?: Prisma.SortOrder
   type?: Prisma.SortOrder
   aiEnabled?: Prisma.SortOrder
@@ -361,6 +372,7 @@ export type GroupScalarWhereWithAggregatesInput = {
   creatorId?: Prisma.StringWithAggregatesFilter<"Group"> | string
   noOfMembers?: Prisma.IntWithAggregatesFilter<"Group"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Group"> | Date | string
+  updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Group"> | Date | string
   joinByLink?: Prisma.BoolWithAggregatesFilter<"Group"> | boolean
   type?: Prisma.EnumgroupTypeWithAggregatesFilter<"Group"> | $Enums.groupType
   aiEnabled?: Prisma.BoolWithAggregatesFilter<"Group"> | boolean
@@ -374,6 +386,7 @@ export type GroupCreateInput = {
   description?: string | null
   noOfMembers?: number
   createdAt?: Date | string
+  updatedAt?: Date | string
   joinByLink?: boolean
   type?: $Enums.groupType
   aiEnabled?: boolean
@@ -397,6 +410,7 @@ export type GroupUncheckedCreateInput = {
   creatorId: string
   noOfMembers?: number
   createdAt?: Date | string
+  updatedAt?: Date | string
   joinByLink?: boolean
   type?: $Enums.groupType
   aiEnabled?: boolean
@@ -418,6 +432,7 @@ export type GroupUpdateInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   noOfMembers?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   joinByLink?: Prisma.BoolFieldUpdateOperationsInput | boolean
   type?: Prisma.EnumgroupTypeFieldUpdateOperationsInput | $Enums.groupType
   aiEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -441,6 +456,7 @@ export type GroupUncheckedUpdateInput = {
   creatorId?: Prisma.StringFieldUpdateOperationsInput | string
   noOfMembers?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   joinByLink?: Prisma.BoolFieldUpdateOperationsInput | boolean
   type?: Prisma.EnumgroupTypeFieldUpdateOperationsInput | $Enums.groupType
   aiEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -463,6 +479,7 @@ export type GroupCreateManyInput = {
   creatorId: string
   noOfMembers?: number
   createdAt?: Date | string
+  updatedAt?: Date | string
   joinByLink?: boolean
   type?: $Enums.groupType
   aiEnabled?: boolean
@@ -476,6 +493,7 @@ export type GroupUpdateManyMutationInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   noOfMembers?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   joinByLink?: Prisma.BoolFieldUpdateOperationsInput | boolean
   type?: Prisma.EnumgroupTypeFieldUpdateOperationsInput | $Enums.groupType
   aiEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -490,6 +508,7 @@ export type GroupUncheckedUpdateManyInput = {
   creatorId?: Prisma.StringFieldUpdateOperationsInput | string
   noOfMembers?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   joinByLink?: Prisma.BoolFieldUpdateOperationsInput | boolean
   type?: Prisma.EnumgroupTypeFieldUpdateOperationsInput | $Enums.groupType
   aiEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -519,6 +538,7 @@ export type GroupCountOrderByAggregateInput = {
   creatorId?: Prisma.SortOrder
   noOfMembers?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   joinByLink?: Prisma.SortOrder
   type?: Prisma.SortOrder
   aiEnabled?: Prisma.SortOrder
@@ -539,6 +559,7 @@ export type GroupMaxOrderByAggregateInput = {
   creatorId?: Prisma.SortOrder
   noOfMembers?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   joinByLink?: Prisma.SortOrder
   type?: Prisma.SortOrder
   aiEnabled?: Prisma.SortOrder
@@ -553,6 +574,7 @@ export type GroupMinOrderByAggregateInput = {
   creatorId?: Prisma.SortOrder
   noOfMembers?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   joinByLink?: Prisma.SortOrder
   type?: Prisma.SortOrder
   aiEnabled?: Prisma.SortOrder
@@ -730,6 +752,7 @@ export type GroupCreateWithoutCreatorInput = {
   description?: string | null
   noOfMembers?: number
   createdAt?: Date | string
+  updatedAt?: Date | string
   joinByLink?: boolean
   type?: $Enums.groupType
   aiEnabled?: boolean
@@ -751,6 +774,7 @@ export type GroupUncheckedCreateWithoutCreatorInput = {
   description?: string | null
   noOfMembers?: number
   createdAt?: Date | string
+  updatedAt?: Date | string
   joinByLink?: boolean
   type?: $Enums.groupType
   aiEnabled?: boolean
@@ -802,6 +826,7 @@ export type GroupScalarWhereInput = {
   creatorId?: Prisma.StringFilter<"Group"> | string
   noOfMembers?: Prisma.IntFilter<"Group"> | number
   createdAt?: Prisma.DateTimeFilter<"Group"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Group"> | Date | string
   joinByLink?: Prisma.BoolFilter<"Group"> | boolean
   type?: Prisma.EnumgroupTypeFilter<"Group"> | $Enums.groupType
   aiEnabled?: Prisma.BoolFilter<"Group"> | boolean
@@ -815,6 +840,7 @@ export type GroupCreateWithoutExamGroupsInput = {
   description?: string | null
   noOfMembers?: number
   createdAt?: Date | string
+  updatedAt?: Date | string
   joinByLink?: boolean
   type?: $Enums.groupType
   aiEnabled?: boolean
@@ -837,6 +863,7 @@ export type GroupUncheckedCreateWithoutExamGroupsInput = {
   creatorId: string
   noOfMembers?: number
   createdAt?: Date | string
+  updatedAt?: Date | string
   joinByLink?: boolean
   type?: $Enums.groupType
   aiEnabled?: boolean
@@ -873,6 +900,7 @@ export type GroupUpdateWithoutExamGroupsInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   noOfMembers?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   joinByLink?: Prisma.BoolFieldUpdateOperationsInput | boolean
   type?: Prisma.EnumgroupTypeFieldUpdateOperationsInput | $Enums.groupType
   aiEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -895,6 +923,7 @@ export type GroupUncheckedUpdateWithoutExamGroupsInput = {
   creatorId?: Prisma.StringFieldUpdateOperationsInput | string
   noOfMembers?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   joinByLink?: Prisma.BoolFieldUpdateOperationsInput | boolean
   type?: Prisma.EnumgroupTypeFieldUpdateOperationsInput | $Enums.groupType
   aiEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -915,6 +944,7 @@ export type GroupCreateWithoutMembersInput = {
   description?: string | null
   noOfMembers?: number
   createdAt?: Date | string
+  updatedAt?: Date | string
   joinByLink?: boolean
   type?: $Enums.groupType
   aiEnabled?: boolean
@@ -937,6 +967,7 @@ export type GroupUncheckedCreateWithoutMembersInput = {
   creatorId: string
   noOfMembers?: number
   createdAt?: Date | string
+  updatedAt?: Date | string
   joinByLink?: boolean
   type?: $Enums.groupType
   aiEnabled?: boolean
@@ -973,6 +1004,7 @@ export type GroupUpdateWithoutMembersInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   noOfMembers?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   joinByLink?: Prisma.BoolFieldUpdateOperationsInput | boolean
   type?: Prisma.EnumgroupTypeFieldUpdateOperationsInput | $Enums.groupType
   aiEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -995,6 +1027,7 @@ export type GroupUncheckedUpdateWithoutMembersInput = {
   creatorId?: Prisma.StringFieldUpdateOperationsInput | string
   noOfMembers?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   joinByLink?: Prisma.BoolFieldUpdateOperationsInput | boolean
   type?: Prisma.EnumgroupTypeFieldUpdateOperationsInput | $Enums.groupType
   aiEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1015,6 +1048,7 @@ export type GroupCreateWithoutAiconversationsInput = {
   description?: string | null
   noOfMembers?: number
   createdAt?: Date | string
+  updatedAt?: Date | string
   joinByLink?: boolean
   type?: $Enums.groupType
   aiEnabled?: boolean
@@ -1037,6 +1071,7 @@ export type GroupUncheckedCreateWithoutAiconversationsInput = {
   creatorId: string
   noOfMembers?: number
   createdAt?: Date | string
+  updatedAt?: Date | string
   joinByLink?: boolean
   type?: $Enums.groupType
   aiEnabled?: boolean
@@ -1073,6 +1108,7 @@ export type GroupUpdateWithoutAiconversationsInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   noOfMembers?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   joinByLink?: Prisma.BoolFieldUpdateOperationsInput | boolean
   type?: Prisma.EnumgroupTypeFieldUpdateOperationsInput | $Enums.groupType
   aiEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1095,6 +1131,7 @@ export type GroupUncheckedUpdateWithoutAiconversationsInput = {
   creatorId?: Prisma.StringFieldUpdateOperationsInput | string
   noOfMembers?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   joinByLink?: Prisma.BoolFieldUpdateOperationsInput | boolean
   type?: Prisma.EnumgroupTypeFieldUpdateOperationsInput | $Enums.groupType
   aiEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1115,6 +1152,7 @@ export type GroupCreateWithoutGroupOverallStatsInput = {
   description?: string | null
   noOfMembers?: number
   createdAt?: Date | string
+  updatedAt?: Date | string
   joinByLink?: boolean
   type?: $Enums.groupType
   aiEnabled?: boolean
@@ -1137,6 +1175,7 @@ export type GroupUncheckedCreateWithoutGroupOverallStatsInput = {
   creatorId: string
   noOfMembers?: number
   createdAt?: Date | string
+  updatedAt?: Date | string
   joinByLink?: boolean
   type?: $Enums.groupType
   aiEnabled?: boolean
@@ -1173,6 +1212,7 @@ export type GroupUpdateWithoutGroupOverallStatsInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   noOfMembers?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   joinByLink?: Prisma.BoolFieldUpdateOperationsInput | boolean
   type?: Prisma.EnumgroupTypeFieldUpdateOperationsInput | $Enums.groupType
   aiEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1195,6 +1235,7 @@ export type GroupUncheckedUpdateWithoutGroupOverallStatsInput = {
   creatorId?: Prisma.StringFieldUpdateOperationsInput | string
   noOfMembers?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   joinByLink?: Prisma.BoolFieldUpdateOperationsInput | boolean
   type?: Prisma.EnumgroupTypeFieldUpdateOperationsInput | $Enums.groupType
   aiEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1215,6 +1256,7 @@ export type GroupCreateWithoutStudentOverallStatsInput = {
   description?: string | null
   noOfMembers?: number
   createdAt?: Date | string
+  updatedAt?: Date | string
   joinByLink?: boolean
   type?: $Enums.groupType
   aiEnabled?: boolean
@@ -1237,6 +1279,7 @@ export type GroupUncheckedCreateWithoutStudentOverallStatsInput = {
   creatorId: string
   noOfMembers?: number
   createdAt?: Date | string
+  updatedAt?: Date | string
   joinByLink?: boolean
   type?: $Enums.groupType
   aiEnabled?: boolean
@@ -1273,6 +1316,7 @@ export type GroupUpdateWithoutStudentOverallStatsInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   noOfMembers?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   joinByLink?: Prisma.BoolFieldUpdateOperationsInput | boolean
   type?: Prisma.EnumgroupTypeFieldUpdateOperationsInput | $Enums.groupType
   aiEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1295,6 +1339,7 @@ export type GroupUncheckedUpdateWithoutStudentOverallStatsInput = {
   creatorId?: Prisma.StringFieldUpdateOperationsInput | string
   noOfMembers?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   joinByLink?: Prisma.BoolFieldUpdateOperationsInput | boolean
   type?: Prisma.EnumgroupTypeFieldUpdateOperationsInput | $Enums.groupType
   aiEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1315,6 +1360,7 @@ export type GroupCreateWithoutGroupProblemStatsInput = {
   description?: string | null
   noOfMembers?: number
   createdAt?: Date | string
+  updatedAt?: Date | string
   joinByLink?: boolean
   type?: $Enums.groupType
   aiEnabled?: boolean
@@ -1337,6 +1383,7 @@ export type GroupUncheckedCreateWithoutGroupProblemStatsInput = {
   creatorId: string
   noOfMembers?: number
   createdAt?: Date | string
+  updatedAt?: Date | string
   joinByLink?: boolean
   type?: $Enums.groupType
   aiEnabled?: boolean
@@ -1373,6 +1420,7 @@ export type GroupUpdateWithoutGroupProblemStatsInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   noOfMembers?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   joinByLink?: Prisma.BoolFieldUpdateOperationsInput | boolean
   type?: Prisma.EnumgroupTypeFieldUpdateOperationsInput | $Enums.groupType
   aiEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1395,6 +1443,7 @@ export type GroupUncheckedUpdateWithoutGroupProblemStatsInput = {
   creatorId?: Prisma.StringFieldUpdateOperationsInput | string
   noOfMembers?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   joinByLink?: Prisma.BoolFieldUpdateOperationsInput | boolean
   type?: Prisma.EnumgroupTypeFieldUpdateOperationsInput | $Enums.groupType
   aiEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1415,6 +1464,7 @@ export type GroupCreateWithoutStudentProblemStatsInput = {
   description?: string | null
   noOfMembers?: number
   createdAt?: Date | string
+  updatedAt?: Date | string
   joinByLink?: boolean
   type?: $Enums.groupType
   aiEnabled?: boolean
@@ -1437,6 +1487,7 @@ export type GroupUncheckedCreateWithoutStudentProblemStatsInput = {
   creatorId: string
   noOfMembers?: number
   createdAt?: Date | string
+  updatedAt?: Date | string
   joinByLink?: boolean
   type?: $Enums.groupType
   aiEnabled?: boolean
@@ -1473,6 +1524,7 @@ export type GroupUpdateWithoutStudentProblemStatsInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   noOfMembers?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   joinByLink?: Prisma.BoolFieldUpdateOperationsInput | boolean
   type?: Prisma.EnumgroupTypeFieldUpdateOperationsInput | $Enums.groupType
   aiEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1495,6 +1547,7 @@ export type GroupUncheckedUpdateWithoutStudentProblemStatsInput = {
   creatorId?: Prisma.StringFieldUpdateOperationsInput | string
   noOfMembers?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   joinByLink?: Prisma.BoolFieldUpdateOperationsInput | boolean
   type?: Prisma.EnumgroupTypeFieldUpdateOperationsInput | $Enums.groupType
   aiEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1515,6 +1568,7 @@ export type GroupCreateWithoutGroupExamAnalyticsInput = {
   description?: string | null
   noOfMembers?: number
   createdAt?: Date | string
+  updatedAt?: Date | string
   joinByLink?: boolean
   type?: $Enums.groupType
   aiEnabled?: boolean
@@ -1537,6 +1591,7 @@ export type GroupUncheckedCreateWithoutGroupExamAnalyticsInput = {
   creatorId: string
   noOfMembers?: number
   createdAt?: Date | string
+  updatedAt?: Date | string
   joinByLink?: boolean
   type?: $Enums.groupType
   aiEnabled?: boolean
@@ -1573,6 +1628,7 @@ export type GroupUpdateWithoutGroupExamAnalyticsInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   noOfMembers?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   joinByLink?: Prisma.BoolFieldUpdateOperationsInput | boolean
   type?: Prisma.EnumgroupTypeFieldUpdateOperationsInput | $Enums.groupType
   aiEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1595,6 +1651,7 @@ export type GroupUncheckedUpdateWithoutGroupExamAnalyticsInput = {
   creatorId?: Prisma.StringFieldUpdateOperationsInput | string
   noOfMembers?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   joinByLink?: Prisma.BoolFieldUpdateOperationsInput | boolean
   type?: Prisma.EnumgroupTypeFieldUpdateOperationsInput | $Enums.groupType
   aiEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1615,6 +1672,7 @@ export type GroupCreateManyCreatorInput = {
   description?: string | null
   noOfMembers?: number
   createdAt?: Date | string
+  updatedAt?: Date | string
   joinByLink?: boolean
   type?: $Enums.groupType
   aiEnabled?: boolean
@@ -1628,6 +1686,7 @@ export type GroupUpdateWithoutCreatorInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   noOfMembers?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   joinByLink?: Prisma.BoolFieldUpdateOperationsInput | boolean
   type?: Prisma.EnumgroupTypeFieldUpdateOperationsInput | $Enums.groupType
   aiEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1649,6 +1708,7 @@ export type GroupUncheckedUpdateWithoutCreatorInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   noOfMembers?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   joinByLink?: Prisma.BoolFieldUpdateOperationsInput | boolean
   type?: Prisma.EnumgroupTypeFieldUpdateOperationsInput | $Enums.groupType
   aiEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1670,6 +1730,7 @@ export type GroupUncheckedUpdateManyWithoutCreatorInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   noOfMembers?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   joinByLink?: Prisma.BoolFieldUpdateOperationsInput | boolean
   type?: Prisma.EnumgroupTypeFieldUpdateOperationsInput | $Enums.groupType
   aiEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1769,6 +1830,7 @@ export type GroupSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   creatorId?: boolean
   noOfMembers?: boolean
   createdAt?: boolean
+  updatedAt?: boolean
   joinByLink?: boolean
   type?: boolean
   aiEnabled?: boolean
@@ -1793,6 +1855,7 @@ export type GroupSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   creatorId?: boolean
   noOfMembers?: boolean
   createdAt?: boolean
+  updatedAt?: boolean
   joinByLink?: boolean
   type?: boolean
   aiEnabled?: boolean
@@ -1808,6 +1871,7 @@ export type GroupSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   creatorId?: boolean
   noOfMembers?: boolean
   createdAt?: boolean
+  updatedAt?: boolean
   joinByLink?: boolean
   type?: boolean
   aiEnabled?: boolean
@@ -1823,6 +1887,7 @@ export type GroupSelectScalar = {
   creatorId?: boolean
   noOfMembers?: boolean
   createdAt?: boolean
+  updatedAt?: boolean
   joinByLink?: boolean
   type?: boolean
   aiEnabled?: boolean
@@ -1830,7 +1895,7 @@ export type GroupSelectScalar = {
   aiMaxTokens?: boolean
 }
 
-export type GroupOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "creatorId" | "noOfMembers" | "createdAt" | "joinByLink" | "type" | "aiEnabled" | "aiMaxMessages" | "aiMaxTokens", ExtArgs["result"]["group"]>
+export type GroupOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "creatorId" | "noOfMembers" | "createdAt" | "updatedAt" | "joinByLink" | "type" | "aiEnabled" | "aiMaxMessages" | "aiMaxTokens", ExtArgs["result"]["group"]>
 export type GroupInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   creator?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   members?: boolean | Prisma.Group$membersArgs<ExtArgs>
@@ -1870,6 +1935,7 @@ export type $GroupPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     creatorId: string
     noOfMembers: number
     createdAt: Date
+    updatedAt: Date
     joinByLink: boolean
     type: $Enums.groupType
     aiEnabled: boolean
@@ -2313,6 +2379,7 @@ export interface GroupFieldRefs {
   readonly creatorId: Prisma.FieldRef<"Group", 'String'>
   readonly noOfMembers: Prisma.FieldRef<"Group", 'Int'>
   readonly createdAt: Prisma.FieldRef<"Group", 'DateTime'>
+  readonly updatedAt: Prisma.FieldRef<"Group", 'DateTime'>
   readonly joinByLink: Prisma.FieldRef<"Group", 'Boolean'>
   readonly type: Prisma.FieldRef<"Group", 'groupType'>
   readonly aiEnabled: Prisma.FieldRef<"Group", 'Boolean'>

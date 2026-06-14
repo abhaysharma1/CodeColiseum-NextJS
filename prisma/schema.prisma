@@ -480,6 +480,7 @@ model Group {
   members     GroupMember[]
   noOfMembers Int           @default(0)
   createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
   joinByLink  Boolean       @default(true)
   examGroups  ExamGroup[]
   type        groupType     @default(CLASS)
@@ -499,7 +500,9 @@ model Group {
 
 enum groupType {
   CLASS
-  LAB
+  BATCH
+  SECTION
+  CUSTOM
 }
 
 model GroupMember {

@@ -44,6 +44,7 @@ import {
   Users,
   Calendar,
   Hash,
+  Beaker,
   Mail,
   UserPlus,
   Sparkles,
@@ -585,16 +586,87 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
         </div>
       </div>
 
-      {/* Members Section */}
+      {/* Tabs Section */}
       <div className="container mx-auto px-6 py-8">
-        <Tabs defaultValue="members" className="space-y-4">
-          <TabsList>
-            <TabsTrigger value="members">Members</TabsTrigger>
-            <TabsTrigger value="exams">Exams</TabsTrigger>
+        <Tabs defaultValue="overview" className="space-y-4">
+          <TabsList className="flex-wrap">
+            <TabsTrigger value="overview">Overview</TabsTrigger>
+            <TabsTrigger value="students">Students</TabsTrigger>
+            <TabsTrigger value="exams">Assigned Exams</TabsTrigger>
+            <TabsTrigger value="labs">Assigned Labs</TabsTrigger>
+            <TabsTrigger value="analytics">Analytics</TabsTrigger>
+            <TabsTrigger value="settings">Settings</TabsTrigger>
           </TabsList>
 
-          <TabsContent value="members" className="space-y-6">
-            {/* Add Member Card */}
+          {/* Overview Tab */}
+          <TabsContent value="overview">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              <Card>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
+                    <Users className="h-4 w-4" /> Students
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-2xl font-bold">{totalMembers || groupMembers?.length || 0}</p>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
+                    <FileText className="h-4 w-4" /> Exams
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-2xl font-bold">{groupExams.length}</p>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
+                    <Bot className="h-4 w-4" /> AI Assist
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <Badge variant={groupData?.aiEnabled ? "default" : "outline"}>
+                    {groupData?.aiEnabled ? "Enabled" : "Disabled"}
+                  </Badge>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
+                    <Calendar className="h-4 w-4" /> Created
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm font-medium">
+                    {groupData?.createdAt
+                      ? new Date(groupData.createdAt).toLocaleDateString(undefined, {
+                          year: "numeric",
+                          month: "short",
+                          day: "numeric",
+                        })
+                      : "—"}
+                  </p>
+                </CardContent>
+              </Card>
+            </div>
+
+            {groupData?.description && (
+              <Card className="mt-4">
+                <CardHeader>
+                  <CardTitle className="text-sm font-medium text-muted-foreground">Description</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm">{groupData.description}</p>
+                </CardContent>
+              </Card>
+            )}
+          </TabsContent>
+
+          {/* Students Tab (was Members) */}
+          <TabsContent value="students" className="space-y-6">
             <Card className="border-dashed">
               <CardHeader>
                 <CardTitle className="text-lg flex items-center gap-2">
@@ -629,7 +701,6 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
               </CardContent>
             </Card>
 
-            {/* Members List Card */}
             <Card>
               <CardHeader>
                 <CardTitle className="text-2xl flex items-center gap-2">
@@ -712,10 +783,7 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
 
                               <div className="flex items-center gap-2 shrink-0">
                                 {member.emailVerified && (
-                                  <Badge
-                                    variant="secondary"
-                                    className="text-xs"
-                                  >
+                                  <Badge variant="secondary" className="text-xs">
                                     Verified
                                   </Badge>
                                 )}
@@ -748,111 +816,72 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
                             {statsLoading ? (
                               <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 pt-1 pb-2">
                                 {Array.from({ length: 4 }).map((_, i) => (
-                                  <Skeleton
-                                    key={i}
-                                    className="h-24 w-full rounded-lg"
-                                  />
+                                  <Skeleton key={i} className="h-24 w-full rounded-lg" />
                                 ))}
                               </div>
                             ) : stats ? (
                               <div className="space-y-3 pt-1 pb-2">
                                 <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-                                  {/* Total Score */}
                                   <div className="rounded-lg border bg-card p-3 space-y-2">
                                     <div className="flex items-center gap-2">
                                       <div className="flex h-7 w-7 items-center justify-center rounded-md bg-amber-500/10">
                                         <Trophy className="h-3.5 w-3.5 text-amber-500" />
                                       </div>
-                                      <span className="text-xs text-muted-foreground">
-                                        Total Score
-                                      </span>
+                                      <span className="text-xs text-muted-foreground">Total Score</span>
                                     </div>
-                                    <p className="text-xl font-bold tracking-tight">
-                                      {stats.totalScore}
-                                    </p>
+                                    <p className="text-xl font-bold tracking-tight">{stats.totalScore}</p>
                                   </div>
-
-                                  {/* Total Exams */}
                                   <div className="rounded-lg border bg-card p-3 space-y-2">
                                     <div className="flex items-center gap-2">
                                       <div className="flex h-7 w-7 items-center justify-center rounded-md bg-blue-500/10">
                                         <FileText className="h-3.5 w-3.5 text-blue-500" />
                                       </div>
-                                      <span className="text-xs text-muted-foreground">
-                                        Total Exams
-                                      </span>
+                                      <span className="text-xs text-muted-foreground">Total Exams</span>
                                     </div>
-                                    <p className="text-xl font-bold tracking-tight">
-                                      {stats.totalExams}
-                                    </p>
+                                    <p className="text-xl font-bold tracking-tight">{stats.totalExams}</p>
                                   </div>
-
-                                  {/* Avg Score */}
                                   <div className="rounded-lg border bg-card p-3 space-y-2">
                                     <div className="flex items-center gap-2">
                                       <div className="flex h-7 w-7 items-center justify-center rounded-md bg-emerald-500/10">
                                         <BarChart3 className="h-3.5 w-3.5 text-emerald-500" />
                                       </div>
-                                      <span className="text-xs text-muted-foreground">
-                                        Avg Score
-                                      </span>
+                                      <span className="text-xs text-muted-foreground">Avg Score</span>
                                     </div>
-                                    <p className="text-xl font-bold tracking-tight">
-                                      {stats.avgScore.toFixed(1)}
-                                    </p>
+                                    <p className="text-xl font-bold tracking-tight">{stats.avgScore.toFixed(1)}</p>
                                   </div>
-
-                                  {/* Total Attempts */}
                                   <div className="rounded-lg border bg-card p-3 space-y-2">
                                     <div className="flex items-center gap-2">
                                       <div className="flex h-7 w-7 items-center justify-center rounded-md bg-violet-500/10">
                                         <RotateCcw className="h-3.5 w-3.5 text-violet-500" />
                                       </div>
-                                      <span className="text-xs text-muted-foreground">
-                                        Total Attempts
-                                      </span>
+                                      <span className="text-xs text-muted-foreground">Total Attempts</span>
                                     </div>
-                                    <p className="text-xl font-bold tracking-tight">
-                                      {stats.totalAttempts}
-                                    </p>
+                                    <p className="text-xl font-bold tracking-tight">{stats.totalAttempts}</p>
                                   </div>
                                 </div>
-
-                                {/* Score bar */}
                                 {stats.totalExams > 0 && (
                                   <div className="flex items-center gap-3 px-1">
-                                    <span className="text-xs text-muted-foreground shrink-0">
-                                      Performance
-                                    </span>
+                                    <span className="text-xs text-muted-foreground shrink-0">Performance</span>
                                     <Progress
                                       value={Math.min(
                                         (stats.avgScore /
-                                          (stats.totalScore / stats.totalExams >
-                                          0
-                                            ? stats.totalScore /
-                                              stats.totalExams
-                                            : 1)) *
-                                          100,
+                                          (stats.totalScore / stats.totalExams > 0
+                                            ? stats.totalScore / stats.totalExams
+                                            : 1)) * 100,
                                         100
                                       )}
                                       className="h-1.5 flex-1"
                                     />
-                                    <span className="text-xs font-medium shrink-0">
-                                      {stats.avgScore.toFixed(0)} avg
-                                    </span>
+                                    <span className="text-xs font-medium shrink-0">{stats.avgScore.toFixed(0)} avg</span>
                                   </div>
                                 )}
-
                                 <p className="text-[11px] text-muted-foreground px-1">
-                                  Last updated:{" "}
-                                  {new Date(stats.updatedAt).toLocaleString()}
+                                  Last updated: {new Date(stats.updatedAt).toLocaleString()}
                                 </p>
                               </div>
                             ) : (
                               <div className="text-center py-6">
-                                <p className="text-sm text-muted-foreground">
-                                  No stats available for this student yet.
-                                </p>
+                                <p className="text-sm text-muted-foreground">No stats available for this student yet.</p>
                               </div>
                             )}
                           </AccordionContent>
@@ -864,9 +893,7 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
                   <div className="text-center py-12">
                     <Users className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
                     <p className="text-lg font-medium text-muted-foreground">
-                      {searchValue
-                        ? "No members match your search"
-                        : "No members in this group yet"}
+                      {searchValue ? "No members match your search" : "No members in this group yet"}
                     </p>
                   </div>
                 )}
@@ -886,12 +913,13 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
             </Card>
           </TabsContent>
 
+          {/* Assigned Exams Tab */}
           <TabsContent value="exams">
             <Card>
               <CardHeader>
                 <CardTitle className="text-2xl flex items-center gap-2">
                   <FileText className="h-6 w-6" />
-                  Group Exams
+                  Assigned Exams
                 </CardTitle>
                 <CardDescription>
                   {groupExams.length} exams linked to this group
@@ -901,10 +929,7 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
                 {examsLoading ? (
                   <div className="space-y-4">
                     {[1, 2, 3].map((i) => (
-                      <div
-                        key={i}
-                        className="flex items-center justify-between gap-4"
-                      >
+                      <div key={i} className="flex items-center justify-between gap-4">
                         <div className="space-y-2 flex-1">
                           <Skeleton className="h-4 w-40" />
                           <Skeleton className="h-3 w-64" />
@@ -923,32 +948,17 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
                         : `/dashboard/teacher/tests/edit/${exam.id}`;
 
                       return (
-                        <div
-                          key={exam.id}
-                          className="flex items-center justify-between gap-4 rounded-lg border bg-card px-4 py-3"
-                        >
+                        <div key={exam.id} className="flex items-center justify-between gap-4 rounded-lg border bg-card px-4 py-3">
                           <div className="flex flex-col gap-1 flex-1 min-w-0">
-                            <p className="font-semibold truncate">
-                              {exam.title}
-                            </p>
+                            <p className="font-semibold truncate">{exam.title}</p>
                             <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
-                              <span>
-                                {new Date(exam.startDate).toLocaleString()} –{" "}
-                                {new Date(exam.endDate).toLocaleString()}
-                              </span>
-                              <Badge variant="outline" className="capitalize">
-                                {isPublished ? "Published" : "Draft"}
-                              </Badge>
+                              <span>{new Date(exam.startDate).toLocaleString()} – {new Date(exam.endDate).toLocaleString()}</span>
+                              <Badge variant="outline" className="capitalize">{isPublished ? "Published" : "Draft"}</Badge>
                             </div>
                           </div>
                           <div className="shrink-0">
                             <Link href={actionHref}>
-                              <Button
-                                className="cursor-pointer"
-                                variant="outline"
-                              >
-                                {actionLabel}
-                              </Button>
+                              <Button className="cursor-pointer" variant="outline">{actionLabel}</Button>
                             </Link>
                           </div>
                         </div>
@@ -958,11 +968,190 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
                 ) : (
                   <div className="text-center py-12">
                     <FileText className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                    <p className="text-lg font-medium text-muted-foreground">
-                      No exams linked to this group yet
-                    </p>
+                    <p className="text-lg font-medium text-muted-foreground">No exams linked to this group yet</p>
                   </div>
                 )}
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* Assigned Labs Tab */}
+          <TabsContent value="labs">
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-2xl flex items-center gap-2">
+                  <Beaker className="h-6 w-6" />
+                  Assigned Labs
+                </CardTitle>
+                <CardDescription>
+                  Lab assignments for this group
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="text-center py-12">
+                  <Beaker className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                  <p className="text-lg font-medium text-muted-foreground mb-2">
+                    Lab management coming soon
+                  </p>
+                  <p className="text-sm text-muted-foreground max-w-md mx-auto">
+                    Lab assignments for this group will be displayed here. Visit the Labs section to assign labs to groups.
+                  </p>
+                  <Button variant="outline" className="mt-4" asChild>
+                    <Link href="/dashboard/teacher/labs">Go to Labs</Link>
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* Analytics Tab */}
+          <TabsContent value="analytics">
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-2xl flex items-center gap-2">
+                  <BarChart3 className="h-6 w-6" />
+                  Group Analytics
+                </CardTitle>
+                <CardDescription>
+                  View detailed analytics and performance metrics for this group
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="text-center py-12">
+                  <BarChart3 className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                  <p className="text-lg font-medium text-muted-foreground mb-2">
+                    Detailed analytics dashboard
+                  </p>
+                  <p className="text-sm text-muted-foreground max-w-md mx-auto mb-4">
+                    Access comprehensive analytics including score distributions, problem-wise performance, student rankings, and more.
+                  </p>
+                  <Button asChild>
+                    <Link href={`/dashboard/teacher/students/group/${id}/analytics`}>
+                      <BarChart3 className="h-4 w-4 mr-1" /> Open Analytics
+                    </Link>
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* Settings Tab */}
+          <TabsContent value="settings">
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-2xl flex items-center gap-2">
+                  <Pencil className="h-6 w-6" />
+                  Group Settings
+                </CardTitle>
+                <CardDescription>
+                  Update group name, description, type, and AI settings
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="space-y-2">
+                  <Label htmlFor="settingsName">Group Name</Label>
+                  <Input
+                    id="settingsName"
+                    placeholder="Enter group name"
+                    value={editedName}
+                    onChange={(e) => setEditedName(e.target.value)}
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="settingsDescription">Description</Label>
+                  <Input
+                    id="settingsDescription"
+                    placeholder="Enter group description (optional)"
+                    value={editedDescription}
+                    onChange={(e) => setEditedDescription(e.target.value)}
+                  />
+                </div>
+
+                <div className="flex gap-6 items-start">
+                  <div className="space-y-2">
+                    <Label>Group Type</Label>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="outline" className="w-28">
+                          {editedType[0] + editedType.slice(1).toLowerCase()}
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="start" className="w-32">
+                        <DropdownMenuItem onClick={() => setEditedType("CLASS")}>Class</DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => setEditedType("BATCH")}>Batch</DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => setEditedType("SECTION")}>Section</DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => setEditedType("CUSTOM")}>Custom</DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label>AI Assist</Label>
+                    <div className="flex gap-4 pt-2">
+                      <div className="flex items-center gap-2">
+                        <input
+                          type="radio"
+                          id="settings-ai-enable"
+                          checked={editedAiEnabled}
+                          onChange={() => setEditedAiEnabled(true)}
+                          className="cursor-pointer"
+                        />
+                        <Label htmlFor="settings-ai-enable" className="cursor-pointer text-sm">Enable</Label>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <input
+                          type="radio"
+                          id="settings-ai-disable"
+                          checked={!editedAiEnabled}
+                          onChange={() => setEditedAiEnabled(false)}
+                          className="cursor-pointer"
+                        />
+                        <Label htmlFor="settings-ai-disable" className="cursor-pointer text-sm">Disable</Label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {editedAiEnabled && (
+                  <div className="rounded-lg border border-dashed border-primary/40 bg-primary/5 p-4 space-y-4">
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-semibold text-primary">AI Settings</span>
+                      <span className="text-xs text-muted-foreground">Configure limits for AI Assist</span>
+                    </div>
+                    <div className="grid gap-4 sm:grid-cols-2">
+                      <div className="space-y-2">
+                        <Label htmlFor="settingsAiMessages">Max Messages</Label>
+                        <Input
+                          id="settingsAiMessages"
+                          type="number"
+                          min={1}
+                          value={editedAiMaxMessages}
+                          onChange={(e) => setEditedAiMaxMessages(Number(e.target.value))}
+                        />
+                        <p className="text-xs text-muted-foreground">Max AI messages per student per exam.</p>
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="settingsAiTokens">Max Tokens</Label>
+                        <Input
+                          id="settingsAiTokens"
+                          type="number"
+                          min={1}
+                          value={editedAiMaxTokens}
+                          onChange={(e) => setEditedAiMaxTokens(Number(e.target.value))}
+                        />
+                        <p className="text-xs text-muted-foreground">Max tokens the AI can use per student per exam.</p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                <div className="flex justify-end gap-3 pt-2">
+                  <Button variant="outline" onClick={() => handleEditClick()}>Reset</Button>
+                  <Button onClick={handleSaveEdit} disabled={savingGroup}>
+                    {savingGroup ? "Saving..." : "Save Changes"}
+                  </Button>
+                </div>
               </CardContent>
             </Card>
           </TabsContent>
@@ -1020,8 +1209,14 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
                     <DropdownMenuItem onClick={() => setEditedType("CLASS")}>
                       Class
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => setEditedType("LAB")}>
-                      Lab
+                    <DropdownMenuItem onClick={() => setEditedType("BATCH")}>
+                      Batch
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setEditedType("SECTION")}>
+                      Section
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setEditedType("CUSTOM")}>
+                      Custom
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
