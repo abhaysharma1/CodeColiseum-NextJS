@@ -32,12 +32,7 @@ import {
   DialogFooter,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/components/ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Table,
   TableBody,
@@ -82,17 +77,31 @@ export default function TeacherModuleDetailPage() {
   const searchParams = useSearchParams();
 
   const { data: mod, loading: modLoading } = useTeacherModule(moduleId);
-  const { data: problems, loading: problemsLoading, refetch: refetchProblems } = useTeacherModuleProblems(moduleId);
-  const { data: assessment, loading: assessmentLoading, refetch: refetchAssessment } = useTeacherAssessment(moduleId);
-  const { data: assessmentResults, loading: resultsLoading } = useTeacherAssessmentResults(moduleId);
-  const { data: studentProgress, loading: studentLoading } = useTeacherStudentProgress(moduleId);
-  const { data: problemAnalytics, loading: analyticsLoading } = useTeacherProblemAnalytics(moduleId);
+  const {
+    data: problems,
+    loading: problemsLoading,
+    refetch: refetchProblems,
+  } = useTeacherModuleProblems(moduleId);
+  const {
+    data: assessment,
+    loading: assessmentLoading,
+    refetch: refetchAssessment,
+  } = useTeacherAssessment(moduleId);
+  const { data: assessmentResults, loading: resultsLoading } =
+    useTeacherAssessmentResults(moduleId);
+  const { data: studentProgress, loading: studentLoading } =
+    useTeacherStudentProgress(moduleId);
+  const { data: problemAnalytics, loading: analyticsLoading } =
+    useTeacherProblemAnalytics(moduleId);
 
   const [addProblemOpen, setAddProblemOpen] = useState(false);
   const [editMode, setEditMode] = useState(searchParams.get("edit") === "true");
   const [attachExamOpen, setAttachExamOpen] = useState(false);
   const [studentDrawerOpen, setStudentDrawerOpen] = useState(false);
-  const [selectedStudent, setSelectedStudent] = useState<{ id: string; name: string } | null>(null);
+  const [selectedStudent, setSelectedStudent] = useState<{
+    id: string;
+    name: string;
+  } | null>(null);
 
   if (modLoading) {
     return (
@@ -112,7 +121,13 @@ export default function TeacherModuleDetailPage() {
         <div className="@container/main flex flex-1 flex-col gap-2">
           <div className="flex flex-col gap-4 py-4 px-10 h-[100%] md:gap-6 md:py-6">
             <div className="flex items-center gap-4">
-              <Button variant="ghost" size="icon" onClick={() => router.push(`/dashboard/teacher/labs/${mod?.labId}`)}>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() =>
+                  router.push(`/dashboard/teacher/labs/${mod?.labId}`)
+                }
+              >
                 <ArrowLeft className="h-5 w-5" />
               </Button>
               <div className="flex-1">
@@ -124,7 +139,11 @@ export default function TeacherModuleDetailPage() {
                   {mod?.description || "Module details"}
                 </p>
               </div>
-              <Button variant="outline" size="sm" onClick={() => setEditMode(!editMode)}>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setEditMode(!editMode)}
+              >
                 <Edit className="h-4 w-4 mr-1" />
                 {editMode ? "Done" : "Edit"}
               </Button>
@@ -155,11 +174,16 @@ export default function TeacherModuleDetailPage() {
                   <div>
                     <h2 className="text-lg font-semibold">Module Problems</h2>
                     <p className="text-sm text-muted-foreground">
-                      {problems.length} problem{problems.length !== 1 ? "s" : ""} in this module
+                      {problems.length} problem
+                      {problems.length !== 1 ? "s" : ""} in this module
                     </p>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Button variant="outline" size="sm" onClick={() => setAddProblemOpen(true)}>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setAddProblemOpen(true)}
+                    >
                       <Plus className="h-4 w-4 mr-1" />
                       Add Problems
                     </Button>
@@ -170,11 +194,17 @@ export default function TeacherModuleDetailPage() {
                   <Card>
                     <CardContent className="flex flex-col items-center justify-center py-12">
                       <BookOpen className="h-12 w-12 text-muted-foreground/50 mb-3" />
-                      <p className="text-muted-foreground mb-1">No problems yet</p>
+                      <p className="text-muted-foreground mb-1">
+                        No problems yet
+                      </p>
                       <p className="text-xs text-muted-foreground mb-4">
                         Add problems from the problem bank
                       </p>
-                      <Button variant="outline" size="sm" onClick={() => setAddProblemOpen(true)}>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setAddProblemOpen(true)}
+                      >
                         <Plus className="h-4 w-4 mr-1" />
                         Add Problems
                       </Button>
@@ -203,8 +233,8 @@ export default function TeacherModuleDetailPage() {
                                   p.problem.difficulty === "EASY"
                                     ? "text-green-600"
                                     : p.problem.difficulty === "MEDIUM"
-                                    ? "text-yellow-600"
-                                    : "text-red-600"
+                                      ? "text-yellow-600"
+                                      : "text-red-600"
                                 }
                               >
                                 {p.problem.difficulty}
@@ -216,7 +246,12 @@ export default function TeacherModuleDetailPage() {
                                 size="sm"
                                 className="text-destructive"
                                 onClick={async () => {
-                                  if (!confirm("Remove this problem from the module?")) return;
+                                  if (
+                                    !confirm(
+                                      "Remove this problem from the module?"
+                                    )
+                                  )
+                                    return;
                                   try {
                                     await axios.delete(
                                       `${getBackendURL()}/teacher/module-problems/${p.id}`,
@@ -225,7 +260,10 @@ export default function TeacherModuleDetailPage() {
                                     toast.success("Problem removed");
                                     refetchProblems();
                                   } catch (err: any) {
-                                    toast.error(err?.response?.data?.message || "Failed to remove");
+                                    toast.error(
+                                      err?.response?.data?.message ||
+                                        "Failed to remove"
+                                    );
                                   }
                                 }}
                               >
@@ -266,8 +304,14 @@ export default function TeacherModuleDetailPage() {
                   studentProgress={studentProgress}
                   studentLoading={studentLoading}
                   onViewStudent={(studentId) => {
-                    const student = studentProgress.find((s) => s.studentId === studentId);
-                    setSelectedStudent(student ? { id: studentId, name: student.studentName } : null);
+                    const student = studentProgress.find(
+                      (s) => s.studentId === studentId
+                    );
+                    setSelectedStudent(
+                      student
+                        ? { id: studentId, name: student.studentName }
+                        : null
+                    );
                     setStudentDrawerOpen(true);
                   }}
                 />
@@ -280,7 +324,13 @@ export default function TeacherModuleDetailPage() {
   );
 }
 
-function EditModuleCard({ module, moduleId }: { module: any; moduleId: string }) {
+function EditModuleCard({
+  module,
+  moduleId,
+}: {
+  module: any;
+  moduleId: string;
+}) {
   const [title, setTitle] = useState(module.title || "");
   const [description, setDescription] = useState(module.description || "");
   const [weekNumber, setWeekNumber] = useState(String(module.weekNumber || ""));
@@ -303,9 +353,13 @@ function EditModuleCard({ module, moduleId }: { module: any; moduleId: string })
       if (dueAt) body.dueAt = new Date(dueAt).toISOString();
       else body.dueAt = null;
 
-      await axios.patch(`${getBackendURL()}/teacher/modules/${moduleId}`, body, {
-        withCredentials: true,
-      });
+      await axios.patch(
+        `${getBackendURL()}/teacher/modules/${moduleId}`,
+        body,
+        {
+          withCredentials: true,
+        }
+      );
       toast.success("Module updated");
       window.location.reload();
     } catch (err: any) {
@@ -328,24 +382,42 @@ function EditModuleCard({ module, moduleId }: { module: any; moduleId: string })
           </div>
           <div className="space-y-2">
             <Label>Week Number</Label>
-            <Input type="number" value={weekNumber} onChange={(e) => setWeekNumber(e.target.value)} />
+            <Input
+              type="number"
+              value={weekNumber}
+              onChange={(e) => setWeekNumber(e.target.value)}
+            />
           </div>
         </div>
         <div className="space-y-2">
           <Label>Description</Label>
-          <Textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={2} />
+          <Textarea
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            rows={2}
+          />
         </div>
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-2">
             <Label>Unlock Date</Label>
-            <Input type="datetime-local" value={unlockAt} onChange={(e) => setUnlockAt(e.target.value)} />
+            <Input
+              type="datetime-local"
+              value={unlockAt}
+              onChange={(e) => setUnlockAt(e.target.value)}
+            />
           </div>
           <div className="space-y-2">
             <Label>Due Date</Label>
-            <Input type="datetime-local" value={dueAt} onChange={(e) => setDueAt(e.target.value)} />
+            <Input
+              type="datetime-local"
+              value={dueAt}
+              onChange={(e) => setDueAt(e.target.value)}
+            />
           </div>
         </div>
-        <Button onClick={handleSave} disabled={saving}>{saving ? "Saving..." : "Save Changes"}</Button>
+        <Button onClick={handleSave} disabled={saving}>
+          {saving ? "Saving..." : "Save Changes"}
+        </Button>
       </CardContent>
     </Card>
   );
@@ -382,33 +454,36 @@ function AddProblemsDialog({
         difficulty: p.difficulty,
       }));
 
-  const fetchProblems = useCallback(async (reset = false) => {
-    try {
-      setLoadingProblems(true);
-      const res = await axios.get(`${getBackendURL()}/problems/getproblems`, {
-        params: {
-          take: 10,
-          skip: reset ? 0 : (page - 1) * 10,
-          searchValue: search || undefined,
-        },
-        withCredentials: true,
-      });
-      const data = (res.data as any[]) ?? [];
-      setHasMore(data.length >= 10);
-      if (reset) {
-        setPage(2);
-        setProblems(mapProblems(data));
-      } else {
-        setPage((prev) => prev + 1);
-        setProblems((prev) => [...prev, ...mapProblems(data)]);
+  const fetchProblems = useCallback(
+    async (reset = false) => {
+      try {
+        setLoadingProblems(true);
+        const res = await axios.get(`${getBackendURL()}/problems/getproblems`, {
+          params: {
+            take: 10,
+            skip: reset ? 0 : (page - 1) * 10,
+            searchValue: search || undefined,
+          },
+          withCredentials: true,
+        });
+        const data = (res.data as any[]) ?? [];
+        setHasMore(data.length >= 10);
+        if (reset) {
+          setPage(2);
+          setProblems(mapProblems(data));
+        } else {
+          setPage((prev) => prev + 1);
+          setProblems((prev) => [...prev, ...mapProblems(data)]);
+        }
+      } catch {
+        if (reset) setProblems([]);
+        setHasMore(false);
+      } finally {
+        setLoadingProblems(false);
       }
-    } catch {
-      if (reset) setProblems([]);
-      setHasMore(false);
-    } finally {
-      setLoadingProblems(false);
-    }
-  }, [page, search, existingIds]);
+    },
+    [page, search, existingIds]
+  );
 
   useEffect(() => {
     if (!open) return;
@@ -467,7 +542,9 @@ function AddProblemsDialog({
       <DialogContent className="max-w-lg">
         <DialogHeader>
           <DialogTitle>Add Problems</DialogTitle>
-          <DialogDescription>Select problems to add to this module</DialogDescription>
+          <DialogDescription>
+            Select problems to add to this module
+          </DialogDescription>
         </DialogHeader>
         <div className="space-y-3">
           <div className="relative">
@@ -479,9 +556,14 @@ function AddProblemsDialog({
               className="pl-10"
             />
           </div>
-          <div id="problem-scroll-container" className="max-h-80 overflow-y-auto">
+          <div
+            id="problem-scroll-container"
+            className="max-h-80 overflow-y-auto"
+          >
             {loadingProblems && problems.length === 0 ? (
-              <div className="flex justify-center py-4"><Spinner variant="infinite" /></div>
+              <div className="flex justify-center py-4">
+                <Spinner variant="infinite" />
+              </div>
             ) : problems.length === 0 && !loadingProblems ? (
               <p className="text-sm text-muted-foreground text-center py-4">
                 {search ? "No problems match" : "All problems already added"}
@@ -516,7 +598,9 @@ function AddProblemsDialog({
                         }`}
                       >
                         {selectedIds.includes(p.id) && (
-                          <span className="text-primary-foreground text-xs">✓</span>
+                          <span className="text-primary-foreground text-xs">
+                            ✓
+                          </span>
                         )}
                       </div>
                       <div className="flex-1 min-w-0">
@@ -530,8 +614,8 @@ function AddProblemsDialog({
                           p.difficulty === "EASY"
                             ? "text-green-600"
                             : p.difficulty === "MEDIUM"
-                            ? "text-yellow-600"
-                            : "text-red-600"
+                              ? "text-yellow-600"
+                              : "text-red-600"
                         }`}
                       >
                         {p.difficulty}
@@ -544,7 +628,9 @@ function AddProblemsDialog({
           </div>
         </div>
         <DialogFooter>
-          <Button variant="outline" onClick={() => onOpenChange(false)}>Cancel</Button>
+          <Button variant="outline" onClick={() => onOpenChange(false)}>
+            Cancel
+          </Button>
           <Button onClick={handleAdd} disabled={!selectedIds.length || adding}>
             {adding ? "Adding..." : `Add (${selectedIds.length})`}
           </Button>
@@ -587,7 +673,9 @@ function AssessmentTab({
       setCreateOpen(false);
       onRefresh();
     } catch (err: any) {
-      toast.error(err?.response?.data?.message || "Failed to create assessment");
+      toast.error(
+        err?.response?.data?.message || "Failed to create assessment"
+      );
     } finally {
       setCreating(false);
     }
@@ -596,18 +684,27 @@ function AssessmentTab({
   const handleRemoveAssessment = async () => {
     if (!confirm("Remove the assessment exam from this module?")) return;
     try {
-      await axios.delete(`${getBackendURL()}/teacher/modules/${moduleId}/assessment`, {
-        withCredentials: true,
-      });
+      await axios.delete(
+        `${getBackendURL()}/teacher/modules/${moduleId}/assessment`,
+        {
+          withCredentials: true,
+        }
+      );
       toast.success("Assessment removed");
       onRefresh();
     } catch (err: any) {
-      toast.error(err?.response?.data?.message || "Failed to remove assessment");
+      toast.error(
+        err?.response?.data?.message || "Failed to remove assessment"
+      );
     }
   };
 
   if (loading) {
-    return <div className="flex justify-center py-8"><Spinner variant="infinite" /></div>;
+    return (
+      <div className="flex justify-center py-8">
+        <Spinner variant="infinite" />
+      </div>
+    );
   }
 
   if (!assessment) {
@@ -672,7 +769,10 @@ function AssessmentTab({
                   </div>
                 </div>
                 <DialogFooter>
-                  <Button variant="outline" onClick={() => setCreateOpen(false)}>
+                  <Button
+                    variant="outline"
+                    onClick={() => setCreateOpen(false)}
+                  >
                     Cancel
                   </Button>
                   <Button onClick={handleCreateAssessment} disabled={creating}>
@@ -704,7 +804,9 @@ function AssessmentTab({
         <Button
           variant="outline"
           size="sm"
-          onClick={() => router.push(`/dashboard/teacher/tests/edit/${assessment.examId}`)}
+          onClick={() =>
+            router.push(`/dashboard/teacher/tests/edit/${assessment.examId}`)
+          }
         >
           <ExternalLink className="h-4 w-4 mr-1" />
           Open Exam
@@ -723,7 +825,12 @@ function AssessmentTab({
             }}
           />
         </Dialog>
-        <Button variant="outline" size="sm" className="text-destructive" onClick={handleRemoveAssessment}>
+        <Button
+          variant="outline"
+          size="sm"
+          className="text-destructive"
+          onClick={handleRemoveAssessment}
+        >
           Remove Exam
         </Button>
       </div>
@@ -748,11 +855,14 @@ function AttachExamDialog({
     const fetch = async () => {
       try {
         setLoading(true);
-        const res = await axios.get(`${getBackendURL()}/teacher/exam/fetchallexams`, {
-          params: { take: 50, skip: 0 },
-          withCredentials: true,
-        });
-        setExams((res.data as any[]) ?? []);
+        const res = await axios.get(
+          `${getBackendURL()}/teacher/exam/fetchallexams`,
+          {
+            params: { take: 50, skip: 0 },
+            withCredentials: true,
+          }
+        );
+        setExams((res.data.exams as any[]) ?? []);
       } catch {
         setExams([]);
       } finally {
@@ -762,9 +872,8 @@ function AttachExamDialog({
     fetch();
   }, []);
 
-  const filtered = exams.filter(
-    (e) =>
-      e.title?.toLowerCase().includes(search.toLowerCase())
+  const filtered = exams.filter((e) =>
+    e.title?.toLowerCase().includes(search.toLowerCase())
   );
 
   const handleAttach = async () => {
@@ -789,7 +898,9 @@ function AttachExamDialog({
     <DialogContent>
       <DialogHeader>
         <DialogTitle>Attach Existing Exam</DialogTitle>
-        <DialogDescription>Select an exam to attach to this module</DialogDescription>
+        <DialogDescription>
+          Select an exam to attach to this module
+        </DialogDescription>
       </DialogHeader>
       <div className="space-y-3">
         <div className="relative">
@@ -803,9 +914,13 @@ function AttachExamDialog({
         </div>
         <div className="max-h-60 overflow-y-auto space-y-1">
           {loading ? (
-            <div className="flex justify-center py-4"><Spinner variant="infinite" /></div>
+            <div className="flex justify-center py-4">
+              <Spinner variant="infinite" />
+            </div>
           ) : filtered.length === 0 ? (
-            <p className="text-sm text-muted-foreground text-center py-4">No exams found</p>
+            <p className="text-sm text-muted-foreground text-center py-4">
+              No exams found
+            </p>
           ) : (
             filtered.map((e: any) => (
               <div
@@ -817,7 +932,9 @@ function AttachExamDialog({
               >
                 <div
                   className={`w-4 h-4 rounded-full border flex items-center justify-center flex-shrink-0 ${
-                    selectedId === e.id ? "bg-primary border-primary" : "border-input"
+                    selectedId === e.id
+                      ? "bg-primary border-primary"
+                      : "border-input"
                   }`}
                 >
                   {selectedId === e.id && (
@@ -836,7 +953,9 @@ function AttachExamDialog({
         </div>
       </div>
       <DialogFooter>
-        <Button variant="outline" onClick={() => {}}>Cancel</Button>
+        <Button variant="outline" onClick={() => {}}>
+          Cancel
+        </Button>
         <Button onClick={handleAttach} disabled={!selectedId || attaching}>
           {attaching ? "Attaching..." : "Attach"}
         </Button>
@@ -882,10 +1001,15 @@ function AnalyticsTab({
       <Card>
         <CardHeader>
           <CardTitle className="text-base">Problem Analytics</CardTitle>
-          <CardDescription>Per-problem solve rates across all students</CardDescription>
+          <CardDescription>
+            Per-problem solve rates across all students
+          </CardDescription>
         </CardHeader>
         <CardContent>
-          <ProblemAnalyticsTable data={problemAnalytics} loading={analyticsLoading} />
+          <ProblemAnalyticsTable
+            data={problemAnalytics}
+            loading={analyticsLoading}
+          />
         </CardContent>
       </Card>
 
@@ -903,11 +1027,7 @@ function AnalyticsTab({
         </CardContent>
       </Card>
 
-      <StudentDrawer
-        open={false}
-        onClose={() => {}}
-        studentName=""
-      />
+      <StudentDrawer open={false} onClose={() => {}} studentName="" />
     </>
   );
 }
