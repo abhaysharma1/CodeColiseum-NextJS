@@ -862,7 +862,8 @@ function AttachExamDialog({
             withCredentials: true,
           }
         );
-        setExams((res.data.exams as any[]) ?? []);
+        const data = res.data as any;
+        setExams((data.exams as any[]) ?? []);
       } catch {
         setExams([]);
       } finally {
