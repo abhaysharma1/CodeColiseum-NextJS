@@ -10,6 +10,9 @@ import {
   AlertCircle,
   Circle,
   X,
+  Lock,
+  Clock,
+  CalendarX,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { ProblemData } from "@/hooks/use-module-problems-list";
@@ -116,6 +119,7 @@ export function ModuleSidebar({
                 <div className="py-1">
                   {sorted.map((p) => {
                     const isActive = p.id === currentModuleProblemId;
+                    const isAccessible = p.accessStatus === "AVAILABLE";
                     const status = p.progress?.isSolved
                       ? "solved"
                       : p.progress && p.progress.attemptCount > 0
@@ -123,6 +127,13 @@ export function ModuleSidebar({
                         : "not_started";
                     const cfg = statusConfig[status];
                     const Icon = cfg.icon;
+
+                    const accessIcons: Record<string, any> = {
+                      LOCKED: Lock,
+                      NOT_YET_AVAILABLE: Clock,
+                      EXPIRED: CalendarX,
+                    };
+                    const AccessIcon = !isAccessible ? accessIcons[p.accessStatus] : null;
 
                     return (
                       <motion.div
@@ -133,8 +144,9 @@ export function ModuleSidebar({
                       >
                         <button
                           onClick={() => {
+                            if (!isAccessible) return;
                             router.push(
-                              `/problems?id=${p.problemId}&moduleProblemId=${currentModuleProblemId}`
+                              `/problems?id=${p.problemId}&moduleProblemId=${p.id}`
                             );
                             onClose();
                           }}
@@ -142,12 +154,16 @@ export function ModuleSidebar({
                             isActive
                               ? "bg-accent font-medium"
                               : "hover:bg-accent/50 text-muted-foreground"
-                          }`}
+                          } ${!isAccessible ? "opacity-50 cursor-not-allowed" : ""}`}
                         >
                           <div
                             className={`flex-shrink-0 p-0.5 rounded ${cfg.bg}`}
                           >
-                            <Icon className={`h-3.5 w-3.5 ${cfg.color}`} />
+                            {AccessIcon ? (
+                              <AccessIcon className={`h-3.5 w-3.5 text-muted-foreground`} />
+                            ) : (
+                              <Icon className={`h-3.5 w-3.5 ${cfg.color}`} />
+                            )}
                           </div>
                           <span className="truncate flex-1">
                             {p.problem.number}. {p.problem.title}

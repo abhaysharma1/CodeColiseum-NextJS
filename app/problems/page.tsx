@@ -36,6 +36,9 @@ import {
   PanelRightClose,
   Circle,
   CheckCircle2,
+  Lock,
+  Clock,
+  CalendarX,
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { Group, Panel, Separator } from "react-resizable-panels";
@@ -364,6 +367,50 @@ function QuestionSolvingPageContent({
 
     return () => clearInterval(intervalId);
   }, [performingAiReview, startAiReviewResponse]);
+
+  const accessStatus = mode.type === "module" ? moduleQuery.data?.moduleProblem?.accessStatus : "AVAILABLE";
+  const isAccessDenied = accessStatus && accessStatus !== "AVAILABLE";
+
+  if (isAccessDenied) {
+    const accessDeniedContent: Record<string, { icon: any; title: string; message: string }> = {
+      LOCKED: {
+        icon: Lock,
+        title: "Problem Locked",
+        message: "This problem has not been unlocked by your instructor yet.",
+      },
+      NOT_YET_AVAILABLE: {
+        icon: Clock,
+        title: "Problem Not Yet Available",
+        message: moduleQuery.data?.moduleProblem?.availableFrom
+          ? `This problem will become available on ${new Date(moduleQuery.data.moduleProblem.availableFrom).toLocaleDateString()}.`
+          : "This problem is not yet available.",
+      },
+      EXPIRED: {
+        icon: CalendarX,
+        title: "Access Window Expired",
+        message: "The access window for this problem has ended.",
+      },
+    };
+    const denied = accessDeniedContent[accessStatus] || accessDeniedContent.LOCKED;
+    const DeniedIcon = denied.icon;
+
+    return (
+      <div className="w-full h-screen flex flex-col items-center justify-center gap-4 p-8">
+        <div className="rounded-full bg-muted p-4">
+          <DeniedIcon className="h-8 w-8 text-muted-foreground" />
+        </div>
+        <h2 className="text-xl font-semibold">{denied.title}</h2>
+        <p className="text-muted-foreground text-center max-w-md">{denied.message}</p>
+        <Button
+          variant="outline"
+          onClick={() => router.push(`/dashboard/student/modules/${moduleQuery.data?.module.id}`)}
+        >
+          <ArrowLeft className="h-4 w-4 mr-2" />
+          Back to Module
+        </Button>
+      </div>
+    );
+  }
 
   return (
     <div>

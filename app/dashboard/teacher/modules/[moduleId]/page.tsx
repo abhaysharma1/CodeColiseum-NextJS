@@ -13,6 +13,11 @@ import {
   BookOpen,
   BarChart3,
   ExternalLink,
+  Lock,
+  Unlock,
+  Clock,
+  CalendarX,
+  CalendarDays,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -62,7 +67,10 @@ import {
   useTeacherAssessmentResults,
   useTeacherStudentProgress,
   useTeacherProblemAnalytics,
+  useTeacherModuleProblemAccess,
+  useUpdateModuleProblemAccess,
 } from "@/hooks/use-labs";
+import { Switch } from "@/components/ui/switch";
 
 interface ProblemOption {
   id: string;
@@ -213,66 +221,83 @@ export default function TeacherModuleDetailPage() {
                 ) : (
                   <div className="overflow-hidden rounded-lg border">
                     <Table>
-                      <TableHeader>
-                        <TableRow>
-                          <TableHead>Problem</TableHead>
-                          <TableHead>Difficulty</TableHead>
-                          <TableHead></TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        {problems.map((p) => (
-                          <TableRow key={p.id}>
-                            <TableCell className="font-medium">
-                              {p.problem.number}. {p.problem.title}
-                            </TableCell>
-                            <TableCell>
-                              <Badge
-                                variant="outline"
-                                className={
-                                  p.problem.difficulty === "EASY"
-                                    ? "text-green-600"
-                                    : p.problem.difficulty === "MEDIUM"
-                                      ? "text-yellow-600"
-                                      : "text-red-600"
-                                }
-                              >
-                                {p.problem.difficulty}
-                              </Badge>
-                            </TableCell>
-                            <TableCell className="text-right">
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                className="text-destructive"
-                                onClick={async () => {
-                                  if (
-                                    !confirm(
-                                      "Remove this problem from the module?"
-                                    )
-                                  )
-                                    return;
-                                  try {
-                                    await axios.delete(
-                                      `${getBackendURL()}/teacher/module-problems/${p.id}`,
-                                      { withCredentials: true }
-                                    );
-                                    toast.success("Problem removed");
-                                    refetchProblems();
-                                  } catch (err: any) {
-                                    toast.error(
-                                      err?.response?.data?.message ||
-                                        "Failed to remove"
-                                    );
-                                  }
-                                }}
-                              >
-                                <Trash2 className="h-4 w-4" />
-                              </Button>
-                            </TableCell>
+                        <TableHeader>
+                          <TableRow>
+                            <TableHead>Problem</TableHead>
+                            <TableHead>Difficulty</TableHead>
+                            <TableHead>Access</TableHead>
+                            <TableHead></TableHead>
                           </TableRow>
-                        ))}
-                      </TableBody>
+                        </TableHeader>
+                        <TableBody>
+                          {problems.map((p) => (
+                            <TableRow key={p.id}>
+                              <TableCell className="font-medium">
+                                {p.problem.number}. {p.problem.title}
+                              </TableCell>
+                              <TableCell>
+                                <Badge
+                                  variant="outline"
+                                  className={
+                                    p.problem.difficulty === "EASY"
+                                      ? "text-green-600"
+                                      : p.problem.difficulty === "MEDIUM"
+                                        ? "text-yellow-600"
+                                        : "text-red-600"
+                                  }
+                                >
+                                  {p.problem.difficulty}
+                                </Badge>
+                              </TableCell>
+                              <TableCell>
+                                <AccessBadge
+                                  isUnlocked={p.isUnlocked}
+                                  availableFrom={p.availableFrom}
+                                  availableUntil={p.availableUntil}
+                                />
+                              </TableCell>
+                              <TableCell className="text-right">
+                                <div className="flex items-center justify-end gap-1">
+                                  <ManageAccessModal
+                                    moduleProblemId={p.id}
+                                    isUnlocked={p.isUnlocked}
+                                    availableFrom={p.availableFrom}
+                                    availableUntil={p.availableUntil}
+                                    onUpdated={refetchProblems}
+                                  />
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    className="text-destructive"
+                                    onClick={async () => {
+                                      if (
+                                        !confirm(
+                                          "Remove this problem from the module?"
+                                        )
+                                      )
+                                        return;
+                                      try {
+                                        await axios.delete(
+                                          `${getBackendURL()}/teacher/module-problems/${p.id}`,
+                                          { withCredentials: true }
+                                        );
+                                        toast.success("Problem removed");
+                                        refetchProblems();
+                                      } catch (err: any) {
+                                        toast.error(
+                                          err?.response?.data?.message ||
+                                            "Failed to remove"
+                                        );
+                                      }
+                                    }}
+                                  >
+                                    <Trash2 className="h-4 w-4" />
+                                  </Button>
+                                </div>
+                              </TableCell>
+                            </TableRow>
+                          ))}
+                        </TableBody>
                     </Table>
                   </div>
                 )}
@@ -1030,5 +1055,157 @@ function AnalyticsTab({
 
       <StudentDrawer open={false} onClose={() => {}} studentName="" />
     </>
+  );
+}
+
+function AccessBadge({
+  isUnlocked,
+  availableFrom,
+  availableUntil,
+}: {
+  isUnlocked: boolean;
+  availableFrom: string | null;
+  availableUntil: string | null;
+}) {
+  const now = new Date();
+  const from = availableFrom ? new Date(availableFrom) : null;
+  const until = availableUntil ? new Date(availableUntil) : null;
+
+  if (!isUnlocked) {
+    return (
+      <Badge variant="outline" className="text-red-600 border-red-300 bg-red-50 dark:bg-red-950/20 gap-1">
+        <Lock className="h-3 w-3" /> Locked
+      </Badge>
+    );
+  }
+
+  if (from && now < from) {
+    return (
+      <Badge variant="outline" className="text-blue-600 border-blue-300 bg-blue-50 dark:bg-blue-950/20 gap-1">
+        <Clock className="h-3 w-3" /> Scheduled
+      </Badge>
+    );
+  }
+
+  if (until && now > until) {
+    return (
+      <Badge variant="outline" className="text-gray-600 border-gray-300 bg-gray-50 dark:bg-gray-800 gap-1">
+        <CalendarX className="h-3 w-3" /> Expired
+      </Badge>
+    );
+  }
+
+  return (
+    <Badge variant="outline" className="text-green-600 border-green-300 bg-green-50 dark:bg-green-950/20 gap-1">
+      <Unlock className="h-3 w-3" /> Unlocked
+    </Badge>
+  );
+}
+
+function ManageAccessModal({
+  moduleProblemId,
+  isUnlocked,
+  availableFrom,
+  availableUntil,
+  onUpdated,
+}: {
+  moduleProblemId: string;
+  isUnlocked: boolean;
+  availableFrom: string | null;
+  availableUntil: string | null;
+  onUpdated: () => void;
+}) {
+  const [open, setOpen] = useState(false);
+  const [unlocked, setUnlocked] = useState(isUnlocked);
+  const [fromDate, setFromDate] = useState(
+    availableFrom ? new Date(availableFrom).toISOString().slice(0, 16) : ""
+  );
+  const [untilDate, setUntilDate] = useState(
+    availableUntil ? new Date(availableUntil).toISOString().slice(0, 16) : ""
+  );
+  const [saving, setSaving] = useState(false);
+
+  const handleSave = async () => {
+    try {
+      setSaving(true);
+      const body: any = { isUnlocked: unlocked };
+      if (fromDate) body.availableFrom = new Date(fromDate).toISOString();
+      else body.availableFrom = null;
+      if (untilDate) body.availableUntil = new Date(untilDate).toISOString();
+      else body.availableUntil = null;
+
+      await axios.patch(
+        `${getBackendURL()}/teacher/module-problems/${moduleProblemId}/access`,
+        body,
+        { withCredentials: true }
+      );
+      toast.success("Access settings updated");
+      setOpen(false);
+      onUpdated();
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message || "Failed to update access");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <Button variant="outline" size="sm">
+          <Unlock className="h-3 w-3 mr-1" />
+          Manage Access
+        </Button>
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Manage Problem Access</DialogTitle>
+          <DialogDescription>
+            Control when students can access this problem
+          </DialogDescription>
+        </DialogHeader>
+        <div className="space-y-6 py-4">
+          <div className="flex items-center justify-between">
+            <div className="space-y-0.5">
+              <Label className="text-base">Problem Unlocked</Label>
+              <p className="text-sm text-muted-foreground">
+                Allow students to access this problem
+              </p>
+            </div>
+            <Switch checked={unlocked} onCheckedChange={setUnlocked} />
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label>Available From</Label>
+              <Input
+                type="datetime-local"
+                value={fromDate}
+                onChange={(e) => setFromDate(e.target.value)}
+                disabled={!unlocked}
+              />
+              <p className="text-xs text-muted-foreground">Optional</p>
+            </div>
+            <div className="space-y-2">
+              <Label>Available Until</Label>
+              <Input
+                type="datetime-local"
+                value={untilDate}
+                onChange={(e) => setUntilDate(e.target.value)}
+                disabled={!unlocked}
+              />
+              <p className="text-xs text-muted-foreground">Optional</p>
+            </div>
+          </div>
+        </div>
+        <DialogFooter>
+          <Button variant="outline" onClick={() => setOpen(false)}>
+            Cancel
+          </Button>
+          <Button onClick={handleSave} disabled={saving}>
+            {saving ? "Saving..." : "Save Changes"}
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 }

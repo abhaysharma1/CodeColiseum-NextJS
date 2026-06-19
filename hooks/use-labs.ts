@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import { getBackendURL } from "@/utils/utilities";
 import { toast } from "sonner";
+import type { AccessStatus } from "./use-module-problems-list";
 
 export interface TeacherLab {
   id: string;
@@ -52,6 +53,15 @@ export interface TeacherModuleProblem {
     title: string;
     difficulty: string;
   };
+  isUnlocked: boolean;
+  availableFrom: string | null;
+  availableUntil: string | null;
+}
+
+export interface TeacherAccessConfig {
+  isUnlocked: boolean;
+  availableFrom: string | null;
+  availableUntil: string | null;
 }
 
 export interface TeacherAssessment {
@@ -162,6 +172,10 @@ export interface StudentModuleProblems {
       isSolved: boolean;
       lastAttemptAt: string | null;
     } | null;
+    isUnlocked: boolean;
+    availableFrom: string | null;
+    availableUntil: string | null;
+    accessStatus: AccessStatus;
   }[];
 }
 
@@ -561,4 +575,54 @@ export function useStudentModuleProblems(moduleId: string) {
   }, [fetch]);
 
   return { data, loading, refetch: fetch };
+}
+
+export function useTeacherModuleProblemAccess(moduleProblemId: string) {
+  const [data, setData] = useState<TeacherAccessConfig | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  const fetch = useCallback(async () => {
+    if (!moduleProblemId) return;
+    try {
+      setLoading(true);
+      const res = await axios.get(
+        `${getBackendURL()}/teacher/module-problems/${moduleProblemId}/access`,
+        { withCredentials: true }
+      );
+      setData(res.data as TeacherAccessConfig);
+    } catch {
+      setData(null);
+    } finally {
+      setLoading(false);
+    }
+  }, [moduleProblemId]);
+
+  useEffect(() => {
+    fetch();
+  }, [fetch]);
+
+  return { data, loading, refetch: fetch };
+}
+
+export function useUpdateModuleProblemAccess() {
+  const [loading, setLoading] = useState(false);
+
+  const mutate = async (
+    moduleProblemId: string,
+    body: { isUnlocked?: boolean; availableFrom?: string | null; availableUntil?: string | null }
+  ) => {
+    try {
+      setLoading(true);
+      const res = await axios.patch(
+        `${getBackendURL()}/teacher/module-problems/${moduleProblemId}/access`,
+        body,
+        { withCredentials: true }
+      );
+      return res.data;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return { mutate, loading };
 }

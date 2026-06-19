@@ -4,7 +4,7 @@ import { useParams, useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import axios from "axios";
 import { toast } from "sonner";
-import { ArrowLeft, FlaskConical, BookOpen, Calendar, Clock, CheckCircle2, AlertCircle, Circle } from "lucide-react";
+import { ArrowLeft, FlaskConical, BookOpen, Calendar, Clock, CheckCircle2, AlertCircle, Circle, Lock, Unlock, CalendarX } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -20,6 +20,8 @@ import { Spinner } from "@/components/ui/shadcn-io/spinner";
 import { ProgressCard } from "@/components/labs/progress-card";
 import { AssessmentCard } from "@/components/labs/assessment-card";
 import { getBackendURL } from "@/utils/utilities";
+
+type AccessStatus = "LOCKED" | "AVAILABLE" | "NOT_YET_AVAILABLE" | "EXPIRED";
 
 interface ProblemData {
   id: string;
@@ -37,6 +39,10 @@ interface ProblemData {
     isSolved: boolean;
     lastAttemptAt: string | null;
   } | null;
+  isUnlocked: boolean;
+  availableFrom: string | null;
+  availableUntil: string | null;
+  accessStatus: AccessStatus;
 }
 
 interface ModuleData {
@@ -98,6 +104,13 @@ const statusConfig = {
   solved: { icon: CheckCircle2, color: "text-green-500", bg: "bg-green-500/10", label: "Solved", border: "border-green-500/30" },
   attempted: { icon: AlertCircle, color: "text-yellow-500", bg: "bg-yellow-500/10", label: "Attempted", border: "border-yellow-500/30" },
   not_started: { icon: Circle, color: "text-muted-foreground", bg: "bg-transparent", label: "Not started", border: "border-muted" },
+};
+
+const accessBadgeConfig: Record<AccessStatus, { icon: any; label: string; className: string }> = {
+  AVAILABLE: { icon: Unlock, label: "Available", className: "text-green-600 border-green-300 bg-green-50 dark:bg-green-950/20" },
+  LOCKED: { icon: Lock, label: "Locked", className: "text-red-600 border-red-300 bg-red-50 dark:bg-red-950/20" },
+  NOT_YET_AVAILABLE: { icon: Clock, label: "Available Soon", className: "text-blue-600 border-blue-300 bg-blue-50 dark:bg-blue-950/20" },
+  EXPIRED: { icon: CalendarX, label: "Expired", className: "text-gray-600 border-gray-300 bg-gray-50 dark:bg-gray-800" },
 };
 
 export default function StudentModuleViewPage() {
@@ -235,6 +248,7 @@ export default function StudentModuleViewPage() {
                 {data.problems
                   .sort((a, b) => a.orderIndex - b.orderIndex)
                   .map((p, i) => {
+                    const isAccessible = p.accessStatus === "AVAILABLE";
                     const status = p.progress?.isSolved
                       ? "solved"
                       : p.progress && p.progress.attemptCount > 0
@@ -243,6 +257,8 @@ export default function StudentModuleViewPage() {
                     const cfg = statusConfig[status];
                     const StatusIcon = cfg.icon;
                     const diff = difficultyStyles[p.problem.difficulty] || difficultyStyles.EASY;
+                    const accessCfg = accessBadgeConfig[p.accessStatus];
+                    const AccessIcon = accessCfg.icon;
 
                     return (
                       <motion.div
@@ -250,15 +266,18 @@ export default function StudentModuleViewPage() {
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ duration: 0.25, delay: i * 0.03 }}
-                        whileHover={{ y: -2, scale: 1.01 }}
+                        whileHover={isAccessible ? { y: -2, scale: 1.01 } : undefined}
                       >
                         <Card
-                          className={`cursor-pointer transition-all hover:shadow-md overflow-hidden border-t-2 ${cfg.border}`}
-                          onClick={() =>
-                            router.push(`/problems?id=${p.problemId}&moduleProblemId=${p.id}`)
-                          }
+                          className={`transition-all overflow-hidden border-t-2 ${cfg.border} ${
+                            isAccessible ? "cursor-pointer hover:shadow-md" : "cursor-default opacity-60"
+                          }`}
+                          onClick={() => {
+                            if (isAccessible) {
+                              router.push(`/problems?id=${p.problemId}&moduleProblemId=${p.id}`);
+                            }
+                          }}
                         >
-                          <div className={`absolute inset-0 ${cfg.bg} opacity-0 hover:opacity-100 transition-opacity`} />
                           <CardContent className="p-4 relative">
                             <div className="flex items-start gap-3">
                               <div className={`mt-0.5 p-1 rounded-md ${cfg.bg}`}>
@@ -275,13 +294,23 @@ export default function StudentModuleViewPage() {
                                   >
                                     {diff.label}
                                   </Badge>
-                                  <span className="text-xs text-muted-foreground">
-                                    {status === "solved"
-                                      ? "Solved"
-                                      : status === "attempted"
-                                      ? `${p.progress!.attemptCount} attempt${p.progress!.attemptCount !== 1 ? "s" : ""}`
-                                      : "Not started"}
-                                  </span>
+                                  {isAccessible ? (
+                                    <span className="text-xs text-muted-foreground">
+                                      {status === "solved"
+                                        ? "Solved"
+                                        : status === "attempted"
+                                        ? `${p.progress!.attemptCount} attempt${p.progress!.attemptCount !== 1 ? "s" : ""}`
+                                        : "Not started"}
+                                    </span>
+                                  ) : (
+                                    <Badge
+                                      variant="outline"
+                                      className={`text-[10px] px-1.5 py-0 h-5 gap-1 ${accessCfg.className}`}
+                                    >
+                                      <AccessIcon className="h-3 w-3" />
+                                      {accessCfg.label}
+                                    </Badge>
+                                  )}
                                 </div>
                               </div>
                             </div>

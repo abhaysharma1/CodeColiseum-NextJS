@@ -277,11 +277,15 @@ function CodingBlock({
 
     const languageId = getLanguageId(language) ?? defaultRuntimeLanguageId;
 
-    const sentData: sentCode = {
+    const sentData: sentCode & { moduleProblemId?: string } = {
       questionId,
       languageId,
       code,
     };
+
+    if (mode?.type === "module") {
+      sentData.moduleProblemId = mode.moduleProblemId;
+    }
 
     try {
       const response = await axios.post(

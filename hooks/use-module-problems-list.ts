@@ -2,6 +2,8 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { getBackendURL } from "@/utils/utilities";
 
+export type AccessStatus = "LOCKED" | "AVAILABLE" | "NOT_YET_AVAILABLE" | "EXPIRED";
+
 export interface ProblemData {
   id: string;
   moduleId: string;
@@ -18,6 +20,10 @@ export interface ProblemData {
     isSolved: boolean;
     lastAttemptAt: string | null;
   } | null;
+  isUnlocked: boolean;
+  availableFrom: string | null;
+  availableUntil: string | null;
+  accessStatus: AccessStatus;
 }
 
 export interface ModuleProblemsData {
