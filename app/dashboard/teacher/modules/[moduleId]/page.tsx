@@ -18,6 +18,7 @@ import {
   Clock,
   CalendarX,
   CalendarDays,
+  Download,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -322,6 +323,7 @@ export default function TeacherModuleDetailPage() {
 
               <TabsContent value="analytics" className="space-y-6">
                 <AnalyticsTab
+                  moduleId={moduleId}
                   assessmentResults={assessmentResults}
                   resultsLoading={resultsLoading}
                   problemAnalytics={problemAnalytics}
@@ -991,6 +993,7 @@ function AttachExamDialog({
 }
 
 function AnalyticsTab({
+  moduleId,
   assessmentResults,
   resultsLoading,
   problemAnalytics,
@@ -999,6 +1002,7 @@ function AnalyticsTab({
   studentLoading,
   onViewStudent,
 }: {
+  moduleId: string;
   assessmentResults: any;
   resultsLoading: boolean;
   problemAnalytics: any[];
@@ -1007,8 +1011,48 @@ function AnalyticsTab({
   studentLoading: boolean;
   onViewStudent: (studentId: string) => void;
 }) {
+  const [exporting, setExporting] = useState(false);
+
+  const handleExportExcel = useCallback(async () => {
+    setExporting(true);
+    try {
+      const response = await axios.get(
+        `${getBackendURL()}/teacher/modules/${moduleId}/export-excel`,
+        { withCredentials: true, responseType: "blob" },
+      );
+      const url = window.URL.createObjectURL(response.data as Blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute(
+        "download",
+        `module-analytics-${moduleId}.xlsx`,
+      );
+      document.body.appendChild(link);
+      link.click();
+      link.parentElement?.removeChild(link);
+      window.URL.revokeObjectURL(url);
+      toast.success("Analytics exported successfully");
+    } catch {
+      toast.error("Failed to export analytics");
+    } finally {
+      setExporting(false);
+    }
+  }, [moduleId]);
+
   return (
     <>
+      <div className="flex justify-end">
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={handleExportExcel}
+          disabled={exporting}
+        >
+          <Download className="w-4 h-4 mr-2" />
+          {exporting ? "Generating..." : "Export to Excel"}
+        </Button>
+      </div>
+
       <OverviewCards
         totalStudents={assessmentResults?.totalStudents ?? 0}
         started={assessmentResults?.attemptedStudents ?? 0}
