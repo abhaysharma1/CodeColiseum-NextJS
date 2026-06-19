@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import axios from "axios";
 import { toast } from "sonner";
-import { FlaskConical, Search, SlidersHorizontal, X } from "lucide-react";
+import { FlaskConical, Search, X } from "lucide-react";
 
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";

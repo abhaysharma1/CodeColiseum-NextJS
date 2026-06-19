@@ -1,6 +1,7 @@
 "use client";
 import { motion } from "framer-motion";
 import { Calendar, Clock, Layers, Trophy } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
 
 interface LabCardProps {
   title: string;
@@ -71,18 +72,17 @@ export function LabCard({
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4 }}
       whileHover={{ scale: 1.02, y: -2 }}
-      className="relative group cursor-pointer rounded-xl"
+      transition={{ duration: 0.4 }}
+      className="relative group cursor-pointer"
       onClick={onClick}
     >
-      <div className={`absolute inset-0 rounded-xl border-t-2 ${cfg.border} transition-colors duration-200`} />
-      <div className="relative rounded-xl border border-border bg-card shadow-sm hover:shadow-md transition-all duration-200 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
-        <div className={`absolute top-3 right-0 ${cfg.ribbon} px-3 py-0.5 text-[11px] font-medium rounded-l-full`}>
+      <div className={`absolute inset-0 rounded-xl border-t-2 ${cfg.border} pointer-events-none z-10`} />
+      <Card className="overflow-hidden shadow-sm hover:shadow-md transition-all duration-200">
+        <div className={`absolute top-3 right-0 ${cfg.ribbon} px-3 py-0.5 text-[11px] font-medium rounded-l-full z-20`}>
           {cfg.label}
         </div>
-        <div className="p-4 space-y-3 relative z-10">
+        <CardContent className="p-4 space-y-3">
           <div className="flex items-start gap-3">
             <DonutRing percentage={completionPercentage} />
             <div className="flex-1 min-w-0">
@@ -125,8 +125,8 @@ export function LabCard({
               )}
             </div>
           )}
-        </div>
-      </div>
+        </CardContent>
+      </Card>
     </motion.div>
   );
 }

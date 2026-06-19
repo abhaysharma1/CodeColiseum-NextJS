@@ -185,7 +185,6 @@ function Page() {
             <h1 className="text-4xl font-bold tracking-tight">
               Welcome back, {user?.name}
             </h1>
-            <Sparkles className="h-6 w-6 text-yellow-500" />
           </div>
           <p className="text-muted-foreground leading-relaxed">
             Here&apos;s your coding progress overview.
@@ -236,7 +235,7 @@ function Page() {
           transition={{ duration: 0.5, delay: 0.2 }}
         >
           <Card className="shadow-sm overflow-hidden">
-            <div className="bg-gradient-to-r from-primary/5 to-transparent px-6 py-4 border-b border-border/50">
+            <div className="bg-muted/30 px-6 py-4 border-b border-border/50">
               <div className="flex items-center gap-2">
                 <BarChart3 className="h-5 w-5 text-primary" />
                 <CardTitle className="text-lg">Problem Difficulty Breakdown</CardTitle>
@@ -305,8 +304,7 @@ function Page() {
                         className="cursor-pointer shadow-sm hover:shadow-md transition-all border-t-2 border-t-green-500 overflow-hidden"
                         onClick={() => router.push(`/tests/start/${exam.id}`)}
                       >
-                        <div className="absolute inset-0 bg-gradient-to-b from-green-500/5 to-transparent opacity-0 hover:opacity-100 transition-opacity" />
-                        <CardHeader className="relative">
+                        <CardHeader>
                           <CardTitle className="text-lg tracking-tight">{exam.title}</CardTitle>
                           <CardDescription>
                             {exam.description || "No description available"}
@@ -374,7 +372,7 @@ function Page() {
           transition={{ duration: 0.5, delay: 0.4 }}
         >
           <Card className="shadow-sm overflow-hidden">
-            <div className="bg-gradient-to-r from-yellow-500/5 to-transparent px-6 py-4 border-b border-border/50">
+            <div className="bg-muted/30 px-6 py-4 border-b border-border/50">
               <div className="flex items-center gap-2">
                 <Trophy className="h-5 w-5 text-yellow-500" />
                 <CardTitle className="text-lg">Recent Results</CardTitle>
@@ -426,7 +424,7 @@ function Page() {
           transition={{ duration: 0.5, delay: 0.5 }}
         >
           <Card className="shadow-sm overflow-hidden">
-            <div className="bg-gradient-to-r from-blue-500/5 to-transparent px-6 py-4 border-b border-border/50">
+            <div className="bg-muted/30 px-6 py-4 border-b border-border/50">
               <div className="flex items-center gap-2">
                 <GraduationCap className="h-5 w-5 text-blue-500" />
                 <CardTitle className="text-lg">Your Groups</CardTitle>

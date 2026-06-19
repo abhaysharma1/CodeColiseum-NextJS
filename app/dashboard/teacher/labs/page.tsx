@@ -87,8 +87,6 @@ function LabCard({
         className="group relative h-full overflow-hidden transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5 border-border/50 hover:border-primary/20 cursor-pointer"
         onClick={() => router.push(`/dashboard/teacher/labs/${lab.id}`)}
       >
-        <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-primary/50 to-primary opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
-
         <CardHeader className="pb-3">
           <div className="flex items-start justify-between gap-4">
             <div className="flex-1 min-w-0">
