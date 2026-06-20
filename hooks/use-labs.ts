@@ -11,6 +11,9 @@ export interface TeacherLab {
   creatorId: string;
   createdAt: string;
   updatedAt: string;
+  aiEnabled: boolean;
+  aiMaxMessages: number | null;
+  aiMaxTokens: number | null;
   modulesCount: number;
   assignedGroupsCount?: number;
 }

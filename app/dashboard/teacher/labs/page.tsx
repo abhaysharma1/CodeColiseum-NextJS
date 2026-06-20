@@ -20,6 +20,7 @@ import {
   BarChart3,
   SearchX,
   X,
+  Bot,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -143,6 +144,15 @@ function LabCard({
             <div className="flex items-center gap-1.5 text-muted-foreground">
               <Users className="h-4 w-4 shrink-0" />
               <span>{(lab.assignedGroupsCount ?? 0) > 0 ? `${lab.assignedGroupsCount} ${lab.assignedGroupsCount === 1 ? "Group" : "Groups"}` : "No Groups"}</span>
+            </div>
+            <div className="flex items-center gap-1.5 text-muted-foreground">
+              <Bot className="h-4 w-4 shrink-0" />
+              <Badge
+                variant={lab.aiEnabled ? "default" : "outline"}
+                className={`text-xs px-1.5 py-0 h-5 ${lab.aiEnabled ? "bg-primary/10 text-primary border-primary/30" : ""}`}
+              >
+                {lab.aiEnabled ? "AI On" : "AI Off"}
+              </Badge>
             </div>
             <div className="flex items-center gap-1.5 text-muted-foreground">
               <Calendar className="h-4 w-4 shrink-0" />

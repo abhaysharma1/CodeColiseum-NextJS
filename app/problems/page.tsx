@@ -262,6 +262,9 @@ function QuestionSolvingPageContent({
   const [language, setLanguage] = useState("cpp");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
+  const [isLabAiEnabled, setIsLabAiEnabled] = useState(false);
+  const [labId, setLabId] = useState<string>("");
+
   const {
     data: descriptionData = [],
     isLoading: loadingDetails,
@@ -298,6 +301,31 @@ function QuestionSolvingPageContent({
   const moduleProblemsQuery = useModuleProblemsList(
     moduleQuery.data?.module.id
   );
+
+  // Check lab AI enablement for module problems
+  const currentModuleProblemId = mode.type === "module" ? mode.moduleProblemId : undefined;
+  useEffect(() => {
+    if (!currentModuleProblemId) return;
+
+    const checkLabAiStatus = async () => {
+      try {
+        const res = await axios.get(
+          `${getBackendURL()}/student/lab/ai/isenabled`,
+          {
+            params: { moduleProblemId: currentModuleProblemId },
+            withCredentials: true,
+          }
+        );
+        const data = res.data as { enabled: boolean; labId: string };
+        setIsLabAiEnabled(data.enabled);
+        setLabId(data.labId);
+      } catch {
+        setIsLabAiEnabled(false);
+      }
+    };
+
+    checkLabAiStatus();
+  }, [currentModuleProblemId]);
 
   const startAiReview = async () => {
     if (!code || !id || !language) {
@@ -467,6 +495,11 @@ function QuestionSolvingPageContent({
                   submissions={submissions}
                   aiReviewResult={aiReviewResult}
                   performingAiReview={performingAiReview}
+                  isAiEnabled={mode.type === "module" ? isLabAiEnabled : false}
+                  labId={labId}
+                  problemId={id ?? ""}
+                  code={code}
+                  language={language}
                 />
               </div>
             </Panel>

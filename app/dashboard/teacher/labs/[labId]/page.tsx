@@ -14,6 +14,7 @@ import {
   Search,
   Edit,
   Trash2,
+  Bot,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -36,6 +37,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { SiteHeader } from "@/components/site-header";
 import { Spinner } from "@/components/ui/shadcn-io/spinner";
 import { Label } from "@/components/ui/label";
@@ -198,7 +200,7 @@ function OverviewCard({ lab }: { lab: any }) {
         <CardTitle>Overview</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="grid gap-4 md:grid-cols-3">
+        <div className="grid gap-4 md:grid-cols-4">
           <div className="space-y-1">
             <p className="text-sm text-muted-foreground">Description</p>
             <p className="text-sm">{lab?.description || "No description"}</p>
@@ -206,6 +208,13 @@ function OverviewCard({ lab }: { lab: any }) {
           <div className="space-y-1">
             <p className="text-sm text-muted-foreground">Total Modules</p>
             <p className="text-2xl font-bold">{lab?.modulesCount || 0}</p>
+          </div>
+          <div className="space-y-1">
+            <p className="text-sm text-muted-foreground">AI Assist</p>
+            <Badge variant={lab?.aiEnabled ? "default" : "outline"}>
+              <Bot className="h-3 w-3 mr-1" />
+              {lab?.aiEnabled ? "Enabled" : "Disabled"}
+            </Badge>
           </div>
           <div className="space-y-1">
             <p className="text-sm text-muted-foreground">Created</p>
@@ -232,6 +241,9 @@ function EditLabCard({
 }) {
   const [title, setTitle] = useState(lab?.title || "");
   const [description, setDescription] = useState(lab?.description || "");
+  const [aiEnabled, setAiEnabled] = useState(lab?.aiEnabled ?? false);
+  const [aiMaxMessages, setAiMaxMessages] = useState(lab?.aiMaxMessages ?? 20);
+  const [aiMaxTokens, setAiMaxTokens] = useState(lab?.aiMaxTokens ?? 2000);
   const [saving, setSaving] = useState(false);
 
   const handleSave = async () => {
@@ -240,7 +252,13 @@ function EditLabCard({
       setSaving(true);
       const res = await axios.patch(
         `${getBackendURL()}/teacher/labs/${labId}`,
-        { title: title.trim(), description: description.trim() },
+        {
+          title: title.trim(),
+          description: description.trim(),
+          aiEnabled,
+          aiMaxMessages: aiEnabled ? aiMaxMessages : undefined,
+          aiMaxTokens: aiEnabled ? aiMaxTokens : undefined,
+        },
         { withCredentials: true }
       );
       onUpdated(res.data);
@@ -266,6 +284,64 @@ function EditLabCard({
           <Label htmlFor="edit-desc">Description</Label>
           <Textarea id="edit-desc" value={description} onChange={(e) => setDescription(e.target.value)} rows={3} />
         </div>
+
+        <div className="space-y-2">
+          <Label className="flex items-center gap-2">
+            <Bot className="h-4 w-4" /> AI Assist
+          </Label>
+          <RadioGroup
+            value={aiEnabled ? "enable" : "disable"}
+            onValueChange={(v) => setAiEnabled(v === "enable")}
+            className="flex gap-4"
+          >
+            <div className="flex items-center gap-2">
+              <RadioGroupItem value="enable" id="edit-ai-enable" className="cursor-pointer" />
+              <Label htmlFor="edit-ai-enable" className="cursor-pointer">Enable</Label>
+            </div>
+            <div className="flex items-center gap-2">
+              <RadioGroupItem value="disable" id="edit-ai-disable" className="cursor-pointer" />
+              <Label htmlFor="edit-ai-disable" className="cursor-pointer">Disable</Label>
+            </div>
+          </RadioGroup>
+        </div>
+
+        <div className={`overflow-hidden transition-all duration-500 ease-in-out ${
+          aiEnabled ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
+        }`}>
+          <div className="rounded-lg border border-dashed border-primary/40 bg-primary/5 p-4 space-y-4">
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-semibold text-primary">AI Settings</span>
+              <span className="text-xs text-muted-foreground">Configure limits for AI Assist</span>
+            </div>
+            <div className="grid gap-4 sm:grid-cols-2">
+              <div className="space-y-2">
+                <Label htmlFor="edit-ai-messages">Max Messages</Label>
+                <Input
+                  id="edit-ai-messages"
+                  type="number"
+                  min={1}
+                  max={50}
+                  value={aiMaxMessages}
+                  onChange={(e) => setAiMaxMessages(Number(e.target.value))}
+                />
+                <p className="text-xs text-muted-foreground">Max AI messages per student per problem.</p>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="edit-ai-tokens">Max Tokens</Label>
+                <Input
+                  id="edit-ai-tokens"
+                  type="number"
+                  min={50}
+                  max={10000}
+                  value={aiMaxTokens}
+                  onChange={(e) => setAiMaxTokens(Number(e.target.value))}
+                />
+                <p className="text-xs text-muted-foreground">Max total tokens per student per problem.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <Button onClick={handleSave} disabled={saving}>
           {saving ? "Saving..." : "Save Changes"}
         </Button>

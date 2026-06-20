@@ -13,6 +13,7 @@ import { Submissions } from "./submissions";
 import { ProblemSubmissionItem } from "./interface";
 import { aiReviewResult } from "./page";
 import AiReviewResult from "./aiReviewResult";
+import AiChatBotLab from "./aiChatbotLab";
 
 interface descriptionData {
   id: string;
@@ -35,6 +36,11 @@ function DetailsBlock({
   setSubmissions,
   aiReviewResult,
   performingAiReview,
+  isAiEnabled,
+  labId,
+  problemId,
+  code,
+  language,
 }: {
   data: descriptionData[];
   loadingDetails: boolean;
@@ -48,6 +54,11 @@ function DetailsBlock({
   setSubmissions: (data: ProblemSubmissionItem[] | undefined) => void;
   aiReviewResult: aiReviewResult | undefined;
   performingAiReview: boolean;
+  isAiEnabled?: boolean;
+  labId?: string;
+  problemId?: string;
+  code?: string;
+  language?: string;
 }) {
   return (
     <div>
@@ -96,6 +107,15 @@ function DetailsBlock({
             >
               Submissions
             </TabsTrigger>
+            {isAiEnabled && (
+              <TabsTrigger
+                value="aichat"
+                onClick={() => setTabPage("aichat")}
+                className="cursor-pointer"
+              >
+                AI Assist
+              </TabsTrigger>
+            )}
             {/* <TabsTrigger
               value="aireviewresult"
               onClick={() => setTabPage("aireviewresult")}
@@ -161,6 +181,16 @@ function DetailsBlock({
               setSubmissions={setSubmissions}
             />
           </TabsContent>
+          {isAiEnabled && (
+            <TabsContent value="aichat" className="my-4 mx-1">
+              <AiChatBotLab
+                labId={labId ?? ""}
+                problemId={problemId ?? ""}
+                code={code ?? ""}
+                language={language ?? "cpp"}
+              />
+            </TabsContent>
+          )}
           {/* <TabsContent value="aireviewresult">
             <AiReviewResult aiReviewResult={aiReviewResult} performingAiReview={performingAiReview}/>
           </TabsContent> */}
