@@ -1,11 +1,6 @@
 "use client";
 
 import { Input } from "@/components/ui/input";
-import {
-  complexityTestingCases,
-  driverCode,
-  Problem,
-} from "@/generated/prisma/client";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -29,116 +24,144 @@ import { atomDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { Card, CardContent } from "@/components/ui/card";
 import { getBackendURL } from "@/utils/utilities";
 
+interface AdminProblem {
+  id: string;
+  number: number;
+  title: string;
+  isPublished: boolean;
+  difficulty: string;
+  hidden: boolean;
+}
+
+interface UploadResult {
+  language: string;
+  success: boolean;
+  error?: string;
+}
+
 function Page() {
+  const [availableProblems, setAvailableProblems] = useState<AdminProblem[]>(
+    []
+  );
+  const [selectedProblemId, setSelectedProblemId] = useState<
+    string | undefined
+  >();
   const [searchValue, setSearchValue] = useState("");
-  const [foundProblems, setFoundProblems] = useState<Problem[] | undefined>();
-  const [problem, setProblem] = useState<Problem | undefined>();
-  const [loadingProblems, setLoadingProblems] = useState(false);
   const [files, setFiles] = useState<File[] | undefined>();
-  const [response, setResponse] = useState<driverCode | undefined>();
+  const [results, setResults] = useState<UploadResult[] | undefined>();
   const [uploading, setUploading] = useState(false);
-  const exampleTemplate = ` {
-    "languageId": 71,
-    "header": "#include <bits/stdc++.h>\\nusing namespace std;",
-    "template": "bool checkSortedAndRotated(vector<int>& nums) {\\n    // WRITE YOUR CODE HERE\\n}",
-    "footer": "int main() {\\n    int n;\\n    cin >> n;\\n    vector<int> nums(n);\\n    for (int i = 0; i < n; i++) cin >> nums[i];\\n    bool res = checkSortedAndRotated(nums);\\n    cout << (res ? \"true\" : \"false\");\\n    return 0;\\n}"
-  }
-`;
 
-  const codeWithID = `
-  {
-    id: 50,
-    name: "C (GCC 9.2.0)",
-  },
-  {
-    id: 54,
-    name: "C++ (GCC 9.2.0)",
-  },
-  {
-    id: 62,
-    name: "Java (OpenJDK 13.0.1)",
-  },
+  const exampleTemplate = `{
+  "language": "cpp",
+  "header": "#include <bits/stdc++.h>\\nusing namespace std;",
+  "template": "bool checkSortedAndRotated(vector<int>& nums) {\\n    // WRITE YOUR CODE HERE\\n}",
+  "footer": "int main() {\\n    int n;\\n    cin >> n;\\n    vector<int> nums(n);\\n    for (int i = 0; i < n; i++) cin >> nums[i];\\n    bool res = checkSortedAndRotated(nums);\\n    cout << (res ? \\"true\\" : \\"false\\");\\n    return 0;\\n}"
+}`;
 
-  {
-    id: 71,
-    name: "Python (3.8.1)",
-  }
-    `;
+  const codeWithID = `[
+  { "language": "c",      "label": "C",           "languageId": 1 },
+  { "language": "cpp",    "label": "C++",         "languageId": 2 },
+  { "language": "python", "label": "Python",      "languageId": 3 },
+  { "language": "java",   "label": "Java",        "languageId": 4 }
+]`;
+
+  const selectedProblem = availableProblems.find(
+    (p) => p.id === selectedProblemId
+  );
 
   const fetchProblems = async () => {
     try {
-      setLoadingProblems(true);
-      const problem = await axios.get(
-        `${getBackendURL()}/problems/getproblems`,
-        {
-          params: { searchValue, take: 10, skip: 0 },
-          withCredentials: true,
-        }
-      );
-      setFoundProblems(problem.data as Problem[]);
+      const res = await axios.get(`${getBackendURL()}/admin/problems`, {
+        withCredentials: true,
+      });
+      setAvailableProblems((res.data as any)?.problems ?? []);
     } catch (error) {
       if (typeof error === "string") {
         toast.error(error);
       }
-    } finally {
-      setLoadingProblems(false);
     }
   };
 
+  useEffect(() => {
+    fetchProblems();
+  }, []);
+
+  const filteredProblems = availableProblems.filter((p) =>
+    p.title.toLowerCase().includes(searchValue.toLowerCase())
+  );
+
   const uploadDriverCodeFunc = async () => {
-    if (!problem) {
-      toast.error("Please Select a problem");
+    if (!selectedProblemId || !selectedProblem) {
+      toast.error("Please select a problem");
       return;
     }
 
     if (!files || files.length === 0) {
-      toast.error("Please select a JSON file first.");
+      toast.error("Please select at least one JSON file.");
       return;
     }
-    try {
-      setUploading(true);
-      const file = files[0];
 
+    setUploading(true);
+    setResults(undefined);
+    const uploadResults: UploadResult[] = [];
+
+    for (const file of files) {
       let jsonText: string;
       try {
         jsonText = await file.text();
-      } catch (err) {
-        toast.error("Failed to read file.");
-        return;
+      } catch {
+        uploadResults.push({
+          language: file.name,
+          success: false,
+          error: "Failed to read file",
+        });
+        continue;
       }
 
       let json: any;
       try {
         json = JSON.parse(jsonText);
-      } catch (error) {
-        toast.error("Invalid JSON file.");
-        console.log(error);
+      } catch {
+        uploadResults.push({
+          language: file.name,
+          success: false,
+          error: "Invalid JSON",
+        });
+        continue;
       }
-      console.log("uploading");
-      const res = await axios.post(
-        `${getBackendURL()}/admin/driver-code`,
-        { problemId: problem.id, ...json },
-        { withCredentials: true }
+
+      try {
+        const res = await axios.post(
+          `${getBackendURL()}/admin/driver-code`,
+          { problemId: selectedProblem.id, ...json },
+          { withCredentials: true }
+        );
+        const language =
+          (res.data as any)?.data?.language ?? file.name;
+        uploadResults.push({ language, success: true });
+      } catch (error: any) {
+        const msg =
+          error?.response?.data?.error || error.message || "Upload failed";
+        uploadResults.push({
+          language: file.name,
+          success: false,
+          error: msg,
+        });
+      }
+    }
+
+    setResults(uploadResults);
+    setUploading(false);
+    const successCount = uploadResults.filter((r) => r.success).length;
+    const failCount = uploadResults.filter((r) => !r.success).length;
+    if (failCount === 0) {
+      toast.success(
+        `All ${successCount} driver code(s) uploaded successfully`
       );
-      setResponse((res.data as any)?.data as any);
-      console.log(res.data);
-    } catch (error: any) {
-      if (typeof error.message === "string") {
-        toast.error(error.message);
-      }
-      console.log(error);
-    } finally {
-      setUploading(false);
+    } else {
+      toast.error(`${successCount} succeeded, ${failCount} failed`);
     }
   };
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      fetchProblems();
-    }, 500);
-
-    return () => clearTimeout(timer);
-  }, [searchValue]);
 
   return (
     <div className="flex-1 px-4 py-6 md:px-8 lg:px-10">
@@ -148,8 +171,8 @@ function Page() {
             Upload Driver Code
           </h1>
           <p className="text-sm text-muted-foreground">
-            Attach a JSON driver template to a problem. The file should contain
-            header, template, and footer fields.
+            Attach JSON driver template(s) to a problem. Select up to 4 files
+            (one per language).
           </p>
         </div>
 
@@ -161,41 +184,45 @@ function Page() {
                   Select problem
                 </p>
                 <p className="text-xs text-muted-foreground">
-                  Search and choose the problem you want to attach driver code
-                  to.
+                  Search and choose the problem to attach driver code to.
                 </p>
                 <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
                   <div className="flex-1">
-                    <Combobox>
+                    <Combobox
+                      value={selectedProblemId || ""}
+                      onValueChange={(val) => {
+                        setSelectedProblemId(val || undefined);
+                        const p = availableProblems.find(
+                          (x) => x.id === val
+                        );
+                        if (p)
+                          setSearchValue(`#${p.number} ${p.title}`);
+                      }}
+                    >
                       <ComboboxInput
                         placeholder="Search problems"
                         className="w-full"
                         value={searchValue}
                         onChange={(e) => {
                           setSearchValue(e.target.value);
-                          if (problem) setProblem(undefined);
+                          if (selectedProblemId)
+                            setSelectedProblemId(undefined);
                         }}
+                        showTrigger
                       />
                       <ComboboxContent>
-                        {!loadingProblems && !foundProblems ? (
-                          <ComboboxEmpty>No items found.</ComboboxEmpty>
-                        ) : null}
                         <ComboboxList>
-                          {loadingProblems
-                            ? "Loading..."
-                            : foundProblems?.map((item) => (
-                                <ComboboxItem
-                                  key={item.id}
-                                  onClick={() => {
-                                    setProblem(item);
-                                    setSearchValue(item.title);
-                                  }}
-                                >
-                                  {item.number}
-                                  {"\t"}
-                                  {item.title}
-                                </ComboboxItem>
-                              ))}
+                          {filteredProblems.length === 0 ? (
+                            <ComboboxEmpty>
+                              No problems found.
+                            </ComboboxEmpty>
+                          ) : (
+                            filteredProblems.map((p) => (
+                              <ComboboxItem key={p.id} value={p.id}>
+                                #{p.number} — {p.title}
+                              </ComboboxItem>
+                            ))
+                          )}
                         </ComboboxList>
                       </ComboboxContent>
                     </Combobox>
@@ -204,23 +231,33 @@ function Page() {
                     variant="outline"
                     size="sm"
                     onClick={() => {
-                      setProblem(undefined);
+                      setSelectedProblemId(undefined);
                       setSearchValue("");
                     }}
                   >
                     Clear
                   </Button>
                 </div>
+                {selectedProblem && (
+                  <Card className="border-primary/20 bg-primary/5">
+                    <CardContent className="py-2">
+                      <p className="text-sm font-medium">
+                        Selected: #{selectedProblem.number} —{" "}
+                        {selectedProblem.title}
+                      </p>
+                    </CardContent>
+                  </Card>
+                )}
               </div>
 
               <div className="space-y-3">
                 <div>
                   <p className="text-sm font-medium leading-none">
-                    Upload JSON file
+                    Upload JSON file(s)
                   </p>
                   <p className="mt-1 text-xs text-muted-foreground">
-                    Only one .json file is allowed. It should match the expected
-                    driver format.
+                    Select up to 4 JSON files (one per language). Each file
+                    should match the expected driver format.
                   </p>
                 </div>
 
@@ -229,7 +266,7 @@ function Page() {
                   accept={{
                     "application/json": [".json"],
                   }}
-                  maxFiles={1}
+                  maxFiles={4}
                   onDrop={(file) => setFiles(file)}
                 >
                   <DropzoneEmptyState>
@@ -238,19 +275,26 @@ function Page() {
                         <UploadIcon size={20} />
                       </div>
                       <div className="flex-1 text-left">
-                        {!files ? (
+                        {!files || files.length === 0 ? (
                           <div className="space-y-1">
                             <p className="text-sm font-medium">
-                              Drag and drop your JSON file here
+                              Drag and drop JSON files here
                             </p>
                             <p className="text-xs text-muted-foreground">
-                              Or click to browse from your computer.
+                              Or click to browse. Up to 4 files accepted.
                             </p>
                           </div>
                         ) : (
-                          <p className="text-xs text-muted-foreground">
-                            Selected file: {files[0].name}
-                          </p>
+                          <div className="space-y-1">
+                            <p className="text-sm font-medium">
+                              {files.length} file(s) selected
+                            </p>
+                            <ul className="list-inside list-disc text-xs text-muted-foreground">
+                              {files.map((f, i) => (
+                                <li key={i}>{f.name}</li>
+                              ))}
+                            </ul>
+                          </div>
                         )}
                       </div>
                     </div>
@@ -269,32 +313,27 @@ function Page() {
                 </div>
               </div>
 
-              {response && (
+              {results && results.length > 0 && (
                 <Card className="border-dashed bg-muted/30">
                   <CardContent className="space-y-3 pt-4">
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="font-medium">Upload status</span>
-                      {response.updatedAt ? (
-                        <span className="rounded-full bg-emerald-500/10 px-2.5 py-0.5 text-xs font-medium text-emerald-500">
-                          Accepted
-                        </span>
-                      ) : (
-                        <span className="rounded-full bg-red-500/10 px-2.5 py-0.5 text-xs font-medium text-red-500">
-                          Declined
-                        </span>
-                      )}
-                    </div>
-                    <SyntaxHighlighter
-                      language="json"
-                      style={atomDark}
-                      className="max-h-64 overflow-auto rounded-md border border-border text-xs"
-                    >
-                      {`${JSON.stringify(response.header, null, 2)}\n${JSON.stringify(
-                        response.template,
-                        null,
-                        2
-                      )}\n${JSON.stringify(response.footer, null, 2)}`}
-                    </SyntaxHighlighter>
+                    <p className="text-sm font-medium">Upload Results</p>
+                    {results.map((r, i) => (
+                      <div
+                        key={i}
+                        className="flex items-center justify-between rounded-md border px-3 py-2 text-sm"
+                      >
+                        <span className="font-medium">{r.language}</span>
+                        {r.success ? (
+                          <span className="rounded-full bg-emerald-500/10 px-2.5 py-0.5 text-xs font-medium text-emerald-500">
+                            Accepted
+                          </span>
+                        ) : (
+                          <span className="rounded-full bg-red-500/10 px-2.5 py-0.5 text-xs font-medium text-red-500">
+                            {r.error || "Failed"}
+                          </span>
+                        )}
+                      </div>
+                    ))}
                   </CardContent>
                 </Card>
               )}
@@ -320,9 +359,11 @@ function Page() {
               </SyntaxHighlighter>
 
               <div className="space-y-1 pt-2">
-                <p className="text-sm font-medium leading-none">Language IDs</p>
+                <p className="text-sm font-medium leading-none">
+                  Supported Languages
+                </p>
                 <p className="text-xs text-muted-foreground">
-                  Supported language names with their corresponding IDs.
+                  Language keys and their corresponding IDs.
                 </p>
               </div>
               <SyntaxHighlighter
