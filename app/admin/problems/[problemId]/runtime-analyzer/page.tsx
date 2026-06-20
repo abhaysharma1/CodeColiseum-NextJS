@@ -14,7 +14,6 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { StatCard } from "@/components/dashboard/StatCard";
-import { DashboardChart } from "@/components/dashboard/DashboardChart";
 import { toast } from "sonner";
 import {
   ArrowLeft,
@@ -24,10 +23,10 @@ import {
   Timer,
   Gauge,
   MemoryStick,
-  BrainCircuit,
   AlertCircle,
   CheckCircle2,
   XCircle,
+  Clock,
 } from "lucide-react";
 
 interface NormalCase {
@@ -43,13 +42,13 @@ interface NormalCasesResult {
   cases: NormalCase[];
 }
 
-interface StressCaseResult {
-  size: number;
+interface PerformanceCaseResult {
+  id: string;
+  name: string;
   runtimeMs: number;
   memoryKb: number;
   inputBytes: number;
-  generatorType: string;
-  pattern: string;
+  status: "ACCEPTED" | "WRONG_ANSWER" | "RUNTIME_ERROR" | "TIME_LIMIT_EXCEEDED";
 }
 
 interface Summary {
@@ -62,7 +61,7 @@ interface Summary {
 
 interface AnalysisResult {
   normalCases: NormalCasesResult | null;
-  stressCases: StressCaseResult[];
+  performanceCases: PerformanceCaseResult[];
   summary: Summary | null;
   compilationError?: string;
 }
@@ -109,12 +108,14 @@ const statusIcon: Record<string, React.ReactNode> = {
   ACCEPTED: <CheckCircle2 className="h-4 w-4 text-green-600" />,
   WRONG_ANSWER: <XCircle className="h-4 w-4 text-red-600" />,
   RUNTIME_ERROR: <AlertCircle className="h-4 w-4 text-orange-600" />,
+  TIME_LIMIT_EXCEEDED: <Clock className="h-4 w-4 text-yellow-600" />,
 };
 
 const statusBadge: Record<string, string> = {
   ACCEPTED: "bg-green-500/10 text-green-600 border-green-500/20",
   WRONG_ANSWER: "bg-red-500/10 text-red-600 border-red-500/20",
   RUNTIME_ERROR: "bg-orange-500/10 text-orange-600 border-orange-500/20",
+  TIME_LIMIT_EXCEEDED: "bg-yellow-500/10 text-yellow-600 border-yellow-500/20",
 };
 
 export default function RuntimeAnalyzerPage() {
@@ -225,7 +226,7 @@ export default function RuntimeAnalyzerPage() {
             <h1 className="text-xl font-semibold tracking-tight">Runtime Analyzer</h1>
           )}
           <p className="text-sm text-muted-foreground mt-1">
-            Paste code and benchmark it against test cases and generated stress inputs.
+            Paste code and benchmark it against test cases and performance test cases.
           </p>
         </div>
       </div>
@@ -280,7 +281,7 @@ export default function RuntimeAnalyzerPage() {
       {running && (
         <div className="flex items-center justify-center py-12 text-muted-foreground">
           <Loader2 className="h-6 w-6 animate-spin mr-3" />
-          <span>Running analysis against test cases and stress generators...</span>
+          <span>Running analysis against test cases and performance test cases...</span>
         </div>
       )}
 
@@ -353,37 +354,43 @@ export default function RuntimeAnalyzerPage() {
             </Card>
           )}
 
-          {/* Stress Cases */}
-          {result.stressCases.length > 0 && (
+          {/* Performance Test Cases */}
+          {result.performanceCases.length > 0 && (
             <>
               <Card>
                 <CardHeader className="pb-3">
                   <div className="flex items-center gap-2">
-                    <BrainCircuit className="h-5 w-5 text-muted-foreground" />
-                    <CardTitle className="text-base">Stress Cases</CardTitle>
+                    <FlaskConical className="h-5 w-5 text-muted-foreground" />
+                    <CardTitle className="text-base">Performance Test Cases</CardTitle>
                   </div>
                   <CardDescription>
-                    Generator: {result.stressCases[0].generatorType} &middot;
-                    Pattern: {result.stressCases[0].pattern}
+                    S3-stored large test cases to validate scalability.
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="p-0">
                   <Table>
                     <TableHeader>
                       <TableRow>
-                        <TableHead>Size</TableHead>
+                        <TableHead>Name</TableHead>
+                        <TableHead>Status</TableHead>
                         <TableHead>Runtime (ms)</TableHead>
                         <TableHead>Memory (KB)</TableHead>
                         <TableHead>Input Size (bytes)</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                      {result.stressCases.map((sc) => (
-                        <TableRow key={sc.size}>
-                          <TableCell className="font-mono">{sc.size.toLocaleString()}</TableCell>
-                          <TableCell className="font-mono">{sc.runtimeMs}</TableCell>
-                          <TableCell className="font-mono">{sc.memoryKb}</TableCell>
-                          <TableCell className="font-mono">{sc.inputBytes}</TableCell>
+                      {result.performanceCases.map((pc) => (
+                        <TableRow key={pc.id}>
+                          <TableCell className="font-medium">{pc.name}</TableCell>
+                          <TableCell>
+                            <Badge variant="outline" className={`gap-1 ${statusBadge[pc.status] ?? ""}`}>
+                              {statusIcon[pc.status]}
+                              {pc.status.replace(/_/g, " ")}
+                            </Badge>
+                          </TableCell>
+                          <TableCell className="font-mono">{pc.runtimeMs}</TableCell>
+                          <TableCell className="font-mono">{pc.memoryKb}</TableCell>
+                          <TableCell className="font-mono">{pc.inputBytes}</TableCell>
                         </TableRow>
                       ))}
                     </TableBody>
@@ -391,40 +398,12 @@ export default function RuntimeAnalyzerPage() {
                 </CardContent>
               </Card>
 
-              {/* Charts */}
-              <div className="grid gap-6 lg:grid-cols-2">
-                <DashboardChart
-                  title="Runtime vs Input Size"
-                  description="Execution time as input size grows"
-                  data={result.stressCases.map(sc => ({
-                    size: sc.size,
-                    "Runtime (ms)": sc.runtimeMs,
-                  }))}
-                  chartType="line"
-                  dataKey="Runtime (ms)"
-                  xAxisKey="size"
-                  height={280}
-                />
-                <DashboardChart
-                  title="Memory vs Input Size"
-                  description="Memory usage as input size grows"
-                  data={result.stressCases.map(sc => ({
-                    size: sc.size,
-                    "Memory (KB)": sc.memoryKb,
-                  }))}
-                  chartType="line"
-                  dataKey="Memory (KB)"
-                  xAxisKey="size"
-                  height={280}
-                />
-              </div>
-
               {/* Summary Cards */}
               {result.summary && (
                 <>
                   <Separator />
                   <div>
-                    <h3 className="text-base font-semibold tracking-tight mb-4">Summary</h3>
+                    <h3 className="text-base font-semibold tracking-tight mb-4">Performance Summary</h3>
                     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
                       <StatCard
                         title="Fastest Runtime"
@@ -464,11 +443,11 @@ export default function RuntimeAnalyzerPage() {
           )}
 
           {/* No Results */}
-          {!result.compilationError && result.normalCases === null && result.stressCases.length === 0 && (
+          {!result.compilationError && result.normalCases === null && result.performanceCases.length === 0 && (
             <Card>
               <CardContent className="flex flex-col items-center justify-center py-12 text-muted-foreground">
                 <FlaskConical className="h-8 w-8 mb-3" />
-                <p>No test cases or stress generator configured for this problem.</p>
+                <p>No test cases or performance test cases configured for this problem.</p>
               </CardContent>
             </Card>
           )}
