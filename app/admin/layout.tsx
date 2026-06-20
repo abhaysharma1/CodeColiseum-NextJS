@@ -46,8 +46,8 @@ const navigation = [
     icon: IconFileCode,
   },
   {
-    name: "Complexity Generator",
-    href: "/admin/upload-complexity-generator",
+    name: "Problem Constraints",
+    href: "/admin/problem-constraints",
     icon: IconSparkles,
   },
   {
