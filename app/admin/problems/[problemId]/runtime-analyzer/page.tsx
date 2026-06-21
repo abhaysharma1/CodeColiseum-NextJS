@@ -10,10 +10,10 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { StatCard } from "@/components/dashboard/StatCard";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { toast } from "sonner";
 import {
   ArrowLeft,
@@ -32,6 +32,9 @@ import {
 interface NormalCase {
   testcaseId: string;
   status: "ACCEPTED" | "WRONG_ANSWER" | "RUNTIME_ERROR";
+  input?: string;
+  expectedOutput?: string;
+  actualOutput?: string;
 }
 
 interface NormalCasesResult {
@@ -49,6 +52,9 @@ interface PerformanceCaseResult {
   memoryKb: number;
   inputBytes: number;
   status: "ACCEPTED" | "WRONG_ANSWER" | "RUNTIME_ERROR" | "TIME_LIMIT_EXCEEDED";
+  input?: string;
+  expectedOutput?: string;
+  actualOutput?: string;
 }
 
 interface Summary {
@@ -328,27 +334,39 @@ export default function RuntimeAnalyzerPage() {
               </CardHeader>
               {result.normalCases.cases.length > 0 && (
                 <CardContent className="p-0">
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>Testcase</TableHead>
-                        <TableHead>Status</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {result.normalCases.cases.map((tc) => (
-                        <TableRow key={tc.testcaseId}>
-                          <TableCell className="font-mono text-sm">{tc.testcaseId}</TableCell>
-                          <TableCell>
+                  <Accordion type="single" collapsible>
+                    {result.normalCases.cases.map((tc) => (
+                      <AccordionItem key={tc.testcaseId} value={tc.testcaseId} className="px-4">
+                        <AccordionTrigger className="hover:no-underline [&>svg]:shrink-0">
+                          <div className="flex w-full items-center justify-between pr-2">
+                            <span className="font-mono text-sm">{tc.testcaseId}</span>
                             <Badge variant="outline" className={`gap-1 ${statusBadge[tc.status] ?? ""}`}>
                               {statusIcon[tc.status]}
                               {tc.status.replace("_", " ")}
                             </Badge>
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
+                          </div>
+                        </AccordionTrigger>
+                        <AccordionContent>
+                          <div className="space-y-3 pt-2">
+                            <div className="rounded-md bg-muted/40 p-3 text-xs whitespace-pre-wrap break-words">
+                              <div className="mb-1 text-[11px] font-semibold uppercase text-muted-foreground">Input</div>
+                              {tc.input || "(empty)"}
+                            </div>
+                            <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
+                              <div className="rounded-md bg-muted/40 p-3 text-xs whitespace-pre-wrap break-words">
+                                <div className="mb-1 text-[11px] font-semibold uppercase text-muted-foreground">Expected</div>
+                                {tc.expectedOutput || "(empty)"}
+                              </div>
+                              <div className="rounded-md bg-muted/40 p-3 text-xs whitespace-pre-wrap break-words">
+                                <div className="mb-1 text-[11px] font-semibold uppercase text-muted-foreground">Actual</div>
+                                {tc.actualOutput || "(empty)"}
+                              </div>
+                            </div>
+                          </div>
+                        </AccordionContent>
+                      </AccordionItem>
+                    ))}
+                  </Accordion>
                 </CardContent>
               )}
             </Card>
@@ -368,33 +386,44 @@ export default function RuntimeAnalyzerPage() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="p-0">
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>Name</TableHead>
-                        <TableHead>Status</TableHead>
-                        <TableHead>Runtime (ms)</TableHead>
-                        <TableHead>Memory (KB)</TableHead>
-                        <TableHead>Input Size (bytes)</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {result.performanceCases.map((pc) => (
-                        <TableRow key={pc.id}>
-                          <TableCell className="font-medium">{pc.name}</TableCell>
-                          <TableCell>
-                            <Badge variant="outline" className={`gap-1 ${statusBadge[pc.status] ?? ""}`}>
+                  <Accordion type="single" collapsible>
+                    {result.performanceCases.map((pc) => (
+                      <AccordionItem key={pc.id} value={pc.id} className="px-4">
+                        <AccordionTrigger className="hover:no-underline [&>svg]:shrink-0">
+                          <div className="flex w-full items-center justify-between gap-4 pr-2">
+                            <div className="flex items-center gap-3 min-w-0">
+                              <span className="font-medium truncate">{pc.name}</span>
+                              <span className="font-mono text-xs text-muted-foreground shrink-0">
+                                {pc.runtimeMs}ms / {pc.memoryKb}KB / {pc.inputBytes}B
+                              </span>
+                            </div>
+                            <Badge variant="outline" className={`gap-1 shrink-0 ${statusBadge[pc.status] ?? ""}`}>
                               {statusIcon[pc.status]}
                               {pc.status.replace(/_/g, " ")}
                             </Badge>
-                          </TableCell>
-                          <TableCell className="font-mono">{pc.runtimeMs}</TableCell>
-                          <TableCell className="font-mono">{pc.memoryKb}</TableCell>
-                          <TableCell className="font-mono">{pc.inputBytes}</TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
+                          </div>
+                        </AccordionTrigger>
+                        <AccordionContent>
+                          <div className="space-y-3 pt-2">
+                            <div className="rounded-md bg-muted/40 p-3 text-xs whitespace-pre-wrap break-words">
+                              <div className="mb-1 text-[11px] font-semibold uppercase text-muted-foreground">Input</div>
+                              {pc.input || "(empty)"}
+                            </div>
+                            <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
+                              <div className="rounded-md bg-muted/40 p-3 text-xs whitespace-pre-wrap break-words">
+                                <div className="mb-1 text-[11px] font-semibold uppercase text-muted-foreground">Expected</div>
+                                {pc.expectedOutput || "(empty)"}
+                              </div>
+                              <div className="rounded-md bg-muted/40 p-3 text-xs whitespace-pre-wrap break-words">
+                                <div className="mb-1 text-[11px] font-semibold uppercase text-muted-foreground">Actual</div>
+                                {pc.actualOutput || "(empty)"}
+                              </div>
+                            </div>
+                          </div>
+                        </AccordionContent>
+                      </AccordionItem>
+                    ))}
+                  </Accordion>
                 </CardContent>
               </Card>
 
