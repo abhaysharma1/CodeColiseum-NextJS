@@ -35,6 +35,7 @@ interface NormalCase {
   input?: string;
   expectedOutput?: string;
   actualOutput?: string;
+  stderr?: string;
 }
 
 interface NormalCasesResult {
@@ -55,6 +56,7 @@ interface PerformanceCaseResult {
   input?: string;
   expectedOutput?: string;
   actualOutput?: string;
+  stderr?: string;
 }
 
 interface Summary {
@@ -352,6 +354,12 @@ export default function RuntimeAnalyzerPage() {
                               <div className="mb-1 text-[11px] font-semibold uppercase text-muted-foreground">Input</div>
                               {tc.input || "(empty)"}
                             </div>
+                            {tc.stderr && (
+                              <div className="rounded-md bg-red-500/10 p-3 text-xs whitespace-pre-wrap break-words border border-red-500/20">
+                                <div className="mb-1 text-[11px] font-semibold uppercase text-red-600">Error</div>
+                                <pre className="font-mono text-red-700 dark:text-red-300">{tc.stderr}</pre>
+                              </div>
+                            )}
                             <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
                               <div className="rounded-md bg-muted/40 p-3 text-xs whitespace-pre-wrap break-words">
                                 <div className="mb-1 text-[11px] font-semibold uppercase text-muted-foreground">Expected</div>
@@ -409,6 +417,12 @@ export default function RuntimeAnalyzerPage() {
                               <div className="mb-1 text-[11px] font-semibold uppercase text-muted-foreground">Input</div>
                               {pc.input || "(empty)"}
                             </div>
+                            {pc.stderr && (
+                              <div className="rounded-md bg-red-500/10 p-3 text-xs whitespace-pre-wrap break-words border border-red-500/20">
+                                <div className="mb-1 text-[11px] font-semibold uppercase text-red-600">Error</div>
+                                <pre className="font-mono text-red-700 dark:text-red-300">{pc.stderr}</pre>
+                              </div>
+                            )}
                             <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
                               <div className="rounded-md bg-muted/40 p-3 text-xs whitespace-pre-wrap break-words">
                                 <div className="mb-1 text-[11px] font-semibold uppercase text-muted-foreground">Expected</div>
