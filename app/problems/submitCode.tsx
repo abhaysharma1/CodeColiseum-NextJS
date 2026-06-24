@@ -145,7 +145,7 @@ function SubmitCode({ results }: { results: SubmissionResult | undefined }) {
       },
       BAD_SCALING: {
         icon: <AlertCircle className="w-8 h-8 text-amber-600" />,
-        title: "Time Complexity Issue",
+        title: "Time Limit Exceeded",
         color: "text-amber-700",
         bgColor: "bg-amber-50 dark:bg-amber-950/20",
         borderColor: "border-amber-200 dark:border-amber-800",
