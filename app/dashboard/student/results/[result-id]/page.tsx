@@ -76,6 +76,7 @@ export type ExamResultResponse = {
     submittedAt: Date | null;
     totalScore: number;
   };
+  maxScore: number;
   finalScore: number;
   submissionReports: Array<{
     problemId: string;
@@ -213,13 +214,13 @@ function Page({ params }: { params: Promise<{ "result-id": string }> }) {
     );
   }
 
-  const { examDetails, examAttempt, finalScore, submissionReports, ranking } =
+  const { examDetails, examAttempt, finalScore, maxScore, submissionReports, ranking } =
     result;
   const totalProblems: number = examDetails.problems.length;
   const solvedProblems: number = submissionReports.filter(
     (s) => s.isSuccessful
   ).length;
-  const scorePercentage: number = (finalScore / examAttempt.totalScore) * 100;
+  const scorePercentage: number = maxScore > 0 ? (finalScore / maxScore) * 100 : 0;
 
   return (
     <div className="min-h-screen">
@@ -239,7 +240,7 @@ function Page({ params }: { params: Promise<{ "result-id": string }> }) {
                     {finalScore}
                   </div>
                   <div className="text-sm text-muted-foreground">
-                    out of {examAttempt.totalScore}
+                    out of {maxScore}
                   </div>
                   <div className="mt-2">
                     <Badge variant="outline" className="text-xs">

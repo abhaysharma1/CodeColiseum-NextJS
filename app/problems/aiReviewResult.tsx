@@ -135,8 +135,7 @@ function AiReviewResult({
   const review = aiReviewResult.data?.data;
   if (!review) return null;
 
-  const offsetScore = review.overall_score * 10;
-  const score = offsetScore ?? 0;
+  const score = review.overall_score != null ? Math.round(review.overall_score * 10) : 0;
   const scoreColor =
     score >= 80 ? "bg-green-400" : score >= 50 ? "bg-yellow-400" : "bg-red-400";
 
