@@ -169,7 +169,7 @@ export const StudentTable: React.FC<StudentTableProps> = ({
                     </TableCell>
                     <TableCell>
                       {row.lastActive
-                        ? formatDistanceToNow(new Date(row.lastActive), {
+                        ? formatDistanceToNow(row.lastActive, {
                             addSuffix: true,
                           })
                         : "-"}

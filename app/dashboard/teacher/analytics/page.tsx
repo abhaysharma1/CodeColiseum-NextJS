@@ -13,7 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Download } from "lucide-react";
+import { Download, Loader2 } from "lucide-react";
 import { getBackendURL } from "@/utils/utilities";
 import { usePermission } from "@/hooks/usePermission";
 
@@ -162,6 +162,7 @@ export default function TeacherAnalyticsPage() {
 
   const [isLoadingExams, setIsLoadingExams] = useState(false);
   const [isLoadingExamDetail, setIsLoadingExamDetail] = useState(false);
+  const [isExporting, setIsExporting] = useState(false);
 
   const [groupStats, setGroupStats] = useState<GroupStatsResponse | null>(null);
   const [students, setStudents] = useState<StudentData[]>([]);
@@ -172,6 +173,10 @@ export default function TeacherAnalyticsPage() {
 
   const [exams, setExams] = useState<ExamRow[]>([]);
   const [totalExams, setTotalExams] = useState(0);
+
+  const [chartTrend, setChartTrend] = useState<
+    Array<{ date: string; avgScore: number; count: number }>
+  >([]);
 
   const [filters, setFilters] = useState<FilterState>({
     search: "",
@@ -435,6 +440,66 @@ export default function TeacherAnalyticsPage() {
     [selectedGroupId, canViewAnalytics]
   );
 
+  const fetchChartTrend = useCallback(async () => {
+    if (!selectedGroupId || !canViewAnalytics) return;
+    try {
+      const res = await axios.get<{ performanceTrend?: Array<{ date: string; avgScore: number; count: number }> }>(
+        `${BACKEND_URL}/teacher/analytics/charts`,
+        {
+          params: { groupId: selectedGroupId, type: "trend" },
+          withCredentials: true,
+        },
+      );
+      setChartTrend(res.data.performanceTrend || []);
+    } catch {
+      setChartTrend([]);
+    }
+  }, [selectedGroupId, canViewAnalytics]);
+
+  const handleExportCSV = useCallback(async () => {
+    if (!selectedGroupId) return;
+    setIsExporting(true);
+    try {
+      const res = await axios.get<Blob>(`${BACKEND_URL}/teacher/analytics/export-csv`, {
+        params: { groupId: selectedGroupId },
+        withCredentials: true,
+        responseType: "blob",
+      });
+      const url = window.URL.createObjectURL(res.data);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `analytics_${selectedGroupId}_${new Date().toISOString().split("T")[0]}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
+    } finally {
+      setIsExporting(false);
+    }
+  }, [selectedGroupId]);
+
+  const handleExportPDF = useCallback(async () => {
+    if (!selectedGroupId) return;
+    setIsExporting(true);
+    try {
+      const res = await axios.get<Blob>(`${BACKEND_URL}/teacher/analytics/export-pdf`, {
+        params: { groupId: selectedGroupId },
+        withCredentials: true,
+        responseType: "blob",
+      });
+      const url = window.URL.createObjectURL(res.data);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `analytics_${selectedGroupId}_${new Date().toISOString().split("T")[0]}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
+    } finally {
+      setIsExporting(false);
+    }
+  }, [selectedGroupId]);
+
   const fetchStudentDetail = useCallback(
     async (studentId: string) => {
       if (!selectedGroupId) return;
@@ -470,20 +535,13 @@ export default function TeacherAnalyticsPage() {
   }, [fetchGroups]);
 
   useEffect(() => {
+    if (!selectedGroupId) return;
     fetchStats();
-  }, [fetchStats]);
-
-  useEffect(() => {
     fetchStudents();
-  }, [fetchStudents]);
-
-  useEffect(() => {
     fetchProblems();
-  }, [fetchProblems]);
-
-  useEffect(() => {
     fetchExams();
-  }, [fetchExams]);
+    fetchChartTrend();
+  }, [selectedGroupId, fetchStats, fetchStudents, fetchProblems, fetchExams, fetchChartTrend]);
 
   const chartData = useMemo(() => {
     if (!students.length) return undefined;
@@ -515,15 +573,17 @@ export default function TeacherAnalyticsPage() {
     return {
       scoreDistribution,
       completionDistribution,
-      performanceTrend: [
-        {
-          date: "Current",
-          avgScore:
-            students.reduce((acc, s) => acc + s.avgScore, 0) /
-            Math.max(students.length, 1),
-          count: students.length,
-        },
-      ],
+      performanceTrend: chartTrend.length > 0
+        ? chartTrend
+        : [
+            {
+              date: "Current",
+              avgScore:
+                students.reduce((acc, s) => acc + s.avgScore, 0) /
+                Math.max(students.length, 1),
+              count: students.length,
+            },
+          ],
       timeSpentByProblem: [],
     };
   }, [students]);
@@ -606,7 +666,7 @@ export default function TeacherAnalyticsPage() {
   const canRender = !!selectedGroupId && canViewAnalytics;
 
   return (
-    <div className="min-h-screen  p-4 md:p-8 space-y-6">
+    <div className="min-h-screen p-4 md:p-8 space-y-6">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold">Teacher Analytics</h1>
@@ -649,12 +709,30 @@ export default function TeacherAnalyticsPage() {
             </SelectContent>
           </Select>
 
-          <Button variant="outline" size="sm" disabled>
-            <Download className="w-4 h-4 mr-2" />
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleExportCSV}
+            disabled={isExporting || !canRender}
+          >
+            {isExporting ? (
+              <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+            ) : (
+              <Download className="w-4 h-4 mr-2" />
+            )}
             Export CSV
           </Button>
-          <Button variant="outline" size="sm" disabled>
-            <Download className="w-4 h-4 mr-2" />
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleExportPDF}
+            disabled={isExporting || !canRender}
+          >
+            {isExporting ? (
+              <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+            ) : (
+              <Download className="w-4 h-4 mr-2" />
+            )}
             Export PDF
           </Button>
         </div>
