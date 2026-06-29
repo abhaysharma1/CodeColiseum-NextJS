@@ -5,7 +5,6 @@ import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { Spinner } from "@/components/ui/shadcn-io/spinner";
 import { Problem, RunTestCase, TestCaseItem } from "@/interfaces/DB Schema";
-import { Separator } from "@/components/ui/separator";
 import { runTestCaseType } from "./interface";
 import {
   Card,
@@ -277,27 +276,43 @@ function Description({
           </TabsContent>
           <TabsContent value="testcases" className="my-4 mx-1">
             <div className="mt-7 flex flex-col h-full">
-              <div className=" flex flex-col h-full">
+              <div className="flex flex-col h-full">
                 {!testcases ? (
                   <div className="w-full flex flex-col justify-center items-center">
                     <Spinner variant="ring" />
                   </div>
+                ) : !jsonCases || jsonCases.length === 0 ? (
+                  <div className="rounded-md border border-dashed px-4 py-6 text-center text-sm text-muted-foreground">
+                    No test cases available.
+                  </div>
                 ) : (
-                  <div className="">
-                    <div className="mb-2 w-full flex justify-between px-10">
-                      <div>Input</div>
-                      <div>Output</div>
-                    </div>
-                    {jsonCases?.map((item, index) => (
+                  <div className="space-y-4">
+                    {jsonCases.map((item, index) => (
                       <div
-                        className="text-foreground/70 w-full whitespace-pre-line"
-                        key={item.input}
+                        className="rounded-lg border bg-card p-4"
+                        key={`${index}-${item.input.slice(0, 24)}`}
                       >
-                        <div className="my-3 flex w-full justify-between pl-10">
-                          <div>{item.input}</div>
-                          <div className="pr-14">{item.output}</div>
+                        <div className="mb-3 text-sm font-semibold text-foreground/90">
+                          Test Case {index + 1}
                         </div>
-                        <Separator />
+                        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                          <div>
+                            <div className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                              Input
+                            </div>
+                            <pre className="max-h-44 overflow-auto rounded-md bg-muted/50 p-3 text-xs whitespace-pre-wrap break-words">
+                              {item.input || "-"}
+                            </pre>
+                          </div>
+                          <div>
+                            <div className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                              Output
+                            </div>
+                            <pre className="max-h-44 overflow-auto rounded-md bg-muted/50 p-3 text-xs whitespace-pre-wrap break-words">
+                              {item.output || "-"}
+                            </pre>
+                          </div>
+                        </div>
                       </div>
                     ))}
                   </div>
