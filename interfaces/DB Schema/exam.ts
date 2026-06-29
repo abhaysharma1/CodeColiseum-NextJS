@@ -42,6 +42,11 @@ export interface ExamProblem {
   order: number;
   examId: string;
   problemId: string;
+  problem?: {
+    title: string;
+    difficulty: string;
+    number: number;
+  };
 }
 
 export interface ExamEnrollment {

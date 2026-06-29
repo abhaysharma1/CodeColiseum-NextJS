@@ -194,8 +194,7 @@ function Description({
   return (
     <div>
       <div
-        title="tab navbar"
-        className="w-[calc(35vw-2.5rem)] h-[calc(100vh-7rem)] overflow-y-scroll scroll-smooth m-5 outline-1 outline-offset-8 rounded-md py-3 px-7  box-border bg-accent/30"
+        className=" h-[calc(100vh-7rem)] overflow-y-scroll scroll-smooth m-5 outline-1 outline-offset-8 rounded-md py-3 px-7  box-border bg-accent/30 shadow-2xl"
       >
         <Tabs className="w-full h-full " value={currentTab}>
           <TabsList>

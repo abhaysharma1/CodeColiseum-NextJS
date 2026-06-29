@@ -19,6 +19,12 @@ import { Separator } from "@/components/ui/separator";
 import { getLanguageId } from "@/utils/getLanguageId";
 import { runTestCaseType } from "./interface";
 import { useRemainingTime } from "./getRemainingTime";
+import ExamSidebar from "./examSidebar";
+import {
+  ResizablePanelGroup,
+  ResizablePanel,
+  ResizableHandle,
+} from "@/components/ui/resizable";
 
 const defaultRuntimeLanguageId = 54;
 const terminalStatuses = new Set([
@@ -71,6 +77,30 @@ function Page({ params }: { params: Promise<{ "exam-id": string }> }) {
 
   const [isAiEnabled, setIsAiEnabled] = useState(false);
   const [groupId, setGroupId] = useState<string>("");
+
+  const [problemStatus, setProblemStatus] = useState<
+    Record<number, "solved" | "attempted" | "not_attempted">
+  >({});
+
+  const [isSidebarOpen, setIsSidebarOpen] = useState(() => {
+    if (typeof window !== "undefined") {
+      return localStorage.getItem("exam-sidebar-open") === "true";
+    }
+    return false;
+  });
+
+  const initialSizes: [number, number] = (() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("exam-description-width");
+      if (saved) {
+        const parsed = parseInt(saved, 10);
+        if (!isNaN(parsed) && parsed > 0 && parsed < 100) {
+          return [parsed, 100 - parsed];
+        }
+      }
+    }
+    return [45, 55];
+  })();
 
   function getErrorMessage(err: any) {
     if (!err) return "Something went wrong. Please try again.";
@@ -366,6 +396,7 @@ function Page({ params }: { params: Promise<{ "exam-id": string }> }) {
     }
     setSubmitting(true);
     setSubmittingResults(undefined);
+    setProblemStatus((prev) => ({ ...prev, [currProblem!]: "attempted" }));
     const languageId = getLanguageId(language);
     const sentData = {
       examId: examDetails.id,
@@ -407,6 +438,12 @@ function Page({ params }: { params: Promise<{ "exam-id": string }> }) {
           "status" in latestResult &&
           terminalStatuses.has(latestResult.status)
         ) {
+          if (latestResult.status === "ACCEPTED") {
+            setProblemStatus((prev) => ({
+              ...prev,
+              [currProblem!]: "solved",
+            }));
+          }
           return;
         }
 
@@ -465,6 +502,14 @@ function Page({ params }: { params: Promise<{ "exam-id": string }> }) {
     }
   };
 
+  const problemItems = examProblems?.map((p) => ({
+    order: p.order,
+    problemId: p.problemId,
+    title: p.problem?.title,
+    difficulty: p.problem?.difficulty,
+    status: problemStatus[p.order] ?? ("not_attempted" as const),
+  })) ?? [];
+
   if (sebError) {
     return (
       <div className="p-8 text-red-500 w-full h-screen flex justify-center items-center">
@@ -482,8 +527,8 @@ function Page({ params }: { params: Promise<{ "exam-id": string }> }) {
   }
 
   return (
-    <div>
-      <div className="w-full flex justify-between items-center h-13 px-5 ">
+    <div className="flex flex-col h-screen">
+      <div className="w-full flex justify-between items-center h-13 px-5 flex-shrink-0">
         <div className="font-logoFont font-bold">CODECOLISEUM</div>
         <div>{examDetails?.title}</div>
         <div>
@@ -504,60 +549,79 @@ function Page({ params }: { params: Promise<{ "exam-id": string }> }) {
         </div>
       </div>
       <Separator></Separator>
-      <div className="flex p-2 gap-3">
-        <div className="min-w-17 w-fit h-[calc(100vh-7rem)] overflow-y-scroll scroll-smooth m-5 outline-1 outline-offset-8 rounded-md px-4 py-3 box-border bg-accent/30">
-          <h1 className="mb-4 font-semibold">Problem List</h1>
-
-          {/* Changed grid to flex with wrap */}
-          <div className="flex flex-wrap gap-2 justify-start">
-            {examProblems?.map((p) => (
-              <div key={p.id}>
-                <Button
-                  variant={currProblem === p.order ? "default" : "outline"}
-                  onClick={() => setCurrProblem(p.order)}
-                  // Added w-10 (or similar) to keep buttons uniform and square-ish
-                  // className="w-10 h-10 p-0"
-                >
-                  {p.order}
-                </Button>
-              </div>
-            ))}
-          </div>
-        </div>
-        <div>
-          <Description
-            descriptionData={descriptionData}
-            testcases={testCases}
-            runningResults={runningResults}
-            attemptId={examAttempt?.id}
-            problemId={
-              examProblems && currProblem
-                ? examProblems[currProblem - 1]?.problemId
-                : undefined
+      <div className="flex flex-1 overflow-hidden p-2 gap-3">
+        <ExamSidebar
+          problems={problemItems}
+          currentOrder={currProblem ?? 1}
+          onProblemSelect={(order) => setCurrProblem(order)}
+          isOpen={isSidebarOpen}
+          onToggle={() => {
+            const next = !isSidebarOpen;
+            setIsSidebarOpen(next);
+            localStorage.setItem("exam-sidebar-open", String(next));
+          }}
+        />
+        <ResizablePanelGroup
+          orientation="horizontal"
+          className="flex-1"
+          onLayoutChange={(layout: { [id: string]: number }) => {
+            const descWidth = layout["description-panel"];
+            if (descWidth) {
+              localStorage.setItem(
+                "exam-description-width",
+                String(Math.round(descWidth))
+              );
             }
-            submittingResults={submittingResults}
-            currentTab={currentTab}
-            setCurrentTab={setCurrentTab}
-            isAiEnabled={isAiEnabled}
-            groupId={groupId}
-            examId={examId}
-            code={code}
-            language={language}
-          />
-        </div>
-        <div className="flex-1">
-          <CodingEditor
-            code={code}
-            running={running}
-            submitting={submitting}
-            setCode={setCode}
-            language={language}
-            setLanguage={setLanguage}
-            onRun={onRun}
-            onSubmit={onSubmit}
-            resetCode={resetCode}
-          />
-        </div>
+          }}
+        >
+          <ResizablePanel
+            defaultSize={initialSizes[0]}
+            minSize={25}
+            id="description-panel"
+          >
+            <div className="h-full overflow-y-auto">
+              <Description
+                descriptionData={descriptionData}
+                testcases={testCases}
+                runningResults={runningResults}
+                attemptId={examAttempt?.id}
+                problemId={
+                  examProblems && currProblem
+                    ? examProblems[currProblem - 1]?.problemId
+                    : undefined
+                }
+                submittingResults={submittingResults}
+                currentTab={currentTab}
+                setCurrentTab={setCurrentTab}
+                isAiEnabled={isAiEnabled}
+                groupId={groupId}
+                examId={examId}
+                code={code}
+                language={language}
+              />
+            </div>
+          </ResizablePanel>
+          <ResizableHandle withHandle />
+          <ResizablePanel
+            defaultSize={initialSizes[1]}
+            minSize={30}
+            id="editor-panel"
+          >
+            <div className="h-full">
+              <CodingEditor
+                code={code}
+                running={running}
+                submitting={submitting}
+                setCode={setCode}
+                language={language}
+                setLanguage={setLanguage}
+                onRun={onRun}
+                onSubmit={onSubmit}
+                resetCode={resetCode}
+              />
+            </div>
+          </ResizablePanel>
+        </ResizablePanelGroup>
       </div>
     </div>
   );
