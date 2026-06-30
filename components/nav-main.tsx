@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/sidebar";
 import { usePermission } from "@/hooks/usePermission";
 import { useRouter } from "next/navigation";
-import { MdLibraryBooks, MdOutlineSpaceDashboard } from "react-icons/md";
+import { MdLibraryBooks, MdOutlineSpaceDashboard, MdCreate } from "react-icons/md";
 import { PiStudentBold } from "react-icons/pi";
 import { IoAnalytics } from "react-icons/io5";
 import { BookOpen, FlaskConical, Megaphone } from "lucide-react";
@@ -96,6 +96,21 @@ export function NavMain({ page }: { page: string }) {
               <SidebarMenuButton tooltip={"Problems"}>
                 <MdLibraryBooks />
                 <span>Problems</span>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          )}
+          {canEditExam && (
+            <SidebarMenuItem
+              className={
+                page == "MY_PROBLEMS"
+                  ? "bg-primary text-primary-foreground rounded-md"
+                  : ""
+              }
+              onClick={() => router.push("/dashboard/teacher/my-problems")}
+            >
+              <SidebarMenuButton tooltip={"My Problems"}>
+                <MdCreate />
+                <span>My Problems</span>
               </SidebarMenuButton>
             </SidebarMenuItem>
           )}

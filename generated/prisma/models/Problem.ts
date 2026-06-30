@@ -42,6 +42,16 @@ export type ProblemMinAggregateOutputType = {
   difficulty: $Enums.problemDifficulty | null
   source: string | null
   isPublished: boolean | null
+  hidden: boolean | null
+  ownerType: $Enums.ProblemOwnerType | null
+  ownerId: string | null
+  visibility: $Enums.ProblemVisibility | null
+  approvalStatus: $Enums.ProblemApprovalStatus | null
+  approvedById: string | null
+  approvedAt: Date | null
+  rejectionReason: string | null
+  createdAt: Date | null
+  updatedAt: Date | null
 }
 
 export type ProblemMaxAggregateOutputType = {
@@ -52,6 +62,16 @@ export type ProblemMaxAggregateOutputType = {
   difficulty: $Enums.problemDifficulty | null
   source: string | null
   isPublished: boolean | null
+  hidden: boolean | null
+  ownerType: $Enums.ProblemOwnerType | null
+  ownerId: string | null
+  visibility: $Enums.ProblemVisibility | null
+  approvalStatus: $Enums.ProblemApprovalStatus | null
+  approvedById: string | null
+  approvedAt: Date | null
+  rejectionReason: string | null
+  createdAt: Date | null
+  updatedAt: Date | null
 }
 
 export type ProblemCountAggregateOutputType = {
@@ -62,6 +82,16 @@ export type ProblemCountAggregateOutputType = {
   difficulty: number
   source: number
   isPublished: number
+  hidden: number
+  ownerType: number
+  ownerId: number
+  visibility: number
+  approvalStatus: number
+  approvedById: number
+  approvedAt: number
+  rejectionReason: number
+  createdAt: number
+  updatedAt: number
   _all: number
 }
 
@@ -82,6 +112,16 @@ export type ProblemMinAggregateInputType = {
   difficulty?: true
   source?: true
   isPublished?: true
+  hidden?: true
+  ownerType?: true
+  ownerId?: true
+  visibility?: true
+  approvalStatus?: true
+  approvedById?: true
+  approvedAt?: true
+  rejectionReason?: true
+  createdAt?: true
+  updatedAt?: true
 }
 
 export type ProblemMaxAggregateInputType = {
@@ -92,6 +132,16 @@ export type ProblemMaxAggregateInputType = {
   difficulty?: true
   source?: true
   isPublished?: true
+  hidden?: true
+  ownerType?: true
+  ownerId?: true
+  visibility?: true
+  approvalStatus?: true
+  approvedById?: true
+  approvedAt?: true
+  rejectionReason?: true
+  createdAt?: true
+  updatedAt?: true
 }
 
 export type ProblemCountAggregateInputType = {
@@ -102,6 +152,16 @@ export type ProblemCountAggregateInputType = {
   difficulty?: true
   source?: true
   isPublished?: true
+  hidden?: true
+  ownerType?: true
+  ownerId?: true
+  visibility?: true
+  approvalStatus?: true
+  approvedById?: true
+  approvedAt?: true
+  rejectionReason?: true
+  createdAt?: true
+  updatedAt?: true
   _all?: true
 }
 
@@ -199,6 +259,16 @@ export type ProblemGroupByOutputType = {
   difficulty: $Enums.problemDifficulty
   source: string
   isPublished: boolean
+  hidden: boolean
+  ownerType: $Enums.ProblemOwnerType
+  ownerId: string | null
+  visibility: $Enums.ProblemVisibility
+  approvalStatus: $Enums.ProblemApprovalStatus
+  approvedById: string | null
+  approvedAt: Date | null
+  rejectionReason: string | null
+  createdAt: Date
+  updatedAt: Date
   _count: ProblemCountAggregateOutputType | null
   _avg: ProblemAvgAggregateOutputType | null
   _sum: ProblemSumAggregateOutputType | null
@@ -232,6 +302,18 @@ export type ProblemWhereInput = {
   difficulty?: Prisma.EnumproblemDifficultyFilter<"Problem"> | $Enums.problemDifficulty
   source?: Prisma.StringFilter<"Problem"> | string
   isPublished?: Prisma.BoolFilter<"Problem"> | boolean
+  hidden?: Prisma.BoolFilter<"Problem"> | boolean
+  ownerType?: Prisma.EnumProblemOwnerTypeFilter<"Problem"> | $Enums.ProblemOwnerType
+  ownerId?: Prisma.StringNullableFilter<"Problem"> | string | null
+  visibility?: Prisma.EnumProblemVisibilityFilter<"Problem"> | $Enums.ProblemVisibility
+  approvalStatus?: Prisma.EnumProblemApprovalStatusFilter<"Problem"> | $Enums.ProblemApprovalStatus
+  approvedById?: Prisma.StringNullableFilter<"Problem"> | string | null
+  approvedAt?: Prisma.DateTimeNullableFilter<"Problem"> | Date | string | null
+  rejectionReason?: Prisma.StringNullableFilter<"Problem"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"Problem"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Problem"> | Date | string
+  owner?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  approvedBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   examProblems?: Prisma.ExamProblemListRelationFilter
   tags?: Prisma.ProblemTagListRelationFilter
   testCase?: Prisma.XOR<Prisma.TestCaseNullableScalarRelationFilter, Prisma.TestCaseWhereInput> | null
@@ -241,7 +323,8 @@ export type ProblemWhereInput = {
   complexityTestingCases?: Prisma.XOR<Prisma.ComplexityTestingCasesNullableScalarRelationFilter, Prisma.complexityTestingCasesWhereInput> | null
   driverCode?: Prisma.DriverCodeListRelationFilter
   referenceSolutions?: Prisma.ReferenceSolutionListRelationFilter
-  problemTestGenerators?: Prisma.XOR<Prisma.ProblemTestGeneratorNullableScalarRelationFilter, Prisma.ProblemTestGeneratorWhereInput> | null
+  performanceConstraints?: Prisma.XOR<Prisma.PerformanceConstraintsNullableScalarRelationFilter, Prisma.PerformanceConstraintsWhereInput> | null
+  performanceTestCases?: Prisma.PerformanceTestCaseListRelationFilter
   aiconversations?: Prisma.AIConversationListRelationFilter
   airateLimits?: Prisma.AIRateLimitListRelationFilter
   groupProblemStats?: Prisma.GroupProblemStatsListRelationFilter
@@ -256,6 +339,18 @@ export type ProblemOrderByWithRelationInput = {
   difficulty?: Prisma.SortOrder
   source?: Prisma.SortOrder
   isPublished?: Prisma.SortOrder
+  hidden?: Prisma.SortOrder
+  ownerType?: Prisma.SortOrder
+  ownerId?: Prisma.SortOrderInput | Prisma.SortOrder
+  visibility?: Prisma.SortOrder
+  approvalStatus?: Prisma.SortOrder
+  approvedById?: Prisma.SortOrderInput | Prisma.SortOrder
+  approvedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  rejectionReason?: Prisma.SortOrderInput | Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
+  owner?: Prisma.UserOrderByWithRelationInput
+  approvedBy?: Prisma.UserOrderByWithRelationInput
   examProblems?: Prisma.ExamProblemOrderByRelationAggregateInput
   tags?: Prisma.ProblemTagOrderByRelationAggregateInput
   testCase?: Prisma.TestCaseOrderByWithRelationInput
@@ -265,7 +360,8 @@ export type ProblemOrderByWithRelationInput = {
   complexityTestingCases?: Prisma.complexityTestingCasesOrderByWithRelationInput
   driverCode?: Prisma.driverCodeOrderByRelationAggregateInput
   referenceSolutions?: Prisma.referenceSolutionOrderByRelationAggregateInput
-  problemTestGenerators?: Prisma.ProblemTestGeneratorOrderByWithRelationInput
+  performanceConstraints?: Prisma.PerformanceConstraintsOrderByWithRelationInput
+  performanceTestCases?: Prisma.PerformanceTestCaseOrderByRelationAggregateInput
   aiconversations?: Prisma.AIConversationOrderByRelationAggregateInput
   airateLimits?: Prisma.AIRateLimitOrderByRelationAggregateInput
   groupProblemStats?: Prisma.GroupProblemStatsOrderByRelationAggregateInput
@@ -283,6 +379,18 @@ export type ProblemWhereUniqueInput = Prisma.AtLeast<{
   difficulty?: Prisma.EnumproblemDifficultyFilter<"Problem"> | $Enums.problemDifficulty
   source?: Prisma.StringFilter<"Problem"> | string
   isPublished?: Prisma.BoolFilter<"Problem"> | boolean
+  hidden?: Prisma.BoolFilter<"Problem"> | boolean
+  ownerType?: Prisma.EnumProblemOwnerTypeFilter<"Problem"> | $Enums.ProblemOwnerType
+  ownerId?: Prisma.StringNullableFilter<"Problem"> | string | null
+  visibility?: Prisma.EnumProblemVisibilityFilter<"Problem"> | $Enums.ProblemVisibility
+  approvalStatus?: Prisma.EnumProblemApprovalStatusFilter<"Problem"> | $Enums.ProblemApprovalStatus
+  approvedById?: Prisma.StringNullableFilter<"Problem"> | string | null
+  approvedAt?: Prisma.DateTimeNullableFilter<"Problem"> | Date | string | null
+  rejectionReason?: Prisma.StringNullableFilter<"Problem"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"Problem"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Problem"> | Date | string
+  owner?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  approvedBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   examProblems?: Prisma.ExamProblemListRelationFilter
   tags?: Prisma.ProblemTagListRelationFilter
   testCase?: Prisma.XOR<Prisma.TestCaseNullableScalarRelationFilter, Prisma.TestCaseWhereInput> | null
@@ -292,7 +400,8 @@ export type ProblemWhereUniqueInput = Prisma.AtLeast<{
   complexityTestingCases?: Prisma.XOR<Prisma.ComplexityTestingCasesNullableScalarRelationFilter, Prisma.complexityTestingCasesWhereInput> | null
   driverCode?: Prisma.DriverCodeListRelationFilter
   referenceSolutions?: Prisma.ReferenceSolutionListRelationFilter
-  problemTestGenerators?: Prisma.XOR<Prisma.ProblemTestGeneratorNullableScalarRelationFilter, Prisma.ProblemTestGeneratorWhereInput> | null
+  performanceConstraints?: Prisma.XOR<Prisma.PerformanceConstraintsNullableScalarRelationFilter, Prisma.PerformanceConstraintsWhereInput> | null
+  performanceTestCases?: Prisma.PerformanceTestCaseListRelationFilter
   aiconversations?: Prisma.AIConversationListRelationFilter
   airateLimits?: Prisma.AIRateLimitListRelationFilter
   groupProblemStats?: Prisma.GroupProblemStatsListRelationFilter
@@ -307,6 +416,16 @@ export type ProblemOrderByWithAggregationInput = {
   difficulty?: Prisma.SortOrder
   source?: Prisma.SortOrder
   isPublished?: Prisma.SortOrder
+  hidden?: Prisma.SortOrder
+  ownerType?: Prisma.SortOrder
+  ownerId?: Prisma.SortOrderInput | Prisma.SortOrder
+  visibility?: Prisma.SortOrder
+  approvalStatus?: Prisma.SortOrder
+  approvedById?: Prisma.SortOrderInput | Prisma.SortOrder
+  approvedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  rejectionReason?: Prisma.SortOrderInput | Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   _count?: Prisma.ProblemCountOrderByAggregateInput
   _avg?: Prisma.ProblemAvgOrderByAggregateInput
   _max?: Prisma.ProblemMaxOrderByAggregateInput
@@ -325,6 +444,16 @@ export type ProblemScalarWhereWithAggregatesInput = {
   difficulty?: Prisma.EnumproblemDifficultyWithAggregatesFilter<"Problem"> | $Enums.problemDifficulty
   source?: Prisma.StringWithAggregatesFilter<"Problem"> | string
   isPublished?: Prisma.BoolWithAggregatesFilter<"Problem"> | boolean
+  hidden?: Prisma.BoolWithAggregatesFilter<"Problem"> | boolean
+  ownerType?: Prisma.EnumProblemOwnerTypeWithAggregatesFilter<"Problem"> | $Enums.ProblemOwnerType
+  ownerId?: Prisma.StringNullableWithAggregatesFilter<"Problem"> | string | null
+  visibility?: Prisma.EnumProblemVisibilityWithAggregatesFilter<"Problem"> | $Enums.ProblemVisibility
+  approvalStatus?: Prisma.EnumProblemApprovalStatusWithAggregatesFilter<"Problem"> | $Enums.ProblemApprovalStatus
+  approvedById?: Prisma.StringNullableWithAggregatesFilter<"Problem"> | string | null
+  approvedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Problem"> | Date | string | null
+  rejectionReason?: Prisma.StringNullableWithAggregatesFilter<"Problem"> | string | null
+  createdAt?: Prisma.DateTimeWithAggregatesFilter<"Problem"> | Date | string
+  updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Problem"> | Date | string
 }
 
 export type ProblemCreateInput = {
@@ -335,6 +464,16 @@ export type ProblemCreateInput = {
   difficulty: $Enums.problemDifficulty
   source?: string
   isPublished?: boolean
+  hidden?: boolean
+  ownerType?: $Enums.ProblemOwnerType
+  visibility?: $Enums.ProblemVisibility
+  approvalStatus?: $Enums.ProblemApprovalStatus
+  approvedAt?: Date | string | null
+  rejectionReason?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  owner?: Prisma.UserCreateNestedOneWithoutOwnedProblemsInput
+  approvedBy?: Prisma.UserCreateNestedOneWithoutApprovedProblemsInput
   examProblems?: Prisma.ExamProblemCreateNestedManyWithoutProblemInput
   tags?: Prisma.ProblemTagCreateNestedManyWithoutProblemInput
   testCase?: Prisma.TestCaseCreateNestedOneWithoutProblemInput
@@ -344,7 +483,8 @@ export type ProblemCreateInput = {
   complexityTestingCases?: Prisma.complexityTestingCasesCreateNestedOneWithoutProblemInput
   driverCode?: Prisma.driverCodeCreateNestedManyWithoutProblemInput
   referenceSolutions?: Prisma.referenceSolutionCreateNestedManyWithoutProblemInput
-  problemTestGenerators?: Prisma.ProblemTestGeneratorCreateNestedOneWithoutProblemInput
+  performanceConstraints?: Prisma.PerformanceConstraintsCreateNestedOneWithoutProblemInput
+  performanceTestCases?: Prisma.PerformanceTestCaseCreateNestedManyWithoutProblemInput
   aiconversations?: Prisma.AIConversationCreateNestedManyWithoutProblemInput
   airateLimits?: Prisma.AIRateLimitCreateNestedManyWithoutProblemInput
   groupProblemStats?: Prisma.GroupProblemStatsCreateNestedManyWithoutProblemInput
@@ -359,6 +499,16 @@ export type ProblemUncheckedCreateInput = {
   difficulty: $Enums.problemDifficulty
   source?: string
   isPublished?: boolean
+  hidden?: boolean
+  ownerType?: $Enums.ProblemOwnerType
+  ownerId?: string | null
+  visibility?: $Enums.ProblemVisibility
+  approvalStatus?: $Enums.ProblemApprovalStatus
+  approvedById?: string | null
+  approvedAt?: Date | string | null
+  rejectionReason?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   examProblems?: Prisma.ExamProblemUncheckedCreateNestedManyWithoutProblemInput
   tags?: Prisma.ProblemTagUncheckedCreateNestedManyWithoutProblemInput
   testCase?: Prisma.TestCaseUncheckedCreateNestedOneWithoutProblemInput
@@ -368,7 +518,8 @@ export type ProblemUncheckedCreateInput = {
   complexityTestingCases?: Prisma.complexityTestingCasesUncheckedCreateNestedOneWithoutProblemInput
   driverCode?: Prisma.driverCodeUncheckedCreateNestedManyWithoutProblemInput
   referenceSolutions?: Prisma.referenceSolutionUncheckedCreateNestedManyWithoutProblemInput
-  problemTestGenerators?: Prisma.ProblemTestGeneratorUncheckedCreateNestedOneWithoutProblemInput
+  performanceConstraints?: Prisma.PerformanceConstraintsUncheckedCreateNestedOneWithoutProblemInput
+  performanceTestCases?: Prisma.PerformanceTestCaseUncheckedCreateNestedManyWithoutProblemInput
   aiconversations?: Prisma.AIConversationUncheckedCreateNestedManyWithoutProblemInput
   airateLimits?: Prisma.AIRateLimitUncheckedCreateNestedManyWithoutProblemInput
   groupProblemStats?: Prisma.GroupProblemStatsUncheckedCreateNestedManyWithoutProblemInput
@@ -383,6 +534,16 @@ export type ProblemUpdateInput = {
   difficulty?: Prisma.EnumproblemDifficultyFieldUpdateOperationsInput | $Enums.problemDifficulty
   source?: Prisma.StringFieldUpdateOperationsInput | string
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  ownerType?: Prisma.EnumProblemOwnerTypeFieldUpdateOperationsInput | $Enums.ProblemOwnerType
+  visibility?: Prisma.EnumProblemVisibilityFieldUpdateOperationsInput | $Enums.ProblemVisibility
+  approvalStatus?: Prisma.EnumProblemApprovalStatusFieldUpdateOperationsInput | $Enums.ProblemApprovalStatus
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  owner?: Prisma.UserUpdateOneWithoutOwnedProblemsNestedInput
+  approvedBy?: Prisma.UserUpdateOneWithoutApprovedProblemsNestedInput
   examProblems?: Prisma.ExamProblemUpdateManyWithoutProblemNestedInput
   tags?: Prisma.ProblemTagUpdateManyWithoutProblemNestedInput
   testCase?: Prisma.TestCaseUpdateOneWithoutProblemNestedInput
@@ -392,7 +553,8 @@ export type ProblemUpdateInput = {
   complexityTestingCases?: Prisma.complexityTestingCasesUpdateOneWithoutProblemNestedInput
   driverCode?: Prisma.driverCodeUpdateManyWithoutProblemNestedInput
   referenceSolutions?: Prisma.referenceSolutionUpdateManyWithoutProblemNestedInput
-  problemTestGenerators?: Prisma.ProblemTestGeneratorUpdateOneWithoutProblemNestedInput
+  performanceConstraints?: Prisma.PerformanceConstraintsUpdateOneWithoutProblemNestedInput
+  performanceTestCases?: Prisma.PerformanceTestCaseUpdateManyWithoutProblemNestedInput
   aiconversations?: Prisma.AIConversationUpdateManyWithoutProblemNestedInput
   airateLimits?: Prisma.AIRateLimitUpdateManyWithoutProblemNestedInput
   groupProblemStats?: Prisma.GroupProblemStatsUpdateManyWithoutProblemNestedInput
@@ -407,6 +569,16 @@ export type ProblemUncheckedUpdateInput = {
   difficulty?: Prisma.EnumproblemDifficultyFieldUpdateOperationsInput | $Enums.problemDifficulty
   source?: Prisma.StringFieldUpdateOperationsInput | string
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  ownerType?: Prisma.EnumProblemOwnerTypeFieldUpdateOperationsInput | $Enums.ProblemOwnerType
+  ownerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  visibility?: Prisma.EnumProblemVisibilityFieldUpdateOperationsInput | $Enums.ProblemVisibility
+  approvalStatus?: Prisma.EnumProblemApprovalStatusFieldUpdateOperationsInput | $Enums.ProblemApprovalStatus
+  approvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   examProblems?: Prisma.ExamProblemUncheckedUpdateManyWithoutProblemNestedInput
   tags?: Prisma.ProblemTagUncheckedUpdateManyWithoutProblemNestedInput
   testCase?: Prisma.TestCaseUncheckedUpdateOneWithoutProblemNestedInput
@@ -416,7 +588,8 @@ export type ProblemUncheckedUpdateInput = {
   complexityTestingCases?: Prisma.complexityTestingCasesUncheckedUpdateOneWithoutProblemNestedInput
   driverCode?: Prisma.driverCodeUncheckedUpdateManyWithoutProblemNestedInput
   referenceSolutions?: Prisma.referenceSolutionUncheckedUpdateManyWithoutProblemNestedInput
-  problemTestGenerators?: Prisma.ProblemTestGeneratorUncheckedUpdateOneWithoutProblemNestedInput
+  performanceConstraints?: Prisma.PerformanceConstraintsUncheckedUpdateOneWithoutProblemNestedInput
+  performanceTestCases?: Prisma.PerformanceTestCaseUncheckedUpdateManyWithoutProblemNestedInput
   aiconversations?: Prisma.AIConversationUncheckedUpdateManyWithoutProblemNestedInput
   airateLimits?: Prisma.AIRateLimitUncheckedUpdateManyWithoutProblemNestedInput
   groupProblemStats?: Prisma.GroupProblemStatsUncheckedUpdateManyWithoutProblemNestedInput
@@ -431,6 +604,16 @@ export type ProblemCreateManyInput = {
   difficulty: $Enums.problemDifficulty
   source?: string
   isPublished?: boolean
+  hidden?: boolean
+  ownerType?: $Enums.ProblemOwnerType
+  ownerId?: string | null
+  visibility?: $Enums.ProblemVisibility
+  approvalStatus?: $Enums.ProblemApprovalStatus
+  approvedById?: string | null
+  approvedAt?: Date | string | null
+  rejectionReason?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type ProblemUpdateManyMutationInput = {
@@ -441,6 +624,14 @@ export type ProblemUpdateManyMutationInput = {
   difficulty?: Prisma.EnumproblemDifficultyFieldUpdateOperationsInput | $Enums.problemDifficulty
   source?: Prisma.StringFieldUpdateOperationsInput | string
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  ownerType?: Prisma.EnumProblemOwnerTypeFieldUpdateOperationsInput | $Enums.ProblemOwnerType
+  visibility?: Prisma.EnumProblemVisibilityFieldUpdateOperationsInput | $Enums.ProblemVisibility
+  approvalStatus?: Prisma.EnumProblemApprovalStatusFieldUpdateOperationsInput | $Enums.ProblemApprovalStatus
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ProblemUncheckedUpdateManyInput = {
@@ -451,6 +642,26 @@ export type ProblemUncheckedUpdateManyInput = {
   difficulty?: Prisma.EnumproblemDifficultyFieldUpdateOperationsInput | $Enums.problemDifficulty
   source?: Prisma.StringFieldUpdateOperationsInput | string
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  ownerType?: Prisma.EnumProblemOwnerTypeFieldUpdateOperationsInput | $Enums.ProblemOwnerType
+  ownerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  visibility?: Prisma.EnumProblemVisibilityFieldUpdateOperationsInput | $Enums.ProblemVisibility
+  approvalStatus?: Prisma.EnumProblemApprovalStatusFieldUpdateOperationsInput | $Enums.ProblemApprovalStatus
+  approvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type ProblemListRelationFilter = {
+  every?: Prisma.ProblemWhereInput
+  some?: Prisma.ProblemWhereInput
+  none?: Prisma.ProblemWhereInput
+}
+
+export type ProblemOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
 }
 
 export type ProblemCountOrderByAggregateInput = {
@@ -461,6 +672,16 @@ export type ProblemCountOrderByAggregateInput = {
   difficulty?: Prisma.SortOrder
   source?: Prisma.SortOrder
   isPublished?: Prisma.SortOrder
+  hidden?: Prisma.SortOrder
+  ownerType?: Prisma.SortOrder
+  ownerId?: Prisma.SortOrder
+  visibility?: Prisma.SortOrder
+  approvalStatus?: Prisma.SortOrder
+  approvedById?: Prisma.SortOrder
+  approvedAt?: Prisma.SortOrder
+  rejectionReason?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 export type ProblemAvgOrderByAggregateInput = {
@@ -475,6 +696,16 @@ export type ProblemMaxOrderByAggregateInput = {
   difficulty?: Prisma.SortOrder
   source?: Prisma.SortOrder
   isPublished?: Prisma.SortOrder
+  hidden?: Prisma.SortOrder
+  ownerType?: Prisma.SortOrder
+  ownerId?: Prisma.SortOrder
+  visibility?: Prisma.SortOrder
+  approvalStatus?: Prisma.SortOrder
+  approvedById?: Prisma.SortOrder
+  approvedAt?: Prisma.SortOrder
+  rejectionReason?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 export type ProblemMinOrderByAggregateInput = {
@@ -485,6 +716,16 @@ export type ProblemMinOrderByAggregateInput = {
   difficulty?: Prisma.SortOrder
   source?: Prisma.SortOrder
   isPublished?: Prisma.SortOrder
+  hidden?: Prisma.SortOrder
+  ownerType?: Prisma.SortOrder
+  ownerId?: Prisma.SortOrder
+  visibility?: Prisma.SortOrder
+  approvalStatus?: Prisma.SortOrder
+  approvedById?: Prisma.SortOrder
+  approvedAt?: Prisma.SortOrder
+  rejectionReason?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 export type ProblemSumOrderByAggregateInput = {
@@ -494,6 +735,90 @@ export type ProblemSumOrderByAggregateInput = {
 export type ProblemScalarRelationFilter = {
   is?: Prisma.ProblemWhereInput
   isNot?: Prisma.ProblemWhereInput
+}
+
+export type ProblemCreateNestedManyWithoutOwnerInput = {
+  create?: Prisma.XOR<Prisma.ProblemCreateWithoutOwnerInput, Prisma.ProblemUncheckedCreateWithoutOwnerInput> | Prisma.ProblemCreateWithoutOwnerInput[] | Prisma.ProblemUncheckedCreateWithoutOwnerInput[]
+  connectOrCreate?: Prisma.ProblemCreateOrConnectWithoutOwnerInput | Prisma.ProblemCreateOrConnectWithoutOwnerInput[]
+  createMany?: Prisma.ProblemCreateManyOwnerInputEnvelope
+  connect?: Prisma.ProblemWhereUniqueInput | Prisma.ProblemWhereUniqueInput[]
+}
+
+export type ProblemCreateNestedManyWithoutApprovedByInput = {
+  create?: Prisma.XOR<Prisma.ProblemCreateWithoutApprovedByInput, Prisma.ProblemUncheckedCreateWithoutApprovedByInput> | Prisma.ProblemCreateWithoutApprovedByInput[] | Prisma.ProblemUncheckedCreateWithoutApprovedByInput[]
+  connectOrCreate?: Prisma.ProblemCreateOrConnectWithoutApprovedByInput | Prisma.ProblemCreateOrConnectWithoutApprovedByInput[]
+  createMany?: Prisma.ProblemCreateManyApprovedByInputEnvelope
+  connect?: Prisma.ProblemWhereUniqueInput | Prisma.ProblemWhereUniqueInput[]
+}
+
+export type ProblemUncheckedCreateNestedManyWithoutOwnerInput = {
+  create?: Prisma.XOR<Prisma.ProblemCreateWithoutOwnerInput, Prisma.ProblemUncheckedCreateWithoutOwnerInput> | Prisma.ProblemCreateWithoutOwnerInput[] | Prisma.ProblemUncheckedCreateWithoutOwnerInput[]
+  connectOrCreate?: Prisma.ProblemCreateOrConnectWithoutOwnerInput | Prisma.ProblemCreateOrConnectWithoutOwnerInput[]
+  createMany?: Prisma.ProblemCreateManyOwnerInputEnvelope
+  connect?: Prisma.ProblemWhereUniqueInput | Prisma.ProblemWhereUniqueInput[]
+}
+
+export type ProblemUncheckedCreateNestedManyWithoutApprovedByInput = {
+  create?: Prisma.XOR<Prisma.ProblemCreateWithoutApprovedByInput, Prisma.ProblemUncheckedCreateWithoutApprovedByInput> | Prisma.ProblemCreateWithoutApprovedByInput[] | Prisma.ProblemUncheckedCreateWithoutApprovedByInput[]
+  connectOrCreate?: Prisma.ProblemCreateOrConnectWithoutApprovedByInput | Prisma.ProblemCreateOrConnectWithoutApprovedByInput[]
+  createMany?: Prisma.ProblemCreateManyApprovedByInputEnvelope
+  connect?: Prisma.ProblemWhereUniqueInput | Prisma.ProblemWhereUniqueInput[]
+}
+
+export type ProblemUpdateManyWithoutOwnerNestedInput = {
+  create?: Prisma.XOR<Prisma.ProblemCreateWithoutOwnerInput, Prisma.ProblemUncheckedCreateWithoutOwnerInput> | Prisma.ProblemCreateWithoutOwnerInput[] | Prisma.ProblemUncheckedCreateWithoutOwnerInput[]
+  connectOrCreate?: Prisma.ProblemCreateOrConnectWithoutOwnerInput | Prisma.ProblemCreateOrConnectWithoutOwnerInput[]
+  upsert?: Prisma.ProblemUpsertWithWhereUniqueWithoutOwnerInput | Prisma.ProblemUpsertWithWhereUniqueWithoutOwnerInput[]
+  createMany?: Prisma.ProblemCreateManyOwnerInputEnvelope
+  set?: Prisma.ProblemWhereUniqueInput | Prisma.ProblemWhereUniqueInput[]
+  disconnect?: Prisma.ProblemWhereUniqueInput | Prisma.ProblemWhereUniqueInput[]
+  delete?: Prisma.ProblemWhereUniqueInput | Prisma.ProblemWhereUniqueInput[]
+  connect?: Prisma.ProblemWhereUniqueInput | Prisma.ProblemWhereUniqueInput[]
+  update?: Prisma.ProblemUpdateWithWhereUniqueWithoutOwnerInput | Prisma.ProblemUpdateWithWhereUniqueWithoutOwnerInput[]
+  updateMany?: Prisma.ProblemUpdateManyWithWhereWithoutOwnerInput | Prisma.ProblemUpdateManyWithWhereWithoutOwnerInput[]
+  deleteMany?: Prisma.ProblemScalarWhereInput | Prisma.ProblemScalarWhereInput[]
+}
+
+export type ProblemUpdateManyWithoutApprovedByNestedInput = {
+  create?: Prisma.XOR<Prisma.ProblemCreateWithoutApprovedByInput, Prisma.ProblemUncheckedCreateWithoutApprovedByInput> | Prisma.ProblemCreateWithoutApprovedByInput[] | Prisma.ProblemUncheckedCreateWithoutApprovedByInput[]
+  connectOrCreate?: Prisma.ProblemCreateOrConnectWithoutApprovedByInput | Prisma.ProblemCreateOrConnectWithoutApprovedByInput[]
+  upsert?: Prisma.ProblemUpsertWithWhereUniqueWithoutApprovedByInput | Prisma.ProblemUpsertWithWhereUniqueWithoutApprovedByInput[]
+  createMany?: Prisma.ProblemCreateManyApprovedByInputEnvelope
+  set?: Prisma.ProblemWhereUniqueInput | Prisma.ProblemWhereUniqueInput[]
+  disconnect?: Prisma.ProblemWhereUniqueInput | Prisma.ProblemWhereUniqueInput[]
+  delete?: Prisma.ProblemWhereUniqueInput | Prisma.ProblemWhereUniqueInput[]
+  connect?: Prisma.ProblemWhereUniqueInput | Prisma.ProblemWhereUniqueInput[]
+  update?: Prisma.ProblemUpdateWithWhereUniqueWithoutApprovedByInput | Prisma.ProblemUpdateWithWhereUniqueWithoutApprovedByInput[]
+  updateMany?: Prisma.ProblemUpdateManyWithWhereWithoutApprovedByInput | Prisma.ProblemUpdateManyWithWhereWithoutApprovedByInput[]
+  deleteMany?: Prisma.ProblemScalarWhereInput | Prisma.ProblemScalarWhereInput[]
+}
+
+export type ProblemUncheckedUpdateManyWithoutOwnerNestedInput = {
+  create?: Prisma.XOR<Prisma.ProblemCreateWithoutOwnerInput, Prisma.ProblemUncheckedCreateWithoutOwnerInput> | Prisma.ProblemCreateWithoutOwnerInput[] | Prisma.ProblemUncheckedCreateWithoutOwnerInput[]
+  connectOrCreate?: Prisma.ProblemCreateOrConnectWithoutOwnerInput | Prisma.ProblemCreateOrConnectWithoutOwnerInput[]
+  upsert?: Prisma.ProblemUpsertWithWhereUniqueWithoutOwnerInput | Prisma.ProblemUpsertWithWhereUniqueWithoutOwnerInput[]
+  createMany?: Prisma.ProblemCreateManyOwnerInputEnvelope
+  set?: Prisma.ProblemWhereUniqueInput | Prisma.ProblemWhereUniqueInput[]
+  disconnect?: Prisma.ProblemWhereUniqueInput | Prisma.ProblemWhereUniqueInput[]
+  delete?: Prisma.ProblemWhereUniqueInput | Prisma.ProblemWhereUniqueInput[]
+  connect?: Prisma.ProblemWhereUniqueInput | Prisma.ProblemWhereUniqueInput[]
+  update?: Prisma.ProblemUpdateWithWhereUniqueWithoutOwnerInput | Prisma.ProblemUpdateWithWhereUniqueWithoutOwnerInput[]
+  updateMany?: Prisma.ProblemUpdateManyWithWhereWithoutOwnerInput | Prisma.ProblemUpdateManyWithWhereWithoutOwnerInput[]
+  deleteMany?: Prisma.ProblemScalarWhereInput | Prisma.ProblemScalarWhereInput[]
+}
+
+export type ProblemUncheckedUpdateManyWithoutApprovedByNestedInput = {
+  create?: Prisma.XOR<Prisma.ProblemCreateWithoutApprovedByInput, Prisma.ProblemUncheckedCreateWithoutApprovedByInput> | Prisma.ProblemCreateWithoutApprovedByInput[] | Prisma.ProblemUncheckedCreateWithoutApprovedByInput[]
+  connectOrCreate?: Prisma.ProblemCreateOrConnectWithoutApprovedByInput | Prisma.ProblemCreateOrConnectWithoutApprovedByInput[]
+  upsert?: Prisma.ProblemUpsertWithWhereUniqueWithoutApprovedByInput | Prisma.ProblemUpsertWithWhereUniqueWithoutApprovedByInput[]
+  createMany?: Prisma.ProblemCreateManyApprovedByInputEnvelope
+  set?: Prisma.ProblemWhereUniqueInput | Prisma.ProblemWhereUniqueInput[]
+  disconnect?: Prisma.ProblemWhereUniqueInput | Prisma.ProblemWhereUniqueInput[]
+  delete?: Prisma.ProblemWhereUniqueInput | Prisma.ProblemWhereUniqueInput[]
+  connect?: Prisma.ProblemWhereUniqueInput | Prisma.ProblemWhereUniqueInput[]
+  update?: Prisma.ProblemUpdateWithWhereUniqueWithoutApprovedByInput | Prisma.ProblemUpdateWithWhereUniqueWithoutApprovedByInput[]
+  updateMany?: Prisma.ProblemUpdateManyWithWhereWithoutApprovedByInput | Prisma.ProblemUpdateManyWithWhereWithoutApprovedByInput[]
+  deleteMany?: Prisma.ProblemScalarWhereInput | Prisma.ProblemScalarWhereInput[]
 }
 
 export type IntFieldUpdateOperationsInput = {
@@ -506,6 +831,18 @@ export type IntFieldUpdateOperationsInput = {
 
 export type EnumproblemDifficultyFieldUpdateOperationsInput = {
   set?: $Enums.problemDifficulty
+}
+
+export type EnumProblemOwnerTypeFieldUpdateOperationsInput = {
+  set?: $Enums.ProblemOwnerType
+}
+
+export type EnumProblemVisibilityFieldUpdateOperationsInput = {
+  set?: $Enums.ProblemVisibility
+}
+
+export type EnumProblemApprovalStatusFieldUpdateOperationsInput = {
+  set?: $Enums.ProblemApprovalStatus
 }
 
 export type ProblemCreateNestedOneWithoutTestCaseInput = {
@@ -592,18 +929,32 @@ export type ProblemUpdateOneRequiredWithoutSelfSubmissionsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.ProblemUpdateToOneWithWhereWithoutSelfSubmissionsInput, Prisma.ProblemUpdateWithoutSelfSubmissionsInput>, Prisma.ProblemUncheckedUpdateWithoutSelfSubmissionsInput>
 }
 
-export type ProblemCreateNestedOneWithoutProblemTestGeneratorsInput = {
-  create?: Prisma.XOR<Prisma.ProblemCreateWithoutProblemTestGeneratorsInput, Prisma.ProblemUncheckedCreateWithoutProblemTestGeneratorsInput>
-  connectOrCreate?: Prisma.ProblemCreateOrConnectWithoutProblemTestGeneratorsInput
+export type ProblemCreateNestedOneWithoutPerformanceConstraintsInput = {
+  create?: Prisma.XOR<Prisma.ProblemCreateWithoutPerformanceConstraintsInput, Prisma.ProblemUncheckedCreateWithoutPerformanceConstraintsInput>
+  connectOrCreate?: Prisma.ProblemCreateOrConnectWithoutPerformanceConstraintsInput
   connect?: Prisma.ProblemWhereUniqueInput
 }
 
-export type ProblemUpdateOneRequiredWithoutProblemTestGeneratorsNestedInput = {
-  create?: Prisma.XOR<Prisma.ProblemCreateWithoutProblemTestGeneratorsInput, Prisma.ProblemUncheckedCreateWithoutProblemTestGeneratorsInput>
-  connectOrCreate?: Prisma.ProblemCreateOrConnectWithoutProblemTestGeneratorsInput
-  upsert?: Prisma.ProblemUpsertWithoutProblemTestGeneratorsInput
+export type ProblemUpdateOneRequiredWithoutPerformanceConstraintsNestedInput = {
+  create?: Prisma.XOR<Prisma.ProblemCreateWithoutPerformanceConstraintsInput, Prisma.ProblemUncheckedCreateWithoutPerformanceConstraintsInput>
+  connectOrCreate?: Prisma.ProblemCreateOrConnectWithoutPerformanceConstraintsInput
+  upsert?: Prisma.ProblemUpsertWithoutPerformanceConstraintsInput
   connect?: Prisma.ProblemWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.ProblemUpdateToOneWithWhereWithoutProblemTestGeneratorsInput, Prisma.ProblemUpdateWithoutProblemTestGeneratorsInput>, Prisma.ProblemUncheckedUpdateWithoutProblemTestGeneratorsInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ProblemUpdateToOneWithWhereWithoutPerformanceConstraintsInput, Prisma.ProblemUpdateWithoutPerformanceConstraintsInput>, Prisma.ProblemUncheckedUpdateWithoutPerformanceConstraintsInput>
+}
+
+export type ProblemCreateNestedOneWithoutPerformanceTestCasesInput = {
+  create?: Prisma.XOR<Prisma.ProblemCreateWithoutPerformanceTestCasesInput, Prisma.ProblemUncheckedCreateWithoutPerformanceTestCasesInput>
+  connectOrCreate?: Prisma.ProblemCreateOrConnectWithoutPerformanceTestCasesInput
+  connect?: Prisma.ProblemWhereUniqueInput
+}
+
+export type ProblemUpdateOneRequiredWithoutPerformanceTestCasesNestedInput = {
+  create?: Prisma.XOR<Prisma.ProblemCreateWithoutPerformanceTestCasesInput, Prisma.ProblemUncheckedCreateWithoutPerformanceTestCasesInput>
+  connectOrCreate?: Prisma.ProblemCreateOrConnectWithoutPerformanceTestCasesInput
+  upsert?: Prisma.ProblemUpsertWithoutPerformanceTestCasesInput
+  connect?: Prisma.ProblemWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ProblemUpdateToOneWithWhereWithoutPerformanceTestCasesInput, Prisma.ProblemUpdateWithoutPerformanceTestCasesInput>, Prisma.ProblemUncheckedUpdateWithoutPerformanceTestCasesInput>
 }
 
 export type ProblemCreateNestedOneWithoutExamProblemsInput = {
@@ -704,6 +1055,217 @@ export type ProblemUpdateOneRequiredWithoutStudentProblemStatsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.ProblemUpdateToOneWithWhereWithoutStudentProblemStatsInput, Prisma.ProblemUpdateWithoutStudentProblemStatsInput>, Prisma.ProblemUncheckedUpdateWithoutStudentProblemStatsInput>
 }
 
+export type ProblemCreateWithoutOwnerInput = {
+  id?: string
+  number: number
+  title: string
+  description: string
+  difficulty: $Enums.problemDifficulty
+  source?: string
+  isPublished?: boolean
+  hidden?: boolean
+  ownerType?: $Enums.ProblemOwnerType
+  visibility?: $Enums.ProblemVisibility
+  approvalStatus?: $Enums.ProblemApprovalStatus
+  approvedAt?: Date | string | null
+  rejectionReason?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  approvedBy?: Prisma.UserCreateNestedOneWithoutApprovedProblemsInput
+  examProblems?: Prisma.ExamProblemCreateNestedManyWithoutProblemInput
+  tags?: Prisma.ProblemTagCreateNestedManyWithoutProblemInput
+  testCase?: Prisma.TestCaseCreateNestedOneWithoutProblemInput
+  runTestCase?: Prisma.RunTestCaseCreateNestedOneWithoutProblemInput
+  selfSubmissions?: Prisma.selfSubmissionCreateNestedManyWithoutProblemInput
+  submissions?: Prisma.SubmissionCreateNestedManyWithoutProblemInput
+  complexityTestingCases?: Prisma.complexityTestingCasesCreateNestedOneWithoutProblemInput
+  driverCode?: Prisma.driverCodeCreateNestedManyWithoutProblemInput
+  referenceSolutions?: Prisma.referenceSolutionCreateNestedManyWithoutProblemInput
+  performanceConstraints?: Prisma.PerformanceConstraintsCreateNestedOneWithoutProblemInput
+  performanceTestCases?: Prisma.PerformanceTestCaseCreateNestedManyWithoutProblemInput
+  aiconversations?: Prisma.AIConversationCreateNestedManyWithoutProblemInput
+  airateLimits?: Prisma.AIRateLimitCreateNestedManyWithoutProblemInput
+  groupProblemStats?: Prisma.GroupProblemStatsCreateNestedManyWithoutProblemInput
+  studentProblemStats?: Prisma.StudentProblemStatsCreateNestedManyWithoutProblemInput
+}
+
+export type ProblemUncheckedCreateWithoutOwnerInput = {
+  id?: string
+  number: number
+  title: string
+  description: string
+  difficulty: $Enums.problemDifficulty
+  source?: string
+  isPublished?: boolean
+  hidden?: boolean
+  ownerType?: $Enums.ProblemOwnerType
+  visibility?: $Enums.ProblemVisibility
+  approvalStatus?: $Enums.ProblemApprovalStatus
+  approvedById?: string | null
+  approvedAt?: Date | string | null
+  rejectionReason?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  examProblems?: Prisma.ExamProblemUncheckedCreateNestedManyWithoutProblemInput
+  tags?: Prisma.ProblemTagUncheckedCreateNestedManyWithoutProblemInput
+  testCase?: Prisma.TestCaseUncheckedCreateNestedOneWithoutProblemInput
+  runTestCase?: Prisma.RunTestCaseUncheckedCreateNestedOneWithoutProblemInput
+  selfSubmissions?: Prisma.selfSubmissionUncheckedCreateNestedManyWithoutProblemInput
+  submissions?: Prisma.SubmissionUncheckedCreateNestedManyWithoutProblemInput
+  complexityTestingCases?: Prisma.complexityTestingCasesUncheckedCreateNestedOneWithoutProblemInput
+  driverCode?: Prisma.driverCodeUncheckedCreateNestedManyWithoutProblemInput
+  referenceSolutions?: Prisma.referenceSolutionUncheckedCreateNestedManyWithoutProblemInput
+  performanceConstraints?: Prisma.PerformanceConstraintsUncheckedCreateNestedOneWithoutProblemInput
+  performanceTestCases?: Prisma.PerformanceTestCaseUncheckedCreateNestedManyWithoutProblemInput
+  aiconversations?: Prisma.AIConversationUncheckedCreateNestedManyWithoutProblemInput
+  airateLimits?: Prisma.AIRateLimitUncheckedCreateNestedManyWithoutProblemInput
+  groupProblemStats?: Prisma.GroupProblemStatsUncheckedCreateNestedManyWithoutProblemInput
+  studentProblemStats?: Prisma.StudentProblemStatsUncheckedCreateNestedManyWithoutProblemInput
+}
+
+export type ProblemCreateOrConnectWithoutOwnerInput = {
+  where: Prisma.ProblemWhereUniqueInput
+  create: Prisma.XOR<Prisma.ProblemCreateWithoutOwnerInput, Prisma.ProblemUncheckedCreateWithoutOwnerInput>
+}
+
+export type ProblemCreateManyOwnerInputEnvelope = {
+  data: Prisma.ProblemCreateManyOwnerInput | Prisma.ProblemCreateManyOwnerInput[]
+  skipDuplicates?: boolean
+}
+
+export type ProblemCreateWithoutApprovedByInput = {
+  id?: string
+  number: number
+  title: string
+  description: string
+  difficulty: $Enums.problemDifficulty
+  source?: string
+  isPublished?: boolean
+  hidden?: boolean
+  ownerType?: $Enums.ProblemOwnerType
+  visibility?: $Enums.ProblemVisibility
+  approvalStatus?: $Enums.ProblemApprovalStatus
+  approvedAt?: Date | string | null
+  rejectionReason?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  owner?: Prisma.UserCreateNestedOneWithoutOwnedProblemsInput
+  examProblems?: Prisma.ExamProblemCreateNestedManyWithoutProblemInput
+  tags?: Prisma.ProblemTagCreateNestedManyWithoutProblemInput
+  testCase?: Prisma.TestCaseCreateNestedOneWithoutProblemInput
+  runTestCase?: Prisma.RunTestCaseCreateNestedOneWithoutProblemInput
+  selfSubmissions?: Prisma.selfSubmissionCreateNestedManyWithoutProblemInput
+  submissions?: Prisma.SubmissionCreateNestedManyWithoutProblemInput
+  complexityTestingCases?: Prisma.complexityTestingCasesCreateNestedOneWithoutProblemInput
+  driverCode?: Prisma.driverCodeCreateNestedManyWithoutProblemInput
+  referenceSolutions?: Prisma.referenceSolutionCreateNestedManyWithoutProblemInput
+  performanceConstraints?: Prisma.PerformanceConstraintsCreateNestedOneWithoutProblemInput
+  performanceTestCases?: Prisma.PerformanceTestCaseCreateNestedManyWithoutProblemInput
+  aiconversations?: Prisma.AIConversationCreateNestedManyWithoutProblemInput
+  airateLimits?: Prisma.AIRateLimitCreateNestedManyWithoutProblemInput
+  groupProblemStats?: Prisma.GroupProblemStatsCreateNestedManyWithoutProblemInput
+  studentProblemStats?: Prisma.StudentProblemStatsCreateNestedManyWithoutProblemInput
+}
+
+export type ProblemUncheckedCreateWithoutApprovedByInput = {
+  id?: string
+  number: number
+  title: string
+  description: string
+  difficulty: $Enums.problemDifficulty
+  source?: string
+  isPublished?: boolean
+  hidden?: boolean
+  ownerType?: $Enums.ProblemOwnerType
+  ownerId?: string | null
+  visibility?: $Enums.ProblemVisibility
+  approvalStatus?: $Enums.ProblemApprovalStatus
+  approvedAt?: Date | string | null
+  rejectionReason?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  examProblems?: Prisma.ExamProblemUncheckedCreateNestedManyWithoutProblemInput
+  tags?: Prisma.ProblemTagUncheckedCreateNestedManyWithoutProblemInput
+  testCase?: Prisma.TestCaseUncheckedCreateNestedOneWithoutProblemInput
+  runTestCase?: Prisma.RunTestCaseUncheckedCreateNestedOneWithoutProblemInput
+  selfSubmissions?: Prisma.selfSubmissionUncheckedCreateNestedManyWithoutProblemInput
+  submissions?: Prisma.SubmissionUncheckedCreateNestedManyWithoutProblemInput
+  complexityTestingCases?: Prisma.complexityTestingCasesUncheckedCreateNestedOneWithoutProblemInput
+  driverCode?: Prisma.driverCodeUncheckedCreateNestedManyWithoutProblemInput
+  referenceSolutions?: Prisma.referenceSolutionUncheckedCreateNestedManyWithoutProblemInput
+  performanceConstraints?: Prisma.PerformanceConstraintsUncheckedCreateNestedOneWithoutProblemInput
+  performanceTestCases?: Prisma.PerformanceTestCaseUncheckedCreateNestedManyWithoutProblemInput
+  aiconversations?: Prisma.AIConversationUncheckedCreateNestedManyWithoutProblemInput
+  airateLimits?: Prisma.AIRateLimitUncheckedCreateNestedManyWithoutProblemInput
+  groupProblemStats?: Prisma.GroupProblemStatsUncheckedCreateNestedManyWithoutProblemInput
+  studentProblemStats?: Prisma.StudentProblemStatsUncheckedCreateNestedManyWithoutProblemInput
+}
+
+export type ProblemCreateOrConnectWithoutApprovedByInput = {
+  where: Prisma.ProblemWhereUniqueInput
+  create: Prisma.XOR<Prisma.ProblemCreateWithoutApprovedByInput, Prisma.ProblemUncheckedCreateWithoutApprovedByInput>
+}
+
+export type ProblemCreateManyApprovedByInputEnvelope = {
+  data: Prisma.ProblemCreateManyApprovedByInput | Prisma.ProblemCreateManyApprovedByInput[]
+  skipDuplicates?: boolean
+}
+
+export type ProblemUpsertWithWhereUniqueWithoutOwnerInput = {
+  where: Prisma.ProblemWhereUniqueInput
+  update: Prisma.XOR<Prisma.ProblemUpdateWithoutOwnerInput, Prisma.ProblemUncheckedUpdateWithoutOwnerInput>
+  create: Prisma.XOR<Prisma.ProblemCreateWithoutOwnerInput, Prisma.ProblemUncheckedCreateWithoutOwnerInput>
+}
+
+export type ProblemUpdateWithWhereUniqueWithoutOwnerInput = {
+  where: Prisma.ProblemWhereUniqueInput
+  data: Prisma.XOR<Prisma.ProblemUpdateWithoutOwnerInput, Prisma.ProblemUncheckedUpdateWithoutOwnerInput>
+}
+
+export type ProblemUpdateManyWithWhereWithoutOwnerInput = {
+  where: Prisma.ProblemScalarWhereInput
+  data: Prisma.XOR<Prisma.ProblemUpdateManyMutationInput, Prisma.ProblemUncheckedUpdateManyWithoutOwnerInput>
+}
+
+export type ProblemScalarWhereInput = {
+  AND?: Prisma.ProblemScalarWhereInput | Prisma.ProblemScalarWhereInput[]
+  OR?: Prisma.ProblemScalarWhereInput[]
+  NOT?: Prisma.ProblemScalarWhereInput | Prisma.ProblemScalarWhereInput[]
+  id?: Prisma.StringFilter<"Problem"> | string
+  number?: Prisma.IntFilter<"Problem"> | number
+  title?: Prisma.StringFilter<"Problem"> | string
+  description?: Prisma.StringFilter<"Problem"> | string
+  difficulty?: Prisma.EnumproblemDifficultyFilter<"Problem"> | $Enums.problemDifficulty
+  source?: Prisma.StringFilter<"Problem"> | string
+  isPublished?: Prisma.BoolFilter<"Problem"> | boolean
+  hidden?: Prisma.BoolFilter<"Problem"> | boolean
+  ownerType?: Prisma.EnumProblemOwnerTypeFilter<"Problem"> | $Enums.ProblemOwnerType
+  ownerId?: Prisma.StringNullableFilter<"Problem"> | string | null
+  visibility?: Prisma.EnumProblemVisibilityFilter<"Problem"> | $Enums.ProblemVisibility
+  approvalStatus?: Prisma.EnumProblemApprovalStatusFilter<"Problem"> | $Enums.ProblemApprovalStatus
+  approvedById?: Prisma.StringNullableFilter<"Problem"> | string | null
+  approvedAt?: Prisma.DateTimeNullableFilter<"Problem"> | Date | string | null
+  rejectionReason?: Prisma.StringNullableFilter<"Problem"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"Problem"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Problem"> | Date | string
+}
+
+export type ProblemUpsertWithWhereUniqueWithoutApprovedByInput = {
+  where: Prisma.ProblemWhereUniqueInput
+  update: Prisma.XOR<Prisma.ProblemUpdateWithoutApprovedByInput, Prisma.ProblemUncheckedUpdateWithoutApprovedByInput>
+  create: Prisma.XOR<Prisma.ProblemCreateWithoutApprovedByInput, Prisma.ProblemUncheckedCreateWithoutApprovedByInput>
+}
+
+export type ProblemUpdateWithWhereUniqueWithoutApprovedByInput = {
+  where: Prisma.ProblemWhereUniqueInput
+  data: Prisma.XOR<Prisma.ProblemUpdateWithoutApprovedByInput, Prisma.ProblemUncheckedUpdateWithoutApprovedByInput>
+}
+
+export type ProblemUpdateManyWithWhereWithoutApprovedByInput = {
+  where: Prisma.ProblemScalarWhereInput
+  data: Prisma.XOR<Prisma.ProblemUpdateManyMutationInput, Prisma.ProblemUncheckedUpdateManyWithoutApprovedByInput>
+}
+
 export type ProblemCreateWithoutTestCaseInput = {
   id?: string
   number: number
@@ -712,6 +1274,16 @@ export type ProblemCreateWithoutTestCaseInput = {
   difficulty: $Enums.problemDifficulty
   source?: string
   isPublished?: boolean
+  hidden?: boolean
+  ownerType?: $Enums.ProblemOwnerType
+  visibility?: $Enums.ProblemVisibility
+  approvalStatus?: $Enums.ProblemApprovalStatus
+  approvedAt?: Date | string | null
+  rejectionReason?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  owner?: Prisma.UserCreateNestedOneWithoutOwnedProblemsInput
+  approvedBy?: Prisma.UserCreateNestedOneWithoutApprovedProblemsInput
   examProblems?: Prisma.ExamProblemCreateNestedManyWithoutProblemInput
   tags?: Prisma.ProblemTagCreateNestedManyWithoutProblemInput
   runTestCase?: Prisma.RunTestCaseCreateNestedOneWithoutProblemInput
@@ -720,7 +1292,8 @@ export type ProblemCreateWithoutTestCaseInput = {
   complexityTestingCases?: Prisma.complexityTestingCasesCreateNestedOneWithoutProblemInput
   driverCode?: Prisma.driverCodeCreateNestedManyWithoutProblemInput
   referenceSolutions?: Prisma.referenceSolutionCreateNestedManyWithoutProblemInput
-  problemTestGenerators?: Prisma.ProblemTestGeneratorCreateNestedOneWithoutProblemInput
+  performanceConstraints?: Prisma.PerformanceConstraintsCreateNestedOneWithoutProblemInput
+  performanceTestCases?: Prisma.PerformanceTestCaseCreateNestedManyWithoutProblemInput
   aiconversations?: Prisma.AIConversationCreateNestedManyWithoutProblemInput
   airateLimits?: Prisma.AIRateLimitCreateNestedManyWithoutProblemInput
   groupProblemStats?: Prisma.GroupProblemStatsCreateNestedManyWithoutProblemInput
@@ -735,6 +1308,16 @@ export type ProblemUncheckedCreateWithoutTestCaseInput = {
   difficulty: $Enums.problemDifficulty
   source?: string
   isPublished?: boolean
+  hidden?: boolean
+  ownerType?: $Enums.ProblemOwnerType
+  ownerId?: string | null
+  visibility?: $Enums.ProblemVisibility
+  approvalStatus?: $Enums.ProblemApprovalStatus
+  approvedById?: string | null
+  approvedAt?: Date | string | null
+  rejectionReason?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   examProblems?: Prisma.ExamProblemUncheckedCreateNestedManyWithoutProblemInput
   tags?: Prisma.ProblemTagUncheckedCreateNestedManyWithoutProblemInput
   runTestCase?: Prisma.RunTestCaseUncheckedCreateNestedOneWithoutProblemInput
@@ -743,7 +1326,8 @@ export type ProblemUncheckedCreateWithoutTestCaseInput = {
   complexityTestingCases?: Prisma.complexityTestingCasesUncheckedCreateNestedOneWithoutProblemInput
   driverCode?: Prisma.driverCodeUncheckedCreateNestedManyWithoutProblemInput
   referenceSolutions?: Prisma.referenceSolutionUncheckedCreateNestedManyWithoutProblemInput
-  problemTestGenerators?: Prisma.ProblemTestGeneratorUncheckedCreateNestedOneWithoutProblemInput
+  performanceConstraints?: Prisma.PerformanceConstraintsUncheckedCreateNestedOneWithoutProblemInput
+  performanceTestCases?: Prisma.PerformanceTestCaseUncheckedCreateNestedManyWithoutProblemInput
   aiconversations?: Prisma.AIConversationUncheckedCreateNestedManyWithoutProblemInput
   airateLimits?: Prisma.AIRateLimitUncheckedCreateNestedManyWithoutProblemInput
   groupProblemStats?: Prisma.GroupProblemStatsUncheckedCreateNestedManyWithoutProblemInput
@@ -774,6 +1358,16 @@ export type ProblemUpdateWithoutTestCaseInput = {
   difficulty?: Prisma.EnumproblemDifficultyFieldUpdateOperationsInput | $Enums.problemDifficulty
   source?: Prisma.StringFieldUpdateOperationsInput | string
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  ownerType?: Prisma.EnumProblemOwnerTypeFieldUpdateOperationsInput | $Enums.ProblemOwnerType
+  visibility?: Prisma.EnumProblemVisibilityFieldUpdateOperationsInput | $Enums.ProblemVisibility
+  approvalStatus?: Prisma.EnumProblemApprovalStatusFieldUpdateOperationsInput | $Enums.ProblemApprovalStatus
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  owner?: Prisma.UserUpdateOneWithoutOwnedProblemsNestedInput
+  approvedBy?: Prisma.UserUpdateOneWithoutApprovedProblemsNestedInput
   examProblems?: Prisma.ExamProblemUpdateManyWithoutProblemNestedInput
   tags?: Prisma.ProblemTagUpdateManyWithoutProblemNestedInput
   runTestCase?: Prisma.RunTestCaseUpdateOneWithoutProblemNestedInput
@@ -782,7 +1376,8 @@ export type ProblemUpdateWithoutTestCaseInput = {
   complexityTestingCases?: Prisma.complexityTestingCasesUpdateOneWithoutProblemNestedInput
   driverCode?: Prisma.driverCodeUpdateManyWithoutProblemNestedInput
   referenceSolutions?: Prisma.referenceSolutionUpdateManyWithoutProblemNestedInput
-  problemTestGenerators?: Prisma.ProblemTestGeneratorUpdateOneWithoutProblemNestedInput
+  performanceConstraints?: Prisma.PerformanceConstraintsUpdateOneWithoutProblemNestedInput
+  performanceTestCases?: Prisma.PerformanceTestCaseUpdateManyWithoutProblemNestedInput
   aiconversations?: Prisma.AIConversationUpdateManyWithoutProblemNestedInput
   airateLimits?: Prisma.AIRateLimitUpdateManyWithoutProblemNestedInput
   groupProblemStats?: Prisma.GroupProblemStatsUpdateManyWithoutProblemNestedInput
@@ -797,6 +1392,16 @@ export type ProblemUncheckedUpdateWithoutTestCaseInput = {
   difficulty?: Prisma.EnumproblemDifficultyFieldUpdateOperationsInput | $Enums.problemDifficulty
   source?: Prisma.StringFieldUpdateOperationsInput | string
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  ownerType?: Prisma.EnumProblemOwnerTypeFieldUpdateOperationsInput | $Enums.ProblemOwnerType
+  ownerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  visibility?: Prisma.EnumProblemVisibilityFieldUpdateOperationsInput | $Enums.ProblemVisibility
+  approvalStatus?: Prisma.EnumProblemApprovalStatusFieldUpdateOperationsInput | $Enums.ProblemApprovalStatus
+  approvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   examProblems?: Prisma.ExamProblemUncheckedUpdateManyWithoutProblemNestedInput
   tags?: Prisma.ProblemTagUncheckedUpdateManyWithoutProblemNestedInput
   runTestCase?: Prisma.RunTestCaseUncheckedUpdateOneWithoutProblemNestedInput
@@ -805,7 +1410,8 @@ export type ProblemUncheckedUpdateWithoutTestCaseInput = {
   complexityTestingCases?: Prisma.complexityTestingCasesUncheckedUpdateOneWithoutProblemNestedInput
   driverCode?: Prisma.driverCodeUncheckedUpdateManyWithoutProblemNestedInput
   referenceSolutions?: Prisma.referenceSolutionUncheckedUpdateManyWithoutProblemNestedInput
-  problemTestGenerators?: Prisma.ProblemTestGeneratorUncheckedUpdateOneWithoutProblemNestedInput
+  performanceConstraints?: Prisma.PerformanceConstraintsUncheckedUpdateOneWithoutProblemNestedInput
+  performanceTestCases?: Prisma.PerformanceTestCaseUncheckedUpdateManyWithoutProblemNestedInput
   aiconversations?: Prisma.AIConversationUncheckedUpdateManyWithoutProblemNestedInput
   airateLimits?: Prisma.AIRateLimitUncheckedUpdateManyWithoutProblemNestedInput
   groupProblemStats?: Prisma.GroupProblemStatsUncheckedUpdateManyWithoutProblemNestedInput
@@ -820,6 +1426,16 @@ export type ProblemCreateWithoutComplexityTestingCasesInput = {
   difficulty: $Enums.problemDifficulty
   source?: string
   isPublished?: boolean
+  hidden?: boolean
+  ownerType?: $Enums.ProblemOwnerType
+  visibility?: $Enums.ProblemVisibility
+  approvalStatus?: $Enums.ProblemApprovalStatus
+  approvedAt?: Date | string | null
+  rejectionReason?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  owner?: Prisma.UserCreateNestedOneWithoutOwnedProblemsInput
+  approvedBy?: Prisma.UserCreateNestedOneWithoutApprovedProblemsInput
   examProblems?: Prisma.ExamProblemCreateNestedManyWithoutProblemInput
   tags?: Prisma.ProblemTagCreateNestedManyWithoutProblemInput
   testCase?: Prisma.TestCaseCreateNestedOneWithoutProblemInput
@@ -828,7 +1444,8 @@ export type ProblemCreateWithoutComplexityTestingCasesInput = {
   submissions?: Prisma.SubmissionCreateNestedManyWithoutProblemInput
   driverCode?: Prisma.driverCodeCreateNestedManyWithoutProblemInput
   referenceSolutions?: Prisma.referenceSolutionCreateNestedManyWithoutProblemInput
-  problemTestGenerators?: Prisma.ProblemTestGeneratorCreateNestedOneWithoutProblemInput
+  performanceConstraints?: Prisma.PerformanceConstraintsCreateNestedOneWithoutProblemInput
+  performanceTestCases?: Prisma.PerformanceTestCaseCreateNestedManyWithoutProblemInput
   aiconversations?: Prisma.AIConversationCreateNestedManyWithoutProblemInput
   airateLimits?: Prisma.AIRateLimitCreateNestedManyWithoutProblemInput
   groupProblemStats?: Prisma.GroupProblemStatsCreateNestedManyWithoutProblemInput
@@ -843,6 +1460,16 @@ export type ProblemUncheckedCreateWithoutComplexityTestingCasesInput = {
   difficulty: $Enums.problemDifficulty
   source?: string
   isPublished?: boolean
+  hidden?: boolean
+  ownerType?: $Enums.ProblemOwnerType
+  ownerId?: string | null
+  visibility?: $Enums.ProblemVisibility
+  approvalStatus?: $Enums.ProblemApprovalStatus
+  approvedById?: string | null
+  approvedAt?: Date | string | null
+  rejectionReason?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   examProblems?: Prisma.ExamProblemUncheckedCreateNestedManyWithoutProblemInput
   tags?: Prisma.ProblemTagUncheckedCreateNestedManyWithoutProblemInput
   testCase?: Prisma.TestCaseUncheckedCreateNestedOneWithoutProblemInput
@@ -851,7 +1478,8 @@ export type ProblemUncheckedCreateWithoutComplexityTestingCasesInput = {
   submissions?: Prisma.SubmissionUncheckedCreateNestedManyWithoutProblemInput
   driverCode?: Prisma.driverCodeUncheckedCreateNestedManyWithoutProblemInput
   referenceSolutions?: Prisma.referenceSolutionUncheckedCreateNestedManyWithoutProblemInput
-  problemTestGenerators?: Prisma.ProblemTestGeneratorUncheckedCreateNestedOneWithoutProblemInput
+  performanceConstraints?: Prisma.PerformanceConstraintsUncheckedCreateNestedOneWithoutProblemInput
+  performanceTestCases?: Prisma.PerformanceTestCaseUncheckedCreateNestedManyWithoutProblemInput
   aiconversations?: Prisma.AIConversationUncheckedCreateNestedManyWithoutProblemInput
   airateLimits?: Prisma.AIRateLimitUncheckedCreateNestedManyWithoutProblemInput
   groupProblemStats?: Prisma.GroupProblemStatsUncheckedCreateNestedManyWithoutProblemInput
@@ -882,6 +1510,16 @@ export type ProblemUpdateWithoutComplexityTestingCasesInput = {
   difficulty?: Prisma.EnumproblemDifficultyFieldUpdateOperationsInput | $Enums.problemDifficulty
   source?: Prisma.StringFieldUpdateOperationsInput | string
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  ownerType?: Prisma.EnumProblemOwnerTypeFieldUpdateOperationsInput | $Enums.ProblemOwnerType
+  visibility?: Prisma.EnumProblemVisibilityFieldUpdateOperationsInput | $Enums.ProblemVisibility
+  approvalStatus?: Prisma.EnumProblemApprovalStatusFieldUpdateOperationsInput | $Enums.ProblemApprovalStatus
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  owner?: Prisma.UserUpdateOneWithoutOwnedProblemsNestedInput
+  approvedBy?: Prisma.UserUpdateOneWithoutApprovedProblemsNestedInput
   examProblems?: Prisma.ExamProblemUpdateManyWithoutProblemNestedInput
   tags?: Prisma.ProblemTagUpdateManyWithoutProblemNestedInput
   testCase?: Prisma.TestCaseUpdateOneWithoutProblemNestedInput
@@ -890,7 +1528,8 @@ export type ProblemUpdateWithoutComplexityTestingCasesInput = {
   submissions?: Prisma.SubmissionUpdateManyWithoutProblemNestedInput
   driverCode?: Prisma.driverCodeUpdateManyWithoutProblemNestedInput
   referenceSolutions?: Prisma.referenceSolutionUpdateManyWithoutProblemNestedInput
-  problemTestGenerators?: Prisma.ProblemTestGeneratorUpdateOneWithoutProblemNestedInput
+  performanceConstraints?: Prisma.PerformanceConstraintsUpdateOneWithoutProblemNestedInput
+  performanceTestCases?: Prisma.PerformanceTestCaseUpdateManyWithoutProblemNestedInput
   aiconversations?: Prisma.AIConversationUpdateManyWithoutProblemNestedInput
   airateLimits?: Prisma.AIRateLimitUpdateManyWithoutProblemNestedInput
   groupProblemStats?: Prisma.GroupProblemStatsUpdateManyWithoutProblemNestedInput
@@ -905,6 +1544,16 @@ export type ProblemUncheckedUpdateWithoutComplexityTestingCasesInput = {
   difficulty?: Prisma.EnumproblemDifficultyFieldUpdateOperationsInput | $Enums.problemDifficulty
   source?: Prisma.StringFieldUpdateOperationsInput | string
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  ownerType?: Prisma.EnumProblemOwnerTypeFieldUpdateOperationsInput | $Enums.ProblemOwnerType
+  ownerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  visibility?: Prisma.EnumProblemVisibilityFieldUpdateOperationsInput | $Enums.ProblemVisibility
+  approvalStatus?: Prisma.EnumProblemApprovalStatusFieldUpdateOperationsInput | $Enums.ProblemApprovalStatus
+  approvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   examProblems?: Prisma.ExamProblemUncheckedUpdateManyWithoutProblemNestedInput
   tags?: Prisma.ProblemTagUncheckedUpdateManyWithoutProblemNestedInput
   testCase?: Prisma.TestCaseUncheckedUpdateOneWithoutProblemNestedInput
@@ -913,7 +1562,8 @@ export type ProblemUncheckedUpdateWithoutComplexityTestingCasesInput = {
   submissions?: Prisma.SubmissionUncheckedUpdateManyWithoutProblemNestedInput
   driverCode?: Prisma.driverCodeUncheckedUpdateManyWithoutProblemNestedInput
   referenceSolutions?: Prisma.referenceSolutionUncheckedUpdateManyWithoutProblemNestedInput
-  problemTestGenerators?: Prisma.ProblemTestGeneratorUncheckedUpdateOneWithoutProblemNestedInput
+  performanceConstraints?: Prisma.PerformanceConstraintsUncheckedUpdateOneWithoutProblemNestedInput
+  performanceTestCases?: Prisma.PerformanceTestCaseUncheckedUpdateManyWithoutProblemNestedInput
   aiconversations?: Prisma.AIConversationUncheckedUpdateManyWithoutProblemNestedInput
   airateLimits?: Prisma.AIRateLimitUncheckedUpdateManyWithoutProblemNestedInput
   groupProblemStats?: Prisma.GroupProblemStatsUncheckedUpdateManyWithoutProblemNestedInput
@@ -928,6 +1578,16 @@ export type ProblemCreateWithoutDriverCodeInput = {
   difficulty: $Enums.problemDifficulty
   source?: string
   isPublished?: boolean
+  hidden?: boolean
+  ownerType?: $Enums.ProblemOwnerType
+  visibility?: $Enums.ProblemVisibility
+  approvalStatus?: $Enums.ProblemApprovalStatus
+  approvedAt?: Date | string | null
+  rejectionReason?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  owner?: Prisma.UserCreateNestedOneWithoutOwnedProblemsInput
+  approvedBy?: Prisma.UserCreateNestedOneWithoutApprovedProblemsInput
   examProblems?: Prisma.ExamProblemCreateNestedManyWithoutProblemInput
   tags?: Prisma.ProblemTagCreateNestedManyWithoutProblemInput
   testCase?: Prisma.TestCaseCreateNestedOneWithoutProblemInput
@@ -936,7 +1596,8 @@ export type ProblemCreateWithoutDriverCodeInput = {
   submissions?: Prisma.SubmissionCreateNestedManyWithoutProblemInput
   complexityTestingCases?: Prisma.complexityTestingCasesCreateNestedOneWithoutProblemInput
   referenceSolutions?: Prisma.referenceSolutionCreateNestedManyWithoutProblemInput
-  problemTestGenerators?: Prisma.ProblemTestGeneratorCreateNestedOneWithoutProblemInput
+  performanceConstraints?: Prisma.PerformanceConstraintsCreateNestedOneWithoutProblemInput
+  performanceTestCases?: Prisma.PerformanceTestCaseCreateNestedManyWithoutProblemInput
   aiconversations?: Prisma.AIConversationCreateNestedManyWithoutProblemInput
   airateLimits?: Prisma.AIRateLimitCreateNestedManyWithoutProblemInput
   groupProblemStats?: Prisma.GroupProblemStatsCreateNestedManyWithoutProblemInput
@@ -951,6 +1612,16 @@ export type ProblemUncheckedCreateWithoutDriverCodeInput = {
   difficulty: $Enums.problemDifficulty
   source?: string
   isPublished?: boolean
+  hidden?: boolean
+  ownerType?: $Enums.ProblemOwnerType
+  ownerId?: string | null
+  visibility?: $Enums.ProblemVisibility
+  approvalStatus?: $Enums.ProblemApprovalStatus
+  approvedById?: string | null
+  approvedAt?: Date | string | null
+  rejectionReason?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   examProblems?: Prisma.ExamProblemUncheckedCreateNestedManyWithoutProblemInput
   tags?: Prisma.ProblemTagUncheckedCreateNestedManyWithoutProblemInput
   testCase?: Prisma.TestCaseUncheckedCreateNestedOneWithoutProblemInput
@@ -959,7 +1630,8 @@ export type ProblemUncheckedCreateWithoutDriverCodeInput = {
   submissions?: Prisma.SubmissionUncheckedCreateNestedManyWithoutProblemInput
   complexityTestingCases?: Prisma.complexityTestingCasesUncheckedCreateNestedOneWithoutProblemInput
   referenceSolutions?: Prisma.referenceSolutionUncheckedCreateNestedManyWithoutProblemInput
-  problemTestGenerators?: Prisma.ProblemTestGeneratorUncheckedCreateNestedOneWithoutProblemInput
+  performanceConstraints?: Prisma.PerformanceConstraintsUncheckedCreateNestedOneWithoutProblemInput
+  performanceTestCases?: Prisma.PerformanceTestCaseUncheckedCreateNestedManyWithoutProblemInput
   aiconversations?: Prisma.AIConversationUncheckedCreateNestedManyWithoutProblemInput
   airateLimits?: Prisma.AIRateLimitUncheckedCreateNestedManyWithoutProblemInput
   groupProblemStats?: Prisma.GroupProblemStatsUncheckedCreateNestedManyWithoutProblemInput
@@ -990,6 +1662,16 @@ export type ProblemUpdateWithoutDriverCodeInput = {
   difficulty?: Prisma.EnumproblemDifficultyFieldUpdateOperationsInput | $Enums.problemDifficulty
   source?: Prisma.StringFieldUpdateOperationsInput | string
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  ownerType?: Prisma.EnumProblemOwnerTypeFieldUpdateOperationsInput | $Enums.ProblemOwnerType
+  visibility?: Prisma.EnumProblemVisibilityFieldUpdateOperationsInput | $Enums.ProblemVisibility
+  approvalStatus?: Prisma.EnumProblemApprovalStatusFieldUpdateOperationsInput | $Enums.ProblemApprovalStatus
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  owner?: Prisma.UserUpdateOneWithoutOwnedProblemsNestedInput
+  approvedBy?: Prisma.UserUpdateOneWithoutApprovedProblemsNestedInput
   examProblems?: Prisma.ExamProblemUpdateManyWithoutProblemNestedInput
   tags?: Prisma.ProblemTagUpdateManyWithoutProblemNestedInput
   testCase?: Prisma.TestCaseUpdateOneWithoutProblemNestedInput
@@ -998,7 +1680,8 @@ export type ProblemUpdateWithoutDriverCodeInput = {
   submissions?: Prisma.SubmissionUpdateManyWithoutProblemNestedInput
   complexityTestingCases?: Prisma.complexityTestingCasesUpdateOneWithoutProblemNestedInput
   referenceSolutions?: Prisma.referenceSolutionUpdateManyWithoutProblemNestedInput
-  problemTestGenerators?: Prisma.ProblemTestGeneratorUpdateOneWithoutProblemNestedInput
+  performanceConstraints?: Prisma.PerformanceConstraintsUpdateOneWithoutProblemNestedInput
+  performanceTestCases?: Prisma.PerformanceTestCaseUpdateManyWithoutProblemNestedInput
   aiconversations?: Prisma.AIConversationUpdateManyWithoutProblemNestedInput
   airateLimits?: Prisma.AIRateLimitUpdateManyWithoutProblemNestedInput
   groupProblemStats?: Prisma.GroupProblemStatsUpdateManyWithoutProblemNestedInput
@@ -1013,6 +1696,16 @@ export type ProblemUncheckedUpdateWithoutDriverCodeInput = {
   difficulty?: Prisma.EnumproblemDifficultyFieldUpdateOperationsInput | $Enums.problemDifficulty
   source?: Prisma.StringFieldUpdateOperationsInput | string
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  ownerType?: Prisma.EnumProblemOwnerTypeFieldUpdateOperationsInput | $Enums.ProblemOwnerType
+  ownerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  visibility?: Prisma.EnumProblemVisibilityFieldUpdateOperationsInput | $Enums.ProblemVisibility
+  approvalStatus?: Prisma.EnumProblemApprovalStatusFieldUpdateOperationsInput | $Enums.ProblemApprovalStatus
+  approvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   examProblems?: Prisma.ExamProblemUncheckedUpdateManyWithoutProblemNestedInput
   tags?: Prisma.ProblemTagUncheckedUpdateManyWithoutProblemNestedInput
   testCase?: Prisma.TestCaseUncheckedUpdateOneWithoutProblemNestedInput
@@ -1021,7 +1714,8 @@ export type ProblemUncheckedUpdateWithoutDriverCodeInput = {
   submissions?: Prisma.SubmissionUncheckedUpdateManyWithoutProblemNestedInput
   complexityTestingCases?: Prisma.complexityTestingCasesUncheckedUpdateOneWithoutProblemNestedInput
   referenceSolutions?: Prisma.referenceSolutionUncheckedUpdateManyWithoutProblemNestedInput
-  problemTestGenerators?: Prisma.ProblemTestGeneratorUncheckedUpdateOneWithoutProblemNestedInput
+  performanceConstraints?: Prisma.PerformanceConstraintsUncheckedUpdateOneWithoutProblemNestedInput
+  performanceTestCases?: Prisma.PerformanceTestCaseUncheckedUpdateManyWithoutProblemNestedInput
   aiconversations?: Prisma.AIConversationUncheckedUpdateManyWithoutProblemNestedInput
   airateLimits?: Prisma.AIRateLimitUncheckedUpdateManyWithoutProblemNestedInput
   groupProblemStats?: Prisma.GroupProblemStatsUncheckedUpdateManyWithoutProblemNestedInput
@@ -1036,6 +1730,16 @@ export type ProblemCreateWithoutReferenceSolutionsInput = {
   difficulty: $Enums.problemDifficulty
   source?: string
   isPublished?: boolean
+  hidden?: boolean
+  ownerType?: $Enums.ProblemOwnerType
+  visibility?: $Enums.ProblemVisibility
+  approvalStatus?: $Enums.ProblemApprovalStatus
+  approvedAt?: Date | string | null
+  rejectionReason?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  owner?: Prisma.UserCreateNestedOneWithoutOwnedProblemsInput
+  approvedBy?: Prisma.UserCreateNestedOneWithoutApprovedProblemsInput
   examProblems?: Prisma.ExamProblemCreateNestedManyWithoutProblemInput
   tags?: Prisma.ProblemTagCreateNestedManyWithoutProblemInput
   testCase?: Prisma.TestCaseCreateNestedOneWithoutProblemInput
@@ -1044,7 +1748,8 @@ export type ProblemCreateWithoutReferenceSolutionsInput = {
   submissions?: Prisma.SubmissionCreateNestedManyWithoutProblemInput
   complexityTestingCases?: Prisma.complexityTestingCasesCreateNestedOneWithoutProblemInput
   driverCode?: Prisma.driverCodeCreateNestedManyWithoutProblemInput
-  problemTestGenerators?: Prisma.ProblemTestGeneratorCreateNestedOneWithoutProblemInput
+  performanceConstraints?: Prisma.PerformanceConstraintsCreateNestedOneWithoutProblemInput
+  performanceTestCases?: Prisma.PerformanceTestCaseCreateNestedManyWithoutProblemInput
   aiconversations?: Prisma.AIConversationCreateNestedManyWithoutProblemInput
   airateLimits?: Prisma.AIRateLimitCreateNestedManyWithoutProblemInput
   groupProblemStats?: Prisma.GroupProblemStatsCreateNestedManyWithoutProblemInput
@@ -1059,6 +1764,16 @@ export type ProblemUncheckedCreateWithoutReferenceSolutionsInput = {
   difficulty: $Enums.problemDifficulty
   source?: string
   isPublished?: boolean
+  hidden?: boolean
+  ownerType?: $Enums.ProblemOwnerType
+  ownerId?: string | null
+  visibility?: $Enums.ProblemVisibility
+  approvalStatus?: $Enums.ProblemApprovalStatus
+  approvedById?: string | null
+  approvedAt?: Date | string | null
+  rejectionReason?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   examProblems?: Prisma.ExamProblemUncheckedCreateNestedManyWithoutProblemInput
   tags?: Prisma.ProblemTagUncheckedCreateNestedManyWithoutProblemInput
   testCase?: Prisma.TestCaseUncheckedCreateNestedOneWithoutProblemInput
@@ -1067,7 +1782,8 @@ export type ProblemUncheckedCreateWithoutReferenceSolutionsInput = {
   submissions?: Prisma.SubmissionUncheckedCreateNestedManyWithoutProblemInput
   complexityTestingCases?: Prisma.complexityTestingCasesUncheckedCreateNestedOneWithoutProblemInput
   driverCode?: Prisma.driverCodeUncheckedCreateNestedManyWithoutProblemInput
-  problemTestGenerators?: Prisma.ProblemTestGeneratorUncheckedCreateNestedOneWithoutProblemInput
+  performanceConstraints?: Prisma.PerformanceConstraintsUncheckedCreateNestedOneWithoutProblemInput
+  performanceTestCases?: Prisma.PerformanceTestCaseUncheckedCreateNestedManyWithoutProblemInput
   aiconversations?: Prisma.AIConversationUncheckedCreateNestedManyWithoutProblemInput
   airateLimits?: Prisma.AIRateLimitUncheckedCreateNestedManyWithoutProblemInput
   groupProblemStats?: Prisma.GroupProblemStatsUncheckedCreateNestedManyWithoutProblemInput
@@ -1098,6 +1814,16 @@ export type ProblemUpdateWithoutReferenceSolutionsInput = {
   difficulty?: Prisma.EnumproblemDifficultyFieldUpdateOperationsInput | $Enums.problemDifficulty
   source?: Prisma.StringFieldUpdateOperationsInput | string
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  ownerType?: Prisma.EnumProblemOwnerTypeFieldUpdateOperationsInput | $Enums.ProblemOwnerType
+  visibility?: Prisma.EnumProblemVisibilityFieldUpdateOperationsInput | $Enums.ProblemVisibility
+  approvalStatus?: Prisma.EnumProblemApprovalStatusFieldUpdateOperationsInput | $Enums.ProblemApprovalStatus
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  owner?: Prisma.UserUpdateOneWithoutOwnedProblemsNestedInput
+  approvedBy?: Prisma.UserUpdateOneWithoutApprovedProblemsNestedInput
   examProblems?: Prisma.ExamProblemUpdateManyWithoutProblemNestedInput
   tags?: Prisma.ProblemTagUpdateManyWithoutProblemNestedInput
   testCase?: Prisma.TestCaseUpdateOneWithoutProblemNestedInput
@@ -1106,7 +1832,8 @@ export type ProblemUpdateWithoutReferenceSolutionsInput = {
   submissions?: Prisma.SubmissionUpdateManyWithoutProblemNestedInput
   complexityTestingCases?: Prisma.complexityTestingCasesUpdateOneWithoutProblemNestedInput
   driverCode?: Prisma.driverCodeUpdateManyWithoutProblemNestedInput
-  problemTestGenerators?: Prisma.ProblemTestGeneratorUpdateOneWithoutProblemNestedInput
+  performanceConstraints?: Prisma.PerformanceConstraintsUpdateOneWithoutProblemNestedInput
+  performanceTestCases?: Prisma.PerformanceTestCaseUpdateManyWithoutProblemNestedInput
   aiconversations?: Prisma.AIConversationUpdateManyWithoutProblemNestedInput
   airateLimits?: Prisma.AIRateLimitUpdateManyWithoutProblemNestedInput
   groupProblemStats?: Prisma.GroupProblemStatsUpdateManyWithoutProblemNestedInput
@@ -1121,6 +1848,16 @@ export type ProblemUncheckedUpdateWithoutReferenceSolutionsInput = {
   difficulty?: Prisma.EnumproblemDifficultyFieldUpdateOperationsInput | $Enums.problemDifficulty
   source?: Prisma.StringFieldUpdateOperationsInput | string
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  ownerType?: Prisma.EnumProblemOwnerTypeFieldUpdateOperationsInput | $Enums.ProblemOwnerType
+  ownerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  visibility?: Prisma.EnumProblemVisibilityFieldUpdateOperationsInput | $Enums.ProblemVisibility
+  approvalStatus?: Prisma.EnumProblemApprovalStatusFieldUpdateOperationsInput | $Enums.ProblemApprovalStatus
+  approvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   examProblems?: Prisma.ExamProblemUncheckedUpdateManyWithoutProblemNestedInput
   tags?: Prisma.ProblemTagUncheckedUpdateManyWithoutProblemNestedInput
   testCase?: Prisma.TestCaseUncheckedUpdateOneWithoutProblemNestedInput
@@ -1129,7 +1866,8 @@ export type ProblemUncheckedUpdateWithoutReferenceSolutionsInput = {
   submissions?: Prisma.SubmissionUncheckedUpdateManyWithoutProblemNestedInput
   complexityTestingCases?: Prisma.complexityTestingCasesUncheckedUpdateOneWithoutProblemNestedInput
   driverCode?: Prisma.driverCodeUncheckedUpdateManyWithoutProblemNestedInput
-  problemTestGenerators?: Prisma.ProblemTestGeneratorUncheckedUpdateOneWithoutProblemNestedInput
+  performanceConstraints?: Prisma.PerformanceConstraintsUncheckedUpdateOneWithoutProblemNestedInput
+  performanceTestCases?: Prisma.PerformanceTestCaseUncheckedUpdateManyWithoutProblemNestedInput
   aiconversations?: Prisma.AIConversationUncheckedUpdateManyWithoutProblemNestedInput
   airateLimits?: Prisma.AIRateLimitUncheckedUpdateManyWithoutProblemNestedInput
   groupProblemStats?: Prisma.GroupProblemStatsUncheckedUpdateManyWithoutProblemNestedInput
@@ -1144,6 +1882,16 @@ export type ProblemCreateWithoutRunTestCaseInput = {
   difficulty: $Enums.problemDifficulty
   source?: string
   isPublished?: boolean
+  hidden?: boolean
+  ownerType?: $Enums.ProblemOwnerType
+  visibility?: $Enums.ProblemVisibility
+  approvalStatus?: $Enums.ProblemApprovalStatus
+  approvedAt?: Date | string | null
+  rejectionReason?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  owner?: Prisma.UserCreateNestedOneWithoutOwnedProblemsInput
+  approvedBy?: Prisma.UserCreateNestedOneWithoutApprovedProblemsInput
   examProblems?: Prisma.ExamProblemCreateNestedManyWithoutProblemInput
   tags?: Prisma.ProblemTagCreateNestedManyWithoutProblemInput
   testCase?: Prisma.TestCaseCreateNestedOneWithoutProblemInput
@@ -1152,7 +1900,8 @@ export type ProblemCreateWithoutRunTestCaseInput = {
   complexityTestingCases?: Prisma.complexityTestingCasesCreateNestedOneWithoutProblemInput
   driverCode?: Prisma.driverCodeCreateNestedManyWithoutProblemInput
   referenceSolutions?: Prisma.referenceSolutionCreateNestedManyWithoutProblemInput
-  problemTestGenerators?: Prisma.ProblemTestGeneratorCreateNestedOneWithoutProblemInput
+  performanceConstraints?: Prisma.PerformanceConstraintsCreateNestedOneWithoutProblemInput
+  performanceTestCases?: Prisma.PerformanceTestCaseCreateNestedManyWithoutProblemInput
   aiconversations?: Prisma.AIConversationCreateNestedManyWithoutProblemInput
   airateLimits?: Prisma.AIRateLimitCreateNestedManyWithoutProblemInput
   groupProblemStats?: Prisma.GroupProblemStatsCreateNestedManyWithoutProblemInput
@@ -1167,6 +1916,16 @@ export type ProblemUncheckedCreateWithoutRunTestCaseInput = {
   difficulty: $Enums.problemDifficulty
   source?: string
   isPublished?: boolean
+  hidden?: boolean
+  ownerType?: $Enums.ProblemOwnerType
+  ownerId?: string | null
+  visibility?: $Enums.ProblemVisibility
+  approvalStatus?: $Enums.ProblemApprovalStatus
+  approvedById?: string | null
+  approvedAt?: Date | string | null
+  rejectionReason?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   examProblems?: Prisma.ExamProblemUncheckedCreateNestedManyWithoutProblemInput
   tags?: Prisma.ProblemTagUncheckedCreateNestedManyWithoutProblemInput
   testCase?: Prisma.TestCaseUncheckedCreateNestedOneWithoutProblemInput
@@ -1175,7 +1934,8 @@ export type ProblemUncheckedCreateWithoutRunTestCaseInput = {
   complexityTestingCases?: Prisma.complexityTestingCasesUncheckedCreateNestedOneWithoutProblemInput
   driverCode?: Prisma.driverCodeUncheckedCreateNestedManyWithoutProblemInput
   referenceSolutions?: Prisma.referenceSolutionUncheckedCreateNestedManyWithoutProblemInput
-  problemTestGenerators?: Prisma.ProblemTestGeneratorUncheckedCreateNestedOneWithoutProblemInput
+  performanceConstraints?: Prisma.PerformanceConstraintsUncheckedCreateNestedOneWithoutProblemInput
+  performanceTestCases?: Prisma.PerformanceTestCaseUncheckedCreateNestedManyWithoutProblemInput
   aiconversations?: Prisma.AIConversationUncheckedCreateNestedManyWithoutProblemInput
   airateLimits?: Prisma.AIRateLimitUncheckedCreateNestedManyWithoutProblemInput
   groupProblemStats?: Prisma.GroupProblemStatsUncheckedCreateNestedManyWithoutProblemInput
@@ -1206,6 +1966,16 @@ export type ProblemUpdateWithoutRunTestCaseInput = {
   difficulty?: Prisma.EnumproblemDifficultyFieldUpdateOperationsInput | $Enums.problemDifficulty
   source?: Prisma.StringFieldUpdateOperationsInput | string
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  ownerType?: Prisma.EnumProblemOwnerTypeFieldUpdateOperationsInput | $Enums.ProblemOwnerType
+  visibility?: Prisma.EnumProblemVisibilityFieldUpdateOperationsInput | $Enums.ProblemVisibility
+  approvalStatus?: Prisma.EnumProblemApprovalStatusFieldUpdateOperationsInput | $Enums.ProblemApprovalStatus
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  owner?: Prisma.UserUpdateOneWithoutOwnedProblemsNestedInput
+  approvedBy?: Prisma.UserUpdateOneWithoutApprovedProblemsNestedInput
   examProblems?: Prisma.ExamProblemUpdateManyWithoutProblemNestedInput
   tags?: Prisma.ProblemTagUpdateManyWithoutProblemNestedInput
   testCase?: Prisma.TestCaseUpdateOneWithoutProblemNestedInput
@@ -1214,7 +1984,8 @@ export type ProblemUpdateWithoutRunTestCaseInput = {
   complexityTestingCases?: Prisma.complexityTestingCasesUpdateOneWithoutProblemNestedInput
   driverCode?: Prisma.driverCodeUpdateManyWithoutProblemNestedInput
   referenceSolutions?: Prisma.referenceSolutionUpdateManyWithoutProblemNestedInput
-  problemTestGenerators?: Prisma.ProblemTestGeneratorUpdateOneWithoutProblemNestedInput
+  performanceConstraints?: Prisma.PerformanceConstraintsUpdateOneWithoutProblemNestedInput
+  performanceTestCases?: Prisma.PerformanceTestCaseUpdateManyWithoutProblemNestedInput
   aiconversations?: Prisma.AIConversationUpdateManyWithoutProblemNestedInput
   airateLimits?: Prisma.AIRateLimitUpdateManyWithoutProblemNestedInput
   groupProblemStats?: Prisma.GroupProblemStatsUpdateManyWithoutProblemNestedInput
@@ -1229,6 +2000,16 @@ export type ProblemUncheckedUpdateWithoutRunTestCaseInput = {
   difficulty?: Prisma.EnumproblemDifficultyFieldUpdateOperationsInput | $Enums.problemDifficulty
   source?: Prisma.StringFieldUpdateOperationsInput | string
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  ownerType?: Prisma.EnumProblemOwnerTypeFieldUpdateOperationsInput | $Enums.ProblemOwnerType
+  ownerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  visibility?: Prisma.EnumProblemVisibilityFieldUpdateOperationsInput | $Enums.ProblemVisibility
+  approvalStatus?: Prisma.EnumProblemApprovalStatusFieldUpdateOperationsInput | $Enums.ProblemApprovalStatus
+  approvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   examProblems?: Prisma.ExamProblemUncheckedUpdateManyWithoutProblemNestedInput
   tags?: Prisma.ProblemTagUncheckedUpdateManyWithoutProblemNestedInput
   testCase?: Prisma.TestCaseUncheckedUpdateOneWithoutProblemNestedInput
@@ -1237,7 +2018,8 @@ export type ProblemUncheckedUpdateWithoutRunTestCaseInput = {
   complexityTestingCases?: Prisma.complexityTestingCasesUncheckedUpdateOneWithoutProblemNestedInput
   driverCode?: Prisma.driverCodeUncheckedUpdateManyWithoutProblemNestedInput
   referenceSolutions?: Prisma.referenceSolutionUncheckedUpdateManyWithoutProblemNestedInput
-  problemTestGenerators?: Prisma.ProblemTestGeneratorUncheckedUpdateOneWithoutProblemNestedInput
+  performanceConstraints?: Prisma.PerformanceConstraintsUncheckedUpdateOneWithoutProblemNestedInput
+  performanceTestCases?: Prisma.PerformanceTestCaseUncheckedUpdateManyWithoutProblemNestedInput
   aiconversations?: Prisma.AIConversationUncheckedUpdateManyWithoutProblemNestedInput
   airateLimits?: Prisma.AIRateLimitUncheckedUpdateManyWithoutProblemNestedInput
   groupProblemStats?: Prisma.GroupProblemStatsUncheckedUpdateManyWithoutProblemNestedInput
@@ -1252,6 +2034,16 @@ export type ProblemCreateWithoutSelfSubmissionsInput = {
   difficulty: $Enums.problemDifficulty
   source?: string
   isPublished?: boolean
+  hidden?: boolean
+  ownerType?: $Enums.ProblemOwnerType
+  visibility?: $Enums.ProblemVisibility
+  approvalStatus?: $Enums.ProblemApprovalStatus
+  approvedAt?: Date | string | null
+  rejectionReason?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  owner?: Prisma.UserCreateNestedOneWithoutOwnedProblemsInput
+  approvedBy?: Prisma.UserCreateNestedOneWithoutApprovedProblemsInput
   examProblems?: Prisma.ExamProblemCreateNestedManyWithoutProblemInput
   tags?: Prisma.ProblemTagCreateNestedManyWithoutProblemInput
   testCase?: Prisma.TestCaseCreateNestedOneWithoutProblemInput
@@ -1260,7 +2052,8 @@ export type ProblemCreateWithoutSelfSubmissionsInput = {
   complexityTestingCases?: Prisma.complexityTestingCasesCreateNestedOneWithoutProblemInput
   driverCode?: Prisma.driverCodeCreateNestedManyWithoutProblemInput
   referenceSolutions?: Prisma.referenceSolutionCreateNestedManyWithoutProblemInput
-  problemTestGenerators?: Prisma.ProblemTestGeneratorCreateNestedOneWithoutProblemInput
+  performanceConstraints?: Prisma.PerformanceConstraintsCreateNestedOneWithoutProblemInput
+  performanceTestCases?: Prisma.PerformanceTestCaseCreateNestedManyWithoutProblemInput
   aiconversations?: Prisma.AIConversationCreateNestedManyWithoutProblemInput
   airateLimits?: Prisma.AIRateLimitCreateNestedManyWithoutProblemInput
   groupProblemStats?: Prisma.GroupProblemStatsCreateNestedManyWithoutProblemInput
@@ -1275,6 +2068,16 @@ export type ProblemUncheckedCreateWithoutSelfSubmissionsInput = {
   difficulty: $Enums.problemDifficulty
   source?: string
   isPublished?: boolean
+  hidden?: boolean
+  ownerType?: $Enums.ProblemOwnerType
+  ownerId?: string | null
+  visibility?: $Enums.ProblemVisibility
+  approvalStatus?: $Enums.ProblemApprovalStatus
+  approvedById?: string | null
+  approvedAt?: Date | string | null
+  rejectionReason?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   examProblems?: Prisma.ExamProblemUncheckedCreateNestedManyWithoutProblemInput
   tags?: Prisma.ProblemTagUncheckedCreateNestedManyWithoutProblemInput
   testCase?: Prisma.TestCaseUncheckedCreateNestedOneWithoutProblemInput
@@ -1283,7 +2086,8 @@ export type ProblemUncheckedCreateWithoutSelfSubmissionsInput = {
   complexityTestingCases?: Prisma.complexityTestingCasesUncheckedCreateNestedOneWithoutProblemInput
   driverCode?: Prisma.driverCodeUncheckedCreateNestedManyWithoutProblemInput
   referenceSolutions?: Prisma.referenceSolutionUncheckedCreateNestedManyWithoutProblemInput
-  problemTestGenerators?: Prisma.ProblemTestGeneratorUncheckedCreateNestedOneWithoutProblemInput
+  performanceConstraints?: Prisma.PerformanceConstraintsUncheckedCreateNestedOneWithoutProblemInput
+  performanceTestCases?: Prisma.PerformanceTestCaseUncheckedCreateNestedManyWithoutProblemInput
   aiconversations?: Prisma.AIConversationUncheckedCreateNestedManyWithoutProblemInput
   airateLimits?: Prisma.AIRateLimitUncheckedCreateNestedManyWithoutProblemInput
   groupProblemStats?: Prisma.GroupProblemStatsUncheckedCreateNestedManyWithoutProblemInput
@@ -1314,6 +2118,16 @@ export type ProblemUpdateWithoutSelfSubmissionsInput = {
   difficulty?: Prisma.EnumproblemDifficultyFieldUpdateOperationsInput | $Enums.problemDifficulty
   source?: Prisma.StringFieldUpdateOperationsInput | string
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  ownerType?: Prisma.EnumProblemOwnerTypeFieldUpdateOperationsInput | $Enums.ProblemOwnerType
+  visibility?: Prisma.EnumProblemVisibilityFieldUpdateOperationsInput | $Enums.ProblemVisibility
+  approvalStatus?: Prisma.EnumProblemApprovalStatusFieldUpdateOperationsInput | $Enums.ProblemApprovalStatus
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  owner?: Prisma.UserUpdateOneWithoutOwnedProblemsNestedInput
+  approvedBy?: Prisma.UserUpdateOneWithoutApprovedProblemsNestedInput
   examProblems?: Prisma.ExamProblemUpdateManyWithoutProblemNestedInput
   tags?: Prisma.ProblemTagUpdateManyWithoutProblemNestedInput
   testCase?: Prisma.TestCaseUpdateOneWithoutProblemNestedInput
@@ -1322,7 +2136,8 @@ export type ProblemUpdateWithoutSelfSubmissionsInput = {
   complexityTestingCases?: Prisma.complexityTestingCasesUpdateOneWithoutProblemNestedInput
   driverCode?: Prisma.driverCodeUpdateManyWithoutProblemNestedInput
   referenceSolutions?: Prisma.referenceSolutionUpdateManyWithoutProblemNestedInput
-  problemTestGenerators?: Prisma.ProblemTestGeneratorUpdateOneWithoutProblemNestedInput
+  performanceConstraints?: Prisma.PerformanceConstraintsUpdateOneWithoutProblemNestedInput
+  performanceTestCases?: Prisma.PerformanceTestCaseUpdateManyWithoutProblemNestedInput
   aiconversations?: Prisma.AIConversationUpdateManyWithoutProblemNestedInput
   airateLimits?: Prisma.AIRateLimitUpdateManyWithoutProblemNestedInput
   groupProblemStats?: Prisma.GroupProblemStatsUpdateManyWithoutProblemNestedInput
@@ -1337,6 +2152,16 @@ export type ProblemUncheckedUpdateWithoutSelfSubmissionsInput = {
   difficulty?: Prisma.EnumproblemDifficultyFieldUpdateOperationsInput | $Enums.problemDifficulty
   source?: Prisma.StringFieldUpdateOperationsInput | string
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  ownerType?: Prisma.EnumProblemOwnerTypeFieldUpdateOperationsInput | $Enums.ProblemOwnerType
+  ownerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  visibility?: Prisma.EnumProblemVisibilityFieldUpdateOperationsInput | $Enums.ProblemVisibility
+  approvalStatus?: Prisma.EnumProblemApprovalStatusFieldUpdateOperationsInput | $Enums.ProblemApprovalStatus
+  approvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   examProblems?: Prisma.ExamProblemUncheckedUpdateManyWithoutProblemNestedInput
   tags?: Prisma.ProblemTagUncheckedUpdateManyWithoutProblemNestedInput
   testCase?: Prisma.TestCaseUncheckedUpdateOneWithoutProblemNestedInput
@@ -1345,14 +2170,15 @@ export type ProblemUncheckedUpdateWithoutSelfSubmissionsInput = {
   complexityTestingCases?: Prisma.complexityTestingCasesUncheckedUpdateOneWithoutProblemNestedInput
   driverCode?: Prisma.driverCodeUncheckedUpdateManyWithoutProblemNestedInput
   referenceSolutions?: Prisma.referenceSolutionUncheckedUpdateManyWithoutProblemNestedInput
-  problemTestGenerators?: Prisma.ProblemTestGeneratorUncheckedUpdateOneWithoutProblemNestedInput
+  performanceConstraints?: Prisma.PerformanceConstraintsUncheckedUpdateOneWithoutProblemNestedInput
+  performanceTestCases?: Prisma.PerformanceTestCaseUncheckedUpdateManyWithoutProblemNestedInput
   aiconversations?: Prisma.AIConversationUncheckedUpdateManyWithoutProblemNestedInput
   airateLimits?: Prisma.AIRateLimitUncheckedUpdateManyWithoutProblemNestedInput
   groupProblemStats?: Prisma.GroupProblemStatsUncheckedUpdateManyWithoutProblemNestedInput
   studentProblemStats?: Prisma.StudentProblemStatsUncheckedUpdateManyWithoutProblemNestedInput
 }
 
-export type ProblemCreateWithoutProblemTestGeneratorsInput = {
+export type ProblemCreateWithoutPerformanceConstraintsInput = {
   id?: string
   number: number
   title: string
@@ -1360,6 +2186,16 @@ export type ProblemCreateWithoutProblemTestGeneratorsInput = {
   difficulty: $Enums.problemDifficulty
   source?: string
   isPublished?: boolean
+  hidden?: boolean
+  ownerType?: $Enums.ProblemOwnerType
+  visibility?: $Enums.ProblemVisibility
+  approvalStatus?: $Enums.ProblemApprovalStatus
+  approvedAt?: Date | string | null
+  rejectionReason?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  owner?: Prisma.UserCreateNestedOneWithoutOwnedProblemsInput
+  approvedBy?: Prisma.UserCreateNestedOneWithoutApprovedProblemsInput
   examProblems?: Prisma.ExamProblemCreateNestedManyWithoutProblemInput
   tags?: Prisma.ProblemTagCreateNestedManyWithoutProblemInput
   testCase?: Prisma.TestCaseCreateNestedOneWithoutProblemInput
@@ -1369,13 +2205,14 @@ export type ProblemCreateWithoutProblemTestGeneratorsInput = {
   complexityTestingCases?: Prisma.complexityTestingCasesCreateNestedOneWithoutProblemInput
   driverCode?: Prisma.driverCodeCreateNestedManyWithoutProblemInput
   referenceSolutions?: Prisma.referenceSolutionCreateNestedManyWithoutProblemInput
+  performanceTestCases?: Prisma.PerformanceTestCaseCreateNestedManyWithoutProblemInput
   aiconversations?: Prisma.AIConversationCreateNestedManyWithoutProblemInput
   airateLimits?: Prisma.AIRateLimitCreateNestedManyWithoutProblemInput
   groupProblemStats?: Prisma.GroupProblemStatsCreateNestedManyWithoutProblemInput
   studentProblemStats?: Prisma.StudentProblemStatsCreateNestedManyWithoutProblemInput
 }
 
-export type ProblemUncheckedCreateWithoutProblemTestGeneratorsInput = {
+export type ProblemUncheckedCreateWithoutPerformanceConstraintsInput = {
   id?: string
   number: number
   title: string
@@ -1383,6 +2220,16 @@ export type ProblemUncheckedCreateWithoutProblemTestGeneratorsInput = {
   difficulty: $Enums.problemDifficulty
   source?: string
   isPublished?: boolean
+  hidden?: boolean
+  ownerType?: $Enums.ProblemOwnerType
+  ownerId?: string | null
+  visibility?: $Enums.ProblemVisibility
+  approvalStatus?: $Enums.ProblemApprovalStatus
+  approvedById?: string | null
+  approvedAt?: Date | string | null
+  rejectionReason?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   examProblems?: Prisma.ExamProblemUncheckedCreateNestedManyWithoutProblemInput
   tags?: Prisma.ProblemTagUncheckedCreateNestedManyWithoutProblemInput
   testCase?: Prisma.TestCaseUncheckedCreateNestedOneWithoutProblemInput
@@ -1392,29 +2239,30 @@ export type ProblemUncheckedCreateWithoutProblemTestGeneratorsInput = {
   complexityTestingCases?: Prisma.complexityTestingCasesUncheckedCreateNestedOneWithoutProblemInput
   driverCode?: Prisma.driverCodeUncheckedCreateNestedManyWithoutProblemInput
   referenceSolutions?: Prisma.referenceSolutionUncheckedCreateNestedManyWithoutProblemInput
+  performanceTestCases?: Prisma.PerformanceTestCaseUncheckedCreateNestedManyWithoutProblemInput
   aiconversations?: Prisma.AIConversationUncheckedCreateNestedManyWithoutProblemInput
   airateLimits?: Prisma.AIRateLimitUncheckedCreateNestedManyWithoutProblemInput
   groupProblemStats?: Prisma.GroupProblemStatsUncheckedCreateNestedManyWithoutProblemInput
   studentProblemStats?: Prisma.StudentProblemStatsUncheckedCreateNestedManyWithoutProblemInput
 }
 
-export type ProblemCreateOrConnectWithoutProblemTestGeneratorsInput = {
+export type ProblemCreateOrConnectWithoutPerformanceConstraintsInput = {
   where: Prisma.ProblemWhereUniqueInput
-  create: Prisma.XOR<Prisma.ProblemCreateWithoutProblemTestGeneratorsInput, Prisma.ProblemUncheckedCreateWithoutProblemTestGeneratorsInput>
+  create: Prisma.XOR<Prisma.ProblemCreateWithoutPerformanceConstraintsInput, Prisma.ProblemUncheckedCreateWithoutPerformanceConstraintsInput>
 }
 
-export type ProblemUpsertWithoutProblemTestGeneratorsInput = {
-  update: Prisma.XOR<Prisma.ProblemUpdateWithoutProblemTestGeneratorsInput, Prisma.ProblemUncheckedUpdateWithoutProblemTestGeneratorsInput>
-  create: Prisma.XOR<Prisma.ProblemCreateWithoutProblemTestGeneratorsInput, Prisma.ProblemUncheckedCreateWithoutProblemTestGeneratorsInput>
+export type ProblemUpsertWithoutPerformanceConstraintsInput = {
+  update: Prisma.XOR<Prisma.ProblemUpdateWithoutPerformanceConstraintsInput, Prisma.ProblemUncheckedUpdateWithoutPerformanceConstraintsInput>
+  create: Prisma.XOR<Prisma.ProblemCreateWithoutPerformanceConstraintsInput, Prisma.ProblemUncheckedCreateWithoutPerformanceConstraintsInput>
   where?: Prisma.ProblemWhereInput
 }
 
-export type ProblemUpdateToOneWithWhereWithoutProblemTestGeneratorsInput = {
+export type ProblemUpdateToOneWithWhereWithoutPerformanceConstraintsInput = {
   where?: Prisma.ProblemWhereInput
-  data: Prisma.XOR<Prisma.ProblemUpdateWithoutProblemTestGeneratorsInput, Prisma.ProblemUncheckedUpdateWithoutProblemTestGeneratorsInput>
+  data: Prisma.XOR<Prisma.ProblemUpdateWithoutPerformanceConstraintsInput, Prisma.ProblemUncheckedUpdateWithoutPerformanceConstraintsInput>
 }
 
-export type ProblemUpdateWithoutProblemTestGeneratorsInput = {
+export type ProblemUpdateWithoutPerformanceConstraintsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   number?: Prisma.IntFieldUpdateOperationsInput | number
   title?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1422,6 +2270,16 @@ export type ProblemUpdateWithoutProblemTestGeneratorsInput = {
   difficulty?: Prisma.EnumproblemDifficultyFieldUpdateOperationsInput | $Enums.problemDifficulty
   source?: Prisma.StringFieldUpdateOperationsInput | string
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  ownerType?: Prisma.EnumProblemOwnerTypeFieldUpdateOperationsInput | $Enums.ProblemOwnerType
+  visibility?: Prisma.EnumProblemVisibilityFieldUpdateOperationsInput | $Enums.ProblemVisibility
+  approvalStatus?: Prisma.EnumProblemApprovalStatusFieldUpdateOperationsInput | $Enums.ProblemApprovalStatus
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  owner?: Prisma.UserUpdateOneWithoutOwnedProblemsNestedInput
+  approvedBy?: Prisma.UserUpdateOneWithoutApprovedProblemsNestedInput
   examProblems?: Prisma.ExamProblemUpdateManyWithoutProblemNestedInput
   tags?: Prisma.ProblemTagUpdateManyWithoutProblemNestedInput
   testCase?: Prisma.TestCaseUpdateOneWithoutProblemNestedInput
@@ -1431,13 +2289,14 @@ export type ProblemUpdateWithoutProblemTestGeneratorsInput = {
   complexityTestingCases?: Prisma.complexityTestingCasesUpdateOneWithoutProblemNestedInput
   driverCode?: Prisma.driverCodeUpdateManyWithoutProblemNestedInput
   referenceSolutions?: Prisma.referenceSolutionUpdateManyWithoutProblemNestedInput
+  performanceTestCases?: Prisma.PerformanceTestCaseUpdateManyWithoutProblemNestedInput
   aiconversations?: Prisma.AIConversationUpdateManyWithoutProblemNestedInput
   airateLimits?: Prisma.AIRateLimitUpdateManyWithoutProblemNestedInput
   groupProblemStats?: Prisma.GroupProblemStatsUpdateManyWithoutProblemNestedInput
   studentProblemStats?: Prisma.StudentProblemStatsUpdateManyWithoutProblemNestedInput
 }
 
-export type ProblemUncheckedUpdateWithoutProblemTestGeneratorsInput = {
+export type ProblemUncheckedUpdateWithoutPerformanceConstraintsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   number?: Prisma.IntFieldUpdateOperationsInput | number
   title?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1445,6 +2304,16 @@ export type ProblemUncheckedUpdateWithoutProblemTestGeneratorsInput = {
   difficulty?: Prisma.EnumproblemDifficultyFieldUpdateOperationsInput | $Enums.problemDifficulty
   source?: Prisma.StringFieldUpdateOperationsInput | string
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  ownerType?: Prisma.EnumProblemOwnerTypeFieldUpdateOperationsInput | $Enums.ProblemOwnerType
+  ownerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  visibility?: Prisma.EnumProblemVisibilityFieldUpdateOperationsInput | $Enums.ProblemVisibility
+  approvalStatus?: Prisma.EnumProblemApprovalStatusFieldUpdateOperationsInput | $Enums.ProblemApprovalStatus
+  approvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   examProblems?: Prisma.ExamProblemUncheckedUpdateManyWithoutProblemNestedInput
   tags?: Prisma.ProblemTagUncheckedUpdateManyWithoutProblemNestedInput
   testCase?: Prisma.TestCaseUncheckedUpdateOneWithoutProblemNestedInput
@@ -1454,6 +2323,159 @@ export type ProblemUncheckedUpdateWithoutProblemTestGeneratorsInput = {
   complexityTestingCases?: Prisma.complexityTestingCasesUncheckedUpdateOneWithoutProblemNestedInput
   driverCode?: Prisma.driverCodeUncheckedUpdateManyWithoutProblemNestedInput
   referenceSolutions?: Prisma.referenceSolutionUncheckedUpdateManyWithoutProblemNestedInput
+  performanceTestCases?: Prisma.PerformanceTestCaseUncheckedUpdateManyWithoutProblemNestedInput
+  aiconversations?: Prisma.AIConversationUncheckedUpdateManyWithoutProblemNestedInput
+  airateLimits?: Prisma.AIRateLimitUncheckedUpdateManyWithoutProblemNestedInput
+  groupProblemStats?: Prisma.GroupProblemStatsUncheckedUpdateManyWithoutProblemNestedInput
+  studentProblemStats?: Prisma.StudentProblemStatsUncheckedUpdateManyWithoutProblemNestedInput
+}
+
+export type ProblemCreateWithoutPerformanceTestCasesInput = {
+  id?: string
+  number: number
+  title: string
+  description: string
+  difficulty: $Enums.problemDifficulty
+  source?: string
+  isPublished?: boolean
+  hidden?: boolean
+  ownerType?: $Enums.ProblemOwnerType
+  visibility?: $Enums.ProblemVisibility
+  approvalStatus?: $Enums.ProblemApprovalStatus
+  approvedAt?: Date | string | null
+  rejectionReason?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  owner?: Prisma.UserCreateNestedOneWithoutOwnedProblemsInput
+  approvedBy?: Prisma.UserCreateNestedOneWithoutApprovedProblemsInput
+  examProblems?: Prisma.ExamProblemCreateNestedManyWithoutProblemInput
+  tags?: Prisma.ProblemTagCreateNestedManyWithoutProblemInput
+  testCase?: Prisma.TestCaseCreateNestedOneWithoutProblemInput
+  runTestCase?: Prisma.RunTestCaseCreateNestedOneWithoutProblemInput
+  selfSubmissions?: Prisma.selfSubmissionCreateNestedManyWithoutProblemInput
+  submissions?: Prisma.SubmissionCreateNestedManyWithoutProblemInput
+  complexityTestingCases?: Prisma.complexityTestingCasesCreateNestedOneWithoutProblemInput
+  driverCode?: Prisma.driverCodeCreateNestedManyWithoutProblemInput
+  referenceSolutions?: Prisma.referenceSolutionCreateNestedManyWithoutProblemInput
+  performanceConstraints?: Prisma.PerformanceConstraintsCreateNestedOneWithoutProblemInput
+  aiconversations?: Prisma.AIConversationCreateNestedManyWithoutProblemInput
+  airateLimits?: Prisma.AIRateLimitCreateNestedManyWithoutProblemInput
+  groupProblemStats?: Prisma.GroupProblemStatsCreateNestedManyWithoutProblemInput
+  studentProblemStats?: Prisma.StudentProblemStatsCreateNestedManyWithoutProblemInput
+}
+
+export type ProblemUncheckedCreateWithoutPerformanceTestCasesInput = {
+  id?: string
+  number: number
+  title: string
+  description: string
+  difficulty: $Enums.problemDifficulty
+  source?: string
+  isPublished?: boolean
+  hidden?: boolean
+  ownerType?: $Enums.ProblemOwnerType
+  ownerId?: string | null
+  visibility?: $Enums.ProblemVisibility
+  approvalStatus?: $Enums.ProblemApprovalStatus
+  approvedById?: string | null
+  approvedAt?: Date | string | null
+  rejectionReason?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  examProblems?: Prisma.ExamProblemUncheckedCreateNestedManyWithoutProblemInput
+  tags?: Prisma.ProblemTagUncheckedCreateNestedManyWithoutProblemInput
+  testCase?: Prisma.TestCaseUncheckedCreateNestedOneWithoutProblemInput
+  runTestCase?: Prisma.RunTestCaseUncheckedCreateNestedOneWithoutProblemInput
+  selfSubmissions?: Prisma.selfSubmissionUncheckedCreateNestedManyWithoutProblemInput
+  submissions?: Prisma.SubmissionUncheckedCreateNestedManyWithoutProblemInput
+  complexityTestingCases?: Prisma.complexityTestingCasesUncheckedCreateNestedOneWithoutProblemInput
+  driverCode?: Prisma.driverCodeUncheckedCreateNestedManyWithoutProblemInput
+  referenceSolutions?: Prisma.referenceSolutionUncheckedCreateNestedManyWithoutProblemInput
+  performanceConstraints?: Prisma.PerformanceConstraintsUncheckedCreateNestedOneWithoutProblemInput
+  aiconversations?: Prisma.AIConversationUncheckedCreateNestedManyWithoutProblemInput
+  airateLimits?: Prisma.AIRateLimitUncheckedCreateNestedManyWithoutProblemInput
+  groupProblemStats?: Prisma.GroupProblemStatsUncheckedCreateNestedManyWithoutProblemInput
+  studentProblemStats?: Prisma.StudentProblemStatsUncheckedCreateNestedManyWithoutProblemInput
+}
+
+export type ProblemCreateOrConnectWithoutPerformanceTestCasesInput = {
+  where: Prisma.ProblemWhereUniqueInput
+  create: Prisma.XOR<Prisma.ProblemCreateWithoutPerformanceTestCasesInput, Prisma.ProblemUncheckedCreateWithoutPerformanceTestCasesInput>
+}
+
+export type ProblemUpsertWithoutPerformanceTestCasesInput = {
+  update: Prisma.XOR<Prisma.ProblemUpdateWithoutPerformanceTestCasesInput, Prisma.ProblemUncheckedUpdateWithoutPerformanceTestCasesInput>
+  create: Prisma.XOR<Prisma.ProblemCreateWithoutPerformanceTestCasesInput, Prisma.ProblemUncheckedCreateWithoutPerformanceTestCasesInput>
+  where?: Prisma.ProblemWhereInput
+}
+
+export type ProblemUpdateToOneWithWhereWithoutPerformanceTestCasesInput = {
+  where?: Prisma.ProblemWhereInput
+  data: Prisma.XOR<Prisma.ProblemUpdateWithoutPerformanceTestCasesInput, Prisma.ProblemUncheckedUpdateWithoutPerformanceTestCasesInput>
+}
+
+export type ProblemUpdateWithoutPerformanceTestCasesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  number?: Prisma.IntFieldUpdateOperationsInput | number
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  difficulty?: Prisma.EnumproblemDifficultyFieldUpdateOperationsInput | $Enums.problemDifficulty
+  source?: Prisma.StringFieldUpdateOperationsInput | string
+  isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  ownerType?: Prisma.EnumProblemOwnerTypeFieldUpdateOperationsInput | $Enums.ProblemOwnerType
+  visibility?: Prisma.EnumProblemVisibilityFieldUpdateOperationsInput | $Enums.ProblemVisibility
+  approvalStatus?: Prisma.EnumProblemApprovalStatusFieldUpdateOperationsInput | $Enums.ProblemApprovalStatus
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  owner?: Prisma.UserUpdateOneWithoutOwnedProblemsNestedInput
+  approvedBy?: Prisma.UserUpdateOneWithoutApprovedProblemsNestedInput
+  examProblems?: Prisma.ExamProblemUpdateManyWithoutProblemNestedInput
+  tags?: Prisma.ProblemTagUpdateManyWithoutProblemNestedInput
+  testCase?: Prisma.TestCaseUpdateOneWithoutProblemNestedInput
+  runTestCase?: Prisma.RunTestCaseUpdateOneWithoutProblemNestedInput
+  selfSubmissions?: Prisma.selfSubmissionUpdateManyWithoutProblemNestedInput
+  submissions?: Prisma.SubmissionUpdateManyWithoutProblemNestedInput
+  complexityTestingCases?: Prisma.complexityTestingCasesUpdateOneWithoutProblemNestedInput
+  driverCode?: Prisma.driverCodeUpdateManyWithoutProblemNestedInput
+  referenceSolutions?: Prisma.referenceSolutionUpdateManyWithoutProblemNestedInput
+  performanceConstraints?: Prisma.PerformanceConstraintsUpdateOneWithoutProblemNestedInput
+  aiconversations?: Prisma.AIConversationUpdateManyWithoutProblemNestedInput
+  airateLimits?: Prisma.AIRateLimitUpdateManyWithoutProblemNestedInput
+  groupProblemStats?: Prisma.GroupProblemStatsUpdateManyWithoutProblemNestedInput
+  studentProblemStats?: Prisma.StudentProblemStatsUpdateManyWithoutProblemNestedInput
+}
+
+export type ProblemUncheckedUpdateWithoutPerformanceTestCasesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  number?: Prisma.IntFieldUpdateOperationsInput | number
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  difficulty?: Prisma.EnumproblemDifficultyFieldUpdateOperationsInput | $Enums.problemDifficulty
+  source?: Prisma.StringFieldUpdateOperationsInput | string
+  isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  ownerType?: Prisma.EnumProblemOwnerTypeFieldUpdateOperationsInput | $Enums.ProblemOwnerType
+  ownerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  visibility?: Prisma.EnumProblemVisibilityFieldUpdateOperationsInput | $Enums.ProblemVisibility
+  approvalStatus?: Prisma.EnumProblemApprovalStatusFieldUpdateOperationsInput | $Enums.ProblemApprovalStatus
+  approvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  examProblems?: Prisma.ExamProblemUncheckedUpdateManyWithoutProblemNestedInput
+  tags?: Prisma.ProblemTagUncheckedUpdateManyWithoutProblemNestedInput
+  testCase?: Prisma.TestCaseUncheckedUpdateOneWithoutProblemNestedInput
+  runTestCase?: Prisma.RunTestCaseUncheckedUpdateOneWithoutProblemNestedInput
+  selfSubmissions?: Prisma.selfSubmissionUncheckedUpdateManyWithoutProblemNestedInput
+  submissions?: Prisma.SubmissionUncheckedUpdateManyWithoutProblemNestedInput
+  complexityTestingCases?: Prisma.complexityTestingCasesUncheckedUpdateOneWithoutProblemNestedInput
+  driverCode?: Prisma.driverCodeUncheckedUpdateManyWithoutProblemNestedInput
+  referenceSolutions?: Prisma.referenceSolutionUncheckedUpdateManyWithoutProblemNestedInput
+  performanceConstraints?: Prisma.PerformanceConstraintsUncheckedUpdateOneWithoutProblemNestedInput
   aiconversations?: Prisma.AIConversationUncheckedUpdateManyWithoutProblemNestedInput
   airateLimits?: Prisma.AIRateLimitUncheckedUpdateManyWithoutProblemNestedInput
   groupProblemStats?: Prisma.GroupProblemStatsUncheckedUpdateManyWithoutProblemNestedInput
@@ -1468,6 +2490,16 @@ export type ProblemCreateWithoutExamProblemsInput = {
   difficulty: $Enums.problemDifficulty
   source?: string
   isPublished?: boolean
+  hidden?: boolean
+  ownerType?: $Enums.ProblemOwnerType
+  visibility?: $Enums.ProblemVisibility
+  approvalStatus?: $Enums.ProblemApprovalStatus
+  approvedAt?: Date | string | null
+  rejectionReason?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  owner?: Prisma.UserCreateNestedOneWithoutOwnedProblemsInput
+  approvedBy?: Prisma.UserCreateNestedOneWithoutApprovedProblemsInput
   tags?: Prisma.ProblemTagCreateNestedManyWithoutProblemInput
   testCase?: Prisma.TestCaseCreateNestedOneWithoutProblemInput
   runTestCase?: Prisma.RunTestCaseCreateNestedOneWithoutProblemInput
@@ -1476,7 +2508,8 @@ export type ProblemCreateWithoutExamProblemsInput = {
   complexityTestingCases?: Prisma.complexityTestingCasesCreateNestedOneWithoutProblemInput
   driverCode?: Prisma.driverCodeCreateNestedManyWithoutProblemInput
   referenceSolutions?: Prisma.referenceSolutionCreateNestedManyWithoutProblemInput
-  problemTestGenerators?: Prisma.ProblemTestGeneratorCreateNestedOneWithoutProblemInput
+  performanceConstraints?: Prisma.PerformanceConstraintsCreateNestedOneWithoutProblemInput
+  performanceTestCases?: Prisma.PerformanceTestCaseCreateNestedManyWithoutProblemInput
   aiconversations?: Prisma.AIConversationCreateNestedManyWithoutProblemInput
   airateLimits?: Prisma.AIRateLimitCreateNestedManyWithoutProblemInput
   groupProblemStats?: Prisma.GroupProblemStatsCreateNestedManyWithoutProblemInput
@@ -1491,6 +2524,16 @@ export type ProblemUncheckedCreateWithoutExamProblemsInput = {
   difficulty: $Enums.problemDifficulty
   source?: string
   isPublished?: boolean
+  hidden?: boolean
+  ownerType?: $Enums.ProblemOwnerType
+  ownerId?: string | null
+  visibility?: $Enums.ProblemVisibility
+  approvalStatus?: $Enums.ProblemApprovalStatus
+  approvedById?: string | null
+  approvedAt?: Date | string | null
+  rejectionReason?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   tags?: Prisma.ProblemTagUncheckedCreateNestedManyWithoutProblemInput
   testCase?: Prisma.TestCaseUncheckedCreateNestedOneWithoutProblemInput
   runTestCase?: Prisma.RunTestCaseUncheckedCreateNestedOneWithoutProblemInput
@@ -1499,7 +2542,8 @@ export type ProblemUncheckedCreateWithoutExamProblemsInput = {
   complexityTestingCases?: Prisma.complexityTestingCasesUncheckedCreateNestedOneWithoutProblemInput
   driverCode?: Prisma.driverCodeUncheckedCreateNestedManyWithoutProblemInput
   referenceSolutions?: Prisma.referenceSolutionUncheckedCreateNestedManyWithoutProblemInput
-  problemTestGenerators?: Prisma.ProblemTestGeneratorUncheckedCreateNestedOneWithoutProblemInput
+  performanceConstraints?: Prisma.PerformanceConstraintsUncheckedCreateNestedOneWithoutProblemInput
+  performanceTestCases?: Prisma.PerformanceTestCaseUncheckedCreateNestedManyWithoutProblemInput
   aiconversations?: Prisma.AIConversationUncheckedCreateNestedManyWithoutProblemInput
   airateLimits?: Prisma.AIRateLimitUncheckedCreateNestedManyWithoutProblemInput
   groupProblemStats?: Prisma.GroupProblemStatsUncheckedCreateNestedManyWithoutProblemInput
@@ -1530,6 +2574,16 @@ export type ProblemUpdateWithoutExamProblemsInput = {
   difficulty?: Prisma.EnumproblemDifficultyFieldUpdateOperationsInput | $Enums.problemDifficulty
   source?: Prisma.StringFieldUpdateOperationsInput | string
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  ownerType?: Prisma.EnumProblemOwnerTypeFieldUpdateOperationsInput | $Enums.ProblemOwnerType
+  visibility?: Prisma.EnumProblemVisibilityFieldUpdateOperationsInput | $Enums.ProblemVisibility
+  approvalStatus?: Prisma.EnumProblemApprovalStatusFieldUpdateOperationsInput | $Enums.ProblemApprovalStatus
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  owner?: Prisma.UserUpdateOneWithoutOwnedProblemsNestedInput
+  approvedBy?: Prisma.UserUpdateOneWithoutApprovedProblemsNestedInput
   tags?: Prisma.ProblemTagUpdateManyWithoutProblemNestedInput
   testCase?: Prisma.TestCaseUpdateOneWithoutProblemNestedInput
   runTestCase?: Prisma.RunTestCaseUpdateOneWithoutProblemNestedInput
@@ -1538,7 +2592,8 @@ export type ProblemUpdateWithoutExamProblemsInput = {
   complexityTestingCases?: Prisma.complexityTestingCasesUpdateOneWithoutProblemNestedInput
   driverCode?: Prisma.driverCodeUpdateManyWithoutProblemNestedInput
   referenceSolutions?: Prisma.referenceSolutionUpdateManyWithoutProblemNestedInput
-  problemTestGenerators?: Prisma.ProblemTestGeneratorUpdateOneWithoutProblemNestedInput
+  performanceConstraints?: Prisma.PerformanceConstraintsUpdateOneWithoutProblemNestedInput
+  performanceTestCases?: Prisma.PerformanceTestCaseUpdateManyWithoutProblemNestedInput
   aiconversations?: Prisma.AIConversationUpdateManyWithoutProblemNestedInput
   airateLimits?: Prisma.AIRateLimitUpdateManyWithoutProblemNestedInput
   groupProblemStats?: Prisma.GroupProblemStatsUpdateManyWithoutProblemNestedInput
@@ -1553,6 +2608,16 @@ export type ProblemUncheckedUpdateWithoutExamProblemsInput = {
   difficulty?: Prisma.EnumproblemDifficultyFieldUpdateOperationsInput | $Enums.problemDifficulty
   source?: Prisma.StringFieldUpdateOperationsInput | string
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  ownerType?: Prisma.EnumProblemOwnerTypeFieldUpdateOperationsInput | $Enums.ProblemOwnerType
+  ownerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  visibility?: Prisma.EnumProblemVisibilityFieldUpdateOperationsInput | $Enums.ProblemVisibility
+  approvalStatus?: Prisma.EnumProblemApprovalStatusFieldUpdateOperationsInput | $Enums.ProblemApprovalStatus
+  approvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tags?: Prisma.ProblemTagUncheckedUpdateManyWithoutProblemNestedInput
   testCase?: Prisma.TestCaseUncheckedUpdateOneWithoutProblemNestedInput
   runTestCase?: Prisma.RunTestCaseUncheckedUpdateOneWithoutProblemNestedInput
@@ -1561,7 +2626,8 @@ export type ProblemUncheckedUpdateWithoutExamProblemsInput = {
   complexityTestingCases?: Prisma.complexityTestingCasesUncheckedUpdateOneWithoutProblemNestedInput
   driverCode?: Prisma.driverCodeUncheckedUpdateManyWithoutProblemNestedInput
   referenceSolutions?: Prisma.referenceSolutionUncheckedUpdateManyWithoutProblemNestedInput
-  problemTestGenerators?: Prisma.ProblemTestGeneratorUncheckedUpdateOneWithoutProblemNestedInput
+  performanceConstraints?: Prisma.PerformanceConstraintsUncheckedUpdateOneWithoutProblemNestedInput
+  performanceTestCases?: Prisma.PerformanceTestCaseUncheckedUpdateManyWithoutProblemNestedInput
   aiconversations?: Prisma.AIConversationUncheckedUpdateManyWithoutProblemNestedInput
   airateLimits?: Prisma.AIRateLimitUncheckedUpdateManyWithoutProblemNestedInput
   groupProblemStats?: Prisma.GroupProblemStatsUncheckedUpdateManyWithoutProblemNestedInput
@@ -1576,6 +2642,16 @@ export type ProblemCreateWithoutSubmissionsInput = {
   difficulty: $Enums.problemDifficulty
   source?: string
   isPublished?: boolean
+  hidden?: boolean
+  ownerType?: $Enums.ProblemOwnerType
+  visibility?: $Enums.ProblemVisibility
+  approvalStatus?: $Enums.ProblemApprovalStatus
+  approvedAt?: Date | string | null
+  rejectionReason?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  owner?: Prisma.UserCreateNestedOneWithoutOwnedProblemsInput
+  approvedBy?: Prisma.UserCreateNestedOneWithoutApprovedProblemsInput
   examProblems?: Prisma.ExamProblemCreateNestedManyWithoutProblemInput
   tags?: Prisma.ProblemTagCreateNestedManyWithoutProblemInput
   testCase?: Prisma.TestCaseCreateNestedOneWithoutProblemInput
@@ -1584,7 +2660,8 @@ export type ProblemCreateWithoutSubmissionsInput = {
   complexityTestingCases?: Prisma.complexityTestingCasesCreateNestedOneWithoutProblemInput
   driverCode?: Prisma.driverCodeCreateNestedManyWithoutProblemInput
   referenceSolutions?: Prisma.referenceSolutionCreateNestedManyWithoutProblemInput
-  problemTestGenerators?: Prisma.ProblemTestGeneratorCreateNestedOneWithoutProblemInput
+  performanceConstraints?: Prisma.PerformanceConstraintsCreateNestedOneWithoutProblemInput
+  performanceTestCases?: Prisma.PerformanceTestCaseCreateNestedManyWithoutProblemInput
   aiconversations?: Prisma.AIConversationCreateNestedManyWithoutProblemInput
   airateLimits?: Prisma.AIRateLimitCreateNestedManyWithoutProblemInput
   groupProblemStats?: Prisma.GroupProblemStatsCreateNestedManyWithoutProblemInput
@@ -1599,6 +2676,16 @@ export type ProblemUncheckedCreateWithoutSubmissionsInput = {
   difficulty: $Enums.problemDifficulty
   source?: string
   isPublished?: boolean
+  hidden?: boolean
+  ownerType?: $Enums.ProblemOwnerType
+  ownerId?: string | null
+  visibility?: $Enums.ProblemVisibility
+  approvalStatus?: $Enums.ProblemApprovalStatus
+  approvedById?: string | null
+  approvedAt?: Date | string | null
+  rejectionReason?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   examProblems?: Prisma.ExamProblemUncheckedCreateNestedManyWithoutProblemInput
   tags?: Prisma.ProblemTagUncheckedCreateNestedManyWithoutProblemInput
   testCase?: Prisma.TestCaseUncheckedCreateNestedOneWithoutProblemInput
@@ -1607,7 +2694,8 @@ export type ProblemUncheckedCreateWithoutSubmissionsInput = {
   complexityTestingCases?: Prisma.complexityTestingCasesUncheckedCreateNestedOneWithoutProblemInput
   driverCode?: Prisma.driverCodeUncheckedCreateNestedManyWithoutProblemInput
   referenceSolutions?: Prisma.referenceSolutionUncheckedCreateNestedManyWithoutProblemInput
-  problemTestGenerators?: Prisma.ProblemTestGeneratorUncheckedCreateNestedOneWithoutProblemInput
+  performanceConstraints?: Prisma.PerformanceConstraintsUncheckedCreateNestedOneWithoutProblemInput
+  performanceTestCases?: Prisma.PerformanceTestCaseUncheckedCreateNestedManyWithoutProblemInput
   aiconversations?: Prisma.AIConversationUncheckedCreateNestedManyWithoutProblemInput
   airateLimits?: Prisma.AIRateLimitUncheckedCreateNestedManyWithoutProblemInput
   groupProblemStats?: Prisma.GroupProblemStatsUncheckedCreateNestedManyWithoutProblemInput
@@ -1638,6 +2726,16 @@ export type ProblemUpdateWithoutSubmissionsInput = {
   difficulty?: Prisma.EnumproblemDifficultyFieldUpdateOperationsInput | $Enums.problemDifficulty
   source?: Prisma.StringFieldUpdateOperationsInput | string
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  ownerType?: Prisma.EnumProblemOwnerTypeFieldUpdateOperationsInput | $Enums.ProblemOwnerType
+  visibility?: Prisma.EnumProblemVisibilityFieldUpdateOperationsInput | $Enums.ProblemVisibility
+  approvalStatus?: Prisma.EnumProblemApprovalStatusFieldUpdateOperationsInput | $Enums.ProblemApprovalStatus
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  owner?: Prisma.UserUpdateOneWithoutOwnedProblemsNestedInput
+  approvedBy?: Prisma.UserUpdateOneWithoutApprovedProblemsNestedInput
   examProblems?: Prisma.ExamProblemUpdateManyWithoutProblemNestedInput
   tags?: Prisma.ProblemTagUpdateManyWithoutProblemNestedInput
   testCase?: Prisma.TestCaseUpdateOneWithoutProblemNestedInput
@@ -1646,7 +2744,8 @@ export type ProblemUpdateWithoutSubmissionsInput = {
   complexityTestingCases?: Prisma.complexityTestingCasesUpdateOneWithoutProblemNestedInput
   driverCode?: Prisma.driverCodeUpdateManyWithoutProblemNestedInput
   referenceSolutions?: Prisma.referenceSolutionUpdateManyWithoutProblemNestedInput
-  problemTestGenerators?: Prisma.ProblemTestGeneratorUpdateOneWithoutProblemNestedInput
+  performanceConstraints?: Prisma.PerformanceConstraintsUpdateOneWithoutProblemNestedInput
+  performanceTestCases?: Prisma.PerformanceTestCaseUpdateManyWithoutProblemNestedInput
   aiconversations?: Prisma.AIConversationUpdateManyWithoutProblemNestedInput
   airateLimits?: Prisma.AIRateLimitUpdateManyWithoutProblemNestedInput
   groupProblemStats?: Prisma.GroupProblemStatsUpdateManyWithoutProblemNestedInput
@@ -1661,6 +2760,16 @@ export type ProblemUncheckedUpdateWithoutSubmissionsInput = {
   difficulty?: Prisma.EnumproblemDifficultyFieldUpdateOperationsInput | $Enums.problemDifficulty
   source?: Prisma.StringFieldUpdateOperationsInput | string
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  ownerType?: Prisma.EnumProblemOwnerTypeFieldUpdateOperationsInput | $Enums.ProblemOwnerType
+  ownerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  visibility?: Prisma.EnumProblemVisibilityFieldUpdateOperationsInput | $Enums.ProblemVisibility
+  approvalStatus?: Prisma.EnumProblemApprovalStatusFieldUpdateOperationsInput | $Enums.ProblemApprovalStatus
+  approvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   examProblems?: Prisma.ExamProblemUncheckedUpdateManyWithoutProblemNestedInput
   tags?: Prisma.ProblemTagUncheckedUpdateManyWithoutProblemNestedInput
   testCase?: Prisma.TestCaseUncheckedUpdateOneWithoutProblemNestedInput
@@ -1669,7 +2778,8 @@ export type ProblemUncheckedUpdateWithoutSubmissionsInput = {
   complexityTestingCases?: Prisma.complexityTestingCasesUncheckedUpdateOneWithoutProblemNestedInput
   driverCode?: Prisma.driverCodeUncheckedUpdateManyWithoutProblemNestedInput
   referenceSolutions?: Prisma.referenceSolutionUncheckedUpdateManyWithoutProblemNestedInput
-  problemTestGenerators?: Prisma.ProblemTestGeneratorUncheckedUpdateOneWithoutProblemNestedInput
+  performanceConstraints?: Prisma.PerformanceConstraintsUncheckedUpdateOneWithoutProblemNestedInput
+  performanceTestCases?: Prisma.PerformanceTestCaseUncheckedUpdateManyWithoutProblemNestedInput
   aiconversations?: Prisma.AIConversationUncheckedUpdateManyWithoutProblemNestedInput
   airateLimits?: Prisma.AIRateLimitUncheckedUpdateManyWithoutProblemNestedInput
   groupProblemStats?: Prisma.GroupProblemStatsUncheckedUpdateManyWithoutProblemNestedInput
@@ -1684,6 +2794,16 @@ export type ProblemCreateWithoutTagsInput = {
   difficulty: $Enums.problemDifficulty
   source?: string
   isPublished?: boolean
+  hidden?: boolean
+  ownerType?: $Enums.ProblemOwnerType
+  visibility?: $Enums.ProblemVisibility
+  approvalStatus?: $Enums.ProblemApprovalStatus
+  approvedAt?: Date | string | null
+  rejectionReason?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  owner?: Prisma.UserCreateNestedOneWithoutOwnedProblemsInput
+  approvedBy?: Prisma.UserCreateNestedOneWithoutApprovedProblemsInput
   examProblems?: Prisma.ExamProblemCreateNestedManyWithoutProblemInput
   testCase?: Prisma.TestCaseCreateNestedOneWithoutProblemInput
   runTestCase?: Prisma.RunTestCaseCreateNestedOneWithoutProblemInput
@@ -1692,7 +2812,8 @@ export type ProblemCreateWithoutTagsInput = {
   complexityTestingCases?: Prisma.complexityTestingCasesCreateNestedOneWithoutProblemInput
   driverCode?: Prisma.driverCodeCreateNestedManyWithoutProblemInput
   referenceSolutions?: Prisma.referenceSolutionCreateNestedManyWithoutProblemInput
-  problemTestGenerators?: Prisma.ProblemTestGeneratorCreateNestedOneWithoutProblemInput
+  performanceConstraints?: Prisma.PerformanceConstraintsCreateNestedOneWithoutProblemInput
+  performanceTestCases?: Prisma.PerformanceTestCaseCreateNestedManyWithoutProblemInput
   aiconversations?: Prisma.AIConversationCreateNestedManyWithoutProblemInput
   airateLimits?: Prisma.AIRateLimitCreateNestedManyWithoutProblemInput
   groupProblemStats?: Prisma.GroupProblemStatsCreateNestedManyWithoutProblemInput
@@ -1707,6 +2828,16 @@ export type ProblemUncheckedCreateWithoutTagsInput = {
   difficulty: $Enums.problemDifficulty
   source?: string
   isPublished?: boolean
+  hidden?: boolean
+  ownerType?: $Enums.ProblemOwnerType
+  ownerId?: string | null
+  visibility?: $Enums.ProblemVisibility
+  approvalStatus?: $Enums.ProblemApprovalStatus
+  approvedById?: string | null
+  approvedAt?: Date | string | null
+  rejectionReason?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   examProblems?: Prisma.ExamProblemUncheckedCreateNestedManyWithoutProblemInput
   testCase?: Prisma.TestCaseUncheckedCreateNestedOneWithoutProblemInput
   runTestCase?: Prisma.RunTestCaseUncheckedCreateNestedOneWithoutProblemInput
@@ -1715,7 +2846,8 @@ export type ProblemUncheckedCreateWithoutTagsInput = {
   complexityTestingCases?: Prisma.complexityTestingCasesUncheckedCreateNestedOneWithoutProblemInput
   driverCode?: Prisma.driverCodeUncheckedCreateNestedManyWithoutProblemInput
   referenceSolutions?: Prisma.referenceSolutionUncheckedCreateNestedManyWithoutProblemInput
-  problemTestGenerators?: Prisma.ProblemTestGeneratorUncheckedCreateNestedOneWithoutProblemInput
+  performanceConstraints?: Prisma.PerformanceConstraintsUncheckedCreateNestedOneWithoutProblemInput
+  performanceTestCases?: Prisma.PerformanceTestCaseUncheckedCreateNestedManyWithoutProblemInput
   aiconversations?: Prisma.AIConversationUncheckedCreateNestedManyWithoutProblemInput
   airateLimits?: Prisma.AIRateLimitUncheckedCreateNestedManyWithoutProblemInput
   groupProblemStats?: Prisma.GroupProblemStatsUncheckedCreateNestedManyWithoutProblemInput
@@ -1746,6 +2878,16 @@ export type ProblemUpdateWithoutTagsInput = {
   difficulty?: Prisma.EnumproblemDifficultyFieldUpdateOperationsInput | $Enums.problemDifficulty
   source?: Prisma.StringFieldUpdateOperationsInput | string
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  ownerType?: Prisma.EnumProblemOwnerTypeFieldUpdateOperationsInput | $Enums.ProblemOwnerType
+  visibility?: Prisma.EnumProblemVisibilityFieldUpdateOperationsInput | $Enums.ProblemVisibility
+  approvalStatus?: Prisma.EnumProblemApprovalStatusFieldUpdateOperationsInput | $Enums.ProblemApprovalStatus
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  owner?: Prisma.UserUpdateOneWithoutOwnedProblemsNestedInput
+  approvedBy?: Prisma.UserUpdateOneWithoutApprovedProblemsNestedInput
   examProblems?: Prisma.ExamProblemUpdateManyWithoutProblemNestedInput
   testCase?: Prisma.TestCaseUpdateOneWithoutProblemNestedInput
   runTestCase?: Prisma.RunTestCaseUpdateOneWithoutProblemNestedInput
@@ -1754,7 +2896,8 @@ export type ProblemUpdateWithoutTagsInput = {
   complexityTestingCases?: Prisma.complexityTestingCasesUpdateOneWithoutProblemNestedInput
   driverCode?: Prisma.driverCodeUpdateManyWithoutProblemNestedInput
   referenceSolutions?: Prisma.referenceSolutionUpdateManyWithoutProblemNestedInput
-  problemTestGenerators?: Prisma.ProblemTestGeneratorUpdateOneWithoutProblemNestedInput
+  performanceConstraints?: Prisma.PerformanceConstraintsUpdateOneWithoutProblemNestedInput
+  performanceTestCases?: Prisma.PerformanceTestCaseUpdateManyWithoutProblemNestedInput
   aiconversations?: Prisma.AIConversationUpdateManyWithoutProblemNestedInput
   airateLimits?: Prisma.AIRateLimitUpdateManyWithoutProblemNestedInput
   groupProblemStats?: Prisma.GroupProblemStatsUpdateManyWithoutProblemNestedInput
@@ -1769,6 +2912,16 @@ export type ProblemUncheckedUpdateWithoutTagsInput = {
   difficulty?: Prisma.EnumproblemDifficultyFieldUpdateOperationsInput | $Enums.problemDifficulty
   source?: Prisma.StringFieldUpdateOperationsInput | string
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  ownerType?: Prisma.EnumProblemOwnerTypeFieldUpdateOperationsInput | $Enums.ProblemOwnerType
+  ownerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  visibility?: Prisma.EnumProblemVisibilityFieldUpdateOperationsInput | $Enums.ProblemVisibility
+  approvalStatus?: Prisma.EnumProblemApprovalStatusFieldUpdateOperationsInput | $Enums.ProblemApprovalStatus
+  approvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   examProblems?: Prisma.ExamProblemUncheckedUpdateManyWithoutProblemNestedInput
   testCase?: Prisma.TestCaseUncheckedUpdateOneWithoutProblemNestedInput
   runTestCase?: Prisma.RunTestCaseUncheckedUpdateOneWithoutProblemNestedInput
@@ -1777,7 +2930,8 @@ export type ProblemUncheckedUpdateWithoutTagsInput = {
   complexityTestingCases?: Prisma.complexityTestingCasesUncheckedUpdateOneWithoutProblemNestedInput
   driverCode?: Prisma.driverCodeUncheckedUpdateManyWithoutProblemNestedInput
   referenceSolutions?: Prisma.referenceSolutionUncheckedUpdateManyWithoutProblemNestedInput
-  problemTestGenerators?: Prisma.ProblemTestGeneratorUncheckedUpdateOneWithoutProblemNestedInput
+  performanceConstraints?: Prisma.PerformanceConstraintsUncheckedUpdateOneWithoutProblemNestedInput
+  performanceTestCases?: Prisma.PerformanceTestCaseUncheckedUpdateManyWithoutProblemNestedInput
   aiconversations?: Prisma.AIConversationUncheckedUpdateManyWithoutProblemNestedInput
   airateLimits?: Prisma.AIRateLimitUncheckedUpdateManyWithoutProblemNestedInput
   groupProblemStats?: Prisma.GroupProblemStatsUncheckedUpdateManyWithoutProblemNestedInput
@@ -1792,6 +2946,16 @@ export type ProblemCreateWithoutAiconversationsInput = {
   difficulty: $Enums.problemDifficulty
   source?: string
   isPublished?: boolean
+  hidden?: boolean
+  ownerType?: $Enums.ProblemOwnerType
+  visibility?: $Enums.ProblemVisibility
+  approvalStatus?: $Enums.ProblemApprovalStatus
+  approvedAt?: Date | string | null
+  rejectionReason?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  owner?: Prisma.UserCreateNestedOneWithoutOwnedProblemsInput
+  approvedBy?: Prisma.UserCreateNestedOneWithoutApprovedProblemsInput
   examProblems?: Prisma.ExamProblemCreateNestedManyWithoutProblemInput
   tags?: Prisma.ProblemTagCreateNestedManyWithoutProblemInput
   testCase?: Prisma.TestCaseCreateNestedOneWithoutProblemInput
@@ -1801,7 +2965,8 @@ export type ProblemCreateWithoutAiconversationsInput = {
   complexityTestingCases?: Prisma.complexityTestingCasesCreateNestedOneWithoutProblemInput
   driverCode?: Prisma.driverCodeCreateNestedManyWithoutProblemInput
   referenceSolutions?: Prisma.referenceSolutionCreateNestedManyWithoutProblemInput
-  problemTestGenerators?: Prisma.ProblemTestGeneratorCreateNestedOneWithoutProblemInput
+  performanceConstraints?: Prisma.PerformanceConstraintsCreateNestedOneWithoutProblemInput
+  performanceTestCases?: Prisma.PerformanceTestCaseCreateNestedManyWithoutProblemInput
   airateLimits?: Prisma.AIRateLimitCreateNestedManyWithoutProblemInput
   groupProblemStats?: Prisma.GroupProblemStatsCreateNestedManyWithoutProblemInput
   studentProblemStats?: Prisma.StudentProblemStatsCreateNestedManyWithoutProblemInput
@@ -1815,6 +2980,16 @@ export type ProblemUncheckedCreateWithoutAiconversationsInput = {
   difficulty: $Enums.problemDifficulty
   source?: string
   isPublished?: boolean
+  hidden?: boolean
+  ownerType?: $Enums.ProblemOwnerType
+  ownerId?: string | null
+  visibility?: $Enums.ProblemVisibility
+  approvalStatus?: $Enums.ProblemApprovalStatus
+  approvedById?: string | null
+  approvedAt?: Date | string | null
+  rejectionReason?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   examProblems?: Prisma.ExamProblemUncheckedCreateNestedManyWithoutProblemInput
   tags?: Prisma.ProblemTagUncheckedCreateNestedManyWithoutProblemInput
   testCase?: Prisma.TestCaseUncheckedCreateNestedOneWithoutProblemInput
@@ -1824,7 +2999,8 @@ export type ProblemUncheckedCreateWithoutAiconversationsInput = {
   complexityTestingCases?: Prisma.complexityTestingCasesUncheckedCreateNestedOneWithoutProblemInput
   driverCode?: Prisma.driverCodeUncheckedCreateNestedManyWithoutProblemInput
   referenceSolutions?: Prisma.referenceSolutionUncheckedCreateNestedManyWithoutProblemInput
-  problemTestGenerators?: Prisma.ProblemTestGeneratorUncheckedCreateNestedOneWithoutProblemInput
+  performanceConstraints?: Prisma.PerformanceConstraintsUncheckedCreateNestedOneWithoutProblemInput
+  performanceTestCases?: Prisma.PerformanceTestCaseUncheckedCreateNestedManyWithoutProblemInput
   airateLimits?: Prisma.AIRateLimitUncheckedCreateNestedManyWithoutProblemInput
   groupProblemStats?: Prisma.GroupProblemStatsUncheckedCreateNestedManyWithoutProblemInput
   studentProblemStats?: Prisma.StudentProblemStatsUncheckedCreateNestedManyWithoutProblemInput
@@ -1854,6 +3030,16 @@ export type ProblemUpdateWithoutAiconversationsInput = {
   difficulty?: Prisma.EnumproblemDifficultyFieldUpdateOperationsInput | $Enums.problemDifficulty
   source?: Prisma.StringFieldUpdateOperationsInput | string
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  ownerType?: Prisma.EnumProblemOwnerTypeFieldUpdateOperationsInput | $Enums.ProblemOwnerType
+  visibility?: Prisma.EnumProblemVisibilityFieldUpdateOperationsInput | $Enums.ProblemVisibility
+  approvalStatus?: Prisma.EnumProblemApprovalStatusFieldUpdateOperationsInput | $Enums.ProblemApprovalStatus
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  owner?: Prisma.UserUpdateOneWithoutOwnedProblemsNestedInput
+  approvedBy?: Prisma.UserUpdateOneWithoutApprovedProblemsNestedInput
   examProblems?: Prisma.ExamProblemUpdateManyWithoutProblemNestedInput
   tags?: Prisma.ProblemTagUpdateManyWithoutProblemNestedInput
   testCase?: Prisma.TestCaseUpdateOneWithoutProblemNestedInput
@@ -1863,7 +3049,8 @@ export type ProblemUpdateWithoutAiconversationsInput = {
   complexityTestingCases?: Prisma.complexityTestingCasesUpdateOneWithoutProblemNestedInput
   driverCode?: Prisma.driverCodeUpdateManyWithoutProblemNestedInput
   referenceSolutions?: Prisma.referenceSolutionUpdateManyWithoutProblemNestedInput
-  problemTestGenerators?: Prisma.ProblemTestGeneratorUpdateOneWithoutProblemNestedInput
+  performanceConstraints?: Prisma.PerformanceConstraintsUpdateOneWithoutProblemNestedInput
+  performanceTestCases?: Prisma.PerformanceTestCaseUpdateManyWithoutProblemNestedInput
   airateLimits?: Prisma.AIRateLimitUpdateManyWithoutProblemNestedInput
   groupProblemStats?: Prisma.GroupProblemStatsUpdateManyWithoutProblemNestedInput
   studentProblemStats?: Prisma.StudentProblemStatsUpdateManyWithoutProblemNestedInput
@@ -1877,6 +3064,16 @@ export type ProblemUncheckedUpdateWithoutAiconversationsInput = {
   difficulty?: Prisma.EnumproblemDifficultyFieldUpdateOperationsInput | $Enums.problemDifficulty
   source?: Prisma.StringFieldUpdateOperationsInput | string
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  ownerType?: Prisma.EnumProblemOwnerTypeFieldUpdateOperationsInput | $Enums.ProblemOwnerType
+  ownerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  visibility?: Prisma.EnumProblemVisibilityFieldUpdateOperationsInput | $Enums.ProblemVisibility
+  approvalStatus?: Prisma.EnumProblemApprovalStatusFieldUpdateOperationsInput | $Enums.ProblemApprovalStatus
+  approvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   examProblems?: Prisma.ExamProblemUncheckedUpdateManyWithoutProblemNestedInput
   tags?: Prisma.ProblemTagUncheckedUpdateManyWithoutProblemNestedInput
   testCase?: Prisma.TestCaseUncheckedUpdateOneWithoutProblemNestedInput
@@ -1886,7 +3083,8 @@ export type ProblemUncheckedUpdateWithoutAiconversationsInput = {
   complexityTestingCases?: Prisma.complexityTestingCasesUncheckedUpdateOneWithoutProblemNestedInput
   driverCode?: Prisma.driverCodeUncheckedUpdateManyWithoutProblemNestedInput
   referenceSolutions?: Prisma.referenceSolutionUncheckedUpdateManyWithoutProblemNestedInput
-  problemTestGenerators?: Prisma.ProblemTestGeneratorUncheckedUpdateOneWithoutProblemNestedInput
+  performanceConstraints?: Prisma.PerformanceConstraintsUncheckedUpdateOneWithoutProblemNestedInput
+  performanceTestCases?: Prisma.PerformanceTestCaseUncheckedUpdateManyWithoutProblemNestedInput
   airateLimits?: Prisma.AIRateLimitUncheckedUpdateManyWithoutProblemNestedInput
   groupProblemStats?: Prisma.GroupProblemStatsUncheckedUpdateManyWithoutProblemNestedInput
   studentProblemStats?: Prisma.StudentProblemStatsUncheckedUpdateManyWithoutProblemNestedInput
@@ -1900,6 +3098,16 @@ export type ProblemCreateWithoutAirateLimitsInput = {
   difficulty: $Enums.problemDifficulty
   source?: string
   isPublished?: boolean
+  hidden?: boolean
+  ownerType?: $Enums.ProblemOwnerType
+  visibility?: $Enums.ProblemVisibility
+  approvalStatus?: $Enums.ProblemApprovalStatus
+  approvedAt?: Date | string | null
+  rejectionReason?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  owner?: Prisma.UserCreateNestedOneWithoutOwnedProblemsInput
+  approvedBy?: Prisma.UserCreateNestedOneWithoutApprovedProblemsInput
   examProblems?: Prisma.ExamProblemCreateNestedManyWithoutProblemInput
   tags?: Prisma.ProblemTagCreateNestedManyWithoutProblemInput
   testCase?: Prisma.TestCaseCreateNestedOneWithoutProblemInput
@@ -1909,7 +3117,8 @@ export type ProblemCreateWithoutAirateLimitsInput = {
   complexityTestingCases?: Prisma.complexityTestingCasesCreateNestedOneWithoutProblemInput
   driverCode?: Prisma.driverCodeCreateNestedManyWithoutProblemInput
   referenceSolutions?: Prisma.referenceSolutionCreateNestedManyWithoutProblemInput
-  problemTestGenerators?: Prisma.ProblemTestGeneratorCreateNestedOneWithoutProblemInput
+  performanceConstraints?: Prisma.PerformanceConstraintsCreateNestedOneWithoutProblemInput
+  performanceTestCases?: Prisma.PerformanceTestCaseCreateNestedManyWithoutProblemInput
   aiconversations?: Prisma.AIConversationCreateNestedManyWithoutProblemInput
   groupProblemStats?: Prisma.GroupProblemStatsCreateNestedManyWithoutProblemInput
   studentProblemStats?: Prisma.StudentProblemStatsCreateNestedManyWithoutProblemInput
@@ -1923,6 +3132,16 @@ export type ProblemUncheckedCreateWithoutAirateLimitsInput = {
   difficulty: $Enums.problemDifficulty
   source?: string
   isPublished?: boolean
+  hidden?: boolean
+  ownerType?: $Enums.ProblemOwnerType
+  ownerId?: string | null
+  visibility?: $Enums.ProblemVisibility
+  approvalStatus?: $Enums.ProblemApprovalStatus
+  approvedById?: string | null
+  approvedAt?: Date | string | null
+  rejectionReason?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   examProblems?: Prisma.ExamProblemUncheckedCreateNestedManyWithoutProblemInput
   tags?: Prisma.ProblemTagUncheckedCreateNestedManyWithoutProblemInput
   testCase?: Prisma.TestCaseUncheckedCreateNestedOneWithoutProblemInput
@@ -1932,7 +3151,8 @@ export type ProblemUncheckedCreateWithoutAirateLimitsInput = {
   complexityTestingCases?: Prisma.complexityTestingCasesUncheckedCreateNestedOneWithoutProblemInput
   driverCode?: Prisma.driverCodeUncheckedCreateNestedManyWithoutProblemInput
   referenceSolutions?: Prisma.referenceSolutionUncheckedCreateNestedManyWithoutProblemInput
-  problemTestGenerators?: Prisma.ProblemTestGeneratorUncheckedCreateNestedOneWithoutProblemInput
+  performanceConstraints?: Prisma.PerformanceConstraintsUncheckedCreateNestedOneWithoutProblemInput
+  performanceTestCases?: Prisma.PerformanceTestCaseUncheckedCreateNestedManyWithoutProblemInput
   aiconversations?: Prisma.AIConversationUncheckedCreateNestedManyWithoutProblemInput
   groupProblemStats?: Prisma.GroupProblemStatsUncheckedCreateNestedManyWithoutProblemInput
   studentProblemStats?: Prisma.StudentProblemStatsUncheckedCreateNestedManyWithoutProblemInput
@@ -1962,6 +3182,16 @@ export type ProblemUpdateWithoutAirateLimitsInput = {
   difficulty?: Prisma.EnumproblemDifficultyFieldUpdateOperationsInput | $Enums.problemDifficulty
   source?: Prisma.StringFieldUpdateOperationsInput | string
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  ownerType?: Prisma.EnumProblemOwnerTypeFieldUpdateOperationsInput | $Enums.ProblemOwnerType
+  visibility?: Prisma.EnumProblemVisibilityFieldUpdateOperationsInput | $Enums.ProblemVisibility
+  approvalStatus?: Prisma.EnumProblemApprovalStatusFieldUpdateOperationsInput | $Enums.ProblemApprovalStatus
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  owner?: Prisma.UserUpdateOneWithoutOwnedProblemsNestedInput
+  approvedBy?: Prisma.UserUpdateOneWithoutApprovedProblemsNestedInput
   examProblems?: Prisma.ExamProblemUpdateManyWithoutProblemNestedInput
   tags?: Prisma.ProblemTagUpdateManyWithoutProblemNestedInput
   testCase?: Prisma.TestCaseUpdateOneWithoutProblemNestedInput
@@ -1971,7 +3201,8 @@ export type ProblemUpdateWithoutAirateLimitsInput = {
   complexityTestingCases?: Prisma.complexityTestingCasesUpdateOneWithoutProblemNestedInput
   driverCode?: Prisma.driverCodeUpdateManyWithoutProblemNestedInput
   referenceSolutions?: Prisma.referenceSolutionUpdateManyWithoutProblemNestedInput
-  problemTestGenerators?: Prisma.ProblemTestGeneratorUpdateOneWithoutProblemNestedInput
+  performanceConstraints?: Prisma.PerformanceConstraintsUpdateOneWithoutProblemNestedInput
+  performanceTestCases?: Prisma.PerformanceTestCaseUpdateManyWithoutProblemNestedInput
   aiconversations?: Prisma.AIConversationUpdateManyWithoutProblemNestedInput
   groupProblemStats?: Prisma.GroupProblemStatsUpdateManyWithoutProblemNestedInput
   studentProblemStats?: Prisma.StudentProblemStatsUpdateManyWithoutProblemNestedInput
@@ -1985,6 +3216,16 @@ export type ProblemUncheckedUpdateWithoutAirateLimitsInput = {
   difficulty?: Prisma.EnumproblemDifficultyFieldUpdateOperationsInput | $Enums.problemDifficulty
   source?: Prisma.StringFieldUpdateOperationsInput | string
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  ownerType?: Prisma.EnumProblemOwnerTypeFieldUpdateOperationsInput | $Enums.ProblemOwnerType
+  ownerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  visibility?: Prisma.EnumProblemVisibilityFieldUpdateOperationsInput | $Enums.ProblemVisibility
+  approvalStatus?: Prisma.EnumProblemApprovalStatusFieldUpdateOperationsInput | $Enums.ProblemApprovalStatus
+  approvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   examProblems?: Prisma.ExamProblemUncheckedUpdateManyWithoutProblemNestedInput
   tags?: Prisma.ProblemTagUncheckedUpdateManyWithoutProblemNestedInput
   testCase?: Prisma.TestCaseUncheckedUpdateOneWithoutProblemNestedInput
@@ -1994,7 +3235,8 @@ export type ProblemUncheckedUpdateWithoutAirateLimitsInput = {
   complexityTestingCases?: Prisma.complexityTestingCasesUncheckedUpdateOneWithoutProblemNestedInput
   driverCode?: Prisma.driverCodeUncheckedUpdateManyWithoutProblemNestedInput
   referenceSolutions?: Prisma.referenceSolutionUncheckedUpdateManyWithoutProblemNestedInput
-  problemTestGenerators?: Prisma.ProblemTestGeneratorUncheckedUpdateOneWithoutProblemNestedInput
+  performanceConstraints?: Prisma.PerformanceConstraintsUncheckedUpdateOneWithoutProblemNestedInput
+  performanceTestCases?: Prisma.PerformanceTestCaseUncheckedUpdateManyWithoutProblemNestedInput
   aiconversations?: Prisma.AIConversationUncheckedUpdateManyWithoutProblemNestedInput
   groupProblemStats?: Prisma.GroupProblemStatsUncheckedUpdateManyWithoutProblemNestedInput
   studentProblemStats?: Prisma.StudentProblemStatsUncheckedUpdateManyWithoutProblemNestedInput
@@ -2008,6 +3250,16 @@ export type ProblemCreateWithoutGroupProblemStatsInput = {
   difficulty: $Enums.problemDifficulty
   source?: string
   isPublished?: boolean
+  hidden?: boolean
+  ownerType?: $Enums.ProblemOwnerType
+  visibility?: $Enums.ProblemVisibility
+  approvalStatus?: $Enums.ProblemApprovalStatus
+  approvedAt?: Date | string | null
+  rejectionReason?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  owner?: Prisma.UserCreateNestedOneWithoutOwnedProblemsInput
+  approvedBy?: Prisma.UserCreateNestedOneWithoutApprovedProblemsInput
   examProblems?: Prisma.ExamProblemCreateNestedManyWithoutProblemInput
   tags?: Prisma.ProblemTagCreateNestedManyWithoutProblemInput
   testCase?: Prisma.TestCaseCreateNestedOneWithoutProblemInput
@@ -2017,7 +3269,8 @@ export type ProblemCreateWithoutGroupProblemStatsInput = {
   complexityTestingCases?: Prisma.complexityTestingCasesCreateNestedOneWithoutProblemInput
   driverCode?: Prisma.driverCodeCreateNestedManyWithoutProblemInput
   referenceSolutions?: Prisma.referenceSolutionCreateNestedManyWithoutProblemInput
-  problemTestGenerators?: Prisma.ProblemTestGeneratorCreateNestedOneWithoutProblemInput
+  performanceConstraints?: Prisma.PerformanceConstraintsCreateNestedOneWithoutProblemInput
+  performanceTestCases?: Prisma.PerformanceTestCaseCreateNestedManyWithoutProblemInput
   aiconversations?: Prisma.AIConversationCreateNestedManyWithoutProblemInput
   airateLimits?: Prisma.AIRateLimitCreateNestedManyWithoutProblemInput
   studentProblemStats?: Prisma.StudentProblemStatsCreateNestedManyWithoutProblemInput
@@ -2031,6 +3284,16 @@ export type ProblemUncheckedCreateWithoutGroupProblemStatsInput = {
   difficulty: $Enums.problemDifficulty
   source?: string
   isPublished?: boolean
+  hidden?: boolean
+  ownerType?: $Enums.ProblemOwnerType
+  ownerId?: string | null
+  visibility?: $Enums.ProblemVisibility
+  approvalStatus?: $Enums.ProblemApprovalStatus
+  approvedById?: string | null
+  approvedAt?: Date | string | null
+  rejectionReason?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   examProblems?: Prisma.ExamProblemUncheckedCreateNestedManyWithoutProblemInput
   tags?: Prisma.ProblemTagUncheckedCreateNestedManyWithoutProblemInput
   testCase?: Prisma.TestCaseUncheckedCreateNestedOneWithoutProblemInput
@@ -2040,7 +3303,8 @@ export type ProblemUncheckedCreateWithoutGroupProblemStatsInput = {
   complexityTestingCases?: Prisma.complexityTestingCasesUncheckedCreateNestedOneWithoutProblemInput
   driverCode?: Prisma.driverCodeUncheckedCreateNestedManyWithoutProblemInput
   referenceSolutions?: Prisma.referenceSolutionUncheckedCreateNestedManyWithoutProblemInput
-  problemTestGenerators?: Prisma.ProblemTestGeneratorUncheckedCreateNestedOneWithoutProblemInput
+  performanceConstraints?: Prisma.PerformanceConstraintsUncheckedCreateNestedOneWithoutProblemInput
+  performanceTestCases?: Prisma.PerformanceTestCaseUncheckedCreateNestedManyWithoutProblemInput
   aiconversations?: Prisma.AIConversationUncheckedCreateNestedManyWithoutProblemInput
   airateLimits?: Prisma.AIRateLimitUncheckedCreateNestedManyWithoutProblemInput
   studentProblemStats?: Prisma.StudentProblemStatsUncheckedCreateNestedManyWithoutProblemInput
@@ -2070,6 +3334,16 @@ export type ProblemUpdateWithoutGroupProblemStatsInput = {
   difficulty?: Prisma.EnumproblemDifficultyFieldUpdateOperationsInput | $Enums.problemDifficulty
   source?: Prisma.StringFieldUpdateOperationsInput | string
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  ownerType?: Prisma.EnumProblemOwnerTypeFieldUpdateOperationsInput | $Enums.ProblemOwnerType
+  visibility?: Prisma.EnumProblemVisibilityFieldUpdateOperationsInput | $Enums.ProblemVisibility
+  approvalStatus?: Prisma.EnumProblemApprovalStatusFieldUpdateOperationsInput | $Enums.ProblemApprovalStatus
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  owner?: Prisma.UserUpdateOneWithoutOwnedProblemsNestedInput
+  approvedBy?: Prisma.UserUpdateOneWithoutApprovedProblemsNestedInput
   examProblems?: Prisma.ExamProblemUpdateManyWithoutProblemNestedInput
   tags?: Prisma.ProblemTagUpdateManyWithoutProblemNestedInput
   testCase?: Prisma.TestCaseUpdateOneWithoutProblemNestedInput
@@ -2079,7 +3353,8 @@ export type ProblemUpdateWithoutGroupProblemStatsInput = {
   complexityTestingCases?: Prisma.complexityTestingCasesUpdateOneWithoutProblemNestedInput
   driverCode?: Prisma.driverCodeUpdateManyWithoutProblemNestedInput
   referenceSolutions?: Prisma.referenceSolutionUpdateManyWithoutProblemNestedInput
-  problemTestGenerators?: Prisma.ProblemTestGeneratorUpdateOneWithoutProblemNestedInput
+  performanceConstraints?: Prisma.PerformanceConstraintsUpdateOneWithoutProblemNestedInput
+  performanceTestCases?: Prisma.PerformanceTestCaseUpdateManyWithoutProblemNestedInput
   aiconversations?: Prisma.AIConversationUpdateManyWithoutProblemNestedInput
   airateLimits?: Prisma.AIRateLimitUpdateManyWithoutProblemNestedInput
   studentProblemStats?: Prisma.StudentProblemStatsUpdateManyWithoutProblemNestedInput
@@ -2093,6 +3368,16 @@ export type ProblemUncheckedUpdateWithoutGroupProblemStatsInput = {
   difficulty?: Prisma.EnumproblemDifficultyFieldUpdateOperationsInput | $Enums.problemDifficulty
   source?: Prisma.StringFieldUpdateOperationsInput | string
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  ownerType?: Prisma.EnumProblemOwnerTypeFieldUpdateOperationsInput | $Enums.ProblemOwnerType
+  ownerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  visibility?: Prisma.EnumProblemVisibilityFieldUpdateOperationsInput | $Enums.ProblemVisibility
+  approvalStatus?: Prisma.EnumProblemApprovalStatusFieldUpdateOperationsInput | $Enums.ProblemApprovalStatus
+  approvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   examProblems?: Prisma.ExamProblemUncheckedUpdateManyWithoutProblemNestedInput
   tags?: Prisma.ProblemTagUncheckedUpdateManyWithoutProblemNestedInput
   testCase?: Prisma.TestCaseUncheckedUpdateOneWithoutProblemNestedInput
@@ -2102,7 +3387,8 @@ export type ProblemUncheckedUpdateWithoutGroupProblemStatsInput = {
   complexityTestingCases?: Prisma.complexityTestingCasesUncheckedUpdateOneWithoutProblemNestedInput
   driverCode?: Prisma.driverCodeUncheckedUpdateManyWithoutProblemNestedInput
   referenceSolutions?: Prisma.referenceSolutionUncheckedUpdateManyWithoutProblemNestedInput
-  problemTestGenerators?: Prisma.ProblemTestGeneratorUncheckedUpdateOneWithoutProblemNestedInput
+  performanceConstraints?: Prisma.PerformanceConstraintsUncheckedUpdateOneWithoutProblemNestedInput
+  performanceTestCases?: Prisma.PerformanceTestCaseUncheckedUpdateManyWithoutProblemNestedInput
   aiconversations?: Prisma.AIConversationUncheckedUpdateManyWithoutProblemNestedInput
   airateLimits?: Prisma.AIRateLimitUncheckedUpdateManyWithoutProblemNestedInput
   studentProblemStats?: Prisma.StudentProblemStatsUncheckedUpdateManyWithoutProblemNestedInput
@@ -2116,6 +3402,16 @@ export type ProblemCreateWithoutStudentProblemStatsInput = {
   difficulty: $Enums.problemDifficulty
   source?: string
   isPublished?: boolean
+  hidden?: boolean
+  ownerType?: $Enums.ProblemOwnerType
+  visibility?: $Enums.ProblemVisibility
+  approvalStatus?: $Enums.ProblemApprovalStatus
+  approvedAt?: Date | string | null
+  rejectionReason?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  owner?: Prisma.UserCreateNestedOneWithoutOwnedProblemsInput
+  approvedBy?: Prisma.UserCreateNestedOneWithoutApprovedProblemsInput
   examProblems?: Prisma.ExamProblemCreateNestedManyWithoutProblemInput
   tags?: Prisma.ProblemTagCreateNestedManyWithoutProblemInput
   testCase?: Prisma.TestCaseCreateNestedOneWithoutProblemInput
@@ -2125,7 +3421,8 @@ export type ProblemCreateWithoutStudentProblemStatsInput = {
   complexityTestingCases?: Prisma.complexityTestingCasesCreateNestedOneWithoutProblemInput
   driverCode?: Prisma.driverCodeCreateNestedManyWithoutProblemInput
   referenceSolutions?: Prisma.referenceSolutionCreateNestedManyWithoutProblemInput
-  problemTestGenerators?: Prisma.ProblemTestGeneratorCreateNestedOneWithoutProblemInput
+  performanceConstraints?: Prisma.PerformanceConstraintsCreateNestedOneWithoutProblemInput
+  performanceTestCases?: Prisma.PerformanceTestCaseCreateNestedManyWithoutProblemInput
   aiconversations?: Prisma.AIConversationCreateNestedManyWithoutProblemInput
   airateLimits?: Prisma.AIRateLimitCreateNestedManyWithoutProblemInput
   groupProblemStats?: Prisma.GroupProblemStatsCreateNestedManyWithoutProblemInput
@@ -2139,6 +3436,16 @@ export type ProblemUncheckedCreateWithoutStudentProblemStatsInput = {
   difficulty: $Enums.problemDifficulty
   source?: string
   isPublished?: boolean
+  hidden?: boolean
+  ownerType?: $Enums.ProblemOwnerType
+  ownerId?: string | null
+  visibility?: $Enums.ProblemVisibility
+  approvalStatus?: $Enums.ProblemApprovalStatus
+  approvedById?: string | null
+  approvedAt?: Date | string | null
+  rejectionReason?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   examProblems?: Prisma.ExamProblemUncheckedCreateNestedManyWithoutProblemInput
   tags?: Prisma.ProblemTagUncheckedCreateNestedManyWithoutProblemInput
   testCase?: Prisma.TestCaseUncheckedCreateNestedOneWithoutProblemInput
@@ -2148,7 +3455,8 @@ export type ProblemUncheckedCreateWithoutStudentProblemStatsInput = {
   complexityTestingCases?: Prisma.complexityTestingCasesUncheckedCreateNestedOneWithoutProblemInput
   driverCode?: Prisma.driverCodeUncheckedCreateNestedManyWithoutProblemInput
   referenceSolutions?: Prisma.referenceSolutionUncheckedCreateNestedManyWithoutProblemInput
-  problemTestGenerators?: Prisma.ProblemTestGeneratorUncheckedCreateNestedOneWithoutProblemInput
+  performanceConstraints?: Prisma.PerformanceConstraintsUncheckedCreateNestedOneWithoutProblemInput
+  performanceTestCases?: Prisma.PerformanceTestCaseUncheckedCreateNestedManyWithoutProblemInput
   aiconversations?: Prisma.AIConversationUncheckedCreateNestedManyWithoutProblemInput
   airateLimits?: Prisma.AIRateLimitUncheckedCreateNestedManyWithoutProblemInput
   groupProblemStats?: Prisma.GroupProblemStatsUncheckedCreateNestedManyWithoutProblemInput
@@ -2178,6 +3486,16 @@ export type ProblemUpdateWithoutStudentProblemStatsInput = {
   difficulty?: Prisma.EnumproblemDifficultyFieldUpdateOperationsInput | $Enums.problemDifficulty
   source?: Prisma.StringFieldUpdateOperationsInput | string
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  ownerType?: Prisma.EnumProblemOwnerTypeFieldUpdateOperationsInput | $Enums.ProblemOwnerType
+  visibility?: Prisma.EnumProblemVisibilityFieldUpdateOperationsInput | $Enums.ProblemVisibility
+  approvalStatus?: Prisma.EnumProblemApprovalStatusFieldUpdateOperationsInput | $Enums.ProblemApprovalStatus
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  owner?: Prisma.UserUpdateOneWithoutOwnedProblemsNestedInput
+  approvedBy?: Prisma.UserUpdateOneWithoutApprovedProblemsNestedInput
   examProblems?: Prisma.ExamProblemUpdateManyWithoutProblemNestedInput
   tags?: Prisma.ProblemTagUpdateManyWithoutProblemNestedInput
   testCase?: Prisma.TestCaseUpdateOneWithoutProblemNestedInput
@@ -2187,7 +3505,8 @@ export type ProblemUpdateWithoutStudentProblemStatsInput = {
   complexityTestingCases?: Prisma.complexityTestingCasesUpdateOneWithoutProblemNestedInput
   driverCode?: Prisma.driverCodeUpdateManyWithoutProblemNestedInput
   referenceSolutions?: Prisma.referenceSolutionUpdateManyWithoutProblemNestedInput
-  problemTestGenerators?: Prisma.ProblemTestGeneratorUpdateOneWithoutProblemNestedInput
+  performanceConstraints?: Prisma.PerformanceConstraintsUpdateOneWithoutProblemNestedInput
+  performanceTestCases?: Prisma.PerformanceTestCaseUpdateManyWithoutProblemNestedInput
   aiconversations?: Prisma.AIConversationUpdateManyWithoutProblemNestedInput
   airateLimits?: Prisma.AIRateLimitUpdateManyWithoutProblemNestedInput
   groupProblemStats?: Prisma.GroupProblemStatsUpdateManyWithoutProblemNestedInput
@@ -2201,6 +3520,16 @@ export type ProblemUncheckedUpdateWithoutStudentProblemStatsInput = {
   difficulty?: Prisma.EnumproblemDifficultyFieldUpdateOperationsInput | $Enums.problemDifficulty
   source?: Prisma.StringFieldUpdateOperationsInput | string
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  ownerType?: Prisma.EnumProblemOwnerTypeFieldUpdateOperationsInput | $Enums.ProblemOwnerType
+  ownerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  visibility?: Prisma.EnumProblemVisibilityFieldUpdateOperationsInput | $Enums.ProblemVisibility
+  approvalStatus?: Prisma.EnumProblemApprovalStatusFieldUpdateOperationsInput | $Enums.ProblemApprovalStatus
+  approvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   examProblems?: Prisma.ExamProblemUncheckedUpdateManyWithoutProblemNestedInput
   tags?: Prisma.ProblemTagUncheckedUpdateManyWithoutProblemNestedInput
   testCase?: Prisma.TestCaseUncheckedUpdateOneWithoutProblemNestedInput
@@ -2210,10 +3539,223 @@ export type ProblemUncheckedUpdateWithoutStudentProblemStatsInput = {
   complexityTestingCases?: Prisma.complexityTestingCasesUncheckedUpdateOneWithoutProblemNestedInput
   driverCode?: Prisma.driverCodeUncheckedUpdateManyWithoutProblemNestedInput
   referenceSolutions?: Prisma.referenceSolutionUncheckedUpdateManyWithoutProblemNestedInput
-  problemTestGenerators?: Prisma.ProblemTestGeneratorUncheckedUpdateOneWithoutProblemNestedInput
+  performanceConstraints?: Prisma.PerformanceConstraintsUncheckedUpdateOneWithoutProblemNestedInput
+  performanceTestCases?: Prisma.PerformanceTestCaseUncheckedUpdateManyWithoutProblemNestedInput
   aiconversations?: Prisma.AIConversationUncheckedUpdateManyWithoutProblemNestedInput
   airateLimits?: Prisma.AIRateLimitUncheckedUpdateManyWithoutProblemNestedInput
   groupProblemStats?: Prisma.GroupProblemStatsUncheckedUpdateManyWithoutProblemNestedInput
+}
+
+export type ProblemCreateManyOwnerInput = {
+  id?: string
+  number: number
+  title: string
+  description: string
+  difficulty: $Enums.problemDifficulty
+  source?: string
+  isPublished?: boolean
+  hidden?: boolean
+  ownerType?: $Enums.ProblemOwnerType
+  visibility?: $Enums.ProblemVisibility
+  approvalStatus?: $Enums.ProblemApprovalStatus
+  approvedById?: string | null
+  approvedAt?: Date | string | null
+  rejectionReason?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type ProblemCreateManyApprovedByInput = {
+  id?: string
+  number: number
+  title: string
+  description: string
+  difficulty: $Enums.problemDifficulty
+  source?: string
+  isPublished?: boolean
+  hidden?: boolean
+  ownerType?: $Enums.ProblemOwnerType
+  ownerId?: string | null
+  visibility?: $Enums.ProblemVisibility
+  approvalStatus?: $Enums.ProblemApprovalStatus
+  approvedAt?: Date | string | null
+  rejectionReason?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type ProblemUpdateWithoutOwnerInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  number?: Prisma.IntFieldUpdateOperationsInput | number
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  difficulty?: Prisma.EnumproblemDifficultyFieldUpdateOperationsInput | $Enums.problemDifficulty
+  source?: Prisma.StringFieldUpdateOperationsInput | string
+  isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  ownerType?: Prisma.EnumProblemOwnerTypeFieldUpdateOperationsInput | $Enums.ProblemOwnerType
+  visibility?: Prisma.EnumProblemVisibilityFieldUpdateOperationsInput | $Enums.ProblemVisibility
+  approvalStatus?: Prisma.EnumProblemApprovalStatusFieldUpdateOperationsInput | $Enums.ProblemApprovalStatus
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  approvedBy?: Prisma.UserUpdateOneWithoutApprovedProblemsNestedInput
+  examProblems?: Prisma.ExamProblemUpdateManyWithoutProblemNestedInput
+  tags?: Prisma.ProblemTagUpdateManyWithoutProblemNestedInput
+  testCase?: Prisma.TestCaseUpdateOneWithoutProblemNestedInput
+  runTestCase?: Prisma.RunTestCaseUpdateOneWithoutProblemNestedInput
+  selfSubmissions?: Prisma.selfSubmissionUpdateManyWithoutProblemNestedInput
+  submissions?: Prisma.SubmissionUpdateManyWithoutProblemNestedInput
+  complexityTestingCases?: Prisma.complexityTestingCasesUpdateOneWithoutProblemNestedInput
+  driverCode?: Prisma.driverCodeUpdateManyWithoutProblemNestedInput
+  referenceSolutions?: Prisma.referenceSolutionUpdateManyWithoutProblemNestedInput
+  performanceConstraints?: Prisma.PerformanceConstraintsUpdateOneWithoutProblemNestedInput
+  performanceTestCases?: Prisma.PerformanceTestCaseUpdateManyWithoutProblemNestedInput
+  aiconversations?: Prisma.AIConversationUpdateManyWithoutProblemNestedInput
+  airateLimits?: Prisma.AIRateLimitUpdateManyWithoutProblemNestedInput
+  groupProblemStats?: Prisma.GroupProblemStatsUpdateManyWithoutProblemNestedInput
+  studentProblemStats?: Prisma.StudentProblemStatsUpdateManyWithoutProblemNestedInput
+}
+
+export type ProblemUncheckedUpdateWithoutOwnerInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  number?: Prisma.IntFieldUpdateOperationsInput | number
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  difficulty?: Prisma.EnumproblemDifficultyFieldUpdateOperationsInput | $Enums.problemDifficulty
+  source?: Prisma.StringFieldUpdateOperationsInput | string
+  isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  ownerType?: Prisma.EnumProblemOwnerTypeFieldUpdateOperationsInput | $Enums.ProblemOwnerType
+  visibility?: Prisma.EnumProblemVisibilityFieldUpdateOperationsInput | $Enums.ProblemVisibility
+  approvalStatus?: Prisma.EnumProblemApprovalStatusFieldUpdateOperationsInput | $Enums.ProblemApprovalStatus
+  approvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  examProblems?: Prisma.ExamProblemUncheckedUpdateManyWithoutProblemNestedInput
+  tags?: Prisma.ProblemTagUncheckedUpdateManyWithoutProblemNestedInput
+  testCase?: Prisma.TestCaseUncheckedUpdateOneWithoutProblemNestedInput
+  runTestCase?: Prisma.RunTestCaseUncheckedUpdateOneWithoutProblemNestedInput
+  selfSubmissions?: Prisma.selfSubmissionUncheckedUpdateManyWithoutProblemNestedInput
+  submissions?: Prisma.SubmissionUncheckedUpdateManyWithoutProblemNestedInput
+  complexityTestingCases?: Prisma.complexityTestingCasesUncheckedUpdateOneWithoutProblemNestedInput
+  driverCode?: Prisma.driverCodeUncheckedUpdateManyWithoutProblemNestedInput
+  referenceSolutions?: Prisma.referenceSolutionUncheckedUpdateManyWithoutProblemNestedInput
+  performanceConstraints?: Prisma.PerformanceConstraintsUncheckedUpdateOneWithoutProblemNestedInput
+  performanceTestCases?: Prisma.PerformanceTestCaseUncheckedUpdateManyWithoutProblemNestedInput
+  aiconversations?: Prisma.AIConversationUncheckedUpdateManyWithoutProblemNestedInput
+  airateLimits?: Prisma.AIRateLimitUncheckedUpdateManyWithoutProblemNestedInput
+  groupProblemStats?: Prisma.GroupProblemStatsUncheckedUpdateManyWithoutProblemNestedInput
+  studentProblemStats?: Prisma.StudentProblemStatsUncheckedUpdateManyWithoutProblemNestedInput
+}
+
+export type ProblemUncheckedUpdateManyWithoutOwnerInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  number?: Prisma.IntFieldUpdateOperationsInput | number
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  difficulty?: Prisma.EnumproblemDifficultyFieldUpdateOperationsInput | $Enums.problemDifficulty
+  source?: Prisma.StringFieldUpdateOperationsInput | string
+  isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  ownerType?: Prisma.EnumProblemOwnerTypeFieldUpdateOperationsInput | $Enums.ProblemOwnerType
+  visibility?: Prisma.EnumProblemVisibilityFieldUpdateOperationsInput | $Enums.ProblemVisibility
+  approvalStatus?: Prisma.EnumProblemApprovalStatusFieldUpdateOperationsInput | $Enums.ProblemApprovalStatus
+  approvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type ProblemUpdateWithoutApprovedByInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  number?: Prisma.IntFieldUpdateOperationsInput | number
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  difficulty?: Prisma.EnumproblemDifficultyFieldUpdateOperationsInput | $Enums.problemDifficulty
+  source?: Prisma.StringFieldUpdateOperationsInput | string
+  isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  ownerType?: Prisma.EnumProblemOwnerTypeFieldUpdateOperationsInput | $Enums.ProblemOwnerType
+  visibility?: Prisma.EnumProblemVisibilityFieldUpdateOperationsInput | $Enums.ProblemVisibility
+  approvalStatus?: Prisma.EnumProblemApprovalStatusFieldUpdateOperationsInput | $Enums.ProblemApprovalStatus
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  owner?: Prisma.UserUpdateOneWithoutOwnedProblemsNestedInput
+  examProblems?: Prisma.ExamProblemUpdateManyWithoutProblemNestedInput
+  tags?: Prisma.ProblemTagUpdateManyWithoutProblemNestedInput
+  testCase?: Prisma.TestCaseUpdateOneWithoutProblemNestedInput
+  runTestCase?: Prisma.RunTestCaseUpdateOneWithoutProblemNestedInput
+  selfSubmissions?: Prisma.selfSubmissionUpdateManyWithoutProblemNestedInput
+  submissions?: Prisma.SubmissionUpdateManyWithoutProblemNestedInput
+  complexityTestingCases?: Prisma.complexityTestingCasesUpdateOneWithoutProblemNestedInput
+  driverCode?: Prisma.driverCodeUpdateManyWithoutProblemNestedInput
+  referenceSolutions?: Prisma.referenceSolutionUpdateManyWithoutProblemNestedInput
+  performanceConstraints?: Prisma.PerformanceConstraintsUpdateOneWithoutProblemNestedInput
+  performanceTestCases?: Prisma.PerformanceTestCaseUpdateManyWithoutProblemNestedInput
+  aiconversations?: Prisma.AIConversationUpdateManyWithoutProblemNestedInput
+  airateLimits?: Prisma.AIRateLimitUpdateManyWithoutProblemNestedInput
+  groupProblemStats?: Prisma.GroupProblemStatsUpdateManyWithoutProblemNestedInput
+  studentProblemStats?: Prisma.StudentProblemStatsUpdateManyWithoutProblemNestedInput
+}
+
+export type ProblemUncheckedUpdateWithoutApprovedByInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  number?: Prisma.IntFieldUpdateOperationsInput | number
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  difficulty?: Prisma.EnumproblemDifficultyFieldUpdateOperationsInput | $Enums.problemDifficulty
+  source?: Prisma.StringFieldUpdateOperationsInput | string
+  isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  ownerType?: Prisma.EnumProblemOwnerTypeFieldUpdateOperationsInput | $Enums.ProblemOwnerType
+  ownerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  visibility?: Prisma.EnumProblemVisibilityFieldUpdateOperationsInput | $Enums.ProblemVisibility
+  approvalStatus?: Prisma.EnumProblemApprovalStatusFieldUpdateOperationsInput | $Enums.ProblemApprovalStatus
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  examProblems?: Prisma.ExamProblemUncheckedUpdateManyWithoutProblemNestedInput
+  tags?: Prisma.ProblemTagUncheckedUpdateManyWithoutProblemNestedInput
+  testCase?: Prisma.TestCaseUncheckedUpdateOneWithoutProblemNestedInput
+  runTestCase?: Prisma.RunTestCaseUncheckedUpdateOneWithoutProblemNestedInput
+  selfSubmissions?: Prisma.selfSubmissionUncheckedUpdateManyWithoutProblemNestedInput
+  submissions?: Prisma.SubmissionUncheckedUpdateManyWithoutProblemNestedInput
+  complexityTestingCases?: Prisma.complexityTestingCasesUncheckedUpdateOneWithoutProblemNestedInput
+  driverCode?: Prisma.driverCodeUncheckedUpdateManyWithoutProblemNestedInput
+  referenceSolutions?: Prisma.referenceSolutionUncheckedUpdateManyWithoutProblemNestedInput
+  performanceConstraints?: Prisma.PerformanceConstraintsUncheckedUpdateOneWithoutProblemNestedInput
+  performanceTestCases?: Prisma.PerformanceTestCaseUncheckedUpdateManyWithoutProblemNestedInput
+  aiconversations?: Prisma.AIConversationUncheckedUpdateManyWithoutProblemNestedInput
+  airateLimits?: Prisma.AIRateLimitUncheckedUpdateManyWithoutProblemNestedInput
+  groupProblemStats?: Prisma.GroupProblemStatsUncheckedUpdateManyWithoutProblemNestedInput
+  studentProblemStats?: Prisma.StudentProblemStatsUncheckedUpdateManyWithoutProblemNestedInput
+}
+
+export type ProblemUncheckedUpdateManyWithoutApprovedByInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  number?: Prisma.IntFieldUpdateOperationsInput | number
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  difficulty?: Prisma.EnumproblemDifficultyFieldUpdateOperationsInput | $Enums.problemDifficulty
+  source?: Prisma.StringFieldUpdateOperationsInput | string
+  isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  ownerType?: Prisma.EnumProblemOwnerTypeFieldUpdateOperationsInput | $Enums.ProblemOwnerType
+  ownerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  visibility?: Prisma.EnumProblemVisibilityFieldUpdateOperationsInput | $Enums.ProblemVisibility
+  approvalStatus?: Prisma.EnumProblemApprovalStatusFieldUpdateOperationsInput | $Enums.ProblemApprovalStatus
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 
@@ -2228,6 +3770,7 @@ export type ProblemCountOutputType = {
   submissions: number
   driverCode: number
   referenceSolutions: number
+  performanceTestCases: number
   aiconversations: number
   airateLimits: number
   groupProblemStats: number
@@ -2241,6 +3784,7 @@ export type ProblemCountOutputTypeSelect<ExtArgs extends runtime.Types.Extension
   submissions?: boolean | ProblemCountOutputTypeCountSubmissionsArgs
   driverCode?: boolean | ProblemCountOutputTypeCountDriverCodeArgs
   referenceSolutions?: boolean | ProblemCountOutputTypeCountReferenceSolutionsArgs
+  performanceTestCases?: boolean | ProblemCountOutputTypeCountPerformanceTestCasesArgs
   aiconversations?: boolean | ProblemCountOutputTypeCountAiconversationsArgs
   airateLimits?: boolean | ProblemCountOutputTypeCountAirateLimitsArgs
   groupProblemStats?: boolean | ProblemCountOutputTypeCountGroupProblemStatsArgs
@@ -2302,6 +3846,13 @@ export type ProblemCountOutputTypeCountReferenceSolutionsArgs<ExtArgs extends ru
 /**
  * ProblemCountOutputType without action
  */
+export type ProblemCountOutputTypeCountPerformanceTestCasesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PerformanceTestCaseWhereInput
+}
+
+/**
+ * ProblemCountOutputType without action
+ */
 export type ProblemCountOutputTypeCountAiconversationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.AIConversationWhereInput
 }
@@ -2336,6 +3887,18 @@ export type ProblemSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   difficulty?: boolean
   source?: boolean
   isPublished?: boolean
+  hidden?: boolean
+  ownerType?: boolean
+  ownerId?: boolean
+  visibility?: boolean
+  approvalStatus?: boolean
+  approvedById?: boolean
+  approvedAt?: boolean
+  rejectionReason?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
+  owner?: boolean | Prisma.Problem$ownerArgs<ExtArgs>
+  approvedBy?: boolean | Prisma.Problem$approvedByArgs<ExtArgs>
   examProblems?: boolean | Prisma.Problem$examProblemsArgs<ExtArgs>
   tags?: boolean | Prisma.Problem$tagsArgs<ExtArgs>
   testCase?: boolean | Prisma.Problem$testCaseArgs<ExtArgs>
@@ -2345,7 +3908,8 @@ export type ProblemSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   complexityTestingCases?: boolean | Prisma.Problem$complexityTestingCasesArgs<ExtArgs>
   driverCode?: boolean | Prisma.Problem$driverCodeArgs<ExtArgs>
   referenceSolutions?: boolean | Prisma.Problem$referenceSolutionsArgs<ExtArgs>
-  problemTestGenerators?: boolean | Prisma.Problem$problemTestGeneratorsArgs<ExtArgs>
+  performanceConstraints?: boolean | Prisma.Problem$performanceConstraintsArgs<ExtArgs>
+  performanceTestCases?: boolean | Prisma.Problem$performanceTestCasesArgs<ExtArgs>
   aiconversations?: boolean | Prisma.Problem$aiconversationsArgs<ExtArgs>
   airateLimits?: boolean | Prisma.Problem$airateLimitsArgs<ExtArgs>
   groupProblemStats?: boolean | Prisma.Problem$groupProblemStatsArgs<ExtArgs>
@@ -2361,6 +3925,18 @@ export type ProblemSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   difficulty?: boolean
   source?: boolean
   isPublished?: boolean
+  hidden?: boolean
+  ownerType?: boolean
+  ownerId?: boolean
+  visibility?: boolean
+  approvalStatus?: boolean
+  approvedById?: boolean
+  approvedAt?: boolean
+  rejectionReason?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
+  owner?: boolean | Prisma.Problem$ownerArgs<ExtArgs>
+  approvedBy?: boolean | Prisma.Problem$approvedByArgs<ExtArgs>
 }, ExtArgs["result"]["problem"]>
 
 export type ProblemSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -2371,6 +3947,18 @@ export type ProblemSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   difficulty?: boolean
   source?: boolean
   isPublished?: boolean
+  hidden?: boolean
+  ownerType?: boolean
+  ownerId?: boolean
+  visibility?: boolean
+  approvalStatus?: boolean
+  approvedById?: boolean
+  approvedAt?: boolean
+  rejectionReason?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
+  owner?: boolean | Prisma.Problem$ownerArgs<ExtArgs>
+  approvedBy?: boolean | Prisma.Problem$approvedByArgs<ExtArgs>
 }, ExtArgs["result"]["problem"]>
 
 export type ProblemSelectScalar = {
@@ -2381,10 +3969,22 @@ export type ProblemSelectScalar = {
   difficulty?: boolean
   source?: boolean
   isPublished?: boolean
+  hidden?: boolean
+  ownerType?: boolean
+  ownerId?: boolean
+  visibility?: boolean
+  approvalStatus?: boolean
+  approvedById?: boolean
+  approvedAt?: boolean
+  rejectionReason?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
 }
 
-export type ProblemOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "number" | "title" | "description" | "difficulty" | "source" | "isPublished", ExtArgs["result"]["problem"]>
+export type ProblemOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "number" | "title" | "description" | "difficulty" | "source" | "isPublished" | "hidden" | "ownerType" | "ownerId" | "visibility" | "approvalStatus" | "approvedById" | "approvedAt" | "rejectionReason" | "createdAt" | "updatedAt", ExtArgs["result"]["problem"]>
 export type ProblemInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  owner?: boolean | Prisma.Problem$ownerArgs<ExtArgs>
+  approvedBy?: boolean | Prisma.Problem$approvedByArgs<ExtArgs>
   examProblems?: boolean | Prisma.Problem$examProblemsArgs<ExtArgs>
   tags?: boolean | Prisma.Problem$tagsArgs<ExtArgs>
   testCase?: boolean | Prisma.Problem$testCaseArgs<ExtArgs>
@@ -2394,19 +3994,28 @@ export type ProblemInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs
   complexityTestingCases?: boolean | Prisma.Problem$complexityTestingCasesArgs<ExtArgs>
   driverCode?: boolean | Prisma.Problem$driverCodeArgs<ExtArgs>
   referenceSolutions?: boolean | Prisma.Problem$referenceSolutionsArgs<ExtArgs>
-  problemTestGenerators?: boolean | Prisma.Problem$problemTestGeneratorsArgs<ExtArgs>
+  performanceConstraints?: boolean | Prisma.Problem$performanceConstraintsArgs<ExtArgs>
+  performanceTestCases?: boolean | Prisma.Problem$performanceTestCasesArgs<ExtArgs>
   aiconversations?: boolean | Prisma.Problem$aiconversationsArgs<ExtArgs>
   airateLimits?: boolean | Prisma.Problem$airateLimitsArgs<ExtArgs>
   groupProblemStats?: boolean | Prisma.Problem$groupProblemStatsArgs<ExtArgs>
   studentProblemStats?: boolean | Prisma.Problem$studentProblemStatsArgs<ExtArgs>
   _count?: boolean | Prisma.ProblemCountOutputTypeDefaultArgs<ExtArgs>
 }
-export type ProblemIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
-export type ProblemIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
+export type ProblemIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  owner?: boolean | Prisma.Problem$ownerArgs<ExtArgs>
+  approvedBy?: boolean | Prisma.Problem$approvedByArgs<ExtArgs>
+}
+export type ProblemIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  owner?: boolean | Prisma.Problem$ownerArgs<ExtArgs>
+  approvedBy?: boolean | Prisma.Problem$approvedByArgs<ExtArgs>
+}
 
 export type $ProblemPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Problem"
   objects: {
+    owner: Prisma.$UserPayload<ExtArgs> | null
+    approvedBy: Prisma.$UserPayload<ExtArgs> | null
     examProblems: Prisma.$ExamProblemPayload<ExtArgs>[]
     tags: Prisma.$ProblemTagPayload<ExtArgs>[]
     testCase: Prisma.$TestCasePayload<ExtArgs> | null
@@ -2416,7 +4025,8 @@ export type $ProblemPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     complexityTestingCases: Prisma.$complexityTestingCasesPayload<ExtArgs> | null
     driverCode: Prisma.$driverCodePayload<ExtArgs>[]
     referenceSolutions: Prisma.$referenceSolutionPayload<ExtArgs>[]
-    problemTestGenerators: Prisma.$ProblemTestGeneratorPayload<ExtArgs> | null
+    performanceConstraints: Prisma.$PerformanceConstraintsPayload<ExtArgs> | null
+    performanceTestCases: Prisma.$PerformanceTestCasePayload<ExtArgs>[]
     aiconversations: Prisma.$AIConversationPayload<ExtArgs>[]
     airateLimits: Prisma.$AIRateLimitPayload<ExtArgs>[]
     groupProblemStats: Prisma.$GroupProblemStatsPayload<ExtArgs>[]
@@ -2430,6 +4040,16 @@ export type $ProblemPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     difficulty: $Enums.problemDifficulty
     source: string
     isPublished: boolean
+    hidden: boolean
+    ownerType: $Enums.ProblemOwnerType
+    ownerId: string | null
+    visibility: $Enums.ProblemVisibility
+    approvalStatus: $Enums.ProblemApprovalStatus
+    approvedById: string | null
+    approvedAt: Date | null
+    rejectionReason: string | null
+    createdAt: Date
+    updatedAt: Date
   }, ExtArgs["result"]["problem"]>
   composites: {}
 }
@@ -2824,6 +4444,8 @@ readonly fields: ProblemFieldRefs;
  */
 export interface Prisma__ProblemClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  owner<T extends Prisma.Problem$ownerArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Problem$ownerArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  approvedBy<T extends Prisma.Problem$approvedByArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Problem$approvedByArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   examProblems<T extends Prisma.Problem$examProblemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Problem$examProblemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ExamProblemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   tags<T extends Prisma.Problem$tagsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Problem$tagsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProblemTagPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   testCase<T extends Prisma.Problem$testCaseArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Problem$testCaseArgs<ExtArgs>>): Prisma.Prisma__TestCaseClient<runtime.Types.Result.GetResult<Prisma.$TestCasePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
@@ -2833,7 +4455,8 @@ export interface Prisma__ProblemClient<T, Null = never, ExtArgs extends runtime.
   complexityTestingCases<T extends Prisma.Problem$complexityTestingCasesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Problem$complexityTestingCasesArgs<ExtArgs>>): Prisma.Prisma__complexityTestingCasesClient<runtime.Types.Result.GetResult<Prisma.$complexityTestingCasesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   driverCode<T extends Prisma.Problem$driverCodeArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Problem$driverCodeArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$driverCodePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   referenceSolutions<T extends Prisma.Problem$referenceSolutionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Problem$referenceSolutionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$referenceSolutionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  problemTestGenerators<T extends Prisma.Problem$problemTestGeneratorsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Problem$problemTestGeneratorsArgs<ExtArgs>>): Prisma.Prisma__ProblemTestGeneratorClient<runtime.Types.Result.GetResult<Prisma.$ProblemTestGeneratorPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  performanceConstraints<T extends Prisma.Problem$performanceConstraintsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Problem$performanceConstraintsArgs<ExtArgs>>): Prisma.Prisma__PerformanceConstraintsClient<runtime.Types.Result.GetResult<Prisma.$PerformanceConstraintsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  performanceTestCases<T extends Prisma.Problem$performanceTestCasesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Problem$performanceTestCasesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PerformanceTestCasePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   aiconversations<T extends Prisma.Problem$aiconversationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Problem$aiconversationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AIConversationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   airateLimits<T extends Prisma.Problem$airateLimitsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Problem$airateLimitsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AIRateLimitPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   groupProblemStats<T extends Prisma.Problem$groupProblemStatsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Problem$groupProblemStatsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$GroupProblemStatsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -2874,6 +4497,16 @@ export interface ProblemFieldRefs {
   readonly difficulty: Prisma.FieldRef<"Problem", 'problemDifficulty'>
   readonly source: Prisma.FieldRef<"Problem", 'String'>
   readonly isPublished: Prisma.FieldRef<"Problem", 'Boolean'>
+  readonly hidden: Prisma.FieldRef<"Problem", 'Boolean'>
+  readonly ownerType: Prisma.FieldRef<"Problem", 'ProblemOwnerType'>
+  readonly ownerId: Prisma.FieldRef<"Problem", 'String'>
+  readonly visibility: Prisma.FieldRef<"Problem", 'ProblemVisibility'>
+  readonly approvalStatus: Prisma.FieldRef<"Problem", 'ProblemApprovalStatus'>
+  readonly approvedById: Prisma.FieldRef<"Problem", 'String'>
+  readonly approvedAt: Prisma.FieldRef<"Problem", 'DateTime'>
+  readonly rejectionReason: Prisma.FieldRef<"Problem", 'String'>
+  readonly createdAt: Prisma.FieldRef<"Problem", 'DateTime'>
+  readonly updatedAt: Prisma.FieldRef<"Problem", 'DateTime'>
 }
     
 
@@ -3128,6 +4761,10 @@ export type ProblemCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensi
    */
   data: Prisma.ProblemCreateManyInput | Prisma.ProblemCreateManyInput[]
   skipDuplicates?: boolean
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ProblemIncludeCreateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -3198,6 +4835,10 @@ export type ProblemUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensi
    * Limit how many Problems to update.
    */
   limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ProblemIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -3264,6 +4905,44 @@ export type ProblemDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Inter
    * Limit how many Problems to delete.
    */
   limit?: number
+}
+
+/**
+ * Problem.owner
+ */
+export type Problem$ownerArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the User
+   */
+  select?: Prisma.UserSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the User
+   */
+  omit?: Prisma.UserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
+  where?: Prisma.UserWhereInput
+}
+
+/**
+ * Problem.approvedBy
+ */
+export type Problem$approvedByArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the User
+   */
+  select?: Prisma.UserSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the User
+   */
+  omit?: Prisma.UserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
+  where?: Prisma.UserWhereInput
 }
 
 /**
@@ -3468,22 +5147,46 @@ export type Problem$referenceSolutionsArgs<ExtArgs extends runtime.Types.Extensi
 }
 
 /**
- * Problem.problemTestGenerators
+ * Problem.performanceConstraints
  */
-export type Problem$problemTestGeneratorsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type Problem$performanceConstraintsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the ProblemTestGenerator
+   * Select specific fields to fetch from the PerformanceConstraints
    */
-  select?: Prisma.ProblemTestGeneratorSelect<ExtArgs> | null
+  select?: Prisma.PerformanceConstraintsSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the ProblemTestGenerator
+   * Omit specific fields from the PerformanceConstraints
    */
-  omit?: Prisma.ProblemTestGeneratorOmit<ExtArgs> | null
+  omit?: Prisma.PerformanceConstraintsOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.ProblemTestGeneratorInclude<ExtArgs> | null
-  where?: Prisma.ProblemTestGeneratorWhereInput
+  include?: Prisma.PerformanceConstraintsInclude<ExtArgs> | null
+  where?: Prisma.PerformanceConstraintsWhereInput
+}
+
+/**
+ * Problem.performanceTestCases
+ */
+export type Problem$performanceTestCasesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PerformanceTestCase
+   */
+  select?: Prisma.PerformanceTestCaseSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the PerformanceTestCase
+   */
+  omit?: Prisma.PerformanceTestCaseOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PerformanceTestCaseInclude<ExtArgs> | null
+  where?: Prisma.PerformanceTestCaseWhereInput
+  orderBy?: Prisma.PerformanceTestCaseOrderByWithRelationInput | Prisma.PerformanceTestCaseOrderByWithRelationInput[]
+  cursor?: Prisma.PerformanceTestCaseWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PerformanceTestCaseScalarFieldEnum | Prisma.PerformanceTestCaseScalarFieldEnum[]
 }
 
 /**

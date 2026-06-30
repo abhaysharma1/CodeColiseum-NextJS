@@ -185,7 +185,6 @@ export function ProblemHeader(props: ProblemHeaderProps) {
               value={title}
               onChange={(event) => onChangeTitle(event.target.value)}
               placeholder="Problem Title... (e.g. Two Sum)"
-              // className="text-3xl font-bold border-none bg-transparent shadow-none px-0 h-auto focus-visible:ring-0 placeholder:text-muted-foreground/50 transition-colors"
             />
           </div>
 

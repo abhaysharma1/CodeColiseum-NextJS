@@ -75,6 +75,11 @@ const navigation = [
     href: "/admin/problem-visibility",
     icon: IconFlask,
   },
+  {
+    name: "Moderation",
+    href: "/admin/moderation",
+    icon: IconSparkles,
+  },
 ];
 
 export default function Layout({ children }: { children: ReactNode }) {

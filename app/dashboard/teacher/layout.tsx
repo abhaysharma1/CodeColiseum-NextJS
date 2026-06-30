@@ -29,6 +29,8 @@ export default function TeacherLayout({
       setPage("TESTS");
     } else if (path.startsWith("/dashboard/teacher/students")) {
       setPage("STUDENTS");
+    } else if (path.startsWith("/dashboard/teacher/my-problems")) {
+      setPage("MY_PROBLEMS");
     } else if (path.startsWith("/dashboard/teacher/problems")) {
       setPage("PROBLEMS");
     } else if (path.startsWith("/dashboard/teacher/analytics")) {

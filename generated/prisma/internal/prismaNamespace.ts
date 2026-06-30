@@ -395,7 +395,8 @@ export const ModelName = {
   referenceSolution: 'referenceSolution',
   RunTestCase: 'RunTestCase',
   selfSubmission: 'selfSubmission',
-  ProblemTestGenerator: 'ProblemTestGenerator',
+  PerformanceConstraints: 'PerformanceConstraints',
+  PerformanceTestCase: 'PerformanceTestCase',
   Exam: 'Exam',
   ExamProblem: 'ExamProblem',
   ExamEnrollment: 'ExamEnrollment',
@@ -439,7 +440,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "session" | "account" | "verification" | "problem" | "testCase" | "complexityTestingCases" | "driverCode" | "referenceSolution" | "runTestCase" | "selfSubmission" | "problemTestGenerator" | "exam" | "examProblem" | "examEnrollment" | "submission" | "examResult" | "examGroup" | "examAttempt" | "aiEvaluation" | "examSession" | "group" | "groupMember" | "role" | "permission" | "rolePermission" | "tag" | "problemTag" | "aIConversation" | "aIMessage" | "aIRateLimit" | "groupOverallStats" | "studentOverallStats" | "groupProblemStats" | "studentProblemStats" | "organizationAnalytics" | "examAnalytics" | "groupExamAnalytics" | "notification" | "notificationRecipient"
+    modelProps: "user" | "session" | "account" | "verification" | "problem" | "testCase" | "complexityTestingCases" | "driverCode" | "referenceSolution" | "runTestCase" | "selfSubmission" | "performanceConstraints" | "performanceTestCase" | "exam" | "examProblem" | "examEnrollment" | "submission" | "examResult" | "examGroup" | "examAttempt" | "aiEvaluation" | "examSession" | "group" | "groupMember" | "role" | "permission" | "rolePermission" | "tag" | "problemTag" | "aIConversation" | "aIMessage" | "aIRateLimit" | "groupOverallStats" | "studentOverallStats" | "groupProblemStats" | "studentProblemStats" | "organizationAnalytics" | "examAnalytics" | "groupExamAnalytics" | "notification" | "notificationRecipient"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1257,77 +1258,151 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
-    ProblemTestGenerator: {
-      payload: Prisma.$ProblemTestGeneratorPayload<ExtArgs>
-      fields: Prisma.ProblemTestGeneratorFieldRefs
+    PerformanceConstraints: {
+      payload: Prisma.$PerformanceConstraintsPayload<ExtArgs>
+      fields: Prisma.PerformanceConstraintsFieldRefs
       operations: {
         findUnique: {
-          args: Prisma.ProblemTestGeneratorFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProblemTestGeneratorPayload> | null
+          args: Prisma.PerformanceConstraintsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PerformanceConstraintsPayload> | null
         }
         findUniqueOrThrow: {
-          args: Prisma.ProblemTestGeneratorFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProblemTestGeneratorPayload>
+          args: Prisma.PerformanceConstraintsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PerformanceConstraintsPayload>
         }
         findFirst: {
-          args: Prisma.ProblemTestGeneratorFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProblemTestGeneratorPayload> | null
+          args: Prisma.PerformanceConstraintsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PerformanceConstraintsPayload> | null
         }
         findFirstOrThrow: {
-          args: Prisma.ProblemTestGeneratorFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProblemTestGeneratorPayload>
+          args: Prisma.PerformanceConstraintsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PerformanceConstraintsPayload>
         }
         findMany: {
-          args: Prisma.ProblemTestGeneratorFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProblemTestGeneratorPayload>[]
+          args: Prisma.PerformanceConstraintsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PerformanceConstraintsPayload>[]
         }
         create: {
-          args: Prisma.ProblemTestGeneratorCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProblemTestGeneratorPayload>
+          args: Prisma.PerformanceConstraintsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PerformanceConstraintsPayload>
         }
         createMany: {
-          args: Prisma.ProblemTestGeneratorCreateManyArgs<ExtArgs>
+          args: Prisma.PerformanceConstraintsCreateManyArgs<ExtArgs>
           result: BatchPayload
         }
         createManyAndReturn: {
-          args: Prisma.ProblemTestGeneratorCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProblemTestGeneratorPayload>[]
+          args: Prisma.PerformanceConstraintsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PerformanceConstraintsPayload>[]
         }
         delete: {
-          args: Prisma.ProblemTestGeneratorDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProblemTestGeneratorPayload>
+          args: Prisma.PerformanceConstraintsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PerformanceConstraintsPayload>
         }
         update: {
-          args: Prisma.ProblemTestGeneratorUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProblemTestGeneratorPayload>
+          args: Prisma.PerformanceConstraintsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PerformanceConstraintsPayload>
         }
         deleteMany: {
-          args: Prisma.ProblemTestGeneratorDeleteManyArgs<ExtArgs>
+          args: Prisma.PerformanceConstraintsDeleteManyArgs<ExtArgs>
           result: BatchPayload
         }
         updateMany: {
-          args: Prisma.ProblemTestGeneratorUpdateManyArgs<ExtArgs>
+          args: Prisma.PerformanceConstraintsUpdateManyArgs<ExtArgs>
           result: BatchPayload
         }
         updateManyAndReturn: {
-          args: Prisma.ProblemTestGeneratorUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProblemTestGeneratorPayload>[]
+          args: Prisma.PerformanceConstraintsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PerformanceConstraintsPayload>[]
         }
         upsert: {
-          args: Prisma.ProblemTestGeneratorUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProblemTestGeneratorPayload>
+          args: Prisma.PerformanceConstraintsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PerformanceConstraintsPayload>
         }
         aggregate: {
-          args: Prisma.ProblemTestGeneratorAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateProblemTestGenerator>
+          args: Prisma.PerformanceConstraintsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePerformanceConstraints>
         }
         groupBy: {
-          args: Prisma.ProblemTestGeneratorGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.ProblemTestGeneratorGroupByOutputType>[]
+          args: Prisma.PerformanceConstraintsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PerformanceConstraintsGroupByOutputType>[]
         }
         count: {
-          args: Prisma.ProblemTestGeneratorCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.ProblemTestGeneratorCountAggregateOutputType> | number
+          args: Prisma.PerformanceConstraintsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PerformanceConstraintsCountAggregateOutputType> | number
+        }
+      }
+    }
+    PerformanceTestCase: {
+      payload: Prisma.$PerformanceTestCasePayload<ExtArgs>
+      fields: Prisma.PerformanceTestCaseFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PerformanceTestCaseFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PerformanceTestCasePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PerformanceTestCaseFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PerformanceTestCasePayload>
+        }
+        findFirst: {
+          args: Prisma.PerformanceTestCaseFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PerformanceTestCasePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PerformanceTestCaseFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PerformanceTestCasePayload>
+        }
+        findMany: {
+          args: Prisma.PerformanceTestCaseFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PerformanceTestCasePayload>[]
+        }
+        create: {
+          args: Prisma.PerformanceTestCaseCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PerformanceTestCasePayload>
+        }
+        createMany: {
+          args: Prisma.PerformanceTestCaseCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PerformanceTestCaseCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PerformanceTestCasePayload>[]
+        }
+        delete: {
+          args: Prisma.PerformanceTestCaseDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PerformanceTestCasePayload>
+        }
+        update: {
+          args: Prisma.PerformanceTestCaseUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PerformanceTestCasePayload>
+        }
+        deleteMany: {
+          args: Prisma.PerformanceTestCaseDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PerformanceTestCaseUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PerformanceTestCaseUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PerformanceTestCasePayload>[]
+        }
+        upsert: {
+          args: Prisma.PerformanceTestCaseUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PerformanceTestCasePayload>
+        }
+        aggregate: {
+          args: Prisma.PerformanceTestCaseAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePerformanceTestCase>
+        }
+        groupBy: {
+          args: Prisma.PerformanceTestCaseGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PerformanceTestCaseGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PerformanceTestCaseCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PerformanceTestCaseCountAggregateOutputType> | number
         }
       }
     }
@@ -3509,7 +3584,17 @@ export const ProblemScalarFieldEnum = {
   description: 'description',
   difficulty: 'difficulty',
   source: 'source',
-  isPublished: 'isPublished'
+  isPublished: 'isPublished',
+  hidden: 'hidden',
+  ownerType: 'ownerType',
+  ownerId: 'ownerId',
+  visibility: 'visibility',
+  approvalStatus: 'approvalStatus',
+  approvedById: 'approvedById',
+  approvedAt: 'approvedAt',
+  rejectionReason: 'rejectionReason',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 } as const
 
 export type ProblemScalarFieldEnum = (typeof ProblemScalarFieldEnum)[keyof typeof ProblemScalarFieldEnum]
@@ -3590,23 +3675,31 @@ export const SelfSubmissionScalarFieldEnum = {
 export type SelfSubmissionScalarFieldEnum = (typeof SelfSubmissionScalarFieldEnum)[keyof typeof SelfSubmissionScalarFieldEnum]
 
 
-export const ProblemTestGeneratorScalarFieldEnum = {
+export const PerformanceConstraintsScalarFieldEnum = {
   id: 'id',
   problemId: 'problemId',
-  type: 'type',
-  pattern: 'pattern',
-  minValue: 'minValue',
-  maxValue: 'maxValue',
   cppTimeLimitMs: 'cppTimeLimitMs',
   javaTimeLimitMs: 'javaTimeLimitMs',
   pythonTimeLimitMs: 'pythonTimeLimitMs',
   jsTimeLimitMs: 'jsTimeLimitMs',
   memoryLimitMB: 'memoryLimitMB',
-  sizes: 'sizes',
   createdAt: 'createdAt'
 } as const
 
-export type ProblemTestGeneratorScalarFieldEnum = (typeof ProblemTestGeneratorScalarFieldEnum)[keyof typeof ProblemTestGeneratorScalarFieldEnum]
+export type PerformanceConstraintsScalarFieldEnum = (typeof PerformanceConstraintsScalarFieldEnum)[keyof typeof PerformanceConstraintsScalarFieldEnum]
+
+
+export const PerformanceTestCaseScalarFieldEnum = {
+  id: 'id',
+  problemId: 'problemId',
+  name: 'name',
+  inputFileKey: 'inputFileKey',
+  outputFileKey: 'outputFileKey',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PerformanceTestCaseScalarFieldEnum = (typeof PerformanceTestCaseScalarFieldEnum)[keyof typeof PerformanceTestCaseScalarFieldEnum]
 
 
 export const ExamScalarFieldEnum = {
@@ -4152,6 +4245,48 @@ export type ListEnumproblemDifficultyFieldRefInput<$PrismaModel> = FieldRefInput
 
 
 /**
+ * Reference to a field of type 'ProblemOwnerType'
+ */
+export type EnumProblemOwnerTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ProblemOwnerType'>
+    
+
+
+/**
+ * Reference to a field of type 'ProblemOwnerType[]'
+ */
+export type ListEnumProblemOwnerTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ProblemOwnerType[]'>
+    
+
+
+/**
+ * Reference to a field of type 'ProblemVisibility'
+ */
+export type EnumProblemVisibilityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ProblemVisibility'>
+    
+
+
+/**
+ * Reference to a field of type 'ProblemVisibility[]'
+ */
+export type ListEnumProblemVisibilityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ProblemVisibility[]'>
+    
+
+
+/**
+ * Reference to a field of type 'ProblemApprovalStatus'
+ */
+export type EnumProblemApprovalStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ProblemApprovalStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'ProblemApprovalStatus[]'
+ */
+export type ListEnumProblemApprovalStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ProblemApprovalStatus[]'>
+    
+
+
+/**
  * Reference to a field of type 'Json'
  */
 export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
@@ -4204,34 +4339,6 @@ export type EnumExecutionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$
  * Reference to a field of type 'ExecutionStatus[]'
  */
 export type ListEnumExecutionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ExecutionStatus[]'>
-    
-
-
-/**
- * Reference to a field of type 'GeneratorType'
- */
-export type EnumGeneratorTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'GeneratorType'>
-    
-
-
-/**
- * Reference to a field of type 'GeneratorType[]'
- */
-export type ListEnumGeneratorTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'GeneratorType[]'>
-    
-
-
-/**
- * Reference to a field of type 'GeneratorPattern'
- */
-export type EnumGeneratorPatternFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'GeneratorPattern'>
-    
-
-
-/**
- * Reference to a field of type 'GeneratorPattern[]'
- */
-export type ListEnumGeneratorPatternFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'GeneratorPattern[]'>
     
 
 
@@ -4452,7 +4559,8 @@ export type GlobalOmitConfig = {
   referenceSolution?: Prisma.referenceSolutionOmit
   runTestCase?: Prisma.RunTestCaseOmit
   selfSubmission?: Prisma.selfSubmissionOmit
-  problemTestGenerator?: Prisma.ProblemTestGeneratorOmit
+  performanceConstraints?: Prisma.PerformanceConstraintsOmit
+  performanceTestCase?: Prisma.PerformanceTestCaseOmit
   exam?: Prisma.ExamOmit
   examProblem?: Prisma.ExamProblemOmit
   examEnrollment?: Prisma.ExamEnrollmentOmit

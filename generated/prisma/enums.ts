@@ -9,6 +9,31 @@
 * 🟢 You can import this file directly.
 */
 
+export const ProblemOwnerType = {
+  ADMIN: 'ADMIN',
+  TEACHER: 'TEACHER'
+} as const
+
+export type ProblemOwnerType = (typeof ProblemOwnerType)[keyof typeof ProblemOwnerType]
+
+
+export const ProblemVisibility = {
+  PUBLIC: 'PUBLIC',
+  PRIVATE: 'PRIVATE'
+} as const
+
+export type ProblemVisibility = (typeof ProblemVisibility)[keyof typeof ProblemVisibility]
+
+
+export const ProblemApprovalStatus = {
+  APPROVED: 'APPROVED',
+  PENDING: 'PENDING',
+  REJECTED: 'REJECTED'
+} as const
+
+export type ProblemApprovalStatus = (typeof ProblemApprovalStatus)[keyof typeof ProblemApprovalStatus]
+
+
 export const problemDifficulty = {
   EASY: 'EASY',
   MEDIUM: 'MEDIUM',
@@ -26,25 +51,6 @@ export const ProgrammingLanguage = {
 } as const
 
 export type ProgrammingLanguage = (typeof ProgrammingLanguage)[keyof typeof ProgrammingLanguage]
-
-
-export const GeneratorType = {
-  ARRAY: 'ARRAY',
-  STRING: 'STRING',
-  MATRIX: 'MATRIX'
-} as const
-
-export type GeneratorType = (typeof GeneratorType)[keyof typeof GeneratorType]
-
-
-export const GeneratorPattern = {
-  RANDOM: 'RANDOM',
-  SORTED: 'SORTED',
-  REVERSE: 'REVERSE',
-  CONSTANT: 'CONSTANT'
-} as const
-
-export type GeneratorPattern = (typeof GeneratorPattern)[keyof typeof GeneratorPattern]
 
 
 export const ExamStatus = {

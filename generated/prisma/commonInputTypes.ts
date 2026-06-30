@@ -166,6 +166,27 @@ export type EnumproblemDifficultyFilter<$PrismaModel = never> = {
   not?: Prisma.NestedEnumproblemDifficultyFilter<$PrismaModel> | $Enums.problemDifficulty
 }
 
+export type EnumProblemOwnerTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.ProblemOwnerType | Prisma.EnumProblemOwnerTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.ProblemOwnerType[] | Prisma.ListEnumProblemOwnerTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ProblemOwnerType[] | Prisma.ListEnumProblemOwnerTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumProblemOwnerTypeFilter<$PrismaModel> | $Enums.ProblemOwnerType
+}
+
+export type EnumProblemVisibilityFilter<$PrismaModel = never> = {
+  equals?: $Enums.ProblemVisibility | Prisma.EnumProblemVisibilityFieldRefInput<$PrismaModel>
+  in?: $Enums.ProblemVisibility[] | Prisma.ListEnumProblemVisibilityFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ProblemVisibility[] | Prisma.ListEnumProblemVisibilityFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumProblemVisibilityFilter<$PrismaModel> | $Enums.ProblemVisibility
+}
+
+export type EnumProblemApprovalStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.ProblemApprovalStatus | Prisma.EnumProblemApprovalStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.ProblemApprovalStatus[] | Prisma.ListEnumProblemApprovalStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ProblemApprovalStatus[] | Prisma.ListEnumProblemApprovalStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumProblemApprovalStatusFilter<$PrismaModel> | $Enums.ProblemApprovalStatus
+}
+
 export type IntWithAggregatesFilter<$PrismaModel = never> = {
   equals?: number | Prisma.IntFieldRefInput<$PrismaModel>
   in?: number[] | Prisma.ListIntFieldRefInput<$PrismaModel>
@@ -190,6 +211,36 @@ export type EnumproblemDifficultyWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumproblemDifficultyFilter<$PrismaModel>
   _max?: Prisma.NestedEnumproblemDifficultyFilter<$PrismaModel>
+}
+
+export type EnumProblemOwnerTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.ProblemOwnerType | Prisma.EnumProblemOwnerTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.ProblemOwnerType[] | Prisma.ListEnumProblemOwnerTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ProblemOwnerType[] | Prisma.ListEnumProblemOwnerTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumProblemOwnerTypeWithAggregatesFilter<$PrismaModel> | $Enums.ProblemOwnerType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumProblemOwnerTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumProblemOwnerTypeFilter<$PrismaModel>
+}
+
+export type EnumProblemVisibilityWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.ProblemVisibility | Prisma.EnumProblemVisibilityFieldRefInput<$PrismaModel>
+  in?: $Enums.ProblemVisibility[] | Prisma.ListEnumProblemVisibilityFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ProblemVisibility[] | Prisma.ListEnumProblemVisibilityFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumProblemVisibilityWithAggregatesFilter<$PrismaModel> | $Enums.ProblemVisibility
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumProblemVisibilityFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumProblemVisibilityFilter<$PrismaModel>
+}
+
+export type EnumProblemApprovalStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.ProblemApprovalStatus | Prisma.EnumProblemApprovalStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.ProblemApprovalStatus[] | Prisma.ListEnumProblemApprovalStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ProblemApprovalStatus[] | Prisma.ListEnumProblemApprovalStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumProblemApprovalStatusWithAggregatesFilter<$PrismaModel> | $Enums.ProblemApprovalStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumProblemApprovalStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumProblemApprovalStatusFilter<$PrismaModel>
 }
 
 export type JsonFilter<$PrismaModel = never> =
@@ -302,40 +353,6 @@ export type EnumExecutionStatusWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumExecutionStatusFilter<$PrismaModel>
   _max?: Prisma.NestedEnumExecutionStatusFilter<$PrismaModel>
-}
-
-export type EnumGeneratorTypeFilter<$PrismaModel = never> = {
-  equals?: $Enums.GeneratorType | Prisma.EnumGeneratorTypeFieldRefInput<$PrismaModel>
-  in?: $Enums.GeneratorType[] | Prisma.ListEnumGeneratorTypeFieldRefInput<$PrismaModel>
-  notIn?: $Enums.GeneratorType[] | Prisma.ListEnumGeneratorTypeFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumGeneratorTypeFilter<$PrismaModel> | $Enums.GeneratorType
-}
-
-export type EnumGeneratorPatternFilter<$PrismaModel = never> = {
-  equals?: $Enums.GeneratorPattern | Prisma.EnumGeneratorPatternFieldRefInput<$PrismaModel>
-  in?: $Enums.GeneratorPattern[] | Prisma.ListEnumGeneratorPatternFieldRefInput<$PrismaModel>
-  notIn?: $Enums.GeneratorPattern[] | Prisma.ListEnumGeneratorPatternFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumGeneratorPatternFilter<$PrismaModel> | $Enums.GeneratorPattern
-}
-
-export type EnumGeneratorTypeWithAggregatesFilter<$PrismaModel = never> = {
-  equals?: $Enums.GeneratorType | Prisma.EnumGeneratorTypeFieldRefInput<$PrismaModel>
-  in?: $Enums.GeneratorType[] | Prisma.ListEnumGeneratorTypeFieldRefInput<$PrismaModel>
-  notIn?: $Enums.GeneratorType[] | Prisma.ListEnumGeneratorTypeFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumGeneratorTypeWithAggregatesFilter<$PrismaModel> | $Enums.GeneratorType
-  _count?: Prisma.NestedIntFilter<$PrismaModel>
-  _min?: Prisma.NestedEnumGeneratorTypeFilter<$PrismaModel>
-  _max?: Prisma.NestedEnumGeneratorTypeFilter<$PrismaModel>
-}
-
-export type EnumGeneratorPatternWithAggregatesFilter<$PrismaModel = never> = {
-  equals?: $Enums.GeneratorPattern | Prisma.EnumGeneratorPatternFieldRefInput<$PrismaModel>
-  in?: $Enums.GeneratorPattern[] | Prisma.ListEnumGeneratorPatternFieldRefInput<$PrismaModel>
-  notIn?: $Enums.GeneratorPattern[] | Prisma.ListEnumGeneratorPatternFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumGeneratorPatternWithAggregatesFilter<$PrismaModel> | $Enums.GeneratorPattern
-  _count?: Prisma.NestedIntFilter<$PrismaModel>
-  _min?: Prisma.NestedEnumGeneratorPatternFilter<$PrismaModel>
-  _max?: Prisma.NestedEnumGeneratorPatternFilter<$PrismaModel>
 }
 
 export type EnumExamStatusFilter<$PrismaModel = never> = {
@@ -695,6 +712,27 @@ export type NestedEnumproblemDifficultyFilter<$PrismaModel = never> = {
   not?: Prisma.NestedEnumproblemDifficultyFilter<$PrismaModel> | $Enums.problemDifficulty
 }
 
+export type NestedEnumProblemOwnerTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.ProblemOwnerType | Prisma.EnumProblemOwnerTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.ProblemOwnerType[] | Prisma.ListEnumProblemOwnerTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ProblemOwnerType[] | Prisma.ListEnumProblemOwnerTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumProblemOwnerTypeFilter<$PrismaModel> | $Enums.ProblemOwnerType
+}
+
+export type NestedEnumProblemVisibilityFilter<$PrismaModel = never> = {
+  equals?: $Enums.ProblemVisibility | Prisma.EnumProblemVisibilityFieldRefInput<$PrismaModel>
+  in?: $Enums.ProblemVisibility[] | Prisma.ListEnumProblemVisibilityFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ProblemVisibility[] | Prisma.ListEnumProblemVisibilityFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumProblemVisibilityFilter<$PrismaModel> | $Enums.ProblemVisibility
+}
+
+export type NestedEnumProblemApprovalStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.ProblemApprovalStatus | Prisma.EnumProblemApprovalStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.ProblemApprovalStatus[] | Prisma.ListEnumProblemApprovalStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ProblemApprovalStatus[] | Prisma.ListEnumProblemApprovalStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumProblemApprovalStatusFilter<$PrismaModel> | $Enums.ProblemApprovalStatus
+}
+
 export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
   equals?: number | Prisma.IntFieldRefInput<$PrismaModel>
   in?: number[] | Prisma.ListIntFieldRefInput<$PrismaModel>
@@ -730,6 +768,36 @@ export type NestedEnumproblemDifficultyWithAggregatesFilter<$PrismaModel = never
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumproblemDifficultyFilter<$PrismaModel>
   _max?: Prisma.NestedEnumproblemDifficultyFilter<$PrismaModel>
+}
+
+export type NestedEnumProblemOwnerTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.ProblemOwnerType | Prisma.EnumProblemOwnerTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.ProblemOwnerType[] | Prisma.ListEnumProblemOwnerTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ProblemOwnerType[] | Prisma.ListEnumProblemOwnerTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumProblemOwnerTypeWithAggregatesFilter<$PrismaModel> | $Enums.ProblemOwnerType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumProblemOwnerTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumProblemOwnerTypeFilter<$PrismaModel>
+}
+
+export type NestedEnumProblemVisibilityWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.ProblemVisibility | Prisma.EnumProblemVisibilityFieldRefInput<$PrismaModel>
+  in?: $Enums.ProblemVisibility[] | Prisma.ListEnumProblemVisibilityFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ProblemVisibility[] | Prisma.ListEnumProblemVisibilityFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumProblemVisibilityWithAggregatesFilter<$PrismaModel> | $Enums.ProblemVisibility
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumProblemVisibilityFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumProblemVisibilityFilter<$PrismaModel>
+}
+
+export type NestedEnumProblemApprovalStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.ProblemApprovalStatus | Prisma.EnumProblemApprovalStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.ProblemApprovalStatus[] | Prisma.ListEnumProblemApprovalStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ProblemApprovalStatus[] | Prisma.ListEnumProblemApprovalStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumProblemApprovalStatusWithAggregatesFilter<$PrismaModel> | $Enums.ProblemApprovalStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumProblemApprovalStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumProblemApprovalStatusFilter<$PrismaModel>
 }
 
 export type NestedJsonFilter<$PrismaModel = never> =
@@ -815,40 +883,6 @@ export type NestedEnumExecutionStatusWithAggregatesFilter<$PrismaModel = never> 
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumExecutionStatusFilter<$PrismaModel>
   _max?: Prisma.NestedEnumExecutionStatusFilter<$PrismaModel>
-}
-
-export type NestedEnumGeneratorTypeFilter<$PrismaModel = never> = {
-  equals?: $Enums.GeneratorType | Prisma.EnumGeneratorTypeFieldRefInput<$PrismaModel>
-  in?: $Enums.GeneratorType[] | Prisma.ListEnumGeneratorTypeFieldRefInput<$PrismaModel>
-  notIn?: $Enums.GeneratorType[] | Prisma.ListEnumGeneratorTypeFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumGeneratorTypeFilter<$PrismaModel> | $Enums.GeneratorType
-}
-
-export type NestedEnumGeneratorPatternFilter<$PrismaModel = never> = {
-  equals?: $Enums.GeneratorPattern | Prisma.EnumGeneratorPatternFieldRefInput<$PrismaModel>
-  in?: $Enums.GeneratorPattern[] | Prisma.ListEnumGeneratorPatternFieldRefInput<$PrismaModel>
-  notIn?: $Enums.GeneratorPattern[] | Prisma.ListEnumGeneratorPatternFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumGeneratorPatternFilter<$PrismaModel> | $Enums.GeneratorPattern
-}
-
-export type NestedEnumGeneratorTypeWithAggregatesFilter<$PrismaModel = never> = {
-  equals?: $Enums.GeneratorType | Prisma.EnumGeneratorTypeFieldRefInput<$PrismaModel>
-  in?: $Enums.GeneratorType[] | Prisma.ListEnumGeneratorTypeFieldRefInput<$PrismaModel>
-  notIn?: $Enums.GeneratorType[] | Prisma.ListEnumGeneratorTypeFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumGeneratorTypeWithAggregatesFilter<$PrismaModel> | $Enums.GeneratorType
-  _count?: Prisma.NestedIntFilter<$PrismaModel>
-  _min?: Prisma.NestedEnumGeneratorTypeFilter<$PrismaModel>
-  _max?: Prisma.NestedEnumGeneratorTypeFilter<$PrismaModel>
-}
-
-export type NestedEnumGeneratorPatternWithAggregatesFilter<$PrismaModel = never> = {
-  equals?: $Enums.GeneratorPattern | Prisma.EnumGeneratorPatternFieldRefInput<$PrismaModel>
-  in?: $Enums.GeneratorPattern[] | Prisma.ListEnumGeneratorPatternFieldRefInput<$PrismaModel>
-  notIn?: $Enums.GeneratorPattern[] | Prisma.ListEnumGeneratorPatternFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumGeneratorPatternWithAggregatesFilter<$PrismaModel> | $Enums.GeneratorPattern
-  _count?: Prisma.NestedIntFilter<$PrismaModel>
-  _min?: Prisma.NestedEnumGeneratorPatternFilter<$PrismaModel>
-  _max?: Prisma.NestedEnumGeneratorPatternFilter<$PrismaModel>
 }
 
 export type NestedEnumExamStatusFilter<$PrismaModel = never> = {
