@@ -70,8 +70,16 @@ import {
   useTeacherProblemAnalytics,
   useTeacherModuleProblemAccess,
   useUpdateModuleProblemAccess,
+  useTeacherAssignedGroups,
 } from "@/hooks/use-labs";
 import { Switch } from "@/components/ui/switch";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface ProblemOption {
   id: string;
@@ -86,6 +94,17 @@ export default function TeacherModuleDetailPage() {
   const searchParams = useSearchParams();
 
   const { data: mod, loading: modLoading } = useTeacherModule(moduleId);
+  const { data: assignedGroups, loading: groupsLoading } =
+    useTeacherAssignedGroups(mod?.labId ?? "");
+
+  const [selectedGroupId, setSelectedGroupId] = useState<string>("");
+
+  useEffect(() => {
+    if (assignedGroups.length > 0 && !selectedGroupId) {
+      setSelectedGroupId(assignedGroups[0].groupId);
+    }
+  }, [assignedGroups, selectedGroupId]);
+
   const {
     data: problems,
     loading: problemsLoading,
@@ -97,11 +116,11 @@ export default function TeacherModuleDetailPage() {
     refetch: refetchAssessment,
   } = useTeacherAssessment(moduleId);
   const { data: assessmentResults, loading: resultsLoading } =
-    useTeacherAssessmentResults(moduleId);
+    useTeacherAssessmentResults(moduleId, selectedGroupId || undefined);
   const { data: studentProgress, loading: studentLoading } =
-    useTeacherStudentProgress(moduleId);
+    useTeacherStudentProgress(moduleId, selectedGroupId || undefined);
   const { data: problemAnalytics, loading: analyticsLoading } =
-    useTeacherProblemAnalytics(moduleId);
+    useTeacherProblemAnalytics(moduleId, selectedGroupId || undefined);
 
   const [addProblemOpen, setAddProblemOpen] = useState(false);
   const [editMode, setEditMode] = useState(searchParams.get("edit") === "true");
@@ -324,6 +343,10 @@ export default function TeacherModuleDetailPage() {
               <TabsContent value="analytics" className="space-y-6">
                 <AnalyticsTab
                   moduleId={moduleId}
+                  groups={assignedGroups}
+                  selectedGroupId={selectedGroupId}
+                  onGroupChange={setSelectedGroupId}
+                  groupsLoading={groupsLoading}
                   assessmentResults={assessmentResults}
                   resultsLoading={resultsLoading}
                   problemAnalytics={problemAnalytics}
@@ -994,6 +1017,10 @@ function AttachExamDialog({
 
 function AnalyticsTab({
   moduleId,
+  groups,
+  selectedGroupId,
+  onGroupChange,
+  groupsLoading,
   assessmentResults,
   resultsLoading,
   problemAnalytics,
@@ -1003,6 +1030,10 @@ function AnalyticsTab({
   onViewStudent,
 }: {
   moduleId: string;
+  groups: { groupId: string; groupName: string }[];
+  selectedGroupId: string;
+  onGroupChange: (id: string) => void;
+  groupsLoading: boolean;
   assessmentResults: any;
   resultsLoading: boolean;
   problemAnalytics: any[];
@@ -1016,9 +1047,11 @@ function AnalyticsTab({
   const handleExportExcel = useCallback(async () => {
     setExporting(true);
     try {
+      const params: any = {};
+      if (selectedGroupId) params.groupId = selectedGroupId;
       const response = await axios.get(
         `${getBackendURL()}/teacher/modules/${moduleId}/export-excel`,
-        { withCredentials: true, responseType: "blob" },
+        { params, withCredentials: true, responseType: "blob" },
       );
       const url = window.URL.createObjectURL(response.data as Blob);
       const link = document.createElement("a");
@@ -1037,16 +1070,37 @@ function AnalyticsTab({
     } finally {
       setExporting(false);
     }
-  }, [moduleId]);
+  }, [moduleId, selectedGroupId]);
 
   return (
     <>
-      <div className="flex justify-end">
+      <div className="flex items-center justify-between">
+        <Select
+          value={selectedGroupId}
+          onValueChange={onGroupChange}
+          disabled={groupsLoading || groups.length === 0}
+        >
+          <SelectTrigger className="w-[240px]">
+            <SelectValue
+              placeholder={
+                groupsLoading ? "Loading groups..." : "Select group"
+              }
+            />
+          </SelectTrigger>
+          <SelectContent>
+            {groups.map((group) => (
+              <SelectItem key={group.groupId} value={group.groupId}>
+                {group.groupName}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+
         <Button
           variant="outline"
           size="sm"
           onClick={handleExportExcel}
-          disabled={exporting}
+          disabled={exporting || !selectedGroupId}
         >
           <Download className="w-4 h-4 mr-2" />
           {exporting ? "Generating..." : "Export to Excel"}

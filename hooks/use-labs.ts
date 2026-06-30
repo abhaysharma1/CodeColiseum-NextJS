@@ -418,7 +418,7 @@ export function useTeacherGroups() {
   return { data, loading, refetch: fetch };
 }
 
-export function useTeacherAssessmentResults(moduleId: string) {
+export function useTeacherAssessmentResults(moduleId: string, groupId?: string) {
   const [data, setData] = useState<AssessmentResults | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -428,7 +428,10 @@ export function useTeacherAssessmentResults(moduleId: string) {
       setLoading(true);
       const res = await axios.get(
         `${getBackendURL()}/teacher/modules/${moduleId}/assessment-results`,
-        { withCredentials: true }
+        {
+          params: groupId ? { groupId } : undefined,
+          withCredentials: true,
+        }
       );
       setData(res.data as AssessmentResults);
     } catch {
@@ -436,7 +439,7 @@ export function useTeacherAssessmentResults(moduleId: string) {
     } finally {
       setLoading(false);
     }
-  }, [moduleId]);
+  }, [moduleId, groupId]);
 
   useEffect(() => {
     fetch();
@@ -445,7 +448,7 @@ export function useTeacherAssessmentResults(moduleId: string) {
   return { data, loading, refetch: fetch };
 }
 
-export function useTeacherStudentProgress(moduleId: string) {
+export function useTeacherStudentProgress(moduleId: string, groupId?: string) {
   const [data, setData] = useState<StudentProgress[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -455,7 +458,10 @@ export function useTeacherStudentProgress(moduleId: string) {
       setLoading(true);
       const res = await axios.get(
         `${getBackendURL()}/teacher/modules/${moduleId}/student-progress`,
-        { withCredentials: true }
+        {
+          params: groupId ? { groupId } : undefined,
+          withCredentials: true,
+        }
       );
       setData(res.data as StudentProgress[]);
     } catch {
@@ -463,7 +469,7 @@ export function useTeacherStudentProgress(moduleId: string) {
     } finally {
       setLoading(false);
     }
-  }, [moduleId]);
+  }, [moduleId, groupId]);
 
   useEffect(() => {
     fetch();
@@ -472,7 +478,7 @@ export function useTeacherStudentProgress(moduleId: string) {
   return { data, loading, refetch: fetch };
 }
 
-export function useTeacherProblemAnalytics(moduleId: string) {
+export function useTeacherProblemAnalytics(moduleId: string, groupId?: string) {
   const [data, setData] = useState<ProblemAnalytics[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -482,7 +488,10 @@ export function useTeacherProblemAnalytics(moduleId: string) {
       setLoading(true);
       const res = await axios.get(
         `${getBackendURL()}/teacher/modules/${moduleId}/problem-analytics`,
-        { withCredentials: true }
+        {
+          params: groupId ? { groupId } : undefined,
+          withCredentials: true,
+        }
       );
       setData(res.data as ProblemAnalytics[]);
     } catch {
@@ -490,7 +499,7 @@ export function useTeacherProblemAnalytics(moduleId: string) {
     } finally {
       setLoading(false);
     }
-  }, [moduleId]);
+  }, [moduleId, groupId]);
 
   useEffect(() => {
     fetch();
