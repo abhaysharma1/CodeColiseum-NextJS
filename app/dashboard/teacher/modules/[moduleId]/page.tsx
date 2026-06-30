@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect, useCallback } from "react";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
+import { useAuth } from "@/context/authcontext";
 import axios from "axios";
 import { toast } from "sonner";
 import {
@@ -123,6 +124,8 @@ export default function TeacherModuleDetailPage() {
     useTeacherProblemAnalytics(moduleId, selectedGroupId || undefined);
 
   const [addProblemOpen, setAddProblemOpen] = useState(false);
+  const { user: currentUser } = useAuth();
+  const isCreator = mod?.labCreatorId === currentUser?.id;
   const [editMode, setEditMode] = useState(searchParams.get("edit") === "true");
   const [attachExamOpen, setAttachExamOpen] = useState(false);
   const [studentDrawerOpen, setStudentDrawerOpen] = useState(false);
@@ -167,17 +170,19 @@ export default function TeacherModuleDetailPage() {
                   {mod?.description || "Module details"}
                 </p>
               </div>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setEditMode(!editMode)}
-              >
-                <Edit className="h-4 w-4 mr-1" />
-                {editMode ? "Done" : "Edit"}
-              </Button>
+              {isCreator && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setEditMode(!editMode)}
+                >
+                  <Edit className="h-4 w-4 mr-1" />
+                  {editMode ? "Done" : "Edit"}
+                </Button>
+              )}
             </div>
 
-            {editMode && mod && (
+            {editMode && mod && isCreator && (
               <EditModuleCard module={mod} moduleId={moduleId} />
             )}
 
@@ -207,14 +212,16 @@ export default function TeacherModuleDetailPage() {
                     </p>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => setAddProblemOpen(true)}
-                    >
-                      <Plus className="h-4 w-4 mr-1" />
-                      Add Problems
-                    </Button>
+                    {isCreator && (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setAddProblemOpen(true)}
+                      >
+                        <Plus className="h-4 w-4 mr-1" />
+                        Add Problems
+                      </Button>
+                    )}
                   </div>
                 </div>
 
@@ -225,17 +232,21 @@ export default function TeacherModuleDetailPage() {
                       <p className="text-muted-foreground mb-1">
                         No problems yet
                       </p>
-                      <p className="text-xs text-muted-foreground mb-4">
-                        Add problems from the problem bank
-                      </p>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => setAddProblemOpen(true)}
-                      >
-                        <Plus className="h-4 w-4 mr-1" />
-                        Add Problems
-                      </Button>
+                      {isCreator && (
+                        <>
+                          <p className="text-xs text-muted-foreground mb-4">
+                            Add problems from the problem bank
+                          </p>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => setAddProblemOpen(true)}
+                          >
+                            <Plus className="h-4 w-4 mr-1" />
+                            Add Problems
+                          </Button>
+                        </>
+                      )}
                     </CardContent>
                   </Card>
                 ) : (
@@ -278,41 +289,45 @@ export default function TeacherModuleDetailPage() {
                               </TableCell>
                               <TableCell className="text-right">
                                 <div className="flex items-center justify-end gap-1">
-                                  <ManageAccessModal
-                                    moduleProblemId={p.id}
-                                    isUnlocked={p.isUnlocked}
-                                    availableFrom={p.availableFrom}
-                                    availableUntil={p.availableUntil}
-                                    onUpdated={refetchProblems}
-                                  />
-                                  <Button
-                                    variant="ghost"
-                                    size="sm"
-                                    className="text-destructive"
-                                    onClick={async () => {
-                                      if (
-                                        !confirm(
-                                          "Remove this problem from the module?"
+                                  {isCreator && (
+                                    <ManageAccessModal
+                                      moduleProblemId={p.id}
+                                      isUnlocked={p.isUnlocked}
+                                      availableFrom={p.availableFrom}
+                                      availableUntil={p.availableUntil}
+                                      onUpdated={refetchProblems}
+                                    />
+                                  )}
+                                  {isCreator && (
+                                    <Button
+                                      variant="ghost"
+                                      size="sm"
+                                      className="text-destructive"
+                                      onClick={async () => {
+                                        if (
+                                          !confirm(
+                                            "Remove this problem from the module?"
+                                          )
                                         )
-                                      )
-                                        return;
-                                      try {
-                                        await axios.delete(
-                                          `${getBackendURL()}/teacher/module-problems/${p.id}`,
-                                          { withCredentials: true }
-                                        );
-                                        toast.success("Problem removed");
-                                        refetchProblems();
-                                      } catch (err: any) {
-                                        toast.error(
-                                          err?.response?.data?.message ||
-                                            "Failed to remove"
-                                        );
-                                      }
-                                    }}
-                                  >
-                                    <Trash2 className="h-4 w-4" />
-                                  </Button>
+                                          return;
+                                        try {
+                                          await axios.delete(
+                                            `${getBackendURL()}/teacher/module-problems/${p.id}`,
+                                            { withCredentials: true }
+                                          );
+                                          toast.success("Problem removed");
+                                          refetchProblems();
+                                        } catch (err: any) {
+                                          toast.error(
+                                            err?.response?.data?.message ||
+                                              "Failed to remove"
+                                          );
+                                        }
+                                      }}
+                                    >
+                                      <Trash2 className="h-4 w-4" />
+                                    </Button>
+                                  )}
                                 </div>
                               </TableCell>
                             </TableRow>
@@ -337,6 +352,7 @@ export default function TeacherModuleDetailPage() {
                   assessment={assessment}
                   loading={assessmentLoading}
                   onRefresh={refetchAssessment}
+                  isCreator={isCreator}
                 />
               </TabsContent>
 
@@ -695,11 +711,13 @@ function AssessmentTab({
   assessment,
   loading,
   onRefresh,
+  isCreator,
 }: {
   moduleId: string;
   assessment: any;
   loading: boolean;
   onRefresh: () => void;
+  isCreator: boolean;
 }) {
   const router = useRouter();
   const [attachOpen, setAttachOpen] = useState(false);
@@ -767,29 +785,32 @@ function AssessmentTab({
             Create or attach an assessment exam to this module
           </p>
           <div className="flex items-center gap-3">
-            <Dialog open={attachOpen} onOpenChange={setAttachOpen}>
-              <DialogTrigger asChild>
-                <Button variant="outline" size="sm">
-                  <ExternalLink className="h-4 w-4 mr-1" />
-                  Attach Existing Exam
-                </Button>
-              </DialogTrigger>
-              <AttachExamDialog
-                moduleId={moduleId}
-                onAttached={() => {
-                  setAttachOpen(false);
-                  onRefresh();
-                }}
-              />
-            </Dialog>
-            <Dialog open={createOpen} onOpenChange={setCreateOpen}>
-              <DialogTrigger asChild>
-                <Button size="sm">
-                  <Plus className="h-4 w-4 mr-1" />
-                  Create New Assessment
-                </Button>
-              </DialogTrigger>
-              <DialogContent>
+            {isCreator && (
+              <Dialog open={attachOpen} onOpenChange={setAttachOpen}>
+                <DialogTrigger asChild>
+                  <Button variant="outline" size="sm">
+                    <ExternalLink className="h-4 w-4 mr-1" />
+                    Attach Existing Exam
+                  </Button>
+                </DialogTrigger>
+                <AttachExamDialog
+                  moduleId={moduleId}
+                  onAttached={() => {
+                    setAttachOpen(false);
+                    onRefresh();
+                  }}
+                />
+              </Dialog>
+            )}
+            {isCreator && (
+              <Dialog open={createOpen} onOpenChange={setCreateOpen}>
+                <DialogTrigger asChild>
+                  <Button size="sm">
+                    <Plus className="h-4 w-4 mr-1" />
+                    Create New Assessment
+                  </Button>
+                </DialogTrigger>
+                <DialogContent>
                 <DialogHeader>
                   <DialogTitle>Create Assessment</DialogTitle>
                   <DialogDescription>
@@ -831,6 +852,7 @@ function AssessmentTab({
                 </DialogFooter>
               </DialogContent>
             </Dialog>
+            )}
           </div>
         </CardContent>
       </Card>
@@ -861,28 +883,32 @@ function AssessmentTab({
           <ExternalLink className="h-4 w-4 mr-1" />
           Open Exam
         </Button>
-        <Dialog open={attachOpen} onOpenChange={setAttachOpen}>
-          <DialogTrigger asChild>
-            <Button variant="outline" size="sm">
-              Replace Exam
-            </Button>
-          </DialogTrigger>
-          <AttachExamDialog
-            moduleId={moduleId}
-            onAttached={() => {
-              setAttachOpen(false);
-              onRefresh();
-            }}
-          />
-        </Dialog>
-        <Button
-          variant="outline"
-          size="sm"
-          className="text-destructive"
-          onClick={handleRemoveAssessment}
-        >
-          Remove Exam
-        </Button>
+        {isCreator && (
+          <Dialog open={attachOpen} onOpenChange={setAttachOpen}>
+            <DialogTrigger asChild>
+              <Button variant="outline" size="sm">
+                Replace Exam
+              </Button>
+            </DialogTrigger>
+            <AttachExamDialog
+              moduleId={moduleId}
+              onAttached={() => {
+                setAttachOpen(false);
+                onRefresh();
+              }}
+            />
+          </Dialog>
+        )}
+        {isCreator && (
+          <Button
+            variant="outline"
+            size="sm"
+            className="text-destructive"
+            onClick={handleRemoveAssessment}
+          >
+            Remove Exam
+          </Button>
+        )}
       </div>
     </div>
   );

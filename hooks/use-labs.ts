@@ -35,6 +35,7 @@ export interface TeacherModule {
   title: string;
   description: string | null;
   labId: string;
+  labCreatorId: string;
   weekNumber: number;
   orderIndex: number;
   unlockAt: string;
@@ -180,6 +181,20 @@ export interface StudentModuleProblems {
     availableUntil: string | null;
     accessStatus: AccessStatus;
   }[];
+}
+
+export interface LabTeacherEntry {
+  id: string;
+  userId: string;
+  user: { id: string; name: string; email: string };
+  addedBy: { id: string; name: string };
+  addedAt: string;
+}
+
+export interface TeacherSearchResult {
+  id: string;
+  name: string;
+  email: string;
 }
 
 export interface GroupOption {
@@ -637,4 +652,57 @@ export function useUpdateModuleProblemAccess() {
   };
 
   return { mutate, loading };
+}
+
+export function useLabTeachers(labId: string) {
+  const [data, setData] = useState<LabTeacherEntry[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  const fetch = useCallback(async () => {
+    if (!labId) return;
+    try {
+      setLoading(true);
+      const res = await axios.get(
+        `${getBackendURL()}/teacher/labs/${labId}/teachers`,
+        { withCredentials: true }
+      );
+      setData(res.data as LabTeacherEntry[]);
+    } catch {
+      setData([]);
+    } finally {
+      setLoading(false);
+    }
+  }, [labId]);
+
+  useEffect(() => {
+    fetch();
+  }, [fetch]);
+
+  return { data, loading, refetch: fetch };
+}
+
+export function useSearchTeachers() {
+  const [results, setResults] = useState<TeacherSearchResult[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  const search = useCallback(async (q: string) => {
+    if (!q || q.length < 2) {
+      setResults([]);
+      return;
+    }
+    try {
+      setLoading(true);
+      const res = await axios.get(
+        `${getBackendURL()}/teacher/teachers/search?q=${encodeURIComponent(q)}`,
+        { withCredentials: true }
+      );
+      setResults(res.data as TeacherSearchResult[]);
+    } catch {
+      setResults([]);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  return { results, loading, search };
 }

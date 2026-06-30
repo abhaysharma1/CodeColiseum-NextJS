@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import axios from "axios";
 import { toast } from "sonner";
@@ -15,6 +15,8 @@ import {
   Edit,
   Trash2,
   Bot,
+  UserPlus,
+  UserMinus,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -43,18 +45,22 @@ import { Spinner } from "@/components/ui/shadcn-io/spinner";
 import { Label } from "@/components/ui/label";
 import { getBackendURL } from "@/utils/utilities";
 import { ModuleCard } from "@/components/labs/module-card";
-import type { TeacherModule, GroupOption } from "@/hooks/use-labs";
+import { useAuth } from "@/context/authcontext";
+import { useSearchTeachers } from "@/hooks/use-labs";
+import type { TeacherModule, GroupOption, LabTeacherEntry } from "@/hooks/use-labs";
 
 export default function TeacherLabDetailPage() {
   const { labId } = useParams<{ labId: string }>();
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { user: currentUser } = useAuth();
 
   const [lab, setLab] = useState<any>(null);
   const [modules, setModules] = useState<TeacherModule[]>([]);
   const [assignedGroups, setAssignedGroups] = useState<{ groupId: string; groupName: string }[]>([]);
   const [loading, setLoading] = useState(true);
   const [editMode, setEditMode] = useState(searchParams.get("edit") === "true");
+  const isCreator = lab?.creatorId === currentUser?.id;
 
   const fetchLab = async () => {
     try {
@@ -105,17 +111,21 @@ export default function TeacherLabDetailPage() {
                 <p className="text-sm text-muted-foreground">Lab Details</p>
               </div>
               <div className="flex items-center gap-2">
-                <Button variant="outline" size="sm" onClick={() => setEditMode(!editMode)}>
-                  <Edit className="h-4 w-4 mr-1" />
-                  {editMode ? "View Mode" : "Edit"}
-                </Button>
-                <Button
-                  size="sm"
-                  onClick={() => router.push(`/dashboard/teacher/modules/create?labId=${labId}`)}
-                >
-                  <Plus className="h-4 w-4 mr-1" />
-                  Create Module
-                </Button>
+                {isCreator && (
+                  <Button variant="outline" size="sm" onClick={() => setEditMode(!editMode)}>
+                    <Edit className="h-4 w-4 mr-1" />
+                    {editMode ? "View Mode" : "Edit"}
+                  </Button>
+                )}
+                {isCreator && (
+                  <Button
+                    size="sm"
+                    onClick={() => router.push(`/dashboard/teacher/modules/create?labId=${labId}`)}
+                  >
+                    <Plus className="h-4 w-4 mr-1" />
+                    Create Module
+                  </Button>
+                )}
               </div>
             </div>
 
@@ -163,8 +173,8 @@ export default function TeacherLabDetailPage() {
                         problemsCount={mod.problemsCount}
                         assessmentStatus={mod.assessmentExamId ? "Assessment Set" : null}
                         onView={() => router.push(`/dashboard/teacher/modules/${mod.id}`)}
-                        onEdit={() => router.push(`/dashboard/teacher/modules/${mod.id}?edit=true`)}
-                        onDelete={async () => {
+                        onEdit={isCreator ? () => router.push(`/dashboard/teacher/modules/${mod.id}?edit=true`) : undefined}
+                        onDelete={isCreator ? async () => {
                           if (!confirm("Delete this module?")) return;
                           try {
                             await axios.delete(`${getBackendURL()}/teacher/modules/${mod.id}`, {
@@ -175,7 +185,7 @@ export default function TeacherLabDetailPage() {
                           } catch (err: any) {
                             toast.error(err?.response?.data?.message || "Failed to delete");
                           }
-                        }}
+                        } : undefined}
                       />
                     ))}
                   </div>
@@ -183,7 +193,25 @@ export default function TeacherLabDetailPage() {
               </div>
 
               <div className="space-y-4">
-                <AssignGroupsCard labId={labId} assignedGroups={assignedGroups} onAssigned={() => fetchLab()} />
+                <ManageTeachersCard labId={labId} isCreator={isCreator} onUpdated={() => fetchLab()} />
+                {isCreator && <AssignGroupsCard labId={labId} assignedGroups={assignedGroups} onAssigned={() => fetchLab()} />}
+                {!isCreator && assignedGroups.length > 0 && (
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="text-base flex items-center gap-2">
+                        <Users className="h-4 w-4" />
+                        Assigned Groups
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="flex flex-wrap gap-2">
+                        {assignedGroups.map((g) => (
+                          <Badge key={g.groupId} variant="secondary">{g.groupName}</Badge>
+                        ))}
+                      </div>
+                    </CardContent>
+                  </Card>
+                )}
               </div>
             </div>
           </div>
@@ -345,6 +373,202 @@ function EditLabCard({
         <Button onClick={handleSave} disabled={saving}>
           {saving ? "Saving..." : "Save Changes"}
         </Button>
+      </CardContent>
+    </Card>
+  );
+}
+
+function ManageTeachersCard({
+  labId,
+  isCreator,
+  onUpdated,
+}: {
+  labId: string;
+  isCreator: boolean;
+  onUpdated: () => void;
+}) {
+  const [teachers, setTeachers] = useState<LabTeacherEntry[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [open, setOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const { results, search, loading: searchLoading } = useSearchTeachers();
+  const [adding, setAdding] = useState(false);
+
+  const fetchTeachers = useCallback(async () => {
+    try {
+      setLoading(true);
+      const res = await axios.get(
+        `${getBackendURL()}/teacher/labs/${labId}/teachers`,
+        { withCredentials: true }
+      );
+      setTeachers(res.data as LabTeacherEntry[]);
+    } catch {
+      setTeachers([]);
+    } finally {
+      setLoading(false);
+    }
+  }, [labId]);
+
+  useEffect(() => {
+    fetchTeachers();
+  }, [fetchTeachers]);
+
+  useEffect(() => {
+    if (open) {
+      const timer = setTimeout(() => {
+        if (searchQuery.length >= 2) search(searchQuery);
+      }, 300);
+      return () => clearTimeout(timer);
+    }
+  }, [searchQuery, open, search]);
+
+  const handleAdd = async (teacherId: string) => {
+    try {
+      setAdding(true);
+      await axios.post(
+        `${getBackendURL()}/teacher/labs/${labId}/teachers`,
+        { userId: teacherId },
+        { withCredentials: true }
+      );
+      toast.success("Teacher added to lab");
+      setSearchQuery("");
+      setOpen(false);
+      fetchTeachers();
+      onUpdated();
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message || "Failed to add teacher");
+    } finally {
+      setAdding(false);
+    }
+  };
+
+  const handleRemove = async (teacherUserId: string) => {
+    if (!confirm("Remove this teacher from the lab?")) return;
+    try {
+      await axios.delete(
+        `${getBackendURL()}/teacher/labs/${labId}/teachers/${teacherUserId}`,
+        { withCredentials: true }
+      );
+      toast.success("Teacher removed");
+      fetchTeachers();
+      onUpdated();
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message || "Failed to remove teacher");
+    }
+  };
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle className="text-base flex items-center gap-2">
+          <UserPlus className="h-4 w-4" />
+          Lab Teachers
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-3">
+        {loading ? (
+          <div className="flex justify-center py-2">
+            <Spinner variant="infinite" />
+          </div>
+        ) : teachers.length === 0 ? (
+          <p className="text-sm text-muted-foreground">No additional teachers</p>
+        ) : (
+          <div className="space-y-2">
+            {teachers.map((t) => (
+              <div key={t.id} className="flex items-center justify-between gap-2 rounded-md border p-2">
+                <div className="min-w-0 flex-1">
+                  <p className="text-sm font-medium truncate">{t.user.name}</p>
+                  <p className="text-xs text-muted-foreground truncate">{t.user.email}</p>
+                </div>
+                {isCreator && (
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-7 w-7 shrink-0 text-destructive"
+                    onClick={() => handleRemove(t.userId)}
+                  >
+                    <UserMinus className="h-3.5 w-3.5" />
+                  </Button>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+        {isCreator && (
+          <Dialog open={open} onOpenChange={setOpen}>
+            <DialogTrigger asChild>
+              <Button variant="outline" size="sm" className="w-full">
+                <Plus className="h-4 w-4 mr-1" />
+                Add Teacher
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Add Teacher to Lab</DialogTitle>
+                <DialogDescription>
+                  Search for a teacher by name or email
+                </DialogDescription>
+              </DialogHeader>
+              <div className="space-y-4">
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                  <Input
+                    placeholder="Search teachers..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="pl-10"
+                  />
+                </div>
+                <div className="max-h-60 overflow-y-auto space-y-1">
+                  {searchLoading ? (
+                    <div className="flex justify-center py-4">
+                      <Spinner variant="infinite" />
+                    </div>
+                  ) : searchQuery.length < 2 ? (
+                    <p className="text-sm text-muted-foreground text-center py-4">
+                      Type at least 2 characters to search
+                    </p>
+                  ) : results.length === 0 ? (
+                    <p className="text-sm text-muted-foreground text-center py-4">
+                      No teachers found
+                    </p>
+                  ) : (
+                    results.map((t) => {
+                      const alreadyAdded = teachers.some((lt) => lt.userId === t.id);
+                      return (
+                        <div
+                          key={t.id}
+                          className={`flex items-center justify-between gap-3 p-2 rounded-md ${
+                            alreadyAdded ? "opacity-50" : "cursor-pointer hover:bg-accent"
+                          }`}
+                          onClick={() => !alreadyAdded && !adding && handleAdd(t.id)}
+                        >
+                          <div className="min-w-0 flex-1">
+                            <p className="text-sm font-medium truncate">{t.name}</p>
+                            <p className="text-xs text-muted-foreground truncate">{t.email}</p>
+                          </div>
+                          {alreadyAdded ? (
+                            <Badge variant="outline" className="shrink-0 text-xs">Added</Badge>
+                          ) : (
+                            <Button variant="ghost" size="sm" className="shrink-0" disabled={adding}>
+                              <Plus className="h-3.5 w-3.5 mr-1" />
+                              Add
+                            </Button>
+                          )}
+                        </div>
+                      );
+                    })
+                  )}
+                </div>
+              </div>
+              <DialogFooter>
+                <Button variant="outline" onClick={() => setOpen(false)}>
+                  Done
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+        )}
       </CardContent>
     </Card>
   );
