@@ -423,11 +423,16 @@ function CodingBlock({
         { language, code },
         { withCredentials: true },
       );
-      if (response.data.success) {
-        setCode(response.data.formattedCode);
+      const result = response.data as {
+        success: boolean;
+        formattedCode?: string;
+        error?: string;
+      };
+      if (result.success) {
+        setCode(result.formattedCode ?? "");
         toast.success("Code formatted");
       } else {
-        toast.error(response.data.error || "Formatting failed");
+        toast.error(result.error || "Formatting failed");
       }
     } catch (error: any) {
       toast.error(
