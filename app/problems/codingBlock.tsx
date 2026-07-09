@@ -181,6 +181,7 @@ function CodingBlock({
   const [editorInFocus, setEditorInFocus] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [running, setRunning] = useState(false);
+  const [formatting, setFormatting] = useState(false);
   const [themeList, setThemeList] = useState<string[]>();
   const [monacoInstance, setMonacoInstance] = useState<any>(null);
   const [editorInstance, setEditorInstance] = useState<any>(null);
@@ -414,6 +415,29 @@ function CodingBlock({
     }
   };
 
+  const onFormat = async () => {
+    setFormatting(true);
+    try {
+      const response = await axios.post(
+        `${getBackendURL()}/tools/format`,
+        { language, code },
+        { withCredentials: true },
+      );
+      if (response.data.success) {
+        setCode(response.data.formattedCode);
+        toast.success("Code formatted");
+      } else {
+        toast.error(response.data.error || "Formatting failed");
+      }
+    } catch (error: any) {
+      toast.error(
+        error?.response?.data?.error || "Formatting failed",
+      );
+    } finally {
+      setFormatting(false);
+    }
+  };
+
   return (
     <div>
       <div className="flex-1 h-[calc(100vh-6.5rem)] outline-1 m-5 outline-offset-8 rounded-md py-3 px-5 shadow-2xl">
@@ -548,6 +572,15 @@ function CodingBlock({
               </DropdownMenu>
               <Button variant={"outline"} className="h-8.5" onClick={resetCode}>
                 Clear
+              </Button>
+              <Button
+                variant="outline"
+                className="h-8.5"
+                onClick={onFormat}
+                disabled={formatting || submitting || running || performingAiReview}
+              >
+                <MdFormatAlignLeft className="mr-1" />
+                {formatting ? "Formatting..." : "Format"}
               </Button>
             </div>
             <div className="flex gap-3">
