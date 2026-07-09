@@ -119,40 +119,9 @@ const PanelConnectors = () => (
    Workflow strip — replaces the old feature chips with a
    single glance at the whole student journey
 --------------------------------------------------------- */
-const workflowSteps = [
-  { icon: "📝", label: "Weekly Lab" },
-  { icon: "💻", label: "Coding Assessment" },
-  { icon: "🤖", label: "AI Review" },
-  { icon: "📊", label: "Progress Tracking" },
-  { icon: "🏆", label: "Leaderboard" },
-  { icon: "💼", label: "Placement Ready" },
-];
 
 const dotPositions = ["1%", "20%", "40%", "60%", "80%", "99%", "99%"];
 
-const WorkflowStrip = () => (
-  <div className="relative pt-1.5">
-    <div className="relative flex items-center gap-1.5 overflow-x-auto md:overflow-visible pb-2 md:pb-0 scrollbar-none">
-      {workflowSteps.map((step, i) => (
-        <div key={step.label} className="flex items-center gap-1.5 shrink-0">
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-stone-200 bg-white/70 px-2.5 py-1 text-[11px] font-medium text-stone-600 whitespace-nowrap">
-            <span className="text-xs leading-none">{step.icon}</span>
-            {step.label}
-          </span>
-          {i < workflowSteps.length - 1 && (
-            <span className="text-stone-300 text-xs select-none">→</span>
-          )}
-        </div>
-      ))}
-    </div>
-    {/* Travelling glow — one continuous pulse walking the whole journey */}
-    <motion.span
-      className="absolute -top-0.5 left-0 h-1.5 w-1.5 rounded-full bg-orange-500 shadow-[0_0_8px_3px_rgba(216,110,42,0.55)] hidden md:block"
-      animate={{ left: dotPositions }}
-      transition={{ duration: 7, times: [0, 0.16, 0.33, 0.5, 0.66, 0.83, 1], repeat: Infinity, ease: "easeInOut" }}
-    />
-  </div>
-);
 
 /* ---------------------------------------------------------
    Magnetic wrapper — nudges its child gently toward the
@@ -292,9 +261,6 @@ const Hero = () => {
             </motion.div>
 
             {/* Workflow strip — the entire student journey in one glance */}
-            <motion.div variants={item} className="max-w-xl pt-2 md:pt-3">
-              <WorkflowStrip />
-            </motion.div>
           </div>
 
           {/* CODE EDITOR — overlaps the text column for layered depth */}

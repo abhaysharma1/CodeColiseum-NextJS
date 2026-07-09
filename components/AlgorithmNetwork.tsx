@@ -314,22 +314,6 @@ const AlgorithmNetwork: React.FC<AlgorithmNetworkProps> = ({
 
       ctx.clearRect(0, 0, width, height);
 
-      // Warm ambient wash — gives the network real atmosphere instead of
-      // sitting flat on the page, biased toward the upper-right where the
-      // editor typically sits.
-      const warm = ctx.createRadialGradient(
-        width * 0.72,
-        height * 0.3,
-        0,
-        width * 0.72,
-        height * 0.3,
-        Math.max(width, height) * 0.65
-      );
-      warm.addColorStop(0, "rgba(216, 110, 42, 0.12)");
-      warm.addColorStop(1, "rgba(216, 110, 42, 0)");
-      ctx.fillStyle = warm;
-      ctx.fillRect(0, 0, width, height);
-
       // Smooth pointer easing
       pointerSmooth.x += (pointer.x - pointerSmooth.x) * 0.08;
       pointerSmooth.y += (pointer.y - pointerSmooth.y) * 0.08;
