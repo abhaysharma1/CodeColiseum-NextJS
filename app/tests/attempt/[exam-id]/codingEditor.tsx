@@ -23,6 +23,7 @@ import axios from "axios";
 import { getLanguageId } from "@/utils/getLanguageId";
 import { supportedLanguages } from "@/utils/languageCatalog";
 import { MdFormatAlignLeft } from "react-icons/md";
+import { getBackendURL } from "@/utils/utilities";
 
 // Static theme imports
 import Active4DTheme from "@/utils/themes/Active4D.json";
@@ -156,6 +157,7 @@ function CodingEditor({
 }: CodingBlockProps) {
   const [editorTheme, setEditorTheme] = useState("Sunburst");
   const [editorInFocus, setEditorInFocus] = useState(false);
+  const [formatting, setFormatting] = useState(false);
   const [themeList, setThemeList] = useState<string[]>();
   const [monacoInstance, setMonacoInstance] = useState<any>(null);
   const [editorInstance, setEditorInstance] = useState<any>(null);
@@ -217,6 +219,34 @@ function CodingEditor({
       noSemanticValidation: true,
       noSyntaxValidation: true,
     });
+  };
+
+  const onFormat = async () => {
+    setFormatting(true);
+    try {
+      const response = await axios.post(
+        `${getBackendURL()}/tools/format`,
+        { language, code },
+        { withCredentials: true },
+      );
+      const result = response.data as {
+        success: boolean;
+        formattedCode?: string;
+        error?: string;
+      };
+      if (result.success) {
+        setCode(result.formattedCode ?? "");
+        toast.success("Code formatted");
+      } else {
+        toast.error(result.error || "Formatting failed");
+      }
+    } catch (error: any) {
+      toast.error(
+        error?.response?.data?.error || "Formatting failed",
+      );
+    } finally {
+      setFormatting(false);
+    }
   };
 
   return (
@@ -327,29 +357,15 @@ function CodingEditor({
                   </DropdownMenuSub>
                 </DropdownMenuContent>
               </DropdownMenu>
-              {(language === "javascript" || language === "typescript") && (
-                <Button
-                  className="ml-2 h-[70%] animate-fade-right animate-once"
-                  onClick={() => {
-                    if (editorInstance) {
-                      try {
-                        editorInstance
-                          .getAction("editor.action.formatDocument")
-                          ?.run();
-                      } catch (error) {
-                        console.error("Format error:", error);
-                        toast.error("Failed to format code");
-                      }
-                    } else {
-                      toast.error("Editor not ready");
-                    }
-                  }}
-                  variant="outline"
-                  title="Format Code (Shift+Alt+F)"
-                >
-                  <MdFormatAlignLeft />
-                </Button>
-              )}
+              <Button
+                variant="outline"
+                className="h-8.5"
+                onClick={onFormat}
+                disabled={formatting || submitting || running}
+              >
+                <MdFormatAlignLeft className="mr-1" />
+                {formatting ? "Formatting..." : "Format"}
+              </Button>
 
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
