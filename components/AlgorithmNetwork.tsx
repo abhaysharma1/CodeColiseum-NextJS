@@ -76,12 +76,22 @@ const AlgorithmNetwork: React.FC<AlgorithmNetworkProps> = ({
 
     const rand = (min: number, max: number) => min + Math.random() * (max - min);
 
+    // Biases a chunk of a layer's nodes toward the editor's rough position
+    // (right-of-center, slightly above middle) so the network reads as
+    // converging on the CodeWindow instead of scattering evenly.
     const buildLayer = (target: NetworkNode[], count: number, rMin: number, rMax: number, vMax: number) => {
       target.length = 0;
       for (let i = 0; i < count; i++) {
+        const towardEditor = Math.random() < 0.55;
+        const x = towardEditor
+          ? rand(width * 0.4, width * 1.05)
+          : rand(0, width);
+        const y = towardEditor
+          ? rand(height * 0.05, height * 0.9)
+          : rand(0, height);
         target.push({
-          x: rand(0, width),
-          y: rand(0, height),
+          x,
+          y,
           vx: rand(-vMax, vMax),
           vy: rand(-vMax, vMax),
           r: rand(rMin, rMax),
@@ -106,8 +116,8 @@ const AlgorithmNetwork: React.FC<AlgorithmNetworkProps> = ({
 
       if (!ready || changed) {
         const area = width * height;
-        const backCount = Math.max(34, Math.min(90, Math.round(area / 15000)));
-        const frontCount = Math.max(18, Math.min(46, Math.round(area / 26000)));
+        const backCount = Math.max(60, Math.min(160, Math.round(area / 9000)));
+        const frontCount = Math.max(30, Math.min(80, Math.round(area / 17000)));
 
         buildLayer(back, backCount, 1.3, 2.4, 0.06);
         buildLayer(front, frontCount, 2, 3.4, 0.095);

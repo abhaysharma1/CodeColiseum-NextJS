@@ -256,10 +256,11 @@ const CodeWindow: React.FC = () => {
       animate={{ y: [0, -10, 0] }}
       transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
     >
-      {/* Large soft orange glow behind the editor — draws the eye */}
+      {/* Soft ambient wash — gently seats the editor into the background
+          network instead of punching a hole in it with a hard glow */}
       <motion.div
-        className="absolute -inset-10 rounded-[3rem] bg-orange-400 blur-[70px] -z-10"
-        animate={{ opacity: hovered ? 0.4 : 0.22 }}
+        className="absolute -inset-6 rounded-[2.5rem] bg-gradient-to-br from-orange-200/40 via-orange-100/20 to-transparent blur-2xl -z-10"
+        animate={{ opacity: hovered ? 0.9 : 0.6 }}
         transition={{ duration: 0.5 }}
       />
 
@@ -271,11 +272,13 @@ const CodeWindow: React.FC = () => {
         className="relative text-left border border-orange-200/60 rounded-3xl bg-white overflow-hidden flex flex-col pointer-events-auto"
         animate={{
           boxShadow: hovered
-            ? "0 30px 60px -15px rgba(194,101,42,0.32)"
-            : "0 20px 45px -18px rgba(194,101,42,0.18)",
+            ? "0 30px 70px -15px rgba(194,101,42,0.38), inset 0 1px 0 rgba(255,255,255,0.6), 0 0 0 1px rgba(194,101,42,0.06)"
+            : "0 22px 50px -18px rgba(194,101,42,0.22), inset 0 1px 0 rgba(255,255,255,0.5)",
         }}
         transition={{ duration: 0.4 }}
       >
+        {/* Subtle inner glow along the top edge — premium sheen, no uneven lighting */}
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-orange-100/50 to-transparent" />
         {/* Header */}
         <div className="flex items-center justify-between px-5 py-3 border-b border-orange-200/60 bg-orange-50/70">
           <div className="flex items-center gap-4 min-w-0">
