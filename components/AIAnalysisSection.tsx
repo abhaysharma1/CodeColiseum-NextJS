@@ -1,10 +1,22 @@
 "use client";
 
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Sparkles, AlertTriangle, TrendingUp } from "lucide-react";
+import {
+  Sparkles,
+  AlertTriangle,
+  TrendingUp,
+  Hash,
+  Shuffle,
+  GitMerge,
+  type LucideIcon,
+} from "lucide-react";
 import BlurText from "./BlurText";
 import HandwrittenAnnotation from "./HandwrittenAnnotation";
+
+/* Autoplay timing — mid-point of the 5-6s range so the section feels
+   alive without racing past the diagnosis text before it's readable. */
+const AUTOPLAY_MS = 6000;
 
 /* ---------------------------------------------------------
    Real worked examples — swapping between them is the whole
@@ -18,7 +30,7 @@ interface CodeLine {
 
 interface Example {
   id: string;
-  emoji: string;
+  icon: LucideIcon;
   title: string;
   difficulty: string;
   topic: string;
@@ -33,7 +45,7 @@ interface Example {
 const examples: Example[] = [
   {
     id: "two-sum",
-    emoji: "🔢",
+    icon: Hash,
     title: "Two Sum",
     difficulty: "Easy",
     topic: "Hashing",
@@ -57,7 +69,7 @@ const examples: Example[] = [
   },
   {
     id: "next-permutation",
-    emoji: "🔄",
+    icon: Shuffle,
     title: "Next Permutation",
     difficulty: "Medium",
     topic: "Arrays",
@@ -83,7 +95,7 @@ const examples: Example[] = [
   },
   {
     id: "merge-intervals",
-    emoji: "📐",
+    icon: GitMerge,
     title: "Merge Intervals",
     difficulty: "Medium",
     topic: "Sorting",
@@ -108,43 +120,23 @@ const examples: Example[] = [
   },
 ];
 
-/* A small drifting accent — decorative only, echoes the "catching
-   bugs" theme without adding another card to read. */
-const FloatingAccent = ({
-  emoji,
-  className,
-  duration,
-  delay,
-}: {
-  emoji: string;
-  className: string;
-  duration: number;
-  delay: number;
-}) => (
-  <motion.div
-    className={`absolute z-20 hidden md:flex items-center justify-center w-11 h-11 rounded-full bg-white border border-orange-200/70 shadow-lg shadow-orange-900/10 text-lg pointer-events-none select-none ${className}`}
-    initial={{ opacity: 0, scale: 0.8 }}
-    animate={{ opacity: 1, scale: 1, y: [0, -9, 0], rotate: [0, -4, 0, 4, 0] }}
-    transition={{
-      opacity: { duration: 0.6, delay },
-      scale: { duration: 0.6, delay },
-      y: { duration, delay: delay + 0.3, repeat: Infinity, ease: "easeInOut" },
-      rotate: { duration: duration * 1.4, delay: delay + 0.3, repeat: Infinity, ease: "easeInOut" },
-    }}
-  >
-    {emoji}
-  </motion.div>
-);
-
 export default function AIAnalysisSection() {
   const [activeId, setActiveId] = useState(examples[0].id);
   const [pendingId, setPendingId] = useState(examples[0].id);
   const [scanning, setScanning] = useState(false);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  // Autoplay: cycles cards while the section is in view. Stops permanently
+  // the moment the user takes control — it should never fight them back.
+  const [autoplay, setAutoplay] = useState(true);
+  const [inView, setInView] = useState(false);
+  const sectionRef = useRef<HTMLElement | null>(null);
+  const autoplayTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
   const active = examples.find((e) => e.id === activeId) ?? examples[0];
 
-  const handleSwitch = (id: string) => {
+  const handleSwitch = (id: string, isManual: boolean) => {
+    if (isManual) setAutoplay(false);
     if (id === pendingId) return;
     setPendingId(id);
     setScanning(true);
@@ -155,8 +147,37 @@ export default function AIAnalysisSection() {
     }, 520);
   };
 
+  // Track whether the section is on screen, so autoplay never burns
+  // through cards before the user has scrolled to see them.
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => setInView(entry.isIntersecting),
+      { threshold: 0.4 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  // Drive the rotation itself.
+  useEffect(() => {
+    if (!autoplay || !inView) return;
+    autoplayTimeoutRef.current = setTimeout(() => {
+      const currentIndex = examples.findIndex((e) => e.id === pendingId);
+      const next = examples[(currentIndex + 1) % examples.length];
+      handleSwitch(next.id, false);
+    }, AUTOPLAY_MS);
+    return () => {
+      if (autoplayTimeoutRef.current) clearTimeout(autoplayTimeoutRef.current);
+    };
+  }, [autoplay, inView, pendingId]);
+
   return (
-    <section className="relative w-full min-h-screen flex flex-col justify-center py-16 md:py-12 overflow-hidden">
+    <section
+      ref={sectionRef}
+      className="relative w-full min-h-screen flex flex-col justify-center py-16 md:py-12 overflow-hidden"
+    >
       {/* Subtle radial glow */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-orange-200/20 rounded-full blur-[130px]" />
@@ -193,27 +214,44 @@ export default function AIAnalysisSection() {
 
         {/* Example switcher */}
         <div className="flex items-center justify-center gap-2 mb-6 flex-wrap">
-          {examples.map((ex) => (
-            <button
-              key={ex.id}
-              onClick={() => handleSwitch(ex.id)}
-              className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-semibold border transition-all ${
-                pendingId === ex.id
-                  ? "bg-orange-700 text-white border-orange-700 shadow-md shadow-orange-700/25"
-                  : "bg-white/70 text-stone-500 border-orange-200 hover:border-orange-300 hover:text-orange-700"
-              }`}
-            >
-              <span className="leading-none">{ex.emoji}</span>
-              {ex.title}
-            </button>
-          ))}
+          {examples.map((ex) => {
+            const isActive = pendingId === ex.id;
+            const showProgress = isActive && autoplay && inView;
+            return (
+              <button
+                key={ex.id}
+                onClick={() => handleSwitch(ex.id, true)}
+                className={`relative inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-semibold border transition-all overflow-hidden ${
+                  isActive
+                    ? "bg-orange-700 text-white border-orange-700 shadow-md shadow-orange-700/25"
+                    : "bg-white/70 text-stone-500 border-orange-200 hover:border-orange-300 hover:text-orange-700"
+                }`}
+              >
+                <ex.icon size={14} strokeWidth={2.25} className="shrink-0" />
+                {ex.title}
+                {showProgress && (
+                  <span
+                    key={pendingId}
+                    className="ai-autoplay-fill absolute left-0 bottom-0 h-[2px] bg-white/80"
+                  />
+                )}
+              </button>
+            );
+          })}
         </div>
+        <style>{`
+          .ai-autoplay-fill {
+            width: 0%;
+            animation: ai-autoplay-progress ${AUTOPLAY_MS}ms linear forwards;
+          }
+          @keyframes ai-autoplay-progress {
+            from { width: 0%; }
+            to { width: 100%; }
+          }
+        `}</style>
 
         {/* Split diagnostic view */}
         <div className="relative">
-          <FloatingAccent emoji="🐛" className="-top-5 -left-5" duration={5.5} delay={0.9} />
-          <FloatingAccent emoji="✨" className="-top-4 -right-4" duration={6} delay={1.2} />
-
           <AnimatePresence mode="wait">
             <motion.div
               key={active.id}
@@ -279,13 +317,9 @@ export default function AIAnalysisSection() {
               {/* AI diagnosis panel */}
               <div className="relative rounded-[1.75rem] md:rounded-l-none border border-orange-200/60 border-t-0 md:border-t md:border-l-0 bg-orange-50/40 shadow-xl shadow-orange-900/5 overflow-hidden flex flex-col">
                 <div className="px-6 py-4 flex items-center gap-2.5 border-b border-orange-100">
-                  <motion.div
-                    className="w-8 h-8 rounded-lg bg-orange-700 flex items-center justify-center"
-                    animate={scanning ? { rotate: [0, 15, -15, 0] } : {}}
-                    transition={{ duration: 0.5, repeat: scanning ? Infinity : 0 }}
-                  >
+                  <div className="w-8 h-8 rounded-lg bg-orange-700 flex items-center justify-center">
                     <Sparkles size={15} className="text-white" />
-                  </motion.div>
+                  </div>
                   <h4
                     className="font-bold text-stone-900 text-lg"
                     style={{ fontFamily: "'EB Garamond', serif" }}
