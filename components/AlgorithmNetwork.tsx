@@ -2,39 +2,41 @@
 
 import React, { useEffect, useRef } from "react";
 
-/**
- * AlgorithmNetwork
- * ------------------------------------------------------------------
- * A calm, living graph of connected nodes that stands in for the old
- * hexagonal grid. Small glowing packets travel along the edges to
- * suggest "data flow" / algorithms running, nodes drift slowly, and
- * everything eases gently toward the cursor for a soft parallax feel.
- * Two depth layers (back / front) give it real depth without needing
- * more than a single <canvas>.
- * ------------------------------------------------------------------
- */
-
-interface Point {
-  x: number;
-  y: number;
+interface LatticeNode {
+  homeX: number;
+  homeY: number;
+  r: number;
+  phaseX: number;
+  phaseY: number;
+  freqX: number;
+  freqY: number;
+  ampX: number;
+  ampY: number;
 }
 
-interface NetworkNode extends Point {
-  vx: number;
-  vy: number;
-  r: number;
+interface Edge {
+  a: number;
+  b: number;
 }
 
 interface Packet {
-  a: number; // index of source node (within its layer)
-  b: number; // index of target node
-  t: number; // 0..1 progress along the edge
+  edge: number; // index into the layer's edges array
+  t: number;
   speed: number;
+  reverse: boolean;
 }
 
-interface Ripple extends Point {
+interface Ripple {
+  x: number;
+  y: number;
   radius: number;
   alpha: number;
+}
+
+interface Layer {
+  nodes: LatticeNode[];
+  edges: Edge[];
+  glow: number[]; // per-node glow buffer, boosted when a packet arrives
 }
 
 interface AlgorithmNetworkProps {
@@ -45,8 +47,8 @@ interface AlgorithmNetworkProps {
 }
 
 const AlgorithmNetwork: React.FC<AlgorithmNetworkProps> = ({
-  nodeColor = "rgba(194, 101, 42, 0.65)",
-  lineColor = "rgba(194, 101, 42, 0.2)",
+  nodeColor = "rgba(194, 101, 42, 0.55)",
+  lineColor = "rgba(194, 101, 42, 0.16)",
   packetColor = "rgba(216, 110, 42, 0.95)",
   backgroundFade = "#faf5ee",
 }) => {
@@ -62,11 +64,10 @@ const AlgorithmNetwork: React.FC<AlgorithmNetworkProps> = ({
     let width = 0;
     let height = 0;
     let ready = false;
+    let t = 0; // slow global clock driving the oscillation
 
-    // Two depth layers: back (faint, slow, many small nodes) and
-    // front (fewer, bigger, brighter, more mouse-reactive).
-    const back: NetworkNode[] = [];
-    const front: NetworkNode[] = [];
+    const back: Layer = { nodes: [], edges: [], glow: [] };
+    const front: Layer = { nodes: [], edges: [], glow: [] };
     const packets: Packet[] = [];
     const ripples: Ripple[] = [];
 
@@ -76,32 +77,69 @@ const AlgorithmNetwork: React.FC<AlgorithmNetworkProps> = ({
 
     const rand = (min: number, max: number) => min + Math.random() * (max - min);
 
-    // Biases a chunk of a layer's nodes toward the editor's rough position
-    // (right-of-center, slightly above middle) so the network reads as
-    // converging on the CodeWindow instead of scattering evenly.
-    const buildLayer = (target: NetworkNode[], count: number, rMin: number, rMax: number, vMax: number) => {
-      target.length = 0;
-      for (let i = 0; i < count; i++) {
-        const towardEditor = Math.random() < 0.55;
-        const x = towardEditor
-          ? rand(width * 0.4, width * 1.05)
-          : rand(0, width);
-        const y = towardEditor
-          ? rand(height * 0.05, height * 0.9)
-          : rand(0, height);
-        target.push({
-          x,
-          y,
-          vx: rand(-vMax, vMax),
-          vy: rand(-vMax, vMax),
-          r: rand(rMin, rMax),
-        });
+    // Builds one ordered lattice layer: a loose grid of nodes with jitter,
+    // connected only to grid-adjacent neighbours so lines stay short and
+    // run in a small number of consistent directions.
+    const buildLayer = (
+      layer: Layer,
+      cellSize: number,
+      fillProb: number,
+      rMin: number,
+      rMax: number,
+      jitterFrac: number,
+      ampRange: [number, number],
+      diagonalProb: number
+    ) => {
+      layer.nodes.length = 0;
+      layer.edges.length = 0;
+
+      const cols = Math.ceil(width / cellSize) + 2;
+      const rows = Math.ceil(height / cellSize) + 2;
+      const indexOf = new Map<string, number>();
+
+      for (let col = -1; col < cols; col++) {
+        for (let row = -1; row < rows; row++) {
+          if (Math.random() > fillProb) continue;
+          const jitterX = rand(-jitterFrac, jitterFrac) * cellSize;
+          const jitterY = rand(-jitterFrac, jitterFrac) * cellSize;
+          const node: LatticeNode = {
+            homeX: col * cellSize + cellSize / 2 + jitterX,
+            homeY: row * cellSize + cellSize / 2 + jitterY,
+            r: rand(rMin, rMax),
+            phaseX: rand(0, Math.PI * 2),
+            phaseY: rand(0, Math.PI * 2),
+            freqX: rand(0.05, 0.09),
+            freqY: rand(0.05, 0.09),
+            ampX: rand(ampRange[0], ampRange[1]),
+            ampY: rand(ampRange[0], ampRange[1]),
+          };
+          const idx = layer.nodes.length;
+          layer.nodes.push(node);
+          indexOf.set(`${col},${row}`, idx);
+        }
       }
+
+      for (let col = -1; col < cols; col++) {
+        for (let row = -1; row < rows; row++) {
+          const here = indexOf.get(`${col},${row}`);
+          if (here === undefined) continue;
+
+          const right = indexOf.get(`${col + 1},${row}`);
+          if (right !== undefined) layer.edges.push({ a: here, b: right });
+
+          const down = indexOf.get(`${col},${row + 1}`);
+          if (down !== undefined) layer.edges.push({ a: here, b: down });
+
+          if (diagonalProb > 0 && Math.random() < diagonalProb) {
+            const diag = indexOf.get(`${col + 1},${row + 1}`);
+            if (diag !== undefined) layer.edges.push({ a: here, b: diag });
+          }
+        }
+      }
+
+      layer.glow = new Array(layer.nodes.length).fill(0);
     };
 
-    // Re-measures the box the canvas is actually laid out in and rebuilds
-    // the graph to fill it. Guarded against 0×0 reads that happen before
-    // fonts/layout have settled (common right after mount).
     const resize = (cssWidth: number, cssHeight: number) => {
       if (cssWidth <= 0 || cssHeight <= 0) return;
 
@@ -115,12 +153,12 @@ const AlgorithmNetwork: React.FC<AlgorithmNetworkProps> = ({
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
       if (!ready || changed) {
-        const area = width * height;
-        const backCount = Math.max(60, Math.min(160, Math.round(area / 9000)));
-        const frontCount = Math.max(30, Math.min(80, Math.round(area / 17000)));
-
-        buildLayer(back, backCount, 1.3, 2.4, 0.06);
-        buildLayer(front, frontCount, 2, 3.4, 0.095);
+        // Back layer: finer grid, smaller/fainter nodes, purely orthogonal,
+        // barely-there oscillation — recedes into the page.
+        buildLayer(back, 92, 0.8, 1.1, 1.9, 0.22, [1.5, 3], 0);
+        // Front layer: coarser grid, bigger/bolder nodes, occasional
+        // diagonal for texture, carries the travelling packets.
+        buildLayer(front, 148, 0.72, 1.8, 3, 0.24, [3, 6], 0.12);
         packets.length = 0;
         ready = true;
       }
@@ -134,133 +172,127 @@ const AlgorithmNetwork: React.FC<AlgorithmNetworkProps> = ({
       resize(w, h);
     });
     ro.observe(canvas);
-    // Fallback in case ResizeObserver hasn't fired yet on first paint
     resize(canvas.offsetWidth, canvas.offsetHeight);
 
     const spawnPacket = () => {
-      if (front.length < 2 || packets.length >= 7) return;
-      const a = Math.floor(Math.random() * front.length);
-      // find a plausible neighbour within connect distance
-      let b = -1;
-      let bestDist = Infinity;
-      const candidates: number[] = [];
-      for (let i = 0; i < front.length; i++) {
-        if (i === a) continue;
-        const dx = front[i].x - front[a].x;
-        const dy = front[i].y - front[a].y;
-        const d = Math.hypot(dx, dy);
-        if (d < 190) candidates.push(i);
-        if (d < bestDist) {
-          bestDist = d;
-          b = i;
-        }
-      }
-      const target = candidates.length > 0 ? candidates[Math.floor(Math.random() * candidates.length)] : b;
-      if (target === -1) return;
-      packets.push({ a, b: target, t: 0, speed: rand(0.006, 0.012) });
+      if (front.edges.length === 0 || packets.length >= 6) return;
+      const edge = Math.floor(Math.random() * front.edges.length);
+      packets.push({ edge, t: 0, speed: rand(0.008, 0.014), reverse: Math.random() < 0.5 });
     };
-
     let spawnTimer = 0;
 
+    // Roughly where the code editor sits — the lattice brightens gently
+    // toward this point instead of needing literal extra node density.
+    const focal = () => ({ x: width * 0.66, y: height * 0.48 });
+
     const drawLayer = (
-      nodes: NetworkNode[],
-      connectDist: number,
+      layer: Layer,
       parallaxFactor: number,
       mouseInfluence: number,
       opacityScale: number,
       lineWidth: number,
       withPackets: boolean
     ) => {
-      const px = (pointerSmooth.x - width / 2) * parallaxFactor * 0.02;
-      const py = (pointerSmooth.y - height / 2) * parallaxFactor * 0.02;
+      const px = (pointerSmooth.x - width / 2) * parallaxFactor * 0.018;
+      const py = (pointerSmooth.y - height / 2) * parallaxFactor * 0.018;
+      const f = focal();
+      const focalRadius = Math.max(width, height) * 0.55;
 
-      // Pre-compute display positions (with drift + subtle mouse repulsion)
-      const disp: Point[] = new Array(nodes.length);
-      const glow: number[] = new Array(nodes.length);
+      const disp: { x: number; y: number }[] = new Array(layer.nodes.length);
+      const boost: number[] = new Array(layer.nodes.length);
 
-      for (let i = 0; i < nodes.length; i++) {
-        const n = nodes[i];
-        let dx = n.x - pointerSmooth.x;
-        let dy = n.y - pointerSmooth.y;
-        const dist = Math.hypot(dx, dy);
-        const radius = 140;
-        let ox = 0;
-        let oy = 0;
-        let g = 0;
-        if (dist < radius && mouseInfluence > 0) {
-          const factor = (1 - dist / radius) * mouseInfluence;
-          const safeDist = dist || 1;
-          ox = (dx / safeDist) * factor * 14;
-          oy = (dy / safeDist) * factor * 14;
-          g = factor;
+      for (let i = 0; i < layer.nodes.length; i++) {
+        const n = layer.nodes[i];
+        const oscX = Math.sin(t * n.freqX + n.phaseX) * n.ampX;
+        const oscY = Math.cos(t * n.freqY + n.phaseY) * n.ampY;
+        let baseX = n.homeX + oscX + px;
+        let baseY = n.homeY + oscY + py;
+
+        // Gentle attraction toward the cursor
+        const dxm = pointerSmooth.x - baseX;
+        const dym = pointerSmooth.y - baseY;
+        const distm = Math.hypot(dxm, dym);
+        const mr = 130;
+        let mg = 0;
+        if (distm < mr && mouseInfluence > 0) {
+          const factor = (1 - distm / mr) * mouseInfluence;
+          const safe = distm || 1;
+          baseX += (dxm / safe) * factor * 10;
+          baseY += (dym / safe) * factor * 10;
+          mg = factor;
         }
-        disp[i] = { x: n.x + ox + px, y: n.y + oy + py };
-        glow[i] = g;
+
+        // Focal spotlight — brighten toward the editor without extra nodes
+        const df = Math.hypot(baseX - f.x, baseY - f.y);
+        const focalGlow = Math.max(0, 1 - df / focalRadius) * 0.3;
+
+        disp[i] = { x: baseX, y: baseY };
+        boost[i] = Math.min(mg + focalGlow + layer.glow[i], 1);
       }
 
-      // Connections
+      // Connections — only along the lattice edges, so nothing crosses at
+      // odd angles the way a random graph would.
       ctx.lineWidth = lineWidth;
-      for (let i = 0; i < nodes.length; i++) {
-        for (let j = i + 1; j < nodes.length; j++) {
-          const dx = disp[i].x - disp[j].x;
-          const dy = disp[i].y - disp[j].y;
-          const dist = Math.hypot(dx, dy);
-          if (dist < connectDist) {
-            const alpha = (1 - dist / connectDist) * opacityScale * (1 + Math.max(glow[i], glow[j]) * 0.8);
-            ctx.strokeStyle = lineColor;
-            ctx.globalAlpha = Math.min(alpha, 1);
-            ctx.beginPath();
-            ctx.moveTo(disp[i].x, disp[i].y);
-            ctx.lineTo(disp[j].x, disp[j].y);
-            ctx.stroke();
-          }
-        }
+      for (const e of layer.edges) {
+        const A = disp[e.a];
+        const B = disp[e.b];
+        if (!A || !B) continue;
+        const localBoost = Math.max(boost[e.a], boost[e.b]);
+        ctx.strokeStyle = lineColor;
+        ctx.globalAlpha = Math.min((0.68 + localBoost * 0.4) * opacityScale, 1);
+        ctx.beginPath();
+        ctx.moveTo(A.x, A.y);
+        ctx.lineTo(B.x, B.y);
+        ctx.stroke();
       }
       ctx.globalAlpha = 1;
 
       // Nodes
-      for (let i = 0; i < nodes.length; i++) {
-        const n = nodes[i];
+      for (let i = 0; i < layer.nodes.length; i++) {
+        const n = layer.nodes[i];
         const p = disp[i];
-        const g = glow[i];
+        const g = boost[i];
         ctx.beginPath();
         ctx.fillStyle = nodeColor;
-        ctx.globalAlpha = Math.min(0.35 + g * 0.65, 1) * opacityScale;
-        if (g > 0.05) {
+        ctx.globalAlpha = Math.min((0.55 + g * 0.45) * opacityScale, 1);
+        if (g > 0.08) {
           ctx.shadowColor = packetColor;
-          ctx.shadowBlur = 10 * g;
+          ctx.shadowBlur = 9 * g;
         } else {
           ctx.shadowBlur = 0;
         }
-        ctx.arc(p.x, p.y, n.r * (1 + g * 0.7), 0, Math.PI * 2);
+        ctx.arc(p.x, p.y, n.r * (1 + g * 0.5), 0, Math.PI * 2);
         ctx.fill();
         ctx.shadowBlur = 0;
+
+        // decay the packet-arrival glow
+        layer.glow[i] *= 0.93;
       }
       ctx.globalAlpha = 1;
 
-      // Data packets travelling along edges of this layer
+      // Travelling data packets
       if (withPackets) {
         for (let k = packets.length - 1; k >= 0; k--) {
           const pk = packets[k];
-          if (pk.a >= nodes.length || pk.b >= nodes.length) {
+          const edge = layer.edges[pk.edge];
+          if (!edge) {
             packets.splice(k, 1);
             continue;
           }
-          const A = disp[pk.a];
-          const B = disp[pk.b];
+          const A = disp[pk.reverse ? edge.b : edge.a];
+          const B = disp[pk.reverse ? edge.a : edge.b];
           if (!A || !B) continue;
           const x = A.x + (B.x - A.x) * pk.t;
           const y = A.y + (B.y - A.y) * pk.t;
 
-          // faint trailing tail
           for (let s = 1; s <= 3; s++) {
-            const tt = Math.max(pk.t - s * 0.035, 0);
+            const tt = Math.max(pk.t - s * 0.04, 0);
             const tx = A.x + (B.x - A.x) * tt;
             const ty = A.y + (B.y - A.y) * tt;
             ctx.beginPath();
             ctx.fillStyle = packetColor;
-            ctx.globalAlpha = 0.28 - s * 0.08;
-            ctx.arc(tx, ty, 2.1 - s * 0.3, 0, Math.PI * 2);
+            ctx.globalAlpha = 0.26 - s * 0.07;
+            ctx.arc(tx, ty, 2 - s * 0.3, 0, Math.PI * 2);
             ctx.fill();
           }
 
@@ -268,14 +300,18 @@ const AlgorithmNetwork: React.FC<AlgorithmNetworkProps> = ({
           ctx.fillStyle = packetColor;
           ctx.globalAlpha = 0.95;
           ctx.shadowColor = packetColor;
-          ctx.shadowBlur = 12;
-          ctx.arc(x, y, 2.6, 0, Math.PI * 2);
+          ctx.shadowBlur = 11;
+          ctx.arc(x, y, 2.4, 0, Math.PI * 2);
           ctx.fill();
           ctx.shadowBlur = 0;
           ctx.globalAlpha = 1;
 
           pk.t += pk.speed;
-          if (pk.t >= 1) packets.splice(k, 1);
+          if (pk.t >= 1) {
+            const arrivedNode = pk.reverse ? edge.a : edge.b;
+            layer.glow[arrivedNode] = 1;
+            packets.splice(k, 1);
+          }
         }
       }
     };
@@ -285,24 +321,15 @@ const AlgorithmNetwork: React.FC<AlgorithmNetworkProps> = ({
         const r = ripples[i];
         ctx.beginPath();
         ctx.strokeStyle = packetColor;
-        ctx.globalAlpha = r.alpha * 0.5;
+        ctx.globalAlpha = r.alpha * 0.45;
         ctx.lineWidth = 1;
         ctx.arc(r.x, r.y, r.radius, 0, Math.PI * 2);
         ctx.stroke();
         ctx.globalAlpha = 1;
 
-        r.radius += 1.6;
-        r.alpha -= 0.018;
+        r.radius += 1.4;
+        r.alpha -= 0.02;
         if (r.alpha <= 0) ripples.splice(i, 1);
-      }
-    };
-
-    const step = (nodes: NetworkNode[]) => {
-      for (const n of nodes) {
-        n.x += n.vx;
-        n.y += n.vy;
-        if (n.x < -20 || n.x > width + 20) n.vx *= -1;
-        if (n.y < -20 || n.y > height + 20) n.vy *= -1;
       }
     };
 
@@ -314,24 +341,27 @@ const AlgorithmNetwork: React.FC<AlgorithmNetworkProps> = ({
 
       ctx.clearRect(0, 0, width, height);
 
-      // Smooth pointer easing
-      pointerSmooth.x += (pointer.x - pointerSmooth.x) * 0.08;
-      pointerSmooth.y += (pointer.y - pointerSmooth.y) * 0.08;
+      const f = focal();
+      const warm = ctx.createRadialGradient(f.x, f.y, 0, f.x, f.y, Math.max(width, height) * 0.6);
+      warm.addColorStop(0, "rgba(216, 110, 42, 0.1)");
+      warm.addColorStop(1, "rgba(216, 110, 42, 0)");
+      ctx.fillStyle = warm;
+      ctx.fillRect(0, 0, width, height);
 
-      step(back);
-      step(front);
+      pointerSmooth.x += (pointer.x - pointerSmooth.x) * 0.07;
+      pointerSmooth.y += (pointer.y - pointerSmooth.y) * 0.07;
+      t += 0.016;
 
-      drawLayer(back, 170, 0.4, 0.4, 0.7, 0.9, false);
-      drawLayer(front, 220, 1, 1, 1, 1.1, true);
+      drawLayer(back, 0.35, 0.35, 0.75, 0.85, false);
+      drawLayer(front, 0.9, 1, 0.95, 1.05, true);
       drawRipples();
 
       spawnTimer++;
-      if (spawnTimer > 35) {
+      if (spawnTimer > 38) {
         spawnTimer = 0;
         spawnPacket();
       }
 
-      // Vignette so the graph blends into the cream page background
       const gradient = ctx.createRadialGradient(
         width / 2,
         height / 2,
@@ -341,7 +371,7 @@ const AlgorithmNetwork: React.FC<AlgorithmNetworkProps> = ({
         Math.sqrt(width ** 2 + height ** 2) / 2
       );
       gradient.addColorStop(0, "rgba(250, 245, 238, 0)");
-      gradient.addColorStop(0.7, "rgba(250, 245, 238, 0.22)");
+      gradient.addColorStop(0.82, "rgba(250, 245, 238, 0.14)");
       gradient.addColorStop(1, backgroundFade);
       ctx.fillStyle = gradient;
       ctx.fillRect(0, 0, width, height);
@@ -355,8 +385,8 @@ const AlgorithmNetwork: React.FC<AlgorithmNetworkProps> = ({
       pointer.y = e.clientY - rect.top;
 
       const now = performance.now();
-      if (now - lastRippleAt > 260 && ripples.length < 5) {
-        ripples.push({ x: pointer.x, y: pointer.y, radius: 2, alpha: 0.6 });
+      if (now - lastRippleAt > 280 && ripples.length < 4) {
+        ripples.push({ x: pointer.x, y: pointer.y, radius: 2, alpha: 0.55 });
         lastRippleAt = now;
       }
     };
@@ -377,7 +407,6 @@ const AlgorithmNetwork: React.FC<AlgorithmNetworkProps> = ({
       if (requestRef.current) cancelAnimationFrame(requestRef.current);
     };
   }, [nodeColor, lineColor, packetColor, backgroundFade]);
-
 
   return <canvas ref={canvasRef} className="w-full h-full block" />;
 };

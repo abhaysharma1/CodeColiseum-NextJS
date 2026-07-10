@@ -6,6 +6,7 @@ import HowItWorks from "@/components/HowItWorks";
 import LandingFooter from "@/components/LandingFooter";
 import AIAnalysisSection from "@/components/AIAnalysisSection";
 import BeyondBasicsSection from "@/components/BeyondBasicsSection";
+import ClosingCTA from "@/components/ClosingCTA";
 
 export default function Home() {
   return (
@@ -20,6 +21,7 @@ export default function Home() {
         <BeyondBasicsSection />
         {/* <FeatureCards /> */}
         <HowItWorks />
+        <ClosingCTA />
         <LandingFooter />
       </main>
 

@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import Link from "next/link";
 import { motion, useMotionValue, useSpring } from "framer-motion";
 import { ArrowRight, Sparkles } from "lucide-react";
@@ -15,8 +16,8 @@ const floatingCards = [
     title: "Weekly Lab",
     subtitle: "Due Tomorrow",
     icon: "📝",
-    className: "-top-5 -left-6 md:-left-10",
-    anchor: { x: 8, y: 6 },
+    className: "-top-14 -left-10 md:-left-16",
+    anchor: { x: 2, y: -10 },
     orbitX: 8,
     duration: 6,
     delay: 0,
@@ -25,8 +26,8 @@ const floatingCards = [
     title: "AI Feedback",
     subtitle: "2 Suggestions",
     icon: "🤖",
-    className: "top-[36%] -right-6 md:-right-12",
-    anchor: { x: 96, y: 40 },
+    className: "top-[38%] -right-10 md:-right-16",
+    anchor: { x: 104, y: 40 },
     orbitX: -8,
     duration: 7,
     delay: 0.35,
@@ -35,8 +36,8 @@ const floatingCards = [
     title: "Leaderboard",
     subtitle: "Rank #8",
     icon: "🏆",
-    className: "-bottom-6 left-3 md:left-6",
-    anchor: { x: 10, y: 97 },
+    className: "-bottom-14 left-2 md:left-6",
+    anchor: { x: 8, y: 108 },
     orbitX: 6,
     duration: 6.5,
     delay: 0.7,
@@ -45,8 +46,8 @@ const floatingCards = [
     title: "Placement Progress",
     subtitle: "120 Problems Solved",
     icon: "💼",
-    className: "hidden xl:flex top-[2%] -right-20",
-    anchor: { x: 100, y: 3 },
+    className: "hidden xl:flex -top-14 -right-24",
+    anchor: { x: 106, y: -10 },
     orbitX: -6,
     duration: 7.5,
     delay: 1.05,
@@ -99,29 +100,64 @@ const PanelConnectors = () => (
     viewBox="0 0 100 100"
     preserveAspectRatio="none"
   >
-    {floatingCards.map((c) => (
-      <motion.path
-        key={c.title}
-        d={`M ${c.anchor.x} ${c.anchor.y} Q 50 50 50 50`}
-        fill="none"
-        stroke="rgba(194,101,42,0.35)"
-        strokeWidth="0.25"
-        strokeDasharray="1.5 2"
-        initial={{ opacity: 0, pathLength: 0 }}
-        animate={{ opacity: 0.6, pathLength: 1 }}
-        transition={{ duration: 1.4, delay: 1.4, ease: "easeOut" }}
-      />
-    ))}
+    {floatingCards.map((c) => {
+      const midX = (c.anchor.x + 50) / 2 + (c.anchor.x < 50 ? -7 : 7);
+      const midY = (c.anchor.y + 50) / 2 + (c.anchor.y < 50 ? -5 : 5);
+      return (
+        <motion.path
+          key={c.title}
+          d={`M ${c.anchor.x} ${c.anchor.y} Q ${midX} ${midY} 50 50`}
+          fill="none"
+          stroke="rgba(194,101,42,0.35)"
+          strokeWidth="0.25"
+          strokeDasharray="1.5 2"
+          initial={{ opacity: 0, pathLength: 0 }}
+          animate={{ opacity: 0.6, pathLength: 1 }}
+          transition={{ duration: 1.4, delay: 1.4, ease: "easeOut" }}
+        />
+      );
+    })}
   </svg>
 );
 
+const workflowSteps = [
+  { icon: "📝", label: "Weekly Lab" },
+  { icon: "💻", label: "Coding Assessment" },
+  { icon: "🤖", label: "AI Review" },
+  { icon: "📊", label: "Progress Tracking" },
+  { icon: "🏆", label: "Leaderboard" },
+  { icon: "💼", label: "Placement Ready" },
+];
+
 /* ---------------------------------------------------------
-   Workflow strip — replaces the old feature chips with a
-   single glance at the whole student journey
+   Workflow strip — the whole student journey in one glance.
+   Wraps onto a second line rather than scrolling, so nothing
+   is ever hidden off-screen. A small dot inside each chip
+   lights up in sequence, giving the same "travelling through
+   the workflow" feel without depending on a single fixed-width
+   row (which broke down once labels didn't fit one line).
 --------------------------------------------------------- */
-
-const dotPositions = ["1%", "20%", "40%", "60%", "80%", "99%", "99%"];
-
+const WorkflowStrip = () => {
+  const cycle = workflowSteps.length * 0.85;
+  return (
+    <div className="flex flex-wrap items-center gap-1.5 w-full max-w-xl pt-1">
+      {workflowSteps.map((s, i) => (
+        <span
+          key={s.label}
+          className="relative inline-flex items-center gap-1.5 rounded-full border border-stone-200 bg-white/80 backdrop-blur-sm pl-1.5 pr-2.5 py-1 text-[11px] font-medium text-stone-600 whitespace-nowrap"
+        >
+          <motion.span
+            className="w-1.5 h-1.5 rounded-full bg-orange-500 shrink-0"
+            animate={{ opacity: [0.25, 1, 0.25], boxShadow: ["0 0 0 rgba(216,110,42,0)", "0 0 8px 2px rgba(216,110,42,0.6)", "0 0 0 rgba(216,110,42,0)"] }}
+            transition={{ duration: cycle, delay: i * 0.85, repeat: Infinity, ease: "easeInOut" }}
+          />
+          <span className="leading-none">{s.icon}</span>
+          {s.label}
+        </span>
+      ))}
+    </div>
+  );
+};
 
 /* ---------------------------------------------------------
    Magnetic wrapper — nudges its child gently toward the
@@ -231,7 +267,7 @@ const Hero = () => {
               className="text-base md:text-[0.95rem] lg:text-lg text-stone-500 max-w-[600px] leading-relaxed"
             >
               Complete weekly labs, coding assessments and DSA practice with AI-powered
-              feedback, progress tracking and leaderboards—all in one platform built for
+              feedback, progress tracking and leaderboards all in one platform built for
               college students.
             </motion.p>
 
@@ -261,6 +297,9 @@ const Hero = () => {
             </motion.div>
 
             {/* Workflow strip — the entire student journey in one glance */}
+            <motion.div variants={item}>
+              <WorkflowStrip />
+            </motion.div>
           </div>
 
           {/* CODE EDITOR — overlaps the text column for layered depth */}
@@ -270,7 +309,9 @@ const Hero = () => {
           >
             <div className="relative w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg mx-auto md:mx-0 md:ml-auto">
               <PanelConnectors />
-              <CodeWindow />
+              <div className="relative z-20">
+                <CodeWindow />
+              </div>
               {floatingCards.map((c) => (
                 <FloatingCard key={c.title} {...c} />
               ))}
