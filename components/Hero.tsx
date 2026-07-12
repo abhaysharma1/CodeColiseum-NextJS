@@ -2,166 +2,121 @@
 
 import React from "react";
 import Link from "next/link";
-import { motion, useMotionValue, useSpring } from "framer-motion";
+import { motion, useMotionValue, useSpring, useReducedMotion } from "framer-motion";
 import { ArrowRight, Sparkles } from "lucide-react";
-import AlgorithmNetwork from "./AlgorithmNetwork";
 import CodeWindow from "./CodeWindow";
 import BlurText from "./BlurText";
 
-/* ---------------------------------------------------------
-   Floating panels that orbit the code editor
---------------------------------------------------------- */
-const floatingCards = [
-  {
-    title: "Weekly Lab",
-    subtitle: "Due Tomorrow",
-    icon: "📝",
-    className: "-top-14 -left-10 md:-left-16",
-    anchor: { x: 2, y: -10 },
-    orbitX: 8,
-    duration: 6,
-    delay: 0,
-  },
-  {
-    title: "AI Feedback",
-    subtitle: "2 Suggestions",
-    icon: "🤖",
-    className: "top-[38%] -right-10 md:-right-16",
-    anchor: { x: 104, y: 40 },
-    orbitX: -8,
-    duration: 7,
-    delay: 0.35,
-  },
-  {
-    title: "Leaderboard",
-    subtitle: "Rank #8",
-    icon: "🏆",
-    className: "-bottom-14 left-2 md:left-6",
-    anchor: { x: 8, y: 108 },
-    orbitX: 6,
-    duration: 6.5,
-    delay: 0.7,
-  },
-  {
-    title: "Placement Progress",
-    subtitle: "120 Problems Solved",
-    icon: "💼",
-    className: "hidden xl:flex -top-14 -right-24",
-    anchor: { x: 106, y: -10 },
-    orbitX: -6,
-    duration: 7.5,
-    delay: 1.05,
-  },
+/* ===========================================================
+   Hero background — atmosphere over decoration. Four extremely
+   quiet layers: a mesh gradient that barely shifts, a few large
+   soft light sources drifting only a couple of pixels, a static
+   film-grain texture, and a gentle cursor parallax. Nothing here
+   is meant to be consciously noticed — it should just make the
+   page feel less flat after a few seconds of looking at it.
+=========================================================== */
+
+const MeshGradient = ({ reduceMotion }: { reduceMotion: boolean }) => (
+  <motion.div
+    className="absolute inset-[-10%]"
+    style={{
+      backgroundImage: `
+        radial-gradient(ellipse 60% 50% at 25% 30%, rgba(255,247,237,0.9), transparent 60%),
+        radial-gradient(ellipse 55% 45% at 75% 25%, rgba(254,235,200,0.65), transparent 60%),
+        radial-gradient(ellipse 60% 55% at 55% 82%, rgba(253,224,171,0.45), transparent 62%)
+      `,
+      backgroundSize: "140% 140%",
+    }}
+    animate={reduceMotion ? undefined : { x: [0, 14, -8, 0], y: [0, -10, 6, 0] }}
+    transition={{ duration: 42, repeat: Infinity, ease: "easeInOut" }}
+  />
+);
+
+// Large, soft, almost-static light sources — like sunlight through
+// frosted glass. Movement is only a couple of pixels; the point is
+// atmosphere, not a visible moving object.
+const ambientLights = [
+  { className: "left-[4%] top-[-8%] w-[560px] h-[560px] bg-orange-100/30", blur: 150, duration: 30, delay: 0 },
+  { className: "right-[-8%] top-[8%] w-[480px] h-[480px] bg-amber-100/25", blur: 140, duration: 34, delay: 2 },
+  { className: "left-[28%] bottom-[-16%] w-[440px] h-[440px] bg-orange-50/45", blur: 130, duration: 37, delay: 4 },
 ];
 
-const FloatingCard = ({
-  icon,
-  title,
-  subtitle,
-  className,
-  orbitX,
-  duration,
-  delay,
-}: {
-  icon: string;
-  title: string;
-  subtitle: string;
-  className: string;
-  orbitX: number;
-  duration: number;
-  delay: number;
-}) => (
-  <motion.div
-    className={`absolute z-30 hidden sm:flex items-start gap-2.5 rounded-2xl border border-orange-200/70 bg-white/90 backdrop-blur-md px-3.5 py-2.5 shadow-[0_8px_30px_rgba(194,101,42,0.14)] pointer-events-none select-none max-w-[160px] ${className}`}
-    initial={{ opacity: 0, y: 12, scale: 0.9 }}
-    animate={{ opacity: 1, scale: 1, x: [0, orbitX, 0], y: [0, -10, 0] }}
-    transition={{
-      opacity: { duration: 0.6, delay: 1.2 + delay },
-      scale: { duration: 0.6, delay: 1.2 + delay },
-      x: { duration: duration * 1.2, delay: 1.5 + delay, repeat: Infinity, ease: "easeInOut" },
-      y: { duration, delay: 1.5 + delay, repeat: Infinity, ease: "easeInOut" },
+const AmbientLights = ({ reduceMotion }: { reduceMotion: boolean }) => (
+  <>
+    {ambientLights.map((l, i) => (
+      <motion.div
+        key={i}
+        className={`absolute rounded-full ${l.className}`}
+        style={{ filter: `blur(${l.blur}px)` }}
+        animate={
+          reduceMotion
+            ? undefined
+            : { x: [0, 3, -2, 0], y: [0, -2, 3, 0], opacity: [0.55, 0.8, 0.55] }
+        }
+        transition={{ duration: l.duration, repeat: Infinity, ease: "easeInOut", delay: l.delay }}
+      />
+    ))}
+  </>
+);
+
+// Static film-grain texture — removes the flat digital look. Not
+// animated on purpose: a moving grain layer would draw attention
+// to itself, and the point here is the opposite.
+const NoiseTexture = () => (
+  <div
+    className="absolute inset-0"
+    style={{
+      opacity: 0.035,
+      mixBlendMode: "multiply",
+      backgroundImage:
+        "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")",
     }}
+  />
+);
+
+const HeroBackground = ({
+  parallaxX,
+  parallaxY,
+  reduceMotion,
+}: {
+  parallaxX: ReturnType<typeof useSpring>;
+  parallaxY: ReturnType<typeof useSpring>;
+  reduceMotion: boolean;
+}) => (
+  <div className="absolute inset-0 overflow-hidden pointer-events-none">
+    <motion.div style={{ x: parallaxX, y: parallaxY }} className="absolute inset-0">
+      <MeshGradient reduceMotion={reduceMotion} />
+      <AmbientLights reduceMotion={reduceMotion} />
+    </motion.div>
+    <NoiseTexture />
+  </div>
+);
+
+/* ---------------------------------------------------------
+   Mouse-shaped scroll indicator
+--------------------------------------------------------- */
+const ScrollCue = () => (
+  <motion.div
+    initial={{ opacity: 0, y: -6 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ delay: 1.6, duration: 0.6 }}
+    className="hidden md:flex absolute bottom-7 left-1/2 -translate-x-1/2 z-20 flex-col items-center gap-2 pointer-events-none"
   >
-    <span className="text-base leading-none mt-0.5">{icon}</span>
-    <span className="min-w-0">
-      <span className="block text-xs font-bold text-stone-800 leading-tight">{title}</span>
-      <span className="block text-[11px] text-stone-500 leading-tight">{subtitle}</span>
+    <div className="w-6 h-10 rounded-full border-2 border-orange-300 flex items-start justify-center p-1.5 bg-white/40 backdrop-blur-sm">
+      <motion.span
+        className="w-1.5 h-1.5 rounded-full bg-orange-600"
+        animate={{ y: [0, 14, 0], opacity: [1, 0.2, 1] }}
+        transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+      />
+    </div>
+    <span className="text-[10px] font-bold tracking-[0.18em] uppercase text-orange-700/70">
+      Scroll
     </span>
   </motion.div>
 );
 
 /* ---------------------------------------------------------
-   Subtle SVG threads linking each panel to the editor —
-   drawn once, faded in, so the orbit reads as one system.
---------------------------------------------------------- */
-const PanelConnectors = () => (
-  <svg
-    className="absolute inset-0 w-full h-full z-10 pointer-events-none hidden sm:block"
-    viewBox="0 0 100 100"
-    preserveAspectRatio="none"
-  >
-    {floatingCards.map((c) => {
-      const midX = (c.anchor.x + 50) / 2 + (c.anchor.x < 50 ? -7 : 7);
-      const midY = (c.anchor.y + 50) / 2 + (c.anchor.y < 50 ? -5 : 5);
-      return (
-        <motion.path
-          key={c.title}
-          d={`M ${c.anchor.x} ${c.anchor.y} Q ${midX} ${midY} 50 50`}
-          fill="none"
-          stroke="rgba(194,101,42,0.35)"
-          strokeWidth="0.25"
-          strokeDasharray="1.5 2"
-          initial={{ opacity: 0, pathLength: 0 }}
-          animate={{ opacity: 0.6, pathLength: 1 }}
-          transition={{ duration: 1.4, delay: 1.4, ease: "easeOut" }}
-        />
-      );
-    })}
-  </svg>
-);
-
-const workflowSteps = [
-  { icon: "📝", label: "Weekly Lab" },
-  { icon: "💻", label: "Coding Assessment" },
-  { icon: "🤖", label: "AI Review" },
-  { icon: "📊", label: "Progress Tracking" },
-  { icon: "🏆", label: "Leaderboard" },
-  { icon: "💼", label: "Placement Ready" },
-];
-
-/* ---------------------------------------------------------
-   Workflow strip — the whole student journey in one glance.
-   Wraps onto a second line rather than scrolling, so nothing
-   is ever hidden off-screen. A small dot inside each chip
-   lights up in sequence, giving the same "travelling through
-   the workflow" feel without depending on a single fixed-width
-   row (which broke down once labels didn't fit one line).
---------------------------------------------------------- */
-const WorkflowStrip = () => {
-  const cycle = workflowSteps.length * 0.85;
-  return (
-    <div className="flex flex-wrap items-center gap-1.5 w-full max-w-xl pt-1">
-      {workflowSteps.map((s, i) => (
-        <span
-          key={s.label}
-          className="relative inline-flex items-center gap-1.5 rounded-full border border-stone-200 bg-white/80 backdrop-blur-sm pl-1.5 pr-2.5 py-1 text-[11px] font-medium text-stone-600 whitespace-nowrap"
-        >
-          <motion.span
-            className="w-1.5 h-1.5 rounded-full bg-orange-500 shrink-0"
-            animate={{ opacity: [0.25, 1, 0.25], boxShadow: ["0 0 0 rgba(216,110,42,0)", "0 0 8px 2px rgba(216,110,42,0.6)", "0 0 0 rgba(216,110,42,0)"] }}
-            transition={{ duration: cycle, delay: i * 0.85, repeat: Infinity, ease: "easeInOut" }}
-          />
-          <span className="leading-none">{s.icon}</span>
-          {s.label}
-        </span>
-      ))}
-    </div>
-  );
-};
-
-/* ---------------------------------------------------------
-   Magnetic wrapper — nudges its child gently toward the
-   cursor, used on the primary CTA
+   Magnetic wrapper for the primary CTA
 --------------------------------------------------------- */
 const Magnetic = ({ children }: { children: React.ReactNode }) => {
   const x = useMotionValue(0);
@@ -191,9 +146,6 @@ const Magnetic = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-/* ---------------------------------------------------------
-   Motion variants — staggered reveal
---------------------------------------------------------- */
 const container = {
   hidden: {},
   show: { transition: { staggerChildren: 0.11, delayChildren: 0.1 } },
@@ -205,12 +157,33 @@ const item = {
 };
 
 const Hero = () => {
+  const shouldReduceMotion = useReducedMotion();
+
+  // Gentle parallax — only a few pixels, smooth spring easing.
+  const px = useMotionValue(0);
+  const py = useMotionValue(0);
+  const parallaxX = useSpring(px, { stiffness: 35, damping: 20, mass: 0.6 });
+  const parallaxY = useSpring(py, { stiffness: 35, damping: 20, mass: 0.6 });
+
+  const handleHeroMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (shouldReduceMotion) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    const relX = (e.clientX - rect.left) / rect.width - 0.5;
+    const relY = (e.clientY - rect.top) / rect.height - 0.5;
+    px.set(relX * 6); // only a handful of pixels
+    py.set(relY * 5);
+  };
+
   return (
-    <div className="relative w-full overflow-hidden md:h-[calc(100vh-80px)] md:min-h-[620px] md:max-h-[920px] flex items-center">
-      {/* Interactive Algorithm Network background */}
-      <div className="absolute inset-0 z-0">
-        <AlgorithmNetwork />
-      </div>
+    <div
+      onMouseMove={handleHeroMouseMove}
+      className="relative w-full overflow-hidden md:h-[calc(100vh-80px)] md:min-h-[620px] md:max-h-[920px] flex items-center"
+    >
+      <HeroBackground
+        parallaxX={parallaxX}
+        parallaxY={parallaxY}
+        reduceMotion={!!shouldReduceMotion}
+      />
 
       <motion.section
         variants={container}
@@ -276,7 +249,7 @@ const Hero = () => {
               <Magnetic>
                 <Link
                   href="/problem-list"
-                  className="group relative bg-gradient-to-b from-orange-600 to-orange-700 text-white px-6 md:px-7 py-3 md:py-3.5 rounded-xl font-bold flex items-center gap-2 shadow-lg shadow-orange-700/25 overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow-orange-700/35 hover:-translate-y-0.5 active:scale-95"
+                  className="group relative bg-gradient-to-b from-orange-600 to-orange-700 text-white px-6 md:px-7 py-3 md:py-3.5 rounded-xl font-bold flex items-center gap-2 shadow-lg shadow-orange-700/25 overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow-orange-700/35 hover:-translate-y-[3px] active:scale-95"
                 >
                   <span className="relative z-10">Start Coding</span>
                   <ArrowRight
@@ -290,35 +263,28 @@ const Hero = () => {
               </Magnetic>
               <Link
                 href="#features"
-                className="border border-stone-300 text-stone-800 bg-white px-6 md:px-7 py-3 md:py-3.5 rounded-xl font-bold transition-all duration-300 hover:bg-orange-50 hover:border-orange-300 hover:-translate-y-0.5"
+                className="border border-stone-300 text-stone-800 bg-white px-6 md:px-7 py-3 md:py-3.5 rounded-xl font-bold shadow-sm transition-all duration-300 hover:bg-orange-50 hover:border-orange-300 hover:shadow-md hover:-translate-y-[3px]"
               >
                 Explore Platform
               </Link>
             </motion.div>
-
-            {/* Workflow strip — the entire student journey in one glance */}
-            <motion.div variants={item}>
-              <WorkflowStrip />
-            </motion.div>
           </div>
 
-          {/* CODE EDITOR — overlaps the text column for layered depth */}
+          {/* CODE EDITOR — CodeWindow now owns its own floating motion,
+              ambient glow, layered shadow and glass reflection sweep, so
+              it's rendered plainly here rather than wrapped again. */}
           <motion.div
             variants={item}
             className="md:w-[46%] md:-ml-8 lg:-ml-12 relative z-20 mt-4 md:mt-0 lg:-rotate-1 pointer-events-auto"
           >
-            <div className="relative w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg mx-auto md:mx-0 md:ml-auto">
-              <PanelConnectors />
-              <div className="relative z-20">
-                <CodeWindow />
-              </div>
-              {floatingCards.map((c) => (
-                <FloatingCard key={c.title} {...c} />
-              ))}
+            <div className="w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg mx-auto md:mx-0 md:ml-auto">
+              <CodeWindow />
             </div>
           </motion.div>
         </div>
       </motion.section>
+
+      <ScrollCue />
     </div>
   );
 };

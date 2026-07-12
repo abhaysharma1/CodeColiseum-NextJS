@@ -7,6 +7,7 @@ import {
   useMotionValue,
   useSpring,
   useTransform,
+  useReducedMotion,
 } from "framer-motion";
 
 type Token = { text: string; cls: string };
@@ -248,13 +249,14 @@ const CodeWindow: React.FC = () => {
   };
 
   const isTyping = isCoding && typedCount < LAB_CODE.length;
+  const shouldReduceMotion = useReducedMotion();
 
   return (
     <motion.div
       className="relative w-full max-w-lg mx-auto"
       style={{ perspective: 1400 }}
-      animate={{ y: [0, -10, 0] }}
-      transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+      animate={shouldReduceMotion ? undefined : { y: [0, -4, 0] }}
+      transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
     >
       {/* Soft ambient wash — gently seats the editor into the background
           network instead of punching a hole in it with a hard glow */}
@@ -272,8 +274,8 @@ const CodeWindow: React.FC = () => {
         className="relative text-left border border-orange-200/60 rounded-3xl bg-white overflow-hidden flex flex-col pointer-events-auto"
         animate={{
           boxShadow: hovered
-            ? "0 30px 70px -15px rgba(194,101,42,0.38), inset 0 1px 0 rgba(255,255,255,0.6), 0 0 0 1px rgba(194,101,42,0.06)"
-            : "0 22px 50px -18px rgba(194,101,42,0.22), inset 0 1px 0 rgba(255,255,255,0.5)",
+            ? "0 6px 16px -6px rgba(194,101,42,0.2), 0 30px 70px -15px rgba(194,101,42,0.38), inset 0 1px 0 rgba(255,255,255,0.6), 0 0 0 1px rgba(194,101,42,0.06)"
+            : "0 4px 12px -4px rgba(194,101,42,0.12), 0 24px 55px -20px rgba(194,101,42,0.22), inset 0 1px 0 rgba(255,255,255,0.5)",
         }}
         transition={{ duration: 0.4 }}
       >
@@ -372,6 +374,16 @@ const CodeWindow: React.FC = () => {
         </AnimatePresence>
 
         <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-orange-300/40 to-transparent" />
+
+        {/* Glass reflection — a soft light sweep every ~10s, like light moving across glass.
+            Always rendered (never conditionally mounted) so server and client agree on the
+            DOM structure; reduced motion just freezes it at rest instead of removing it. */}
+        <motion.div
+          className="absolute inset-y-0 left-0 w-1/4 rotate-6 pointer-events-none mix-blend-overlay bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.35),transparent)]"
+          initial={{ x: "-140%" }}
+          animate={shouldReduceMotion ? { x: "-140%" } : { x: "440%" }}
+          transition={{ duration: 2.2, repeat: Infinity, repeatDelay: 8, ease: "easeInOut" }}
+        />
       </motion.div>
     </motion.div>
   );
