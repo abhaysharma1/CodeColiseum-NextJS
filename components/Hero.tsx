@@ -2,10 +2,18 @@
 
 import React from "react";
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import { motion, useMotionValue, useSpring, useReducedMotion } from "framer-motion";
 import { ArrowRight, Sparkles } from "lucide-react";
 import CodeWindow from "./CodeWindow";
 import BlurText from "./BlurText";
+
+// R3F/Three.js touch canvas/WebGL APIs, so this must never be part of
+// the server-rendered HTML — load it client-only.
+const HeroParticleBackground = dynamic(
+  () => import("./HeroBackground/HeroBackground"),
+  { ssr: false }
+);
 
 /* ===========================================================
    Hero background — atmosphere over decoration. Four extremely
@@ -184,6 +192,12 @@ const Hero = () => {
         parallaxY={parallaxY}
         reduceMotion={!!shouldReduceMotion}
       />
+
+      {/* New R3F particle field — Phase 1 rendering foundation.
+          Sits above the CSS gradient/light atmosphere and below
+          all hero content (z-[1] vs the section's z-10). Purely
+          decorative: no pointer events, no layout impact. */}
+      <HeroParticleBackground />
 
       <motion.section
         variants={container}
