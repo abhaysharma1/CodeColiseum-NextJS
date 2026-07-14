@@ -6,6 +6,7 @@ import { motion, useMotionValue, useSpring, useReducedMotion } from "framer-moti
 import { ArrowRight, Sparkles } from "lucide-react";
 import CodeWindow from "./CodeWindow";
 import BlurText from "./BlurText";
+import ConstellationBackground from "./ConstellationBackground";
 
 /* ===========================================================
    Hero background — atmosphere over decoration. Four extremely
@@ -87,6 +88,7 @@ const HeroBackground = ({
     <motion.div style={{ x: parallaxX, y: parallaxY }} className="absolute inset-0">
       <MeshGradient reduceMotion={reduceMotion} />
       <AmbientLights reduceMotion={reduceMotion} />
+      <ConstellationBackground />
     </motion.div>
     <NoiseTexture />
   </div>
