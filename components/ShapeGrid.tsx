@@ -21,19 +21,26 @@ const ShapeGrid: React.FC<ShapeGridProps> = ({
   direction = 'right',
   speed = 1,
   borderColor = '#999',
-  squareSize = 40,
+  squareSize = 50,
   hoverFillColor = '#222',
   shape = 'square',
   hoverTrailAmount = 0
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const requestRef = useRef<number | null>(null);
-  const numSquaresX = useRef<number>(0);
-  const numSquaresY = useRef<number>(0);
+
+  // Foreground (main) grid state
   const gridOffset = useRef<GridOffset>({ x: 0, y: 0 });
+  // Background depth layer — larger, fainter, drifts slower
+  const gridOffsetBg = useRef<GridOffset>({ x: 0, y: 0 });
+
   const hoveredSquareRef = useRef<GridOffset | null>(null);
   const trailCells = useRef<GridOffset[]>([]);
   const cellOpacities = useRef<Map<string, number>>(new Map());
+
+  // Raw + smoothed pointer position for parallax
+  const pointerTarget = useRef<GridOffset>({ x: 0, y: 0 }); // normalized -0.5..0.5
+  const parallax = useRef<GridOffset>({ x: 0, y: 0 }); // smoothed pixel offset
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -48,8 +55,6 @@ const ShapeGrid: React.FC<ShapeGridProps> = ({
     const resizeCanvas = () => {
       canvas.width = canvas.offsetWidth;
       canvas.height = canvas.offsetHeight;
-      numSquaresX.current = Math.ceil(canvas.width / squareSize) + 1;
-      numSquaresY.current = Math.ceil(canvas.height / squareSize) + 1;
     };
 
     window.addEventListener('resize', resizeCanvas);
@@ -90,9 +95,47 @@ const ShapeGrid: React.FC<ShapeGridProps> = ({
       ctx.closePath();
     };
 
+    // Faint, slow-drifting hexagon layer behind the main grid — adds depth.
+    // Purely decorative: no hover glow, no fill, just soft strokes.
+    const drawHexDepthLayer = () => {
+      if (!ctx || !isHex) return;
+      const bgSize = squareSize * 1.9;
+      const bgHoriz = bgSize * 1.5;
+      const bgVert = bgSize * Math.sqrt(3);
+
+      const colShift = Math.floor(gridOffsetBg.current.x / bgHoriz);
+      const offsetX = ((gridOffsetBg.current.x % bgHoriz) + bgHoriz) % bgHoriz;
+      const offsetY = ((gridOffsetBg.current.y % bgVert) + bgVert) % bgVert;
+
+      const cols = Math.ceil(canvas.width / bgHoriz) + 3;
+      const rows = Math.ceil(canvas.height / bgVert) + 3;
+
+      ctx.save();
+      ctx.globalAlpha = 0.35;
+      ctx.translate(parallax.current.x * 0.35, parallax.current.y * 0.35);
+      ctx.strokeStyle = borderColor;
+      ctx.lineWidth = 1;
+
+      for (let col = -2; col < cols; col++) {
+        for (let row = -2; row < rows; row++) {
+          const cx = col * bgHoriz + offsetX;
+          const cy = row * bgVert + ((col + colShift) % 2 !== 0 ? bgVert / 2 : 0) + offsetY;
+          drawHex(cx, cy, bgSize);
+          ctx.stroke();
+        }
+      }
+      ctx.restore();
+    };
+
     const drawGrid = () => {
       if (!ctx) return;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Depth layer goes first, underneath everything
+      drawHexDepthLayer();
+
+      ctx.save();
+      ctx.translate(parallax.current.x, parallax.current.y);
 
       if (isHex) {
         const colShift = Math.floor(gridOffset.current.x / hexHoriz);
@@ -110,15 +153,19 @@ const ShapeGrid: React.FC<ShapeGridProps> = ({
             const cellKey = `${col},${row}`;
             const alpha = cellOpacities.current.get(cellKey);
             if (alpha) {
+              ctx.save();
               ctx.globalAlpha = alpha;
+              ctx.shadowColor = hoverFillColor as string;
+              ctx.shadowBlur = 16 * alpha;
               drawHex(cx, cy, squareSize);
               ctx.fillStyle = hoverFillColor;
               ctx.fill();
-              ctx.globalAlpha = 1;
+              ctx.restore();
             }
 
             drawHex(cx, cy, squareSize);
             ctx.strokeStyle = borderColor;
+            ctx.lineWidth = 1;
             ctx.stroke();
           }
         }
@@ -141,11 +188,14 @@ const ShapeGrid: React.FC<ShapeGridProps> = ({
             const cellKey = `${col},${row}`;
             const alpha = cellOpacities.current.get(cellKey);
             if (alpha) {
+              ctx.save();
               ctx.globalAlpha = alpha;
+              ctx.shadowColor = hoverFillColor as string;
+              ctx.shadowBlur = 14 * alpha;
               drawTriangle(cx, cy, squareSize, flip);
               ctx.fillStyle = hoverFillColor;
               ctx.fill();
-              ctx.globalAlpha = 1;
+              ctx.restore();
             }
 
             drawTriangle(cx, cy, squareSize, flip);
@@ -168,11 +218,14 @@ const ShapeGrid: React.FC<ShapeGridProps> = ({
             const cellKey = `${col},${row}`;
             const alpha = cellOpacities.current.get(cellKey);
             if (alpha) {
+              ctx.save();
               ctx.globalAlpha = alpha;
+              ctx.shadowColor = hoverFillColor as string;
+              ctx.shadowBlur = 14 * alpha;
               drawCircle(cx, cy, squareSize);
               ctx.fillStyle = hoverFillColor;
               ctx.fill();
-              ctx.globalAlpha = 1;
+              ctx.restore();
             }
 
             drawCircle(cx, cy, squareSize);
@@ -195,10 +248,13 @@ const ShapeGrid: React.FC<ShapeGridProps> = ({
             const cellKey = `${col},${row}`;
             const alpha = cellOpacities.current.get(cellKey);
             if (alpha) {
+              ctx.save();
               ctx.globalAlpha = alpha;
+              ctx.shadowColor = hoverFillColor as string;
+              ctx.shadowBlur = 14 * alpha;
               ctx.fillStyle = hoverFillColor;
               ctx.fillRect(sx, sy, squareSize, squareSize);
-              ctx.globalAlpha = 1;
+              ctx.restore();
             }
 
             ctx.strokeStyle = borderColor;
@@ -206,6 +262,8 @@ const ShapeGrid: React.FC<ShapeGridProps> = ({
           }
         }
       }
+
+      ctx.restore();
 
       const gradient = ctx.createRadialGradient(
         canvas.width / 2,
@@ -223,30 +281,44 @@ const ShapeGrid: React.FC<ShapeGridProps> = ({
     };
 
     const updateAnimation = () => {
-      const effectiveSpeed = Math.max(speed, 0.1);
+      // Gentle, unhurried drift — premium rather than busy
+      const effectiveSpeed = Math.max(speed, 0.1) * 0.6;
       const wrapX = isHex ? hexHoriz * 2 : squareSize;
       const wrapY = isHex ? hexVert : isTri ? squareSize * 2 : squareSize;
 
-      switch (direction) {
-        case 'right':
-          gridOffset.current.x = (gridOffset.current.x - effectiveSpeed + wrapX) % wrapX;
-          break;
-        case 'left':
-          gridOffset.current.x = (gridOffset.current.x + effectiveSpeed + wrapX) % wrapX;
-          break;
-        case 'up':
-          gridOffset.current.y = (gridOffset.current.y + effectiveSpeed + wrapY) % wrapY;
-          break;
-        case 'down':
-          gridOffset.current.y = (gridOffset.current.y - effectiveSpeed + wrapY) % wrapY;
-          break;
-        case 'diagonal':
-          gridOffset.current.x = (gridOffset.current.x - effectiveSpeed + wrapX) % wrapX;
-          gridOffset.current.y = (gridOffset.current.y - effectiveSpeed + wrapY) % wrapY;
-          break;
-        default:
-          break;
-      }
+      const applyStep = (offset: React.MutableRefObject<GridOffset>, mult: number) => {
+        const s = effectiveSpeed * mult;
+        switch (direction) {
+          case 'right':
+            offset.current.x = (offset.current.x - s + wrapX) % wrapX;
+            break;
+          case 'left':
+            offset.current.x = (offset.current.x + s + wrapX) % wrapX;
+            break;
+          case 'up':
+            offset.current.y = (offset.current.y + s + wrapY) % wrapY;
+            break;
+          case 'down':
+            offset.current.y = (offset.current.y - s + wrapY) % wrapY;
+            break;
+          case 'diagonal':
+            offset.current.x = (offset.current.x - s + wrapX) % wrapX;
+            offset.current.y = (offset.current.y - s + wrapY) % wrapY;
+            break;
+          default:
+            break;
+        }
+      };
+
+      applyStep(gridOffset, 1);
+      applyStep(gridOffsetBg, 0.45); // background layer drifts noticeably slower
+
+      // Smoothly ease the parallax offset toward the pointer target
+      const maxShift = Math.min(squareSize * 0.5, 26);
+      const targetX = pointerTarget.current.x * maxShift;
+      const targetY = pointerTarget.current.y * maxShift;
+      parallax.current.x += (targetX - parallax.current.x) * 0.06;
+      parallax.current.y += (targetY - parallax.current.y) * 0.06;
 
       updateCellOpacities();
       drawGrid();
@@ -257,15 +329,38 @@ const ShapeGrid: React.FC<ShapeGridProps> = ({
       const targets = new Map<string, number>();
 
       if (hoveredSquareRef.current) {
-        targets.set(`${hoveredSquareRef.current.x},${hoveredSquareRef.current.y}`, 1);
+        const { x: hc, y: hr } = hoveredSquareRef.current;
+        targets.set(`${hc},${hr}`, 0.95);
+
+        // Nearby cells brighten slightly too, falling off with distance —
+        // gives a soft ambient glow around the cursor instead of one hard cell.
+        const ring: { dx: number; dy: number; op: number }[] = [
+          { dx: -1, dy: 0, op: 0.4 },
+          { dx: 1, dy: 0, op: 0.4 },
+          { dx: 0, dy: -1, op: 0.4 },
+          { dx: 0, dy: 1, op: 0.4 },
+          { dx: -1, dy: -1, op: 0.2 },
+          { dx: 1, dy: -1, op: 0.2 },
+          { dx: -1, dy: 1, op: 0.2 },
+          { dx: 1, dy: 1, op: 0.2 },
+          { dx: -2, dy: 0, op: 0.08 },
+          { dx: 2, dy: 0, op: 0.08 },
+          { dx: 0, dy: -2, op: 0.08 },
+          { dx: 0, dy: 2, op: 0.08 },
+        ];
+        for (const n of ring) {
+          const key = `${hc + n.dx},${hr + n.dy}`;
+          if (!targets.has(key)) targets.set(key, n.op);
+        }
       }
 
       if (hoverTrailAmount > 0) {
         for (let i = 0; i < trailCells.current.length; i++) {
           const t = trailCells.current[i];
           const key = `${t.x},${t.y}`;
-          if (!targets.has(key)) {
-            targets.set(key, (trailCells.current.length - i) / (trailCells.current.length + 1));
+          const trailOp = (trailCells.current.length - i) / (trailCells.current.length + 1);
+          if (!targets.has(key) || targets.get(key)! < trailOp) {
+            targets.set(key, trailOp);
           }
         }
       }
@@ -276,10 +371,11 @@ const ShapeGrid: React.FC<ShapeGridProps> = ({
         }
       }
 
+      // Slower easing = softer, more premium fade rather than a snappy blink
       for (const [key, opacity] of cellOpacities.current) {
         const target = targets.get(key) || 0;
-        const next = opacity + (target - opacity) * 0.15;
-        if (next < 0.005) {
+        const next = opacity + (target - opacity) * 0.1;
+        if (next < 0.004) {
           cellOpacities.current.delete(key);
         } else {
           cellOpacities.current.set(key, next);
@@ -292,12 +388,18 @@ const ShapeGrid: React.FC<ShapeGridProps> = ({
       const mouseX = event.clientX - rect.left;
       const mouseY = event.clientY - rect.top;
 
+      // Normalized pointer position for the whole-grid parallax shift
+      pointerTarget.current = {
+        x: mouseX / rect.width - 0.5,
+        y: mouseY / rect.height - 0.5,
+      };
+
       if (isHex) {
         const colShift = Math.floor(gridOffset.current.x / hexHoriz);
         const offsetX = ((gridOffset.current.x % hexHoriz) + hexHoriz) % hexHoriz;
         const offsetY = ((gridOffset.current.y % hexVert) + hexVert) % hexVert;
-        const adjustedX = mouseX - offsetX;
-        const adjustedY = mouseY - offsetY;
+        const adjustedX = mouseX - offsetX - parallax.current.x;
+        const adjustedY = mouseY - offsetY - parallax.current.y;
 
         const col = Math.round(adjustedX / hexHoriz);
         const rowOffset = (col + colShift) % 2 !== 0 ? hexVert / 2 : 0;
@@ -319,8 +421,8 @@ const ShapeGrid: React.FC<ShapeGridProps> = ({
         const offsetX = ((gridOffset.current.x % halfW) + halfW) % halfW;
         const offsetY = ((gridOffset.current.y % squareSize) + squareSize) % squareSize;
 
-        const adjustedX = mouseX - offsetX;
-        const adjustedY = mouseY - offsetY;
+        const adjustedX = mouseX - offsetX - parallax.current.x;
+        const adjustedY = mouseY - offsetY - parallax.current.y;
 
         const col = Math.round(adjustedX / halfW);
         const row = Math.floor(adjustedY / squareSize);
@@ -340,8 +442,8 @@ const ShapeGrid: React.FC<ShapeGridProps> = ({
         const offsetX = ((gridOffset.current.x % squareSize) + squareSize) % squareSize;
         const offsetY = ((gridOffset.current.y % squareSize) + squareSize) % squareSize;
 
-        const adjustedX = mouseX - offsetX;
-        const adjustedY = mouseY - offsetY;
+        const adjustedX = mouseX - offsetX - parallax.current.x;
+        const adjustedY = mouseY - offsetY - parallax.current.y;
 
         const col = Math.round(adjustedX / squareSize);
         const row = Math.round(adjustedY / squareSize);
@@ -361,8 +463,8 @@ const ShapeGrid: React.FC<ShapeGridProps> = ({
         const offsetX = ((gridOffset.current.x % squareSize) + squareSize) % squareSize;
         const offsetY = ((gridOffset.current.y % squareSize) + squareSize) % squareSize;
 
-        const adjustedX = mouseX - offsetX;
-        const adjustedY = mouseY - offsetY;
+        const adjustedX = mouseX - offsetX - parallax.current.x;
+        const adjustedY = mouseY - offsetY - parallax.current.y;
 
         const col = Math.floor(adjustedX / squareSize);
         const row = Math.floor(adjustedY / squareSize);
@@ -387,6 +489,7 @@ const ShapeGrid: React.FC<ShapeGridProps> = ({
         if (trailCells.current.length > hoverTrailAmount) trailCells.current.length = hoverTrailAmount;
       }
       hoveredSquareRef.current = null;
+      pointerTarget.current = { x: 0, y: 0 };
     };
 
     canvas.addEventListener('mousemove', handleMouseMove);

@@ -3,7 +3,14 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useAuth } from "@/context/authcontext";
-import { Menu, X } from "lucide-react";
+import { Menu, X, ArrowRight } from "lucide-react";
+import { AnimatePresence, motion } from "framer-motion";
+
+const NAV_LINKS = [
+  { href: "/problem-list", label: "Practice" },
+  { href: "#features", label: "Features" },
+  { href: "#how-it-works", label: "How It Works" },
+];
 
 export default function LandingHeader() {
   const { user } = useAuth();
@@ -15,6 +22,14 @@ export default function LandingHeader() {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  // Lock body scroll while the mobile menu is open
+  useEffect(() => {
+    document.body.style.overflow = mobileOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [mobileOpen]);
 
   return (
     <nav
@@ -36,49 +51,49 @@ export default function LandingHeader() {
         </Link>
 
         {/* Desktop Nav */}
-        <div className="hidden md:flex items-center gap-8">
-          <Link
-            href="/problem-list"
-            className="text-stone-600 font-medium hover:text-orange-800 transition-colors duration-200 text-sm tracking-wide"
-          >
-            Practice
-          </Link>
-          <Link
-            href="#features"
-            className="text-stone-600 font-medium hover:text-orange-800 transition-colors duration-200 text-sm tracking-wide"
-          >
-            Features
-          </Link>
-          <Link
-            href="#how-it-works"
-            className="text-stone-600 font-medium hover:text-orange-800 transition-colors duration-200 text-sm tracking-wide"
-          >
-            How It Works
-          </Link>
+        <div className="hidden md:flex items-center gap-1">
+          {NAV_LINKS.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className="group relative px-4 py-2 text-sm font-medium tracking-wide text-stone-600 transition-colors duration-200 hover:text-orange-800"
+            >
+              {link.label}
+              <span className="pointer-events-none absolute inset-x-4 -bottom-0.5 h-px scale-x-0 bg-orange-700/70 transition-transform duration-200 ease-out group-hover:scale-x-100" />
+            </Link>
+          ))}
         </div>
 
         {/* CTA / User */}
-        <div className="hidden md:flex items-center gap-3">
+        <div className="hidden md:flex items-center gap-4">
           {user ? (
             <Link
               href="/dashboard"
-              className="bg-orange-700 text-white px-6 py-2.5 rounded-lg font-semibold text-sm hover:brightness-110 active:scale-95 transition-all shadow-lg shadow-orange-700/20"
+              className="group inline-flex items-center gap-1.5 rounded-lg bg-orange-700 px-6 py-2.5 text-sm font-semibold text-white shadow-lg shadow-orange-700/20 transition-all hover:brightness-110 active:scale-95"
             >
               Dashboard
+              <ArrowRight
+                size={15}
+                className="transition-transform duration-200 group-hover:translate-x-0.5"
+              />
             </Link>
           ) : (
             <>
               <Link
                 href="/login"
-                className="text-stone-600 font-medium hover:text-orange-800 transition-colors text-sm"
+                className="text-sm font-medium text-stone-600 transition-colors hover:text-orange-800"
               >
                 Log in
               </Link>
               <Link
                 href="/signup"
-                className="bg-orange-700 text-white px-6 py-2.5 rounded-lg font-semibold text-sm hover:brightness-110 active:scale-95 transition-all shadow-lg shadow-orange-700/20"
+                className="group inline-flex items-center gap-1.5 rounded-lg bg-orange-700 px-6 py-2.5 text-sm font-semibold text-white shadow-lg shadow-orange-700/20 transition-all hover:brightness-110 active:scale-95"
               >
                 Sign Up
+                <ArrowRight
+                  size={15}
+                  className="transition-transform duration-200 group-hover:translate-x-0.5"
+                />
               </Link>
             </>
           )}
@@ -86,32 +101,77 @@ export default function LandingHeader() {
 
         {/* Mobile hamburger */}
         <button
-          className="md:hidden text-stone-700"
-          onClick={() => setMobileOpen(!mobileOpen)}
+          className="relative z-50 text-stone-700 md:hidden"
+          onClick={() => setMobileOpen((v) => !v)}
           aria-label="Toggle menu"
+          aria-expanded={mobileOpen}
         >
           {mobileOpen ? <X size={22} /> : <Menu size={22} />}
         </button>
       </div>
 
       {/* Mobile Menu */}
-      {mobileOpen && (
-        <div className="md:hidden bg-[#faf5ee] border-t border-orange-200/40 px-6 py-6 flex flex-col gap-5">
-          <Link href="/problem-list" className="text-stone-700 font-medium" onClick={() => setMobileOpen(false)}>Practice</Link>
-          <Link href="#features" className="text-stone-700 font-medium" onClick={() => setMobileOpen(false)}>Features</Link>
-          <Link href="#how-it-works" className="text-stone-700 font-medium" onClick={() => setMobileOpen(false)}>How It Works</Link>
-          <Link href="#pricing" className="text-stone-700 font-medium" onClick={() => setMobileOpen(false)}>Pricing</Link>
-          <div className="h-px bg-orange-200/60" />
-          {user ? (
-            <Link href="/dashboard" className="bg-orange-700 text-white px-6 py-2.5 rounded-lg font-semibold text-sm text-center" onClick={() => setMobileOpen(false)}>Dashboard</Link>
-          ) : (
-            <>
-              <Link href="/login" className="text-stone-700 font-medium text-center" onClick={() => setMobileOpen(false)}>Log in</Link>
-              <Link href="/signup" className="bg-orange-700 text-white px-6 py-2.5 rounded-lg font-semibold text-sm text-center" onClick={() => setMobileOpen(false)}>Sign Up</Link>
-            </>
-          )}
-        </div>
-      )}
+      <AnimatePresence>
+        {mobileOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.25, ease: "easeInOut" }}
+            className="overflow-hidden border-t border-orange-200/40 bg-[#faf5ee] md:hidden"
+          >
+            <div className="flex flex-col gap-1 px-6 py-6">
+              {[...NAV_LINKS, { href: "#pricing", label: "Pricing" }].map(
+                (link, i) => (
+                  <motion.div
+                    key={link.href}
+                    initial={{ opacity: 0, x: -8 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.05 * i, duration: 0.2 }}
+                  >
+                    <Link
+                      href={link.href}
+                      className="block rounded-md px-2 py-2.5 text-base font-medium text-stone-700 transition-colors hover:bg-orange-100/60 hover:text-orange-800"
+                      onClick={() => setMobileOpen(false)}
+                    >
+                      {link.label}
+                    </Link>
+                  </motion.div>
+                )
+              )}
+
+              <div className="my-4 h-px bg-orange-200/60" />
+
+              {user ? (
+                <Link
+                  href="/dashboard"
+                  className="rounded-lg bg-orange-700 px-6 py-3 text-center text-sm font-semibold text-white shadow-lg shadow-orange-700/20"
+                  onClick={() => setMobileOpen(false)}
+                >
+                  Dashboard
+                </Link>
+              ) : (
+                <div className="flex flex-col gap-3">
+                  <Link
+                    href="/login"
+                    className="rounded-lg border border-orange-200 px-6 py-3 text-center text-sm font-medium text-stone-700 transition-colors hover:bg-orange-100/50"
+                    onClick={() => setMobileOpen(false)}
+                  >
+                    Log in
+                  </Link>
+                  <Link
+                    href="/signup"
+                    className="rounded-lg bg-orange-700 px-6 py-3 text-center text-sm font-semibold text-white shadow-lg shadow-orange-700/20"
+                    onClick={() => setMobileOpen(false)}
+                  >
+                    Sign Up
+                  </Link>
+                </div>
+              )}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </nav>
   );
 }
