@@ -16,7 +16,7 @@ import HandwrittenAnnotation from "./HandwrittenAnnotation";
 
 /* Autoplay timing — mid-point of the 5-6s range so the section feels
    alive without racing past the diagnosis text before it's readable. */
-const AUTOPLAY_MS = 6000;
+const AUTOPLAY_MS = 4000;
 
 /* ---------------------------------------------------------
    Real worked examples — swapping between them is the whole
@@ -144,7 +144,7 @@ export default function AIAnalysisSection() {
     timeoutRef.current = setTimeout(() => {
       setActiveId(id);
       setScanning(false);
-    }, 520);
+    }, 200);
   };
 
   // Track whether the section is on screen, so autoplay never burns
