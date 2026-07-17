@@ -131,6 +131,14 @@ export const AIRole = {
 export type AIRole = (typeof AIRole)[keyof typeof AIRole]
 
 
+export const LabVisibility = {
+  PRIVATE: 'PRIVATE',
+  PUBLIC: 'PUBLIC'
+} as const
+
+export type LabVisibility = (typeof LabVisibility)[keyof typeof LabVisibility]
+
+
 export const NotificationType = {
   EXAM: 'EXAM',
   ANNOUNCEMENT: 'ANNOUNCEMENT',

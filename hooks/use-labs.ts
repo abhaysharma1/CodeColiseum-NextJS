@@ -16,6 +16,11 @@ export interface TeacherLab {
   aiMaxTokens: number | null;
   modulesCount: number;
   assignedGroupsCount?: number;
+  visibility?: "PRIVATE" | "PUBLIC";
+  duplicateCount?: number;
+  originalLabId?: string | null;
+  isArchived?: boolean;
+  publishedAt?: string | null;
 }
 
 export interface TeacherLabPagination {

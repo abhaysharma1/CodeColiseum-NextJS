@@ -232,6 +232,11 @@ export type UserWhereInput = {
   notifications?: Prisma.NotificationListRelationFilter
   notificationRecipients?: Prisma.NotificationRecipientListRelationFilter
   examSessions?: Prisma.ExamSessionListRelationFilter
+  createdLabs?: Prisma.LabListRelationFilter
+  assignedLabs?: Prisma.LabTeacherListRelationFilter
+  addedLabTeachers?: Prisma.LabTeacherListRelationFilter
+  labProgress?: Prisma.ModuleProblemProgressListRelationFilter
+  labRatings?: Prisma.LabRatingListRelationFilter
   ownedProblems?: Prisma.ProblemListRelationFilter
   approvedProblems?: Prisma.ProblemListRelationFilter
 }
@@ -264,6 +269,11 @@ export type UserOrderByWithRelationInput = {
   notifications?: Prisma.NotificationOrderByRelationAggregateInput
   notificationRecipients?: Prisma.NotificationRecipientOrderByRelationAggregateInput
   examSessions?: Prisma.ExamSessionOrderByRelationAggregateInput
+  createdLabs?: Prisma.LabOrderByRelationAggregateInput
+  assignedLabs?: Prisma.LabTeacherOrderByRelationAggregateInput
+  addedLabTeachers?: Prisma.LabTeacherOrderByRelationAggregateInput
+  labProgress?: Prisma.ModuleProblemProgressOrderByRelationAggregateInput
+  labRatings?: Prisma.LabRatingOrderByRelationAggregateInput
   ownedProblems?: Prisma.ProblemOrderByRelationAggregateInput
   approvedProblems?: Prisma.ProblemOrderByRelationAggregateInput
 }
@@ -299,6 +309,11 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   notifications?: Prisma.NotificationListRelationFilter
   notificationRecipients?: Prisma.NotificationRecipientListRelationFilter
   examSessions?: Prisma.ExamSessionListRelationFilter
+  createdLabs?: Prisma.LabListRelationFilter
+  assignedLabs?: Prisma.LabTeacherListRelationFilter
+  addedLabTeachers?: Prisma.LabTeacherListRelationFilter
+  labProgress?: Prisma.ModuleProblemProgressListRelationFilter
+  labRatings?: Prisma.LabRatingListRelationFilter
   ownedProblems?: Prisma.ProblemListRelationFilter
   approvedProblems?: Prisma.ProblemListRelationFilter
 }, "id" | "email">
@@ -360,6 +375,11 @@ export type UserCreateInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutSenderInput
   notificationRecipients?: Prisma.NotificationRecipientCreateNestedManyWithoutUserInput
   examSessions?: Prisma.ExamSessionCreateNestedManyWithoutUserInput
+  createdLabs?: Prisma.LabCreateNestedManyWithoutCreatorInput
+  assignedLabs?: Prisma.LabTeacherCreateNestedManyWithoutUserInput
+  addedLabTeachers?: Prisma.LabTeacherCreateNestedManyWithoutAddedByInput
+  labProgress?: Prisma.ModuleProblemProgressCreateNestedManyWithoutUserInput
+  labRatings?: Prisma.LabRatingCreateNestedManyWithoutUserInput
   ownedProblems?: Prisma.ProblemCreateNestedManyWithoutOwnerInput
   approvedProblems?: Prisma.ProblemCreateNestedManyWithoutApprovedByInput
 }
@@ -391,6 +411,11 @@ export type UserUncheckedCreateInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutSenderInput
   notificationRecipients?: Prisma.NotificationRecipientUncheckedCreateNestedManyWithoutUserInput
   examSessions?: Prisma.ExamSessionUncheckedCreateNestedManyWithoutUserInput
+  createdLabs?: Prisma.LabUncheckedCreateNestedManyWithoutCreatorInput
+  assignedLabs?: Prisma.LabTeacherUncheckedCreateNestedManyWithoutUserInput
+  addedLabTeachers?: Prisma.LabTeacherUncheckedCreateNestedManyWithoutAddedByInput
+  labProgress?: Prisma.ModuleProblemProgressUncheckedCreateNestedManyWithoutUserInput
+  labRatings?: Prisma.LabRatingUncheckedCreateNestedManyWithoutUserInput
   ownedProblems?: Prisma.ProblemUncheckedCreateNestedManyWithoutOwnerInput
   approvedProblems?: Prisma.ProblemUncheckedCreateNestedManyWithoutApprovedByInput
 }
@@ -422,6 +447,11 @@ export type UserUpdateInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutSenderNestedInput
   notificationRecipients?: Prisma.NotificationRecipientUpdateManyWithoutUserNestedInput
   examSessions?: Prisma.ExamSessionUpdateManyWithoutUserNestedInput
+  createdLabs?: Prisma.LabUpdateManyWithoutCreatorNestedInput
+  assignedLabs?: Prisma.LabTeacherUpdateManyWithoutUserNestedInput
+  addedLabTeachers?: Prisma.LabTeacherUpdateManyWithoutAddedByNestedInput
+  labProgress?: Prisma.ModuleProblemProgressUpdateManyWithoutUserNestedInput
+  labRatings?: Prisma.LabRatingUpdateManyWithoutUserNestedInput
   ownedProblems?: Prisma.ProblemUpdateManyWithoutOwnerNestedInput
   approvedProblems?: Prisma.ProblemUpdateManyWithoutApprovedByNestedInput
 }
@@ -453,6 +483,11 @@ export type UserUncheckedUpdateInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutSenderNestedInput
   notificationRecipients?: Prisma.NotificationRecipientUncheckedUpdateManyWithoutUserNestedInput
   examSessions?: Prisma.ExamSessionUncheckedUpdateManyWithoutUserNestedInput
+  createdLabs?: Prisma.LabUncheckedUpdateManyWithoutCreatorNestedInput
+  assignedLabs?: Prisma.LabTeacherUncheckedUpdateManyWithoutUserNestedInput
+  addedLabTeachers?: Prisma.LabTeacherUncheckedUpdateManyWithoutAddedByNestedInput
+  labProgress?: Prisma.ModuleProblemProgressUncheckedUpdateManyWithoutUserNestedInput
+  labRatings?: Prisma.LabRatingUncheckedUpdateManyWithoutUserNestedInput
   ownedProblems?: Prisma.ProblemUncheckedUpdateManyWithoutOwnerNestedInput
   approvedProblems?: Prisma.ProblemUncheckedUpdateManyWithoutApprovedByNestedInput
 }
@@ -822,6 +857,76 @@ export type UserUpdateOneRequiredWithoutAirateLimitsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAirateLimitsInput, Prisma.UserUpdateWithoutAirateLimitsInput>, Prisma.UserUncheckedUpdateWithoutAirateLimitsInput>
 }
 
+export type UserCreateNestedOneWithoutCreatedLabsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCreatedLabsInput, Prisma.UserUncheckedCreateWithoutCreatedLabsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedLabsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutCreatedLabsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCreatedLabsInput, Prisma.UserUncheckedCreateWithoutCreatedLabsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedLabsInput
+  upsert?: Prisma.UserUpsertWithoutCreatedLabsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCreatedLabsInput, Prisma.UserUpdateWithoutCreatedLabsInput>, Prisma.UserUncheckedUpdateWithoutCreatedLabsInput>
+}
+
+export type UserCreateNestedOneWithoutAssignedLabsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAssignedLabsInput, Prisma.UserUncheckedCreateWithoutAssignedLabsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAssignedLabsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserCreateNestedOneWithoutAddedLabTeachersInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAddedLabTeachersInput, Prisma.UserUncheckedCreateWithoutAddedLabTeachersInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAddedLabTeachersInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutAssignedLabsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAssignedLabsInput, Prisma.UserUncheckedCreateWithoutAssignedLabsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAssignedLabsInput
+  upsert?: Prisma.UserUpsertWithoutAssignedLabsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAssignedLabsInput, Prisma.UserUpdateWithoutAssignedLabsInput>, Prisma.UserUncheckedUpdateWithoutAssignedLabsInput>
+}
+
+export type UserUpdateOneRequiredWithoutAddedLabTeachersNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAddedLabTeachersInput, Prisma.UserUncheckedCreateWithoutAddedLabTeachersInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAddedLabTeachersInput
+  upsert?: Prisma.UserUpsertWithoutAddedLabTeachersInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAddedLabTeachersInput, Prisma.UserUpdateWithoutAddedLabTeachersInput>, Prisma.UserUncheckedUpdateWithoutAddedLabTeachersInput>
+}
+
+export type UserCreateNestedOneWithoutLabProgressInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutLabProgressInput, Prisma.UserUncheckedCreateWithoutLabProgressInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutLabProgressInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutLabProgressNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutLabProgressInput, Prisma.UserUncheckedCreateWithoutLabProgressInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutLabProgressInput
+  upsert?: Prisma.UserUpsertWithoutLabProgressInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutLabProgressInput, Prisma.UserUpdateWithoutLabProgressInput>, Prisma.UserUncheckedUpdateWithoutLabProgressInput>
+}
+
+export type UserCreateNestedOneWithoutLabRatingsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutLabRatingsInput, Prisma.UserUncheckedCreateWithoutLabRatingsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutLabRatingsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutLabRatingsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutLabRatingsInput, Prisma.UserUncheckedCreateWithoutLabRatingsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutLabRatingsInput
+  upsert?: Prisma.UserUpsertWithoutLabRatingsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutLabRatingsInput, Prisma.UserUpdateWithoutLabRatingsInput>, Prisma.UserUncheckedUpdateWithoutLabRatingsInput>
+}
+
 export type UserCreateNestedOneWithoutStudentOverallStatsInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutStudentOverallStatsInput, Prisma.UserUncheckedCreateWithoutStudentOverallStatsInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutStudentOverallStatsInput
@@ -904,6 +1009,11 @@ export type UserCreateWithoutSessionsInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutSenderInput
   notificationRecipients?: Prisma.NotificationRecipientCreateNestedManyWithoutUserInput
   examSessions?: Prisma.ExamSessionCreateNestedManyWithoutUserInput
+  createdLabs?: Prisma.LabCreateNestedManyWithoutCreatorInput
+  assignedLabs?: Prisma.LabTeacherCreateNestedManyWithoutUserInput
+  addedLabTeachers?: Prisma.LabTeacherCreateNestedManyWithoutAddedByInput
+  labProgress?: Prisma.ModuleProblemProgressCreateNestedManyWithoutUserInput
+  labRatings?: Prisma.LabRatingCreateNestedManyWithoutUserInput
   ownedProblems?: Prisma.ProblemCreateNestedManyWithoutOwnerInput
   approvedProblems?: Prisma.ProblemCreateNestedManyWithoutApprovedByInput
 }
@@ -934,6 +1044,11 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutSenderInput
   notificationRecipients?: Prisma.NotificationRecipientUncheckedCreateNestedManyWithoutUserInput
   examSessions?: Prisma.ExamSessionUncheckedCreateNestedManyWithoutUserInput
+  createdLabs?: Prisma.LabUncheckedCreateNestedManyWithoutCreatorInput
+  assignedLabs?: Prisma.LabTeacherUncheckedCreateNestedManyWithoutUserInput
+  addedLabTeachers?: Prisma.LabTeacherUncheckedCreateNestedManyWithoutAddedByInput
+  labProgress?: Prisma.ModuleProblemProgressUncheckedCreateNestedManyWithoutUserInput
+  labRatings?: Prisma.LabRatingUncheckedCreateNestedManyWithoutUserInput
   ownedProblems?: Prisma.ProblemUncheckedCreateNestedManyWithoutOwnerInput
   approvedProblems?: Prisma.ProblemUncheckedCreateNestedManyWithoutApprovedByInput
 }
@@ -980,6 +1095,11 @@ export type UserUpdateWithoutSessionsInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutSenderNestedInput
   notificationRecipients?: Prisma.NotificationRecipientUpdateManyWithoutUserNestedInput
   examSessions?: Prisma.ExamSessionUpdateManyWithoutUserNestedInput
+  createdLabs?: Prisma.LabUpdateManyWithoutCreatorNestedInput
+  assignedLabs?: Prisma.LabTeacherUpdateManyWithoutUserNestedInput
+  addedLabTeachers?: Prisma.LabTeacherUpdateManyWithoutAddedByNestedInput
+  labProgress?: Prisma.ModuleProblemProgressUpdateManyWithoutUserNestedInput
+  labRatings?: Prisma.LabRatingUpdateManyWithoutUserNestedInput
   ownedProblems?: Prisma.ProblemUpdateManyWithoutOwnerNestedInput
   approvedProblems?: Prisma.ProblemUpdateManyWithoutApprovedByNestedInput
 }
@@ -1010,6 +1130,11 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutSenderNestedInput
   notificationRecipients?: Prisma.NotificationRecipientUncheckedUpdateManyWithoutUserNestedInput
   examSessions?: Prisma.ExamSessionUncheckedUpdateManyWithoutUserNestedInput
+  createdLabs?: Prisma.LabUncheckedUpdateManyWithoutCreatorNestedInput
+  assignedLabs?: Prisma.LabTeacherUncheckedUpdateManyWithoutUserNestedInput
+  addedLabTeachers?: Prisma.LabTeacherUncheckedUpdateManyWithoutAddedByNestedInput
+  labProgress?: Prisma.ModuleProblemProgressUncheckedUpdateManyWithoutUserNestedInput
+  labRatings?: Prisma.LabRatingUncheckedUpdateManyWithoutUserNestedInput
   ownedProblems?: Prisma.ProblemUncheckedUpdateManyWithoutOwnerNestedInput
   approvedProblems?: Prisma.ProblemUncheckedUpdateManyWithoutApprovedByNestedInput
 }
@@ -1040,6 +1165,11 @@ export type UserCreateWithoutAccountsInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutSenderInput
   notificationRecipients?: Prisma.NotificationRecipientCreateNestedManyWithoutUserInput
   examSessions?: Prisma.ExamSessionCreateNestedManyWithoutUserInput
+  createdLabs?: Prisma.LabCreateNestedManyWithoutCreatorInput
+  assignedLabs?: Prisma.LabTeacherCreateNestedManyWithoutUserInput
+  addedLabTeachers?: Prisma.LabTeacherCreateNestedManyWithoutAddedByInput
+  labProgress?: Prisma.ModuleProblemProgressCreateNestedManyWithoutUserInput
+  labRatings?: Prisma.LabRatingCreateNestedManyWithoutUserInput
   ownedProblems?: Prisma.ProblemCreateNestedManyWithoutOwnerInput
   approvedProblems?: Prisma.ProblemCreateNestedManyWithoutApprovedByInput
 }
@@ -1070,6 +1200,11 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutSenderInput
   notificationRecipients?: Prisma.NotificationRecipientUncheckedCreateNestedManyWithoutUserInput
   examSessions?: Prisma.ExamSessionUncheckedCreateNestedManyWithoutUserInput
+  createdLabs?: Prisma.LabUncheckedCreateNestedManyWithoutCreatorInput
+  assignedLabs?: Prisma.LabTeacherUncheckedCreateNestedManyWithoutUserInput
+  addedLabTeachers?: Prisma.LabTeacherUncheckedCreateNestedManyWithoutAddedByInput
+  labProgress?: Prisma.ModuleProblemProgressUncheckedCreateNestedManyWithoutUserInput
+  labRatings?: Prisma.LabRatingUncheckedCreateNestedManyWithoutUserInput
   ownedProblems?: Prisma.ProblemUncheckedCreateNestedManyWithoutOwnerInput
   approvedProblems?: Prisma.ProblemUncheckedCreateNestedManyWithoutApprovedByInput
 }
@@ -1116,6 +1251,11 @@ export type UserUpdateWithoutAccountsInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutSenderNestedInput
   notificationRecipients?: Prisma.NotificationRecipientUpdateManyWithoutUserNestedInput
   examSessions?: Prisma.ExamSessionUpdateManyWithoutUserNestedInput
+  createdLabs?: Prisma.LabUpdateManyWithoutCreatorNestedInput
+  assignedLabs?: Prisma.LabTeacherUpdateManyWithoutUserNestedInput
+  addedLabTeachers?: Prisma.LabTeacherUpdateManyWithoutAddedByNestedInput
+  labProgress?: Prisma.ModuleProblemProgressUpdateManyWithoutUserNestedInput
+  labRatings?: Prisma.LabRatingUpdateManyWithoutUserNestedInput
   ownedProblems?: Prisma.ProblemUpdateManyWithoutOwnerNestedInput
   approvedProblems?: Prisma.ProblemUpdateManyWithoutApprovedByNestedInput
 }
@@ -1146,6 +1286,11 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutSenderNestedInput
   notificationRecipients?: Prisma.NotificationRecipientUncheckedUpdateManyWithoutUserNestedInput
   examSessions?: Prisma.ExamSessionUncheckedUpdateManyWithoutUserNestedInput
+  createdLabs?: Prisma.LabUncheckedUpdateManyWithoutCreatorNestedInput
+  assignedLabs?: Prisma.LabTeacherUncheckedUpdateManyWithoutUserNestedInput
+  addedLabTeachers?: Prisma.LabTeacherUncheckedUpdateManyWithoutAddedByNestedInput
+  labProgress?: Prisma.ModuleProblemProgressUncheckedUpdateManyWithoutUserNestedInput
+  labRatings?: Prisma.LabRatingUncheckedUpdateManyWithoutUserNestedInput
   ownedProblems?: Prisma.ProblemUncheckedUpdateManyWithoutOwnerNestedInput
   approvedProblems?: Prisma.ProblemUncheckedUpdateManyWithoutApprovedByNestedInput
 }
@@ -1177,6 +1322,11 @@ export type UserCreateWithoutOwnedProblemsInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutSenderInput
   notificationRecipients?: Prisma.NotificationRecipientCreateNestedManyWithoutUserInput
   examSessions?: Prisma.ExamSessionCreateNestedManyWithoutUserInput
+  createdLabs?: Prisma.LabCreateNestedManyWithoutCreatorInput
+  assignedLabs?: Prisma.LabTeacherCreateNestedManyWithoutUserInput
+  addedLabTeachers?: Prisma.LabTeacherCreateNestedManyWithoutAddedByInput
+  labProgress?: Prisma.ModuleProblemProgressCreateNestedManyWithoutUserInput
+  labRatings?: Prisma.LabRatingCreateNestedManyWithoutUserInput
   approvedProblems?: Prisma.ProblemCreateNestedManyWithoutApprovedByInput
 }
 
@@ -1207,6 +1357,11 @@ export type UserUncheckedCreateWithoutOwnedProblemsInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutSenderInput
   notificationRecipients?: Prisma.NotificationRecipientUncheckedCreateNestedManyWithoutUserInput
   examSessions?: Prisma.ExamSessionUncheckedCreateNestedManyWithoutUserInput
+  createdLabs?: Prisma.LabUncheckedCreateNestedManyWithoutCreatorInput
+  assignedLabs?: Prisma.LabTeacherUncheckedCreateNestedManyWithoutUserInput
+  addedLabTeachers?: Prisma.LabTeacherUncheckedCreateNestedManyWithoutAddedByInput
+  labProgress?: Prisma.ModuleProblemProgressUncheckedCreateNestedManyWithoutUserInput
+  labRatings?: Prisma.LabRatingUncheckedCreateNestedManyWithoutUserInput
   approvedProblems?: Prisma.ProblemUncheckedCreateNestedManyWithoutApprovedByInput
 }
 
@@ -1242,6 +1397,11 @@ export type UserCreateWithoutApprovedProblemsInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutSenderInput
   notificationRecipients?: Prisma.NotificationRecipientCreateNestedManyWithoutUserInput
   examSessions?: Prisma.ExamSessionCreateNestedManyWithoutUserInput
+  createdLabs?: Prisma.LabCreateNestedManyWithoutCreatorInput
+  assignedLabs?: Prisma.LabTeacherCreateNestedManyWithoutUserInput
+  addedLabTeachers?: Prisma.LabTeacherCreateNestedManyWithoutAddedByInput
+  labProgress?: Prisma.ModuleProblemProgressCreateNestedManyWithoutUserInput
+  labRatings?: Prisma.LabRatingCreateNestedManyWithoutUserInput
   ownedProblems?: Prisma.ProblemCreateNestedManyWithoutOwnerInput
 }
 
@@ -1272,6 +1432,11 @@ export type UserUncheckedCreateWithoutApprovedProblemsInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutSenderInput
   notificationRecipients?: Prisma.NotificationRecipientUncheckedCreateNestedManyWithoutUserInput
   examSessions?: Prisma.ExamSessionUncheckedCreateNestedManyWithoutUserInput
+  createdLabs?: Prisma.LabUncheckedCreateNestedManyWithoutCreatorInput
+  assignedLabs?: Prisma.LabTeacherUncheckedCreateNestedManyWithoutUserInput
+  addedLabTeachers?: Prisma.LabTeacherUncheckedCreateNestedManyWithoutAddedByInput
+  labProgress?: Prisma.ModuleProblemProgressUncheckedCreateNestedManyWithoutUserInput
+  labRatings?: Prisma.LabRatingUncheckedCreateNestedManyWithoutUserInput
   ownedProblems?: Prisma.ProblemUncheckedCreateNestedManyWithoutOwnerInput
 }
 
@@ -1318,6 +1483,11 @@ export type UserUpdateWithoutOwnedProblemsInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutSenderNestedInput
   notificationRecipients?: Prisma.NotificationRecipientUpdateManyWithoutUserNestedInput
   examSessions?: Prisma.ExamSessionUpdateManyWithoutUserNestedInput
+  createdLabs?: Prisma.LabUpdateManyWithoutCreatorNestedInput
+  assignedLabs?: Prisma.LabTeacherUpdateManyWithoutUserNestedInput
+  addedLabTeachers?: Prisma.LabTeacherUpdateManyWithoutAddedByNestedInput
+  labProgress?: Prisma.ModuleProblemProgressUpdateManyWithoutUserNestedInput
+  labRatings?: Prisma.LabRatingUpdateManyWithoutUserNestedInput
   approvedProblems?: Prisma.ProblemUpdateManyWithoutApprovedByNestedInput
 }
 
@@ -1348,6 +1518,11 @@ export type UserUncheckedUpdateWithoutOwnedProblemsInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutSenderNestedInput
   notificationRecipients?: Prisma.NotificationRecipientUncheckedUpdateManyWithoutUserNestedInput
   examSessions?: Prisma.ExamSessionUncheckedUpdateManyWithoutUserNestedInput
+  createdLabs?: Prisma.LabUncheckedUpdateManyWithoutCreatorNestedInput
+  assignedLabs?: Prisma.LabTeacherUncheckedUpdateManyWithoutUserNestedInput
+  addedLabTeachers?: Prisma.LabTeacherUncheckedUpdateManyWithoutAddedByNestedInput
+  labProgress?: Prisma.ModuleProblemProgressUncheckedUpdateManyWithoutUserNestedInput
+  labRatings?: Prisma.LabRatingUncheckedUpdateManyWithoutUserNestedInput
   approvedProblems?: Prisma.ProblemUncheckedUpdateManyWithoutApprovedByNestedInput
 }
 
@@ -1389,6 +1564,11 @@ export type UserUpdateWithoutApprovedProblemsInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutSenderNestedInput
   notificationRecipients?: Prisma.NotificationRecipientUpdateManyWithoutUserNestedInput
   examSessions?: Prisma.ExamSessionUpdateManyWithoutUserNestedInput
+  createdLabs?: Prisma.LabUpdateManyWithoutCreatorNestedInput
+  assignedLabs?: Prisma.LabTeacherUpdateManyWithoutUserNestedInput
+  addedLabTeachers?: Prisma.LabTeacherUpdateManyWithoutAddedByNestedInput
+  labProgress?: Prisma.ModuleProblemProgressUpdateManyWithoutUserNestedInput
+  labRatings?: Prisma.LabRatingUpdateManyWithoutUserNestedInput
   ownedProblems?: Prisma.ProblemUpdateManyWithoutOwnerNestedInput
 }
 
@@ -1419,6 +1599,11 @@ export type UserUncheckedUpdateWithoutApprovedProblemsInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutSenderNestedInput
   notificationRecipients?: Prisma.NotificationRecipientUncheckedUpdateManyWithoutUserNestedInput
   examSessions?: Prisma.ExamSessionUncheckedUpdateManyWithoutUserNestedInput
+  createdLabs?: Prisma.LabUncheckedUpdateManyWithoutCreatorNestedInput
+  assignedLabs?: Prisma.LabTeacherUncheckedUpdateManyWithoutUserNestedInput
+  addedLabTeachers?: Prisma.LabTeacherUncheckedUpdateManyWithoutAddedByNestedInput
+  labProgress?: Prisma.ModuleProblemProgressUncheckedUpdateManyWithoutUserNestedInput
+  labRatings?: Prisma.LabRatingUncheckedUpdateManyWithoutUserNestedInput
   ownedProblems?: Prisma.ProblemUncheckedUpdateManyWithoutOwnerNestedInput
 }
 
@@ -1448,6 +1633,11 @@ export type UserCreateWithoutSelfSubmissionsInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutSenderInput
   notificationRecipients?: Prisma.NotificationRecipientCreateNestedManyWithoutUserInput
   examSessions?: Prisma.ExamSessionCreateNestedManyWithoutUserInput
+  createdLabs?: Prisma.LabCreateNestedManyWithoutCreatorInput
+  assignedLabs?: Prisma.LabTeacherCreateNestedManyWithoutUserInput
+  addedLabTeachers?: Prisma.LabTeacherCreateNestedManyWithoutAddedByInput
+  labProgress?: Prisma.ModuleProblemProgressCreateNestedManyWithoutUserInput
+  labRatings?: Prisma.LabRatingCreateNestedManyWithoutUserInput
   ownedProblems?: Prisma.ProblemCreateNestedManyWithoutOwnerInput
   approvedProblems?: Prisma.ProblemCreateNestedManyWithoutApprovedByInput
 }
@@ -1478,6 +1668,11 @@ export type UserUncheckedCreateWithoutSelfSubmissionsInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutSenderInput
   notificationRecipients?: Prisma.NotificationRecipientUncheckedCreateNestedManyWithoutUserInput
   examSessions?: Prisma.ExamSessionUncheckedCreateNestedManyWithoutUserInput
+  createdLabs?: Prisma.LabUncheckedCreateNestedManyWithoutCreatorInput
+  assignedLabs?: Prisma.LabTeacherUncheckedCreateNestedManyWithoutUserInput
+  addedLabTeachers?: Prisma.LabTeacherUncheckedCreateNestedManyWithoutAddedByInput
+  labProgress?: Prisma.ModuleProblemProgressUncheckedCreateNestedManyWithoutUserInput
+  labRatings?: Prisma.LabRatingUncheckedCreateNestedManyWithoutUserInput
   ownedProblems?: Prisma.ProblemUncheckedCreateNestedManyWithoutOwnerInput
   approvedProblems?: Prisma.ProblemUncheckedCreateNestedManyWithoutApprovedByInput
 }
@@ -1524,6 +1719,11 @@ export type UserUpdateWithoutSelfSubmissionsInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutSenderNestedInput
   notificationRecipients?: Prisma.NotificationRecipientUpdateManyWithoutUserNestedInput
   examSessions?: Prisma.ExamSessionUpdateManyWithoutUserNestedInput
+  createdLabs?: Prisma.LabUpdateManyWithoutCreatorNestedInput
+  assignedLabs?: Prisma.LabTeacherUpdateManyWithoutUserNestedInput
+  addedLabTeachers?: Prisma.LabTeacherUpdateManyWithoutAddedByNestedInput
+  labProgress?: Prisma.ModuleProblemProgressUpdateManyWithoutUserNestedInput
+  labRatings?: Prisma.LabRatingUpdateManyWithoutUserNestedInput
   ownedProblems?: Prisma.ProblemUpdateManyWithoutOwnerNestedInput
   approvedProblems?: Prisma.ProblemUpdateManyWithoutApprovedByNestedInput
 }
@@ -1554,6 +1754,11 @@ export type UserUncheckedUpdateWithoutSelfSubmissionsInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutSenderNestedInput
   notificationRecipients?: Prisma.NotificationRecipientUncheckedUpdateManyWithoutUserNestedInput
   examSessions?: Prisma.ExamSessionUncheckedUpdateManyWithoutUserNestedInput
+  createdLabs?: Prisma.LabUncheckedUpdateManyWithoutCreatorNestedInput
+  assignedLabs?: Prisma.LabTeacherUncheckedUpdateManyWithoutUserNestedInput
+  addedLabTeachers?: Prisma.LabTeacherUncheckedUpdateManyWithoutAddedByNestedInput
+  labProgress?: Prisma.ModuleProblemProgressUncheckedUpdateManyWithoutUserNestedInput
+  labRatings?: Prisma.LabRatingUncheckedUpdateManyWithoutUserNestedInput
   ownedProblems?: Prisma.ProblemUncheckedUpdateManyWithoutOwnerNestedInput
   approvedProblems?: Prisma.ProblemUncheckedUpdateManyWithoutApprovedByNestedInput
 }
@@ -1584,6 +1789,11 @@ export type UserCreateWithoutExamsInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutSenderInput
   notificationRecipients?: Prisma.NotificationRecipientCreateNestedManyWithoutUserInput
   examSessions?: Prisma.ExamSessionCreateNestedManyWithoutUserInput
+  createdLabs?: Prisma.LabCreateNestedManyWithoutCreatorInput
+  assignedLabs?: Prisma.LabTeacherCreateNestedManyWithoutUserInput
+  addedLabTeachers?: Prisma.LabTeacherCreateNestedManyWithoutAddedByInput
+  labProgress?: Prisma.ModuleProblemProgressCreateNestedManyWithoutUserInput
+  labRatings?: Prisma.LabRatingCreateNestedManyWithoutUserInput
   ownedProblems?: Prisma.ProblemCreateNestedManyWithoutOwnerInput
   approvedProblems?: Prisma.ProblemCreateNestedManyWithoutApprovedByInput
 }
@@ -1614,6 +1824,11 @@ export type UserUncheckedCreateWithoutExamsInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutSenderInput
   notificationRecipients?: Prisma.NotificationRecipientUncheckedCreateNestedManyWithoutUserInput
   examSessions?: Prisma.ExamSessionUncheckedCreateNestedManyWithoutUserInput
+  createdLabs?: Prisma.LabUncheckedCreateNestedManyWithoutCreatorInput
+  assignedLabs?: Prisma.LabTeacherUncheckedCreateNestedManyWithoutUserInput
+  addedLabTeachers?: Prisma.LabTeacherUncheckedCreateNestedManyWithoutAddedByInput
+  labProgress?: Prisma.ModuleProblemProgressUncheckedCreateNestedManyWithoutUserInput
+  labRatings?: Prisma.LabRatingUncheckedCreateNestedManyWithoutUserInput
   ownedProblems?: Prisma.ProblemUncheckedCreateNestedManyWithoutOwnerInput
   approvedProblems?: Prisma.ProblemUncheckedCreateNestedManyWithoutApprovedByInput
 }
@@ -1660,6 +1875,11 @@ export type UserUpdateWithoutExamsInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutSenderNestedInput
   notificationRecipients?: Prisma.NotificationRecipientUpdateManyWithoutUserNestedInput
   examSessions?: Prisma.ExamSessionUpdateManyWithoutUserNestedInput
+  createdLabs?: Prisma.LabUpdateManyWithoutCreatorNestedInput
+  assignedLabs?: Prisma.LabTeacherUpdateManyWithoutUserNestedInput
+  addedLabTeachers?: Prisma.LabTeacherUpdateManyWithoutAddedByNestedInput
+  labProgress?: Prisma.ModuleProblemProgressUpdateManyWithoutUserNestedInput
+  labRatings?: Prisma.LabRatingUpdateManyWithoutUserNestedInput
   ownedProblems?: Prisma.ProblemUpdateManyWithoutOwnerNestedInput
   approvedProblems?: Prisma.ProblemUpdateManyWithoutApprovedByNestedInput
 }
@@ -1690,6 +1910,11 @@ export type UserUncheckedUpdateWithoutExamsInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutSenderNestedInput
   notificationRecipients?: Prisma.NotificationRecipientUncheckedUpdateManyWithoutUserNestedInput
   examSessions?: Prisma.ExamSessionUncheckedUpdateManyWithoutUserNestedInput
+  createdLabs?: Prisma.LabUncheckedUpdateManyWithoutCreatorNestedInput
+  assignedLabs?: Prisma.LabTeacherUncheckedUpdateManyWithoutUserNestedInput
+  addedLabTeachers?: Prisma.LabTeacherUncheckedUpdateManyWithoutAddedByNestedInput
+  labProgress?: Prisma.ModuleProblemProgressUncheckedUpdateManyWithoutUserNestedInput
+  labRatings?: Prisma.LabRatingUncheckedUpdateManyWithoutUserNestedInput
   ownedProblems?: Prisma.ProblemUncheckedUpdateManyWithoutOwnerNestedInput
   approvedProblems?: Prisma.ProblemUncheckedUpdateManyWithoutApprovedByNestedInput
 }
@@ -1720,6 +1945,11 @@ export type UserCreateWithoutEnrollmentsInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutSenderInput
   notificationRecipients?: Prisma.NotificationRecipientCreateNestedManyWithoutUserInput
   examSessions?: Prisma.ExamSessionCreateNestedManyWithoutUserInput
+  createdLabs?: Prisma.LabCreateNestedManyWithoutCreatorInput
+  assignedLabs?: Prisma.LabTeacherCreateNestedManyWithoutUserInput
+  addedLabTeachers?: Prisma.LabTeacherCreateNestedManyWithoutAddedByInput
+  labProgress?: Prisma.ModuleProblemProgressCreateNestedManyWithoutUserInput
+  labRatings?: Prisma.LabRatingCreateNestedManyWithoutUserInput
   ownedProblems?: Prisma.ProblemCreateNestedManyWithoutOwnerInput
   approvedProblems?: Prisma.ProblemCreateNestedManyWithoutApprovedByInput
 }
@@ -1750,6 +1980,11 @@ export type UserUncheckedCreateWithoutEnrollmentsInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutSenderInput
   notificationRecipients?: Prisma.NotificationRecipientUncheckedCreateNestedManyWithoutUserInput
   examSessions?: Prisma.ExamSessionUncheckedCreateNestedManyWithoutUserInput
+  createdLabs?: Prisma.LabUncheckedCreateNestedManyWithoutCreatorInput
+  assignedLabs?: Prisma.LabTeacherUncheckedCreateNestedManyWithoutUserInput
+  addedLabTeachers?: Prisma.LabTeacherUncheckedCreateNestedManyWithoutAddedByInput
+  labProgress?: Prisma.ModuleProblemProgressUncheckedCreateNestedManyWithoutUserInput
+  labRatings?: Prisma.LabRatingUncheckedCreateNestedManyWithoutUserInput
   ownedProblems?: Prisma.ProblemUncheckedCreateNestedManyWithoutOwnerInput
   approvedProblems?: Prisma.ProblemUncheckedCreateNestedManyWithoutApprovedByInput
 }
@@ -1796,6 +2031,11 @@ export type UserUpdateWithoutEnrollmentsInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutSenderNestedInput
   notificationRecipients?: Prisma.NotificationRecipientUpdateManyWithoutUserNestedInput
   examSessions?: Prisma.ExamSessionUpdateManyWithoutUserNestedInput
+  createdLabs?: Prisma.LabUpdateManyWithoutCreatorNestedInput
+  assignedLabs?: Prisma.LabTeacherUpdateManyWithoutUserNestedInput
+  addedLabTeachers?: Prisma.LabTeacherUpdateManyWithoutAddedByNestedInput
+  labProgress?: Prisma.ModuleProblemProgressUpdateManyWithoutUserNestedInput
+  labRatings?: Prisma.LabRatingUpdateManyWithoutUserNestedInput
   ownedProblems?: Prisma.ProblemUpdateManyWithoutOwnerNestedInput
   approvedProblems?: Prisma.ProblemUpdateManyWithoutApprovedByNestedInput
 }
@@ -1826,6 +2066,11 @@ export type UserUncheckedUpdateWithoutEnrollmentsInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutSenderNestedInput
   notificationRecipients?: Prisma.NotificationRecipientUncheckedUpdateManyWithoutUserNestedInput
   examSessions?: Prisma.ExamSessionUncheckedUpdateManyWithoutUserNestedInput
+  createdLabs?: Prisma.LabUncheckedUpdateManyWithoutCreatorNestedInput
+  assignedLabs?: Prisma.LabTeacherUncheckedUpdateManyWithoutUserNestedInput
+  addedLabTeachers?: Prisma.LabTeacherUncheckedUpdateManyWithoutAddedByNestedInput
+  labProgress?: Prisma.ModuleProblemProgressUncheckedUpdateManyWithoutUserNestedInput
+  labRatings?: Prisma.LabRatingUncheckedUpdateManyWithoutUserNestedInput
   ownedProblems?: Prisma.ProblemUncheckedUpdateManyWithoutOwnerNestedInput
   approvedProblems?: Prisma.ProblemUncheckedUpdateManyWithoutApprovedByNestedInput
 }
@@ -1856,6 +2101,11 @@ export type UserCreateWithoutSubmissionsInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutSenderInput
   notificationRecipients?: Prisma.NotificationRecipientCreateNestedManyWithoutUserInput
   examSessions?: Prisma.ExamSessionCreateNestedManyWithoutUserInput
+  createdLabs?: Prisma.LabCreateNestedManyWithoutCreatorInput
+  assignedLabs?: Prisma.LabTeacherCreateNestedManyWithoutUserInput
+  addedLabTeachers?: Prisma.LabTeacherCreateNestedManyWithoutAddedByInput
+  labProgress?: Prisma.ModuleProblemProgressCreateNestedManyWithoutUserInput
+  labRatings?: Prisma.LabRatingCreateNestedManyWithoutUserInput
   ownedProblems?: Prisma.ProblemCreateNestedManyWithoutOwnerInput
   approvedProblems?: Prisma.ProblemCreateNestedManyWithoutApprovedByInput
 }
@@ -1886,6 +2136,11 @@ export type UserUncheckedCreateWithoutSubmissionsInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutSenderInput
   notificationRecipients?: Prisma.NotificationRecipientUncheckedCreateNestedManyWithoutUserInput
   examSessions?: Prisma.ExamSessionUncheckedCreateNestedManyWithoutUserInput
+  createdLabs?: Prisma.LabUncheckedCreateNestedManyWithoutCreatorInput
+  assignedLabs?: Prisma.LabTeacherUncheckedCreateNestedManyWithoutUserInput
+  addedLabTeachers?: Prisma.LabTeacherUncheckedCreateNestedManyWithoutAddedByInput
+  labProgress?: Prisma.ModuleProblemProgressUncheckedCreateNestedManyWithoutUserInput
+  labRatings?: Prisma.LabRatingUncheckedCreateNestedManyWithoutUserInput
   ownedProblems?: Prisma.ProblemUncheckedCreateNestedManyWithoutOwnerInput
   approvedProblems?: Prisma.ProblemUncheckedCreateNestedManyWithoutApprovedByInput
 }
@@ -1932,6 +2187,11 @@ export type UserUpdateWithoutSubmissionsInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutSenderNestedInput
   notificationRecipients?: Prisma.NotificationRecipientUpdateManyWithoutUserNestedInput
   examSessions?: Prisma.ExamSessionUpdateManyWithoutUserNestedInput
+  createdLabs?: Prisma.LabUpdateManyWithoutCreatorNestedInput
+  assignedLabs?: Prisma.LabTeacherUpdateManyWithoutUserNestedInput
+  addedLabTeachers?: Prisma.LabTeacherUpdateManyWithoutAddedByNestedInput
+  labProgress?: Prisma.ModuleProblemProgressUpdateManyWithoutUserNestedInput
+  labRatings?: Prisma.LabRatingUpdateManyWithoutUserNestedInput
   ownedProblems?: Prisma.ProblemUpdateManyWithoutOwnerNestedInput
   approvedProblems?: Prisma.ProblemUpdateManyWithoutApprovedByNestedInput
 }
@@ -1962,6 +2222,11 @@ export type UserUncheckedUpdateWithoutSubmissionsInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutSenderNestedInput
   notificationRecipients?: Prisma.NotificationRecipientUncheckedUpdateManyWithoutUserNestedInput
   examSessions?: Prisma.ExamSessionUncheckedUpdateManyWithoutUserNestedInput
+  createdLabs?: Prisma.LabUncheckedUpdateManyWithoutCreatorNestedInput
+  assignedLabs?: Prisma.LabTeacherUncheckedUpdateManyWithoutUserNestedInput
+  addedLabTeachers?: Prisma.LabTeacherUncheckedUpdateManyWithoutAddedByNestedInput
+  labProgress?: Prisma.ModuleProblemProgressUncheckedUpdateManyWithoutUserNestedInput
+  labRatings?: Prisma.LabRatingUncheckedUpdateManyWithoutUserNestedInput
   ownedProblems?: Prisma.ProblemUncheckedUpdateManyWithoutOwnerNestedInput
   approvedProblems?: Prisma.ProblemUncheckedUpdateManyWithoutApprovedByNestedInput
 }
@@ -1992,6 +2257,11 @@ export type UserCreateWithoutResultsInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutSenderInput
   notificationRecipients?: Prisma.NotificationRecipientCreateNestedManyWithoutUserInput
   examSessions?: Prisma.ExamSessionCreateNestedManyWithoutUserInput
+  createdLabs?: Prisma.LabCreateNestedManyWithoutCreatorInput
+  assignedLabs?: Prisma.LabTeacherCreateNestedManyWithoutUserInput
+  addedLabTeachers?: Prisma.LabTeacherCreateNestedManyWithoutAddedByInput
+  labProgress?: Prisma.ModuleProblemProgressCreateNestedManyWithoutUserInput
+  labRatings?: Prisma.LabRatingCreateNestedManyWithoutUserInput
   ownedProblems?: Prisma.ProblemCreateNestedManyWithoutOwnerInput
   approvedProblems?: Prisma.ProblemCreateNestedManyWithoutApprovedByInput
 }
@@ -2022,6 +2292,11 @@ export type UserUncheckedCreateWithoutResultsInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutSenderInput
   notificationRecipients?: Prisma.NotificationRecipientUncheckedCreateNestedManyWithoutUserInput
   examSessions?: Prisma.ExamSessionUncheckedCreateNestedManyWithoutUserInput
+  createdLabs?: Prisma.LabUncheckedCreateNestedManyWithoutCreatorInput
+  assignedLabs?: Prisma.LabTeacherUncheckedCreateNestedManyWithoutUserInput
+  addedLabTeachers?: Prisma.LabTeacherUncheckedCreateNestedManyWithoutAddedByInput
+  labProgress?: Prisma.ModuleProblemProgressUncheckedCreateNestedManyWithoutUserInput
+  labRatings?: Prisma.LabRatingUncheckedCreateNestedManyWithoutUserInput
   ownedProblems?: Prisma.ProblemUncheckedCreateNestedManyWithoutOwnerInput
   approvedProblems?: Prisma.ProblemUncheckedCreateNestedManyWithoutApprovedByInput
 }
@@ -2068,6 +2343,11 @@ export type UserUpdateWithoutResultsInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutSenderNestedInput
   notificationRecipients?: Prisma.NotificationRecipientUpdateManyWithoutUserNestedInput
   examSessions?: Prisma.ExamSessionUpdateManyWithoutUserNestedInput
+  createdLabs?: Prisma.LabUpdateManyWithoutCreatorNestedInput
+  assignedLabs?: Prisma.LabTeacherUpdateManyWithoutUserNestedInput
+  addedLabTeachers?: Prisma.LabTeacherUpdateManyWithoutAddedByNestedInput
+  labProgress?: Prisma.ModuleProblemProgressUpdateManyWithoutUserNestedInput
+  labRatings?: Prisma.LabRatingUpdateManyWithoutUserNestedInput
   ownedProblems?: Prisma.ProblemUpdateManyWithoutOwnerNestedInput
   approvedProblems?: Prisma.ProblemUpdateManyWithoutApprovedByNestedInput
 }
@@ -2098,6 +2378,11 @@ export type UserUncheckedUpdateWithoutResultsInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutSenderNestedInput
   notificationRecipients?: Prisma.NotificationRecipientUncheckedUpdateManyWithoutUserNestedInput
   examSessions?: Prisma.ExamSessionUncheckedUpdateManyWithoutUserNestedInput
+  createdLabs?: Prisma.LabUncheckedUpdateManyWithoutCreatorNestedInput
+  assignedLabs?: Prisma.LabTeacherUncheckedUpdateManyWithoutUserNestedInput
+  addedLabTeachers?: Prisma.LabTeacherUncheckedUpdateManyWithoutAddedByNestedInput
+  labProgress?: Prisma.ModuleProblemProgressUncheckedUpdateManyWithoutUserNestedInput
+  labRatings?: Prisma.LabRatingUncheckedUpdateManyWithoutUserNestedInput
   ownedProblems?: Prisma.ProblemUncheckedUpdateManyWithoutOwnerNestedInput
   approvedProblems?: Prisma.ProblemUncheckedUpdateManyWithoutApprovedByNestedInput
 }
@@ -2128,6 +2413,11 @@ export type UserCreateWithoutExamAttemptsInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutSenderInput
   notificationRecipients?: Prisma.NotificationRecipientCreateNestedManyWithoutUserInput
   examSessions?: Prisma.ExamSessionCreateNestedManyWithoutUserInput
+  createdLabs?: Prisma.LabCreateNestedManyWithoutCreatorInput
+  assignedLabs?: Prisma.LabTeacherCreateNestedManyWithoutUserInput
+  addedLabTeachers?: Prisma.LabTeacherCreateNestedManyWithoutAddedByInput
+  labProgress?: Prisma.ModuleProblemProgressCreateNestedManyWithoutUserInput
+  labRatings?: Prisma.LabRatingCreateNestedManyWithoutUserInput
   ownedProblems?: Prisma.ProblemCreateNestedManyWithoutOwnerInput
   approvedProblems?: Prisma.ProblemCreateNestedManyWithoutApprovedByInput
 }
@@ -2158,6 +2448,11 @@ export type UserUncheckedCreateWithoutExamAttemptsInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutSenderInput
   notificationRecipients?: Prisma.NotificationRecipientUncheckedCreateNestedManyWithoutUserInput
   examSessions?: Prisma.ExamSessionUncheckedCreateNestedManyWithoutUserInput
+  createdLabs?: Prisma.LabUncheckedCreateNestedManyWithoutCreatorInput
+  assignedLabs?: Prisma.LabTeacherUncheckedCreateNestedManyWithoutUserInput
+  addedLabTeachers?: Prisma.LabTeacherUncheckedCreateNestedManyWithoutAddedByInput
+  labProgress?: Prisma.ModuleProblemProgressUncheckedCreateNestedManyWithoutUserInput
+  labRatings?: Prisma.LabRatingUncheckedCreateNestedManyWithoutUserInput
   ownedProblems?: Prisma.ProblemUncheckedCreateNestedManyWithoutOwnerInput
   approvedProblems?: Prisma.ProblemUncheckedCreateNestedManyWithoutApprovedByInput
 }
@@ -2204,6 +2499,11 @@ export type UserUpdateWithoutExamAttemptsInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutSenderNestedInput
   notificationRecipients?: Prisma.NotificationRecipientUpdateManyWithoutUserNestedInput
   examSessions?: Prisma.ExamSessionUpdateManyWithoutUserNestedInput
+  createdLabs?: Prisma.LabUpdateManyWithoutCreatorNestedInput
+  assignedLabs?: Prisma.LabTeacherUpdateManyWithoutUserNestedInput
+  addedLabTeachers?: Prisma.LabTeacherUpdateManyWithoutAddedByNestedInput
+  labProgress?: Prisma.ModuleProblemProgressUpdateManyWithoutUserNestedInput
+  labRatings?: Prisma.LabRatingUpdateManyWithoutUserNestedInput
   ownedProblems?: Prisma.ProblemUpdateManyWithoutOwnerNestedInput
   approvedProblems?: Prisma.ProblemUpdateManyWithoutApprovedByNestedInput
 }
@@ -2234,6 +2534,11 @@ export type UserUncheckedUpdateWithoutExamAttemptsInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutSenderNestedInput
   notificationRecipients?: Prisma.NotificationRecipientUncheckedUpdateManyWithoutUserNestedInput
   examSessions?: Prisma.ExamSessionUncheckedUpdateManyWithoutUserNestedInput
+  createdLabs?: Prisma.LabUncheckedUpdateManyWithoutCreatorNestedInput
+  assignedLabs?: Prisma.LabTeacherUncheckedUpdateManyWithoutUserNestedInput
+  addedLabTeachers?: Prisma.LabTeacherUncheckedUpdateManyWithoutAddedByNestedInput
+  labProgress?: Prisma.ModuleProblemProgressUncheckedUpdateManyWithoutUserNestedInput
+  labRatings?: Prisma.LabRatingUncheckedUpdateManyWithoutUserNestedInput
   ownedProblems?: Prisma.ProblemUncheckedUpdateManyWithoutOwnerNestedInput
   approvedProblems?: Prisma.ProblemUncheckedUpdateManyWithoutApprovedByNestedInput
 }
@@ -2264,6 +2569,11 @@ export type UserCreateWithoutExamSessionsInput = {
   studentProblemStats?: Prisma.StudentProblemStatsCreateNestedManyWithoutStudentInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutSenderInput
   notificationRecipients?: Prisma.NotificationRecipientCreateNestedManyWithoutUserInput
+  createdLabs?: Prisma.LabCreateNestedManyWithoutCreatorInput
+  assignedLabs?: Prisma.LabTeacherCreateNestedManyWithoutUserInput
+  addedLabTeachers?: Prisma.LabTeacherCreateNestedManyWithoutAddedByInput
+  labProgress?: Prisma.ModuleProblemProgressCreateNestedManyWithoutUserInput
+  labRatings?: Prisma.LabRatingCreateNestedManyWithoutUserInput
   ownedProblems?: Prisma.ProblemCreateNestedManyWithoutOwnerInput
   approvedProblems?: Prisma.ProblemCreateNestedManyWithoutApprovedByInput
 }
@@ -2294,6 +2604,11 @@ export type UserUncheckedCreateWithoutExamSessionsInput = {
   studentProblemStats?: Prisma.StudentProblemStatsUncheckedCreateNestedManyWithoutStudentInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutSenderInput
   notificationRecipients?: Prisma.NotificationRecipientUncheckedCreateNestedManyWithoutUserInput
+  createdLabs?: Prisma.LabUncheckedCreateNestedManyWithoutCreatorInput
+  assignedLabs?: Prisma.LabTeacherUncheckedCreateNestedManyWithoutUserInput
+  addedLabTeachers?: Prisma.LabTeacherUncheckedCreateNestedManyWithoutAddedByInput
+  labProgress?: Prisma.ModuleProblemProgressUncheckedCreateNestedManyWithoutUserInput
+  labRatings?: Prisma.LabRatingUncheckedCreateNestedManyWithoutUserInput
   ownedProblems?: Prisma.ProblemUncheckedCreateNestedManyWithoutOwnerInput
   approvedProblems?: Prisma.ProblemUncheckedCreateNestedManyWithoutApprovedByInput
 }
@@ -2340,6 +2655,11 @@ export type UserUpdateWithoutExamSessionsInput = {
   studentProblemStats?: Prisma.StudentProblemStatsUpdateManyWithoutStudentNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutSenderNestedInput
   notificationRecipients?: Prisma.NotificationRecipientUpdateManyWithoutUserNestedInput
+  createdLabs?: Prisma.LabUpdateManyWithoutCreatorNestedInput
+  assignedLabs?: Prisma.LabTeacherUpdateManyWithoutUserNestedInput
+  addedLabTeachers?: Prisma.LabTeacherUpdateManyWithoutAddedByNestedInput
+  labProgress?: Prisma.ModuleProblemProgressUpdateManyWithoutUserNestedInput
+  labRatings?: Prisma.LabRatingUpdateManyWithoutUserNestedInput
   ownedProblems?: Prisma.ProblemUpdateManyWithoutOwnerNestedInput
   approvedProblems?: Prisma.ProblemUpdateManyWithoutApprovedByNestedInput
 }
@@ -2370,6 +2690,11 @@ export type UserUncheckedUpdateWithoutExamSessionsInput = {
   studentProblemStats?: Prisma.StudentProblemStatsUncheckedUpdateManyWithoutStudentNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutSenderNestedInput
   notificationRecipients?: Prisma.NotificationRecipientUncheckedUpdateManyWithoutUserNestedInput
+  createdLabs?: Prisma.LabUncheckedUpdateManyWithoutCreatorNestedInput
+  assignedLabs?: Prisma.LabTeacherUncheckedUpdateManyWithoutUserNestedInput
+  addedLabTeachers?: Prisma.LabTeacherUncheckedUpdateManyWithoutAddedByNestedInput
+  labProgress?: Prisma.ModuleProblemProgressUncheckedUpdateManyWithoutUserNestedInput
+  labRatings?: Prisma.LabRatingUncheckedUpdateManyWithoutUserNestedInput
   ownedProblems?: Prisma.ProblemUncheckedUpdateManyWithoutOwnerNestedInput
   approvedProblems?: Prisma.ProblemUncheckedUpdateManyWithoutApprovedByNestedInput
 }
@@ -2400,6 +2725,11 @@ export type UserCreateWithoutCreatedGroupsInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutSenderInput
   notificationRecipients?: Prisma.NotificationRecipientCreateNestedManyWithoutUserInput
   examSessions?: Prisma.ExamSessionCreateNestedManyWithoutUserInput
+  createdLabs?: Prisma.LabCreateNestedManyWithoutCreatorInput
+  assignedLabs?: Prisma.LabTeacherCreateNestedManyWithoutUserInput
+  addedLabTeachers?: Prisma.LabTeacherCreateNestedManyWithoutAddedByInput
+  labProgress?: Prisma.ModuleProblemProgressCreateNestedManyWithoutUserInput
+  labRatings?: Prisma.LabRatingCreateNestedManyWithoutUserInput
   ownedProblems?: Prisma.ProblemCreateNestedManyWithoutOwnerInput
   approvedProblems?: Prisma.ProblemCreateNestedManyWithoutApprovedByInput
 }
@@ -2430,6 +2760,11 @@ export type UserUncheckedCreateWithoutCreatedGroupsInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutSenderInput
   notificationRecipients?: Prisma.NotificationRecipientUncheckedCreateNestedManyWithoutUserInput
   examSessions?: Prisma.ExamSessionUncheckedCreateNestedManyWithoutUserInput
+  createdLabs?: Prisma.LabUncheckedCreateNestedManyWithoutCreatorInput
+  assignedLabs?: Prisma.LabTeacherUncheckedCreateNestedManyWithoutUserInput
+  addedLabTeachers?: Prisma.LabTeacherUncheckedCreateNestedManyWithoutAddedByInput
+  labProgress?: Prisma.ModuleProblemProgressUncheckedCreateNestedManyWithoutUserInput
+  labRatings?: Prisma.LabRatingUncheckedCreateNestedManyWithoutUserInput
   ownedProblems?: Prisma.ProblemUncheckedCreateNestedManyWithoutOwnerInput
   approvedProblems?: Prisma.ProblemUncheckedCreateNestedManyWithoutApprovedByInput
 }
@@ -2476,6 +2811,11 @@ export type UserUpdateWithoutCreatedGroupsInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutSenderNestedInput
   notificationRecipients?: Prisma.NotificationRecipientUpdateManyWithoutUserNestedInput
   examSessions?: Prisma.ExamSessionUpdateManyWithoutUserNestedInput
+  createdLabs?: Prisma.LabUpdateManyWithoutCreatorNestedInput
+  assignedLabs?: Prisma.LabTeacherUpdateManyWithoutUserNestedInput
+  addedLabTeachers?: Prisma.LabTeacherUpdateManyWithoutAddedByNestedInput
+  labProgress?: Prisma.ModuleProblemProgressUpdateManyWithoutUserNestedInput
+  labRatings?: Prisma.LabRatingUpdateManyWithoutUserNestedInput
   ownedProblems?: Prisma.ProblemUpdateManyWithoutOwnerNestedInput
   approvedProblems?: Prisma.ProblemUpdateManyWithoutApprovedByNestedInput
 }
@@ -2506,6 +2846,11 @@ export type UserUncheckedUpdateWithoutCreatedGroupsInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutSenderNestedInput
   notificationRecipients?: Prisma.NotificationRecipientUncheckedUpdateManyWithoutUserNestedInput
   examSessions?: Prisma.ExamSessionUncheckedUpdateManyWithoutUserNestedInput
+  createdLabs?: Prisma.LabUncheckedUpdateManyWithoutCreatorNestedInput
+  assignedLabs?: Prisma.LabTeacherUncheckedUpdateManyWithoutUserNestedInput
+  addedLabTeachers?: Prisma.LabTeacherUncheckedUpdateManyWithoutAddedByNestedInput
+  labProgress?: Prisma.ModuleProblemProgressUncheckedUpdateManyWithoutUserNestedInput
+  labRatings?: Prisma.LabRatingUncheckedUpdateManyWithoutUserNestedInput
   ownedProblems?: Prisma.ProblemUncheckedUpdateManyWithoutOwnerNestedInput
   approvedProblems?: Prisma.ProblemUncheckedUpdateManyWithoutApprovedByNestedInput
 }
@@ -2536,6 +2881,11 @@ export type UserCreateWithoutMemberGroupsInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutSenderInput
   notificationRecipients?: Prisma.NotificationRecipientCreateNestedManyWithoutUserInput
   examSessions?: Prisma.ExamSessionCreateNestedManyWithoutUserInput
+  createdLabs?: Prisma.LabCreateNestedManyWithoutCreatorInput
+  assignedLabs?: Prisma.LabTeacherCreateNestedManyWithoutUserInput
+  addedLabTeachers?: Prisma.LabTeacherCreateNestedManyWithoutAddedByInput
+  labProgress?: Prisma.ModuleProblemProgressCreateNestedManyWithoutUserInput
+  labRatings?: Prisma.LabRatingCreateNestedManyWithoutUserInput
   ownedProblems?: Prisma.ProblemCreateNestedManyWithoutOwnerInput
   approvedProblems?: Prisma.ProblemCreateNestedManyWithoutApprovedByInput
 }
@@ -2566,6 +2916,11 @@ export type UserUncheckedCreateWithoutMemberGroupsInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutSenderInput
   notificationRecipients?: Prisma.NotificationRecipientUncheckedCreateNestedManyWithoutUserInput
   examSessions?: Prisma.ExamSessionUncheckedCreateNestedManyWithoutUserInput
+  createdLabs?: Prisma.LabUncheckedCreateNestedManyWithoutCreatorInput
+  assignedLabs?: Prisma.LabTeacherUncheckedCreateNestedManyWithoutUserInput
+  addedLabTeachers?: Prisma.LabTeacherUncheckedCreateNestedManyWithoutAddedByInput
+  labProgress?: Prisma.ModuleProblemProgressUncheckedCreateNestedManyWithoutUserInput
+  labRatings?: Prisma.LabRatingUncheckedCreateNestedManyWithoutUserInput
   ownedProblems?: Prisma.ProblemUncheckedCreateNestedManyWithoutOwnerInput
   approvedProblems?: Prisma.ProblemUncheckedCreateNestedManyWithoutApprovedByInput
 }
@@ -2612,6 +2967,11 @@ export type UserUpdateWithoutMemberGroupsInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutSenderNestedInput
   notificationRecipients?: Prisma.NotificationRecipientUpdateManyWithoutUserNestedInput
   examSessions?: Prisma.ExamSessionUpdateManyWithoutUserNestedInput
+  createdLabs?: Prisma.LabUpdateManyWithoutCreatorNestedInput
+  assignedLabs?: Prisma.LabTeacherUpdateManyWithoutUserNestedInput
+  addedLabTeachers?: Prisma.LabTeacherUpdateManyWithoutAddedByNestedInput
+  labProgress?: Prisma.ModuleProblemProgressUpdateManyWithoutUserNestedInput
+  labRatings?: Prisma.LabRatingUpdateManyWithoutUserNestedInput
   ownedProblems?: Prisma.ProblemUpdateManyWithoutOwnerNestedInput
   approvedProblems?: Prisma.ProblemUpdateManyWithoutApprovedByNestedInput
 }
@@ -2642,6 +3002,11 @@ export type UserUncheckedUpdateWithoutMemberGroupsInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutSenderNestedInput
   notificationRecipients?: Prisma.NotificationRecipientUncheckedUpdateManyWithoutUserNestedInput
   examSessions?: Prisma.ExamSessionUncheckedUpdateManyWithoutUserNestedInput
+  createdLabs?: Prisma.LabUncheckedUpdateManyWithoutCreatorNestedInput
+  assignedLabs?: Prisma.LabTeacherUncheckedUpdateManyWithoutUserNestedInput
+  addedLabTeachers?: Prisma.LabTeacherUncheckedUpdateManyWithoutAddedByNestedInput
+  labProgress?: Prisma.ModuleProblemProgressUncheckedUpdateManyWithoutUserNestedInput
+  labRatings?: Prisma.LabRatingUncheckedUpdateManyWithoutUserNestedInput
   ownedProblems?: Prisma.ProblemUncheckedUpdateManyWithoutOwnerNestedInput
   approvedProblems?: Prisma.ProblemUncheckedUpdateManyWithoutApprovedByNestedInput
 }
@@ -2672,6 +3037,11 @@ export type UserCreateWithoutGlobalRoleInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutSenderInput
   notificationRecipients?: Prisma.NotificationRecipientCreateNestedManyWithoutUserInput
   examSessions?: Prisma.ExamSessionCreateNestedManyWithoutUserInput
+  createdLabs?: Prisma.LabCreateNestedManyWithoutCreatorInput
+  assignedLabs?: Prisma.LabTeacherCreateNestedManyWithoutUserInput
+  addedLabTeachers?: Prisma.LabTeacherCreateNestedManyWithoutAddedByInput
+  labProgress?: Prisma.ModuleProblemProgressCreateNestedManyWithoutUserInput
+  labRatings?: Prisma.LabRatingCreateNestedManyWithoutUserInput
   ownedProblems?: Prisma.ProblemCreateNestedManyWithoutOwnerInput
   approvedProblems?: Prisma.ProblemCreateNestedManyWithoutApprovedByInput
 }
@@ -2702,6 +3072,11 @@ export type UserUncheckedCreateWithoutGlobalRoleInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutSenderInput
   notificationRecipients?: Prisma.NotificationRecipientUncheckedCreateNestedManyWithoutUserInput
   examSessions?: Prisma.ExamSessionUncheckedCreateNestedManyWithoutUserInput
+  createdLabs?: Prisma.LabUncheckedCreateNestedManyWithoutCreatorInput
+  assignedLabs?: Prisma.LabTeacherUncheckedCreateNestedManyWithoutUserInput
+  addedLabTeachers?: Prisma.LabTeacherUncheckedCreateNestedManyWithoutAddedByInput
+  labProgress?: Prisma.ModuleProblemProgressUncheckedCreateNestedManyWithoutUserInput
+  labRatings?: Prisma.LabRatingUncheckedCreateNestedManyWithoutUserInput
   ownedProblems?: Prisma.ProblemUncheckedCreateNestedManyWithoutOwnerInput
   approvedProblems?: Prisma.ProblemUncheckedCreateNestedManyWithoutApprovedByInput
 }
@@ -2773,6 +3148,11 @@ export type UserCreateWithoutAiconversationsInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutSenderInput
   notificationRecipients?: Prisma.NotificationRecipientCreateNestedManyWithoutUserInput
   examSessions?: Prisma.ExamSessionCreateNestedManyWithoutUserInput
+  createdLabs?: Prisma.LabCreateNestedManyWithoutCreatorInput
+  assignedLabs?: Prisma.LabTeacherCreateNestedManyWithoutUserInput
+  addedLabTeachers?: Prisma.LabTeacherCreateNestedManyWithoutAddedByInput
+  labProgress?: Prisma.ModuleProblemProgressCreateNestedManyWithoutUserInput
+  labRatings?: Prisma.LabRatingCreateNestedManyWithoutUserInput
   ownedProblems?: Prisma.ProblemCreateNestedManyWithoutOwnerInput
   approvedProblems?: Prisma.ProblemCreateNestedManyWithoutApprovedByInput
 }
@@ -2803,6 +3183,11 @@ export type UserUncheckedCreateWithoutAiconversationsInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutSenderInput
   notificationRecipients?: Prisma.NotificationRecipientUncheckedCreateNestedManyWithoutUserInput
   examSessions?: Prisma.ExamSessionUncheckedCreateNestedManyWithoutUserInput
+  createdLabs?: Prisma.LabUncheckedCreateNestedManyWithoutCreatorInput
+  assignedLabs?: Prisma.LabTeacherUncheckedCreateNestedManyWithoutUserInput
+  addedLabTeachers?: Prisma.LabTeacherUncheckedCreateNestedManyWithoutAddedByInput
+  labProgress?: Prisma.ModuleProblemProgressUncheckedCreateNestedManyWithoutUserInput
+  labRatings?: Prisma.LabRatingUncheckedCreateNestedManyWithoutUserInput
   ownedProblems?: Prisma.ProblemUncheckedCreateNestedManyWithoutOwnerInput
   approvedProblems?: Prisma.ProblemUncheckedCreateNestedManyWithoutApprovedByInput
 }
@@ -2849,6 +3234,11 @@ export type UserUpdateWithoutAiconversationsInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutSenderNestedInput
   notificationRecipients?: Prisma.NotificationRecipientUpdateManyWithoutUserNestedInput
   examSessions?: Prisma.ExamSessionUpdateManyWithoutUserNestedInput
+  createdLabs?: Prisma.LabUpdateManyWithoutCreatorNestedInput
+  assignedLabs?: Prisma.LabTeacherUpdateManyWithoutUserNestedInput
+  addedLabTeachers?: Prisma.LabTeacherUpdateManyWithoutAddedByNestedInput
+  labProgress?: Prisma.ModuleProblemProgressUpdateManyWithoutUserNestedInput
+  labRatings?: Prisma.LabRatingUpdateManyWithoutUserNestedInput
   ownedProblems?: Prisma.ProblemUpdateManyWithoutOwnerNestedInput
   approvedProblems?: Prisma.ProblemUpdateManyWithoutApprovedByNestedInput
 }
@@ -2879,6 +3269,11 @@ export type UserUncheckedUpdateWithoutAiconversationsInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutSenderNestedInput
   notificationRecipients?: Prisma.NotificationRecipientUncheckedUpdateManyWithoutUserNestedInput
   examSessions?: Prisma.ExamSessionUncheckedUpdateManyWithoutUserNestedInput
+  createdLabs?: Prisma.LabUncheckedUpdateManyWithoutCreatorNestedInput
+  assignedLabs?: Prisma.LabTeacherUncheckedUpdateManyWithoutUserNestedInput
+  addedLabTeachers?: Prisma.LabTeacherUncheckedUpdateManyWithoutAddedByNestedInput
+  labProgress?: Prisma.ModuleProblemProgressUncheckedUpdateManyWithoutUserNestedInput
+  labRatings?: Prisma.LabRatingUncheckedUpdateManyWithoutUserNestedInput
   ownedProblems?: Prisma.ProblemUncheckedUpdateManyWithoutOwnerNestedInput
   approvedProblems?: Prisma.ProblemUncheckedUpdateManyWithoutApprovedByNestedInput
 }
@@ -2909,6 +3304,11 @@ export type UserCreateWithoutAirateLimitsInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutSenderInput
   notificationRecipients?: Prisma.NotificationRecipientCreateNestedManyWithoutUserInput
   examSessions?: Prisma.ExamSessionCreateNestedManyWithoutUserInput
+  createdLabs?: Prisma.LabCreateNestedManyWithoutCreatorInput
+  assignedLabs?: Prisma.LabTeacherCreateNestedManyWithoutUserInput
+  addedLabTeachers?: Prisma.LabTeacherCreateNestedManyWithoutAddedByInput
+  labProgress?: Prisma.ModuleProblemProgressCreateNestedManyWithoutUserInput
+  labRatings?: Prisma.LabRatingCreateNestedManyWithoutUserInput
   ownedProblems?: Prisma.ProblemCreateNestedManyWithoutOwnerInput
   approvedProblems?: Prisma.ProblemCreateNestedManyWithoutApprovedByInput
 }
@@ -2939,6 +3339,11 @@ export type UserUncheckedCreateWithoutAirateLimitsInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutSenderInput
   notificationRecipients?: Prisma.NotificationRecipientUncheckedCreateNestedManyWithoutUserInput
   examSessions?: Prisma.ExamSessionUncheckedCreateNestedManyWithoutUserInput
+  createdLabs?: Prisma.LabUncheckedCreateNestedManyWithoutCreatorInput
+  assignedLabs?: Prisma.LabTeacherUncheckedCreateNestedManyWithoutUserInput
+  addedLabTeachers?: Prisma.LabTeacherUncheckedCreateNestedManyWithoutAddedByInput
+  labProgress?: Prisma.ModuleProblemProgressUncheckedCreateNestedManyWithoutUserInput
+  labRatings?: Prisma.LabRatingUncheckedCreateNestedManyWithoutUserInput
   ownedProblems?: Prisma.ProblemUncheckedCreateNestedManyWithoutOwnerInput
   approvedProblems?: Prisma.ProblemUncheckedCreateNestedManyWithoutApprovedByInput
 }
@@ -2985,6 +3390,11 @@ export type UserUpdateWithoutAirateLimitsInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutSenderNestedInput
   notificationRecipients?: Prisma.NotificationRecipientUpdateManyWithoutUserNestedInput
   examSessions?: Prisma.ExamSessionUpdateManyWithoutUserNestedInput
+  createdLabs?: Prisma.LabUpdateManyWithoutCreatorNestedInput
+  assignedLabs?: Prisma.LabTeacherUpdateManyWithoutUserNestedInput
+  addedLabTeachers?: Prisma.LabTeacherUpdateManyWithoutAddedByNestedInput
+  labProgress?: Prisma.ModuleProblemProgressUpdateManyWithoutUserNestedInput
+  labRatings?: Prisma.LabRatingUpdateManyWithoutUserNestedInput
   ownedProblems?: Prisma.ProblemUpdateManyWithoutOwnerNestedInput
   approvedProblems?: Prisma.ProblemUpdateManyWithoutApprovedByNestedInput
 }
@@ -3015,6 +3425,791 @@ export type UserUncheckedUpdateWithoutAirateLimitsInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutSenderNestedInput
   notificationRecipients?: Prisma.NotificationRecipientUncheckedUpdateManyWithoutUserNestedInput
   examSessions?: Prisma.ExamSessionUncheckedUpdateManyWithoutUserNestedInput
+  createdLabs?: Prisma.LabUncheckedUpdateManyWithoutCreatorNestedInput
+  assignedLabs?: Prisma.LabTeacherUncheckedUpdateManyWithoutUserNestedInput
+  addedLabTeachers?: Prisma.LabTeacherUncheckedUpdateManyWithoutAddedByNestedInput
+  labProgress?: Prisma.ModuleProblemProgressUncheckedUpdateManyWithoutUserNestedInput
+  labRatings?: Prisma.LabRatingUncheckedUpdateManyWithoutUserNestedInput
+  ownedProblems?: Prisma.ProblemUncheckedUpdateManyWithoutOwnerNestedInput
+  approvedProblems?: Prisma.ProblemUncheckedUpdateManyWithoutApprovedByNestedInput
+}
+
+export type UserCreateWithoutCreatedLabsInput = {
+  id?: string
+  name: string
+  email: string
+  isOnboarded?: boolean
+  emailVerified?: boolean
+  image?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  globalRole?: Prisma.RoleCreateNestedOneWithoutUsersInput
+  exams?: Prisma.ExamCreateNestedManyWithoutCreatorInput
+  submissions?: Prisma.SubmissionCreateNestedManyWithoutUserInput
+  enrollments?: Prisma.ExamEnrollmentCreateNestedManyWithoutUserInput
+  results?: Prisma.ExamResultCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  createdGroups?: Prisma.GroupCreateNestedManyWithoutCreatorInput
+  memberGroups?: Prisma.GroupMemberCreateNestedManyWithoutUserInput
+  selfSubmissions?: Prisma.selfSubmissionCreateNestedManyWithoutUserInput
+  examAttempts?: Prisma.ExamAttemptCreateNestedManyWithoutStudentInput
+  aiconversations?: Prisma.AIConversationCreateNestedManyWithoutStudentInput
+  airateLimits?: Prisma.AIRateLimitCreateNestedManyWithoutStudentInput
+  studentOverallStats?: Prisma.StudentOverallStatsCreateNestedOneWithoutStudentInput
+  studentProblemStats?: Prisma.StudentProblemStatsCreateNestedManyWithoutStudentInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutSenderInput
+  notificationRecipients?: Prisma.NotificationRecipientCreateNestedManyWithoutUserInput
+  examSessions?: Prisma.ExamSessionCreateNestedManyWithoutUserInput
+  assignedLabs?: Prisma.LabTeacherCreateNestedManyWithoutUserInput
+  addedLabTeachers?: Prisma.LabTeacherCreateNestedManyWithoutAddedByInput
+  labProgress?: Prisma.ModuleProblemProgressCreateNestedManyWithoutUserInput
+  labRatings?: Prisma.LabRatingCreateNestedManyWithoutUserInput
+  ownedProblems?: Prisma.ProblemCreateNestedManyWithoutOwnerInput
+  approvedProblems?: Prisma.ProblemCreateNestedManyWithoutApprovedByInput
+}
+
+export type UserUncheckedCreateWithoutCreatedLabsInput = {
+  id?: string
+  name: string
+  email: string
+  isOnboarded?: boolean
+  emailVerified?: boolean
+  image?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  globalRoleId?: string | null
+  exams?: Prisma.ExamUncheckedCreateNestedManyWithoutCreatorInput
+  submissions?: Prisma.SubmissionUncheckedCreateNestedManyWithoutUserInput
+  enrollments?: Prisma.ExamEnrollmentUncheckedCreateNestedManyWithoutUserInput
+  results?: Prisma.ExamResultUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  createdGroups?: Prisma.GroupUncheckedCreateNestedManyWithoutCreatorInput
+  memberGroups?: Prisma.GroupMemberUncheckedCreateNestedManyWithoutUserInput
+  selfSubmissions?: Prisma.selfSubmissionUncheckedCreateNestedManyWithoutUserInput
+  examAttempts?: Prisma.ExamAttemptUncheckedCreateNestedManyWithoutStudentInput
+  aiconversations?: Prisma.AIConversationUncheckedCreateNestedManyWithoutStudentInput
+  airateLimits?: Prisma.AIRateLimitUncheckedCreateNestedManyWithoutStudentInput
+  studentOverallStats?: Prisma.StudentOverallStatsUncheckedCreateNestedOneWithoutStudentInput
+  studentProblemStats?: Prisma.StudentProblemStatsUncheckedCreateNestedManyWithoutStudentInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutSenderInput
+  notificationRecipients?: Prisma.NotificationRecipientUncheckedCreateNestedManyWithoutUserInput
+  examSessions?: Prisma.ExamSessionUncheckedCreateNestedManyWithoutUserInput
+  assignedLabs?: Prisma.LabTeacherUncheckedCreateNestedManyWithoutUserInput
+  addedLabTeachers?: Prisma.LabTeacherUncheckedCreateNestedManyWithoutAddedByInput
+  labProgress?: Prisma.ModuleProblemProgressUncheckedCreateNestedManyWithoutUserInput
+  labRatings?: Prisma.LabRatingUncheckedCreateNestedManyWithoutUserInput
+  ownedProblems?: Prisma.ProblemUncheckedCreateNestedManyWithoutOwnerInput
+  approvedProblems?: Prisma.ProblemUncheckedCreateNestedManyWithoutApprovedByInput
+}
+
+export type UserCreateOrConnectWithoutCreatedLabsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutCreatedLabsInput, Prisma.UserUncheckedCreateWithoutCreatedLabsInput>
+}
+
+export type UserUpsertWithoutCreatedLabsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutCreatedLabsInput, Prisma.UserUncheckedUpdateWithoutCreatedLabsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutCreatedLabsInput, Prisma.UserUncheckedCreateWithoutCreatedLabsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutCreatedLabsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutCreatedLabsInput, Prisma.UserUncheckedUpdateWithoutCreatedLabsInput>
+}
+
+export type UserUpdateWithoutCreatedLabsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  globalRole?: Prisma.RoleUpdateOneWithoutUsersNestedInput
+  exams?: Prisma.ExamUpdateManyWithoutCreatorNestedInput
+  submissions?: Prisma.SubmissionUpdateManyWithoutUserNestedInput
+  enrollments?: Prisma.ExamEnrollmentUpdateManyWithoutUserNestedInput
+  results?: Prisma.ExamResultUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  createdGroups?: Prisma.GroupUpdateManyWithoutCreatorNestedInput
+  memberGroups?: Prisma.GroupMemberUpdateManyWithoutUserNestedInput
+  selfSubmissions?: Prisma.selfSubmissionUpdateManyWithoutUserNestedInput
+  examAttempts?: Prisma.ExamAttemptUpdateManyWithoutStudentNestedInput
+  aiconversations?: Prisma.AIConversationUpdateManyWithoutStudentNestedInput
+  airateLimits?: Prisma.AIRateLimitUpdateManyWithoutStudentNestedInput
+  studentOverallStats?: Prisma.StudentOverallStatsUpdateOneWithoutStudentNestedInput
+  studentProblemStats?: Prisma.StudentProblemStatsUpdateManyWithoutStudentNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutSenderNestedInput
+  notificationRecipients?: Prisma.NotificationRecipientUpdateManyWithoutUserNestedInput
+  examSessions?: Prisma.ExamSessionUpdateManyWithoutUserNestedInput
+  assignedLabs?: Prisma.LabTeacherUpdateManyWithoutUserNestedInput
+  addedLabTeachers?: Prisma.LabTeacherUpdateManyWithoutAddedByNestedInput
+  labProgress?: Prisma.ModuleProblemProgressUpdateManyWithoutUserNestedInput
+  labRatings?: Prisma.LabRatingUpdateManyWithoutUserNestedInput
+  ownedProblems?: Prisma.ProblemUpdateManyWithoutOwnerNestedInput
+  approvedProblems?: Prisma.ProblemUpdateManyWithoutApprovedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutCreatedLabsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  globalRoleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  exams?: Prisma.ExamUncheckedUpdateManyWithoutCreatorNestedInput
+  submissions?: Prisma.SubmissionUncheckedUpdateManyWithoutUserNestedInput
+  enrollments?: Prisma.ExamEnrollmentUncheckedUpdateManyWithoutUserNestedInput
+  results?: Prisma.ExamResultUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  createdGroups?: Prisma.GroupUncheckedUpdateManyWithoutCreatorNestedInput
+  memberGroups?: Prisma.GroupMemberUncheckedUpdateManyWithoutUserNestedInput
+  selfSubmissions?: Prisma.selfSubmissionUncheckedUpdateManyWithoutUserNestedInput
+  examAttempts?: Prisma.ExamAttemptUncheckedUpdateManyWithoutStudentNestedInput
+  aiconversations?: Prisma.AIConversationUncheckedUpdateManyWithoutStudentNestedInput
+  airateLimits?: Prisma.AIRateLimitUncheckedUpdateManyWithoutStudentNestedInput
+  studentOverallStats?: Prisma.StudentOverallStatsUncheckedUpdateOneWithoutStudentNestedInput
+  studentProblemStats?: Prisma.StudentProblemStatsUncheckedUpdateManyWithoutStudentNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutSenderNestedInput
+  notificationRecipients?: Prisma.NotificationRecipientUncheckedUpdateManyWithoutUserNestedInput
+  examSessions?: Prisma.ExamSessionUncheckedUpdateManyWithoutUserNestedInput
+  assignedLabs?: Prisma.LabTeacherUncheckedUpdateManyWithoutUserNestedInput
+  addedLabTeachers?: Prisma.LabTeacherUncheckedUpdateManyWithoutAddedByNestedInput
+  labProgress?: Prisma.ModuleProblemProgressUncheckedUpdateManyWithoutUserNestedInput
+  labRatings?: Prisma.LabRatingUncheckedUpdateManyWithoutUserNestedInput
+  ownedProblems?: Prisma.ProblemUncheckedUpdateManyWithoutOwnerNestedInput
+  approvedProblems?: Prisma.ProblemUncheckedUpdateManyWithoutApprovedByNestedInput
+}
+
+export type UserCreateWithoutAssignedLabsInput = {
+  id?: string
+  name: string
+  email: string
+  isOnboarded?: boolean
+  emailVerified?: boolean
+  image?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  globalRole?: Prisma.RoleCreateNestedOneWithoutUsersInput
+  exams?: Prisma.ExamCreateNestedManyWithoutCreatorInput
+  submissions?: Prisma.SubmissionCreateNestedManyWithoutUserInput
+  enrollments?: Prisma.ExamEnrollmentCreateNestedManyWithoutUserInput
+  results?: Prisma.ExamResultCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  createdGroups?: Prisma.GroupCreateNestedManyWithoutCreatorInput
+  memberGroups?: Prisma.GroupMemberCreateNestedManyWithoutUserInput
+  selfSubmissions?: Prisma.selfSubmissionCreateNestedManyWithoutUserInput
+  examAttempts?: Prisma.ExamAttemptCreateNestedManyWithoutStudentInput
+  aiconversations?: Prisma.AIConversationCreateNestedManyWithoutStudentInput
+  airateLimits?: Prisma.AIRateLimitCreateNestedManyWithoutStudentInput
+  studentOverallStats?: Prisma.StudentOverallStatsCreateNestedOneWithoutStudentInput
+  studentProblemStats?: Prisma.StudentProblemStatsCreateNestedManyWithoutStudentInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutSenderInput
+  notificationRecipients?: Prisma.NotificationRecipientCreateNestedManyWithoutUserInput
+  examSessions?: Prisma.ExamSessionCreateNestedManyWithoutUserInput
+  createdLabs?: Prisma.LabCreateNestedManyWithoutCreatorInput
+  addedLabTeachers?: Prisma.LabTeacherCreateNestedManyWithoutAddedByInput
+  labProgress?: Prisma.ModuleProblemProgressCreateNestedManyWithoutUserInput
+  labRatings?: Prisma.LabRatingCreateNestedManyWithoutUserInput
+  ownedProblems?: Prisma.ProblemCreateNestedManyWithoutOwnerInput
+  approvedProblems?: Prisma.ProblemCreateNestedManyWithoutApprovedByInput
+}
+
+export type UserUncheckedCreateWithoutAssignedLabsInput = {
+  id?: string
+  name: string
+  email: string
+  isOnboarded?: boolean
+  emailVerified?: boolean
+  image?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  globalRoleId?: string | null
+  exams?: Prisma.ExamUncheckedCreateNestedManyWithoutCreatorInput
+  submissions?: Prisma.SubmissionUncheckedCreateNestedManyWithoutUserInput
+  enrollments?: Prisma.ExamEnrollmentUncheckedCreateNestedManyWithoutUserInput
+  results?: Prisma.ExamResultUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  createdGroups?: Prisma.GroupUncheckedCreateNestedManyWithoutCreatorInput
+  memberGroups?: Prisma.GroupMemberUncheckedCreateNestedManyWithoutUserInput
+  selfSubmissions?: Prisma.selfSubmissionUncheckedCreateNestedManyWithoutUserInput
+  examAttempts?: Prisma.ExamAttemptUncheckedCreateNestedManyWithoutStudentInput
+  aiconversations?: Prisma.AIConversationUncheckedCreateNestedManyWithoutStudentInput
+  airateLimits?: Prisma.AIRateLimitUncheckedCreateNestedManyWithoutStudentInput
+  studentOverallStats?: Prisma.StudentOverallStatsUncheckedCreateNestedOneWithoutStudentInput
+  studentProblemStats?: Prisma.StudentProblemStatsUncheckedCreateNestedManyWithoutStudentInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutSenderInput
+  notificationRecipients?: Prisma.NotificationRecipientUncheckedCreateNestedManyWithoutUserInput
+  examSessions?: Prisma.ExamSessionUncheckedCreateNestedManyWithoutUserInput
+  createdLabs?: Prisma.LabUncheckedCreateNestedManyWithoutCreatorInput
+  addedLabTeachers?: Prisma.LabTeacherUncheckedCreateNestedManyWithoutAddedByInput
+  labProgress?: Prisma.ModuleProblemProgressUncheckedCreateNestedManyWithoutUserInput
+  labRatings?: Prisma.LabRatingUncheckedCreateNestedManyWithoutUserInput
+  ownedProblems?: Prisma.ProblemUncheckedCreateNestedManyWithoutOwnerInput
+  approvedProblems?: Prisma.ProblemUncheckedCreateNestedManyWithoutApprovedByInput
+}
+
+export type UserCreateOrConnectWithoutAssignedLabsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutAssignedLabsInput, Prisma.UserUncheckedCreateWithoutAssignedLabsInput>
+}
+
+export type UserCreateWithoutAddedLabTeachersInput = {
+  id?: string
+  name: string
+  email: string
+  isOnboarded?: boolean
+  emailVerified?: boolean
+  image?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  globalRole?: Prisma.RoleCreateNestedOneWithoutUsersInput
+  exams?: Prisma.ExamCreateNestedManyWithoutCreatorInput
+  submissions?: Prisma.SubmissionCreateNestedManyWithoutUserInput
+  enrollments?: Prisma.ExamEnrollmentCreateNestedManyWithoutUserInput
+  results?: Prisma.ExamResultCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  createdGroups?: Prisma.GroupCreateNestedManyWithoutCreatorInput
+  memberGroups?: Prisma.GroupMemberCreateNestedManyWithoutUserInput
+  selfSubmissions?: Prisma.selfSubmissionCreateNestedManyWithoutUserInput
+  examAttempts?: Prisma.ExamAttemptCreateNestedManyWithoutStudentInput
+  aiconversations?: Prisma.AIConversationCreateNestedManyWithoutStudentInput
+  airateLimits?: Prisma.AIRateLimitCreateNestedManyWithoutStudentInput
+  studentOverallStats?: Prisma.StudentOverallStatsCreateNestedOneWithoutStudentInput
+  studentProblemStats?: Prisma.StudentProblemStatsCreateNestedManyWithoutStudentInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutSenderInput
+  notificationRecipients?: Prisma.NotificationRecipientCreateNestedManyWithoutUserInput
+  examSessions?: Prisma.ExamSessionCreateNestedManyWithoutUserInput
+  createdLabs?: Prisma.LabCreateNestedManyWithoutCreatorInput
+  assignedLabs?: Prisma.LabTeacherCreateNestedManyWithoutUserInput
+  labProgress?: Prisma.ModuleProblemProgressCreateNestedManyWithoutUserInput
+  labRatings?: Prisma.LabRatingCreateNestedManyWithoutUserInput
+  ownedProblems?: Prisma.ProblemCreateNestedManyWithoutOwnerInput
+  approvedProblems?: Prisma.ProblemCreateNestedManyWithoutApprovedByInput
+}
+
+export type UserUncheckedCreateWithoutAddedLabTeachersInput = {
+  id?: string
+  name: string
+  email: string
+  isOnboarded?: boolean
+  emailVerified?: boolean
+  image?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  globalRoleId?: string | null
+  exams?: Prisma.ExamUncheckedCreateNestedManyWithoutCreatorInput
+  submissions?: Prisma.SubmissionUncheckedCreateNestedManyWithoutUserInput
+  enrollments?: Prisma.ExamEnrollmentUncheckedCreateNestedManyWithoutUserInput
+  results?: Prisma.ExamResultUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  createdGroups?: Prisma.GroupUncheckedCreateNestedManyWithoutCreatorInput
+  memberGroups?: Prisma.GroupMemberUncheckedCreateNestedManyWithoutUserInput
+  selfSubmissions?: Prisma.selfSubmissionUncheckedCreateNestedManyWithoutUserInput
+  examAttempts?: Prisma.ExamAttemptUncheckedCreateNestedManyWithoutStudentInput
+  aiconversations?: Prisma.AIConversationUncheckedCreateNestedManyWithoutStudentInput
+  airateLimits?: Prisma.AIRateLimitUncheckedCreateNestedManyWithoutStudentInput
+  studentOverallStats?: Prisma.StudentOverallStatsUncheckedCreateNestedOneWithoutStudentInput
+  studentProblemStats?: Prisma.StudentProblemStatsUncheckedCreateNestedManyWithoutStudentInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutSenderInput
+  notificationRecipients?: Prisma.NotificationRecipientUncheckedCreateNestedManyWithoutUserInput
+  examSessions?: Prisma.ExamSessionUncheckedCreateNestedManyWithoutUserInput
+  createdLabs?: Prisma.LabUncheckedCreateNestedManyWithoutCreatorInput
+  assignedLabs?: Prisma.LabTeacherUncheckedCreateNestedManyWithoutUserInput
+  labProgress?: Prisma.ModuleProblemProgressUncheckedCreateNestedManyWithoutUserInput
+  labRatings?: Prisma.LabRatingUncheckedCreateNestedManyWithoutUserInput
+  ownedProblems?: Prisma.ProblemUncheckedCreateNestedManyWithoutOwnerInput
+  approvedProblems?: Prisma.ProblemUncheckedCreateNestedManyWithoutApprovedByInput
+}
+
+export type UserCreateOrConnectWithoutAddedLabTeachersInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutAddedLabTeachersInput, Prisma.UserUncheckedCreateWithoutAddedLabTeachersInput>
+}
+
+export type UserUpsertWithoutAssignedLabsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutAssignedLabsInput, Prisma.UserUncheckedUpdateWithoutAssignedLabsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutAssignedLabsInput, Prisma.UserUncheckedCreateWithoutAssignedLabsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutAssignedLabsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutAssignedLabsInput, Prisma.UserUncheckedUpdateWithoutAssignedLabsInput>
+}
+
+export type UserUpdateWithoutAssignedLabsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  globalRole?: Prisma.RoleUpdateOneWithoutUsersNestedInput
+  exams?: Prisma.ExamUpdateManyWithoutCreatorNestedInput
+  submissions?: Prisma.SubmissionUpdateManyWithoutUserNestedInput
+  enrollments?: Prisma.ExamEnrollmentUpdateManyWithoutUserNestedInput
+  results?: Prisma.ExamResultUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  createdGroups?: Prisma.GroupUpdateManyWithoutCreatorNestedInput
+  memberGroups?: Prisma.GroupMemberUpdateManyWithoutUserNestedInput
+  selfSubmissions?: Prisma.selfSubmissionUpdateManyWithoutUserNestedInput
+  examAttempts?: Prisma.ExamAttemptUpdateManyWithoutStudentNestedInput
+  aiconversations?: Prisma.AIConversationUpdateManyWithoutStudentNestedInput
+  airateLimits?: Prisma.AIRateLimitUpdateManyWithoutStudentNestedInput
+  studentOverallStats?: Prisma.StudentOverallStatsUpdateOneWithoutStudentNestedInput
+  studentProblemStats?: Prisma.StudentProblemStatsUpdateManyWithoutStudentNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutSenderNestedInput
+  notificationRecipients?: Prisma.NotificationRecipientUpdateManyWithoutUserNestedInput
+  examSessions?: Prisma.ExamSessionUpdateManyWithoutUserNestedInput
+  createdLabs?: Prisma.LabUpdateManyWithoutCreatorNestedInput
+  addedLabTeachers?: Prisma.LabTeacherUpdateManyWithoutAddedByNestedInput
+  labProgress?: Prisma.ModuleProblemProgressUpdateManyWithoutUserNestedInput
+  labRatings?: Prisma.LabRatingUpdateManyWithoutUserNestedInput
+  ownedProblems?: Prisma.ProblemUpdateManyWithoutOwnerNestedInput
+  approvedProblems?: Prisma.ProblemUpdateManyWithoutApprovedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutAssignedLabsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  globalRoleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  exams?: Prisma.ExamUncheckedUpdateManyWithoutCreatorNestedInput
+  submissions?: Prisma.SubmissionUncheckedUpdateManyWithoutUserNestedInput
+  enrollments?: Prisma.ExamEnrollmentUncheckedUpdateManyWithoutUserNestedInput
+  results?: Prisma.ExamResultUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  createdGroups?: Prisma.GroupUncheckedUpdateManyWithoutCreatorNestedInput
+  memberGroups?: Prisma.GroupMemberUncheckedUpdateManyWithoutUserNestedInput
+  selfSubmissions?: Prisma.selfSubmissionUncheckedUpdateManyWithoutUserNestedInput
+  examAttempts?: Prisma.ExamAttemptUncheckedUpdateManyWithoutStudentNestedInput
+  aiconversations?: Prisma.AIConversationUncheckedUpdateManyWithoutStudentNestedInput
+  airateLimits?: Prisma.AIRateLimitUncheckedUpdateManyWithoutStudentNestedInput
+  studentOverallStats?: Prisma.StudentOverallStatsUncheckedUpdateOneWithoutStudentNestedInput
+  studentProblemStats?: Prisma.StudentProblemStatsUncheckedUpdateManyWithoutStudentNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutSenderNestedInput
+  notificationRecipients?: Prisma.NotificationRecipientUncheckedUpdateManyWithoutUserNestedInput
+  examSessions?: Prisma.ExamSessionUncheckedUpdateManyWithoutUserNestedInput
+  createdLabs?: Prisma.LabUncheckedUpdateManyWithoutCreatorNestedInput
+  addedLabTeachers?: Prisma.LabTeacherUncheckedUpdateManyWithoutAddedByNestedInput
+  labProgress?: Prisma.ModuleProblemProgressUncheckedUpdateManyWithoutUserNestedInput
+  labRatings?: Prisma.LabRatingUncheckedUpdateManyWithoutUserNestedInput
+  ownedProblems?: Prisma.ProblemUncheckedUpdateManyWithoutOwnerNestedInput
+  approvedProblems?: Prisma.ProblemUncheckedUpdateManyWithoutApprovedByNestedInput
+}
+
+export type UserUpsertWithoutAddedLabTeachersInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutAddedLabTeachersInput, Prisma.UserUncheckedUpdateWithoutAddedLabTeachersInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutAddedLabTeachersInput, Prisma.UserUncheckedCreateWithoutAddedLabTeachersInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutAddedLabTeachersInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutAddedLabTeachersInput, Prisma.UserUncheckedUpdateWithoutAddedLabTeachersInput>
+}
+
+export type UserUpdateWithoutAddedLabTeachersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  globalRole?: Prisma.RoleUpdateOneWithoutUsersNestedInput
+  exams?: Prisma.ExamUpdateManyWithoutCreatorNestedInput
+  submissions?: Prisma.SubmissionUpdateManyWithoutUserNestedInput
+  enrollments?: Prisma.ExamEnrollmentUpdateManyWithoutUserNestedInput
+  results?: Prisma.ExamResultUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  createdGroups?: Prisma.GroupUpdateManyWithoutCreatorNestedInput
+  memberGroups?: Prisma.GroupMemberUpdateManyWithoutUserNestedInput
+  selfSubmissions?: Prisma.selfSubmissionUpdateManyWithoutUserNestedInput
+  examAttempts?: Prisma.ExamAttemptUpdateManyWithoutStudentNestedInput
+  aiconversations?: Prisma.AIConversationUpdateManyWithoutStudentNestedInput
+  airateLimits?: Prisma.AIRateLimitUpdateManyWithoutStudentNestedInput
+  studentOverallStats?: Prisma.StudentOverallStatsUpdateOneWithoutStudentNestedInput
+  studentProblemStats?: Prisma.StudentProblemStatsUpdateManyWithoutStudentNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutSenderNestedInput
+  notificationRecipients?: Prisma.NotificationRecipientUpdateManyWithoutUserNestedInput
+  examSessions?: Prisma.ExamSessionUpdateManyWithoutUserNestedInput
+  createdLabs?: Prisma.LabUpdateManyWithoutCreatorNestedInput
+  assignedLabs?: Prisma.LabTeacherUpdateManyWithoutUserNestedInput
+  labProgress?: Prisma.ModuleProblemProgressUpdateManyWithoutUserNestedInput
+  labRatings?: Prisma.LabRatingUpdateManyWithoutUserNestedInput
+  ownedProblems?: Prisma.ProblemUpdateManyWithoutOwnerNestedInput
+  approvedProblems?: Prisma.ProblemUpdateManyWithoutApprovedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutAddedLabTeachersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  globalRoleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  exams?: Prisma.ExamUncheckedUpdateManyWithoutCreatorNestedInput
+  submissions?: Prisma.SubmissionUncheckedUpdateManyWithoutUserNestedInput
+  enrollments?: Prisma.ExamEnrollmentUncheckedUpdateManyWithoutUserNestedInput
+  results?: Prisma.ExamResultUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  createdGroups?: Prisma.GroupUncheckedUpdateManyWithoutCreatorNestedInput
+  memberGroups?: Prisma.GroupMemberUncheckedUpdateManyWithoutUserNestedInput
+  selfSubmissions?: Prisma.selfSubmissionUncheckedUpdateManyWithoutUserNestedInput
+  examAttempts?: Prisma.ExamAttemptUncheckedUpdateManyWithoutStudentNestedInput
+  aiconversations?: Prisma.AIConversationUncheckedUpdateManyWithoutStudentNestedInput
+  airateLimits?: Prisma.AIRateLimitUncheckedUpdateManyWithoutStudentNestedInput
+  studentOverallStats?: Prisma.StudentOverallStatsUncheckedUpdateOneWithoutStudentNestedInput
+  studentProblemStats?: Prisma.StudentProblemStatsUncheckedUpdateManyWithoutStudentNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutSenderNestedInput
+  notificationRecipients?: Prisma.NotificationRecipientUncheckedUpdateManyWithoutUserNestedInput
+  examSessions?: Prisma.ExamSessionUncheckedUpdateManyWithoutUserNestedInput
+  createdLabs?: Prisma.LabUncheckedUpdateManyWithoutCreatorNestedInput
+  assignedLabs?: Prisma.LabTeacherUncheckedUpdateManyWithoutUserNestedInput
+  labProgress?: Prisma.ModuleProblemProgressUncheckedUpdateManyWithoutUserNestedInput
+  labRatings?: Prisma.LabRatingUncheckedUpdateManyWithoutUserNestedInput
+  ownedProblems?: Prisma.ProblemUncheckedUpdateManyWithoutOwnerNestedInput
+  approvedProblems?: Prisma.ProblemUncheckedUpdateManyWithoutApprovedByNestedInput
+}
+
+export type UserCreateWithoutLabProgressInput = {
+  id?: string
+  name: string
+  email: string
+  isOnboarded?: boolean
+  emailVerified?: boolean
+  image?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  globalRole?: Prisma.RoleCreateNestedOneWithoutUsersInput
+  exams?: Prisma.ExamCreateNestedManyWithoutCreatorInput
+  submissions?: Prisma.SubmissionCreateNestedManyWithoutUserInput
+  enrollments?: Prisma.ExamEnrollmentCreateNestedManyWithoutUserInput
+  results?: Prisma.ExamResultCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  createdGroups?: Prisma.GroupCreateNestedManyWithoutCreatorInput
+  memberGroups?: Prisma.GroupMemberCreateNestedManyWithoutUserInput
+  selfSubmissions?: Prisma.selfSubmissionCreateNestedManyWithoutUserInput
+  examAttempts?: Prisma.ExamAttemptCreateNestedManyWithoutStudentInput
+  aiconversations?: Prisma.AIConversationCreateNestedManyWithoutStudentInput
+  airateLimits?: Prisma.AIRateLimitCreateNestedManyWithoutStudentInput
+  studentOverallStats?: Prisma.StudentOverallStatsCreateNestedOneWithoutStudentInput
+  studentProblemStats?: Prisma.StudentProblemStatsCreateNestedManyWithoutStudentInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutSenderInput
+  notificationRecipients?: Prisma.NotificationRecipientCreateNestedManyWithoutUserInput
+  examSessions?: Prisma.ExamSessionCreateNestedManyWithoutUserInput
+  createdLabs?: Prisma.LabCreateNestedManyWithoutCreatorInput
+  assignedLabs?: Prisma.LabTeacherCreateNestedManyWithoutUserInput
+  addedLabTeachers?: Prisma.LabTeacherCreateNestedManyWithoutAddedByInput
+  labRatings?: Prisma.LabRatingCreateNestedManyWithoutUserInput
+  ownedProblems?: Prisma.ProblemCreateNestedManyWithoutOwnerInput
+  approvedProblems?: Prisma.ProblemCreateNestedManyWithoutApprovedByInput
+}
+
+export type UserUncheckedCreateWithoutLabProgressInput = {
+  id?: string
+  name: string
+  email: string
+  isOnboarded?: boolean
+  emailVerified?: boolean
+  image?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  globalRoleId?: string | null
+  exams?: Prisma.ExamUncheckedCreateNestedManyWithoutCreatorInput
+  submissions?: Prisma.SubmissionUncheckedCreateNestedManyWithoutUserInput
+  enrollments?: Prisma.ExamEnrollmentUncheckedCreateNestedManyWithoutUserInput
+  results?: Prisma.ExamResultUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  createdGroups?: Prisma.GroupUncheckedCreateNestedManyWithoutCreatorInput
+  memberGroups?: Prisma.GroupMemberUncheckedCreateNestedManyWithoutUserInput
+  selfSubmissions?: Prisma.selfSubmissionUncheckedCreateNestedManyWithoutUserInput
+  examAttempts?: Prisma.ExamAttemptUncheckedCreateNestedManyWithoutStudentInput
+  aiconversations?: Prisma.AIConversationUncheckedCreateNestedManyWithoutStudentInput
+  airateLimits?: Prisma.AIRateLimitUncheckedCreateNestedManyWithoutStudentInput
+  studentOverallStats?: Prisma.StudentOverallStatsUncheckedCreateNestedOneWithoutStudentInput
+  studentProblemStats?: Prisma.StudentProblemStatsUncheckedCreateNestedManyWithoutStudentInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutSenderInput
+  notificationRecipients?: Prisma.NotificationRecipientUncheckedCreateNestedManyWithoutUserInput
+  examSessions?: Prisma.ExamSessionUncheckedCreateNestedManyWithoutUserInput
+  createdLabs?: Prisma.LabUncheckedCreateNestedManyWithoutCreatorInput
+  assignedLabs?: Prisma.LabTeacherUncheckedCreateNestedManyWithoutUserInput
+  addedLabTeachers?: Prisma.LabTeacherUncheckedCreateNestedManyWithoutAddedByInput
+  labRatings?: Prisma.LabRatingUncheckedCreateNestedManyWithoutUserInput
+  ownedProblems?: Prisma.ProblemUncheckedCreateNestedManyWithoutOwnerInput
+  approvedProblems?: Prisma.ProblemUncheckedCreateNestedManyWithoutApprovedByInput
+}
+
+export type UserCreateOrConnectWithoutLabProgressInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutLabProgressInput, Prisma.UserUncheckedCreateWithoutLabProgressInput>
+}
+
+export type UserUpsertWithoutLabProgressInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutLabProgressInput, Prisma.UserUncheckedUpdateWithoutLabProgressInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutLabProgressInput, Prisma.UserUncheckedCreateWithoutLabProgressInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutLabProgressInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutLabProgressInput, Prisma.UserUncheckedUpdateWithoutLabProgressInput>
+}
+
+export type UserUpdateWithoutLabProgressInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  globalRole?: Prisma.RoleUpdateOneWithoutUsersNestedInput
+  exams?: Prisma.ExamUpdateManyWithoutCreatorNestedInput
+  submissions?: Prisma.SubmissionUpdateManyWithoutUserNestedInput
+  enrollments?: Prisma.ExamEnrollmentUpdateManyWithoutUserNestedInput
+  results?: Prisma.ExamResultUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  createdGroups?: Prisma.GroupUpdateManyWithoutCreatorNestedInput
+  memberGroups?: Prisma.GroupMemberUpdateManyWithoutUserNestedInput
+  selfSubmissions?: Prisma.selfSubmissionUpdateManyWithoutUserNestedInput
+  examAttempts?: Prisma.ExamAttemptUpdateManyWithoutStudentNestedInput
+  aiconversations?: Prisma.AIConversationUpdateManyWithoutStudentNestedInput
+  airateLimits?: Prisma.AIRateLimitUpdateManyWithoutStudentNestedInput
+  studentOverallStats?: Prisma.StudentOverallStatsUpdateOneWithoutStudentNestedInput
+  studentProblemStats?: Prisma.StudentProblemStatsUpdateManyWithoutStudentNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutSenderNestedInput
+  notificationRecipients?: Prisma.NotificationRecipientUpdateManyWithoutUserNestedInput
+  examSessions?: Prisma.ExamSessionUpdateManyWithoutUserNestedInput
+  createdLabs?: Prisma.LabUpdateManyWithoutCreatorNestedInput
+  assignedLabs?: Prisma.LabTeacherUpdateManyWithoutUserNestedInput
+  addedLabTeachers?: Prisma.LabTeacherUpdateManyWithoutAddedByNestedInput
+  labRatings?: Prisma.LabRatingUpdateManyWithoutUserNestedInput
+  ownedProblems?: Prisma.ProblemUpdateManyWithoutOwnerNestedInput
+  approvedProblems?: Prisma.ProblemUpdateManyWithoutApprovedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutLabProgressInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  globalRoleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  exams?: Prisma.ExamUncheckedUpdateManyWithoutCreatorNestedInput
+  submissions?: Prisma.SubmissionUncheckedUpdateManyWithoutUserNestedInput
+  enrollments?: Prisma.ExamEnrollmentUncheckedUpdateManyWithoutUserNestedInput
+  results?: Prisma.ExamResultUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  createdGroups?: Prisma.GroupUncheckedUpdateManyWithoutCreatorNestedInput
+  memberGroups?: Prisma.GroupMemberUncheckedUpdateManyWithoutUserNestedInput
+  selfSubmissions?: Prisma.selfSubmissionUncheckedUpdateManyWithoutUserNestedInput
+  examAttempts?: Prisma.ExamAttemptUncheckedUpdateManyWithoutStudentNestedInput
+  aiconversations?: Prisma.AIConversationUncheckedUpdateManyWithoutStudentNestedInput
+  airateLimits?: Prisma.AIRateLimitUncheckedUpdateManyWithoutStudentNestedInput
+  studentOverallStats?: Prisma.StudentOverallStatsUncheckedUpdateOneWithoutStudentNestedInput
+  studentProblemStats?: Prisma.StudentProblemStatsUncheckedUpdateManyWithoutStudentNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutSenderNestedInput
+  notificationRecipients?: Prisma.NotificationRecipientUncheckedUpdateManyWithoutUserNestedInput
+  examSessions?: Prisma.ExamSessionUncheckedUpdateManyWithoutUserNestedInput
+  createdLabs?: Prisma.LabUncheckedUpdateManyWithoutCreatorNestedInput
+  assignedLabs?: Prisma.LabTeacherUncheckedUpdateManyWithoutUserNestedInput
+  addedLabTeachers?: Prisma.LabTeacherUncheckedUpdateManyWithoutAddedByNestedInput
+  labRatings?: Prisma.LabRatingUncheckedUpdateManyWithoutUserNestedInput
+  ownedProblems?: Prisma.ProblemUncheckedUpdateManyWithoutOwnerNestedInput
+  approvedProblems?: Prisma.ProblemUncheckedUpdateManyWithoutApprovedByNestedInput
+}
+
+export type UserCreateWithoutLabRatingsInput = {
+  id?: string
+  name: string
+  email: string
+  isOnboarded?: boolean
+  emailVerified?: boolean
+  image?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  globalRole?: Prisma.RoleCreateNestedOneWithoutUsersInput
+  exams?: Prisma.ExamCreateNestedManyWithoutCreatorInput
+  submissions?: Prisma.SubmissionCreateNestedManyWithoutUserInput
+  enrollments?: Prisma.ExamEnrollmentCreateNestedManyWithoutUserInput
+  results?: Prisma.ExamResultCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  createdGroups?: Prisma.GroupCreateNestedManyWithoutCreatorInput
+  memberGroups?: Prisma.GroupMemberCreateNestedManyWithoutUserInput
+  selfSubmissions?: Prisma.selfSubmissionCreateNestedManyWithoutUserInput
+  examAttempts?: Prisma.ExamAttemptCreateNestedManyWithoutStudentInput
+  aiconversations?: Prisma.AIConversationCreateNestedManyWithoutStudentInput
+  airateLimits?: Prisma.AIRateLimitCreateNestedManyWithoutStudentInput
+  studentOverallStats?: Prisma.StudentOverallStatsCreateNestedOneWithoutStudentInput
+  studentProblemStats?: Prisma.StudentProblemStatsCreateNestedManyWithoutStudentInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutSenderInput
+  notificationRecipients?: Prisma.NotificationRecipientCreateNestedManyWithoutUserInput
+  examSessions?: Prisma.ExamSessionCreateNestedManyWithoutUserInput
+  createdLabs?: Prisma.LabCreateNestedManyWithoutCreatorInput
+  assignedLabs?: Prisma.LabTeacherCreateNestedManyWithoutUserInput
+  addedLabTeachers?: Prisma.LabTeacherCreateNestedManyWithoutAddedByInput
+  labProgress?: Prisma.ModuleProblemProgressCreateNestedManyWithoutUserInput
+  ownedProblems?: Prisma.ProblemCreateNestedManyWithoutOwnerInput
+  approvedProblems?: Prisma.ProblemCreateNestedManyWithoutApprovedByInput
+}
+
+export type UserUncheckedCreateWithoutLabRatingsInput = {
+  id?: string
+  name: string
+  email: string
+  isOnboarded?: boolean
+  emailVerified?: boolean
+  image?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  globalRoleId?: string | null
+  exams?: Prisma.ExamUncheckedCreateNestedManyWithoutCreatorInput
+  submissions?: Prisma.SubmissionUncheckedCreateNestedManyWithoutUserInput
+  enrollments?: Prisma.ExamEnrollmentUncheckedCreateNestedManyWithoutUserInput
+  results?: Prisma.ExamResultUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  createdGroups?: Prisma.GroupUncheckedCreateNestedManyWithoutCreatorInput
+  memberGroups?: Prisma.GroupMemberUncheckedCreateNestedManyWithoutUserInput
+  selfSubmissions?: Prisma.selfSubmissionUncheckedCreateNestedManyWithoutUserInput
+  examAttempts?: Prisma.ExamAttemptUncheckedCreateNestedManyWithoutStudentInput
+  aiconversations?: Prisma.AIConversationUncheckedCreateNestedManyWithoutStudentInput
+  airateLimits?: Prisma.AIRateLimitUncheckedCreateNestedManyWithoutStudentInput
+  studentOverallStats?: Prisma.StudentOverallStatsUncheckedCreateNestedOneWithoutStudentInput
+  studentProblemStats?: Prisma.StudentProblemStatsUncheckedCreateNestedManyWithoutStudentInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutSenderInput
+  notificationRecipients?: Prisma.NotificationRecipientUncheckedCreateNestedManyWithoutUserInput
+  examSessions?: Prisma.ExamSessionUncheckedCreateNestedManyWithoutUserInput
+  createdLabs?: Prisma.LabUncheckedCreateNestedManyWithoutCreatorInput
+  assignedLabs?: Prisma.LabTeacherUncheckedCreateNestedManyWithoutUserInput
+  addedLabTeachers?: Prisma.LabTeacherUncheckedCreateNestedManyWithoutAddedByInput
+  labProgress?: Prisma.ModuleProblemProgressUncheckedCreateNestedManyWithoutUserInput
+  ownedProblems?: Prisma.ProblemUncheckedCreateNestedManyWithoutOwnerInput
+  approvedProblems?: Prisma.ProblemUncheckedCreateNestedManyWithoutApprovedByInput
+}
+
+export type UserCreateOrConnectWithoutLabRatingsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutLabRatingsInput, Prisma.UserUncheckedCreateWithoutLabRatingsInput>
+}
+
+export type UserUpsertWithoutLabRatingsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutLabRatingsInput, Prisma.UserUncheckedUpdateWithoutLabRatingsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutLabRatingsInput, Prisma.UserUncheckedCreateWithoutLabRatingsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutLabRatingsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutLabRatingsInput, Prisma.UserUncheckedUpdateWithoutLabRatingsInput>
+}
+
+export type UserUpdateWithoutLabRatingsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  globalRole?: Prisma.RoleUpdateOneWithoutUsersNestedInput
+  exams?: Prisma.ExamUpdateManyWithoutCreatorNestedInput
+  submissions?: Prisma.SubmissionUpdateManyWithoutUserNestedInput
+  enrollments?: Prisma.ExamEnrollmentUpdateManyWithoutUserNestedInput
+  results?: Prisma.ExamResultUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  createdGroups?: Prisma.GroupUpdateManyWithoutCreatorNestedInput
+  memberGroups?: Prisma.GroupMemberUpdateManyWithoutUserNestedInput
+  selfSubmissions?: Prisma.selfSubmissionUpdateManyWithoutUserNestedInput
+  examAttempts?: Prisma.ExamAttemptUpdateManyWithoutStudentNestedInput
+  aiconversations?: Prisma.AIConversationUpdateManyWithoutStudentNestedInput
+  airateLimits?: Prisma.AIRateLimitUpdateManyWithoutStudentNestedInput
+  studentOverallStats?: Prisma.StudentOverallStatsUpdateOneWithoutStudentNestedInput
+  studentProblemStats?: Prisma.StudentProblemStatsUpdateManyWithoutStudentNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutSenderNestedInput
+  notificationRecipients?: Prisma.NotificationRecipientUpdateManyWithoutUserNestedInput
+  examSessions?: Prisma.ExamSessionUpdateManyWithoutUserNestedInput
+  createdLabs?: Prisma.LabUpdateManyWithoutCreatorNestedInput
+  assignedLabs?: Prisma.LabTeacherUpdateManyWithoutUserNestedInput
+  addedLabTeachers?: Prisma.LabTeacherUpdateManyWithoutAddedByNestedInput
+  labProgress?: Prisma.ModuleProblemProgressUpdateManyWithoutUserNestedInput
+  ownedProblems?: Prisma.ProblemUpdateManyWithoutOwnerNestedInput
+  approvedProblems?: Prisma.ProblemUpdateManyWithoutApprovedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutLabRatingsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  globalRoleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  exams?: Prisma.ExamUncheckedUpdateManyWithoutCreatorNestedInput
+  submissions?: Prisma.SubmissionUncheckedUpdateManyWithoutUserNestedInput
+  enrollments?: Prisma.ExamEnrollmentUncheckedUpdateManyWithoutUserNestedInput
+  results?: Prisma.ExamResultUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  createdGroups?: Prisma.GroupUncheckedUpdateManyWithoutCreatorNestedInput
+  memberGroups?: Prisma.GroupMemberUncheckedUpdateManyWithoutUserNestedInput
+  selfSubmissions?: Prisma.selfSubmissionUncheckedUpdateManyWithoutUserNestedInput
+  examAttempts?: Prisma.ExamAttemptUncheckedUpdateManyWithoutStudentNestedInput
+  aiconversations?: Prisma.AIConversationUncheckedUpdateManyWithoutStudentNestedInput
+  airateLimits?: Prisma.AIRateLimitUncheckedUpdateManyWithoutStudentNestedInput
+  studentOverallStats?: Prisma.StudentOverallStatsUncheckedUpdateOneWithoutStudentNestedInput
+  studentProblemStats?: Prisma.StudentProblemStatsUncheckedUpdateManyWithoutStudentNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutSenderNestedInput
+  notificationRecipients?: Prisma.NotificationRecipientUncheckedUpdateManyWithoutUserNestedInput
+  examSessions?: Prisma.ExamSessionUncheckedUpdateManyWithoutUserNestedInput
+  createdLabs?: Prisma.LabUncheckedUpdateManyWithoutCreatorNestedInput
+  assignedLabs?: Prisma.LabTeacherUncheckedUpdateManyWithoutUserNestedInput
+  addedLabTeachers?: Prisma.LabTeacherUncheckedUpdateManyWithoutAddedByNestedInput
+  labProgress?: Prisma.ModuleProblemProgressUncheckedUpdateManyWithoutUserNestedInput
   ownedProblems?: Prisma.ProblemUncheckedUpdateManyWithoutOwnerNestedInput
   approvedProblems?: Prisma.ProblemUncheckedUpdateManyWithoutApprovedByNestedInput
 }
@@ -3045,6 +4240,11 @@ export type UserCreateWithoutStudentOverallStatsInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutSenderInput
   notificationRecipients?: Prisma.NotificationRecipientCreateNestedManyWithoutUserInput
   examSessions?: Prisma.ExamSessionCreateNestedManyWithoutUserInput
+  createdLabs?: Prisma.LabCreateNestedManyWithoutCreatorInput
+  assignedLabs?: Prisma.LabTeacherCreateNestedManyWithoutUserInput
+  addedLabTeachers?: Prisma.LabTeacherCreateNestedManyWithoutAddedByInput
+  labProgress?: Prisma.ModuleProblemProgressCreateNestedManyWithoutUserInput
+  labRatings?: Prisma.LabRatingCreateNestedManyWithoutUserInput
   ownedProblems?: Prisma.ProblemCreateNestedManyWithoutOwnerInput
   approvedProblems?: Prisma.ProblemCreateNestedManyWithoutApprovedByInput
 }
@@ -3075,6 +4275,11 @@ export type UserUncheckedCreateWithoutStudentOverallStatsInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutSenderInput
   notificationRecipients?: Prisma.NotificationRecipientUncheckedCreateNestedManyWithoutUserInput
   examSessions?: Prisma.ExamSessionUncheckedCreateNestedManyWithoutUserInput
+  createdLabs?: Prisma.LabUncheckedCreateNestedManyWithoutCreatorInput
+  assignedLabs?: Prisma.LabTeacherUncheckedCreateNestedManyWithoutUserInput
+  addedLabTeachers?: Prisma.LabTeacherUncheckedCreateNestedManyWithoutAddedByInput
+  labProgress?: Prisma.ModuleProblemProgressUncheckedCreateNestedManyWithoutUserInput
+  labRatings?: Prisma.LabRatingUncheckedCreateNestedManyWithoutUserInput
   ownedProblems?: Prisma.ProblemUncheckedCreateNestedManyWithoutOwnerInput
   approvedProblems?: Prisma.ProblemUncheckedCreateNestedManyWithoutApprovedByInput
 }
@@ -3121,6 +4326,11 @@ export type UserUpdateWithoutStudentOverallStatsInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutSenderNestedInput
   notificationRecipients?: Prisma.NotificationRecipientUpdateManyWithoutUserNestedInput
   examSessions?: Prisma.ExamSessionUpdateManyWithoutUserNestedInput
+  createdLabs?: Prisma.LabUpdateManyWithoutCreatorNestedInput
+  assignedLabs?: Prisma.LabTeacherUpdateManyWithoutUserNestedInput
+  addedLabTeachers?: Prisma.LabTeacherUpdateManyWithoutAddedByNestedInput
+  labProgress?: Prisma.ModuleProblemProgressUpdateManyWithoutUserNestedInput
+  labRatings?: Prisma.LabRatingUpdateManyWithoutUserNestedInput
   ownedProblems?: Prisma.ProblemUpdateManyWithoutOwnerNestedInput
   approvedProblems?: Prisma.ProblemUpdateManyWithoutApprovedByNestedInput
 }
@@ -3151,6 +4361,11 @@ export type UserUncheckedUpdateWithoutStudentOverallStatsInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutSenderNestedInput
   notificationRecipients?: Prisma.NotificationRecipientUncheckedUpdateManyWithoutUserNestedInput
   examSessions?: Prisma.ExamSessionUncheckedUpdateManyWithoutUserNestedInput
+  createdLabs?: Prisma.LabUncheckedUpdateManyWithoutCreatorNestedInput
+  assignedLabs?: Prisma.LabTeacherUncheckedUpdateManyWithoutUserNestedInput
+  addedLabTeachers?: Prisma.LabTeacherUncheckedUpdateManyWithoutAddedByNestedInput
+  labProgress?: Prisma.ModuleProblemProgressUncheckedUpdateManyWithoutUserNestedInput
+  labRatings?: Prisma.LabRatingUncheckedUpdateManyWithoutUserNestedInput
   ownedProblems?: Prisma.ProblemUncheckedUpdateManyWithoutOwnerNestedInput
   approvedProblems?: Prisma.ProblemUncheckedUpdateManyWithoutApprovedByNestedInput
 }
@@ -3181,6 +4396,11 @@ export type UserCreateWithoutStudentProblemStatsInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutSenderInput
   notificationRecipients?: Prisma.NotificationRecipientCreateNestedManyWithoutUserInput
   examSessions?: Prisma.ExamSessionCreateNestedManyWithoutUserInput
+  createdLabs?: Prisma.LabCreateNestedManyWithoutCreatorInput
+  assignedLabs?: Prisma.LabTeacherCreateNestedManyWithoutUserInput
+  addedLabTeachers?: Prisma.LabTeacherCreateNestedManyWithoutAddedByInput
+  labProgress?: Prisma.ModuleProblemProgressCreateNestedManyWithoutUserInput
+  labRatings?: Prisma.LabRatingCreateNestedManyWithoutUserInput
   ownedProblems?: Prisma.ProblemCreateNestedManyWithoutOwnerInput
   approvedProblems?: Prisma.ProblemCreateNestedManyWithoutApprovedByInput
 }
@@ -3211,6 +4431,11 @@ export type UserUncheckedCreateWithoutStudentProblemStatsInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutSenderInput
   notificationRecipients?: Prisma.NotificationRecipientUncheckedCreateNestedManyWithoutUserInput
   examSessions?: Prisma.ExamSessionUncheckedCreateNestedManyWithoutUserInput
+  createdLabs?: Prisma.LabUncheckedCreateNestedManyWithoutCreatorInput
+  assignedLabs?: Prisma.LabTeacherUncheckedCreateNestedManyWithoutUserInput
+  addedLabTeachers?: Prisma.LabTeacherUncheckedCreateNestedManyWithoutAddedByInput
+  labProgress?: Prisma.ModuleProblemProgressUncheckedCreateNestedManyWithoutUserInput
+  labRatings?: Prisma.LabRatingUncheckedCreateNestedManyWithoutUserInput
   ownedProblems?: Prisma.ProblemUncheckedCreateNestedManyWithoutOwnerInput
   approvedProblems?: Prisma.ProblemUncheckedCreateNestedManyWithoutApprovedByInput
 }
@@ -3257,6 +4482,11 @@ export type UserUpdateWithoutStudentProblemStatsInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutSenderNestedInput
   notificationRecipients?: Prisma.NotificationRecipientUpdateManyWithoutUserNestedInput
   examSessions?: Prisma.ExamSessionUpdateManyWithoutUserNestedInput
+  createdLabs?: Prisma.LabUpdateManyWithoutCreatorNestedInput
+  assignedLabs?: Prisma.LabTeacherUpdateManyWithoutUserNestedInput
+  addedLabTeachers?: Prisma.LabTeacherUpdateManyWithoutAddedByNestedInput
+  labProgress?: Prisma.ModuleProblemProgressUpdateManyWithoutUserNestedInput
+  labRatings?: Prisma.LabRatingUpdateManyWithoutUserNestedInput
   ownedProblems?: Prisma.ProblemUpdateManyWithoutOwnerNestedInput
   approvedProblems?: Prisma.ProblemUpdateManyWithoutApprovedByNestedInput
 }
@@ -3287,6 +4517,11 @@ export type UserUncheckedUpdateWithoutStudentProblemStatsInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutSenderNestedInput
   notificationRecipients?: Prisma.NotificationRecipientUncheckedUpdateManyWithoutUserNestedInput
   examSessions?: Prisma.ExamSessionUncheckedUpdateManyWithoutUserNestedInput
+  createdLabs?: Prisma.LabUncheckedUpdateManyWithoutCreatorNestedInput
+  assignedLabs?: Prisma.LabTeacherUncheckedUpdateManyWithoutUserNestedInput
+  addedLabTeachers?: Prisma.LabTeacherUncheckedUpdateManyWithoutAddedByNestedInput
+  labProgress?: Prisma.ModuleProblemProgressUncheckedUpdateManyWithoutUserNestedInput
+  labRatings?: Prisma.LabRatingUncheckedUpdateManyWithoutUserNestedInput
   ownedProblems?: Prisma.ProblemUncheckedUpdateManyWithoutOwnerNestedInput
   approvedProblems?: Prisma.ProblemUncheckedUpdateManyWithoutApprovedByNestedInput
 }
@@ -3317,6 +4552,11 @@ export type UserCreateWithoutNotificationsInput = {
   studentProblemStats?: Prisma.StudentProblemStatsCreateNestedManyWithoutStudentInput
   notificationRecipients?: Prisma.NotificationRecipientCreateNestedManyWithoutUserInput
   examSessions?: Prisma.ExamSessionCreateNestedManyWithoutUserInput
+  createdLabs?: Prisma.LabCreateNestedManyWithoutCreatorInput
+  assignedLabs?: Prisma.LabTeacherCreateNestedManyWithoutUserInput
+  addedLabTeachers?: Prisma.LabTeacherCreateNestedManyWithoutAddedByInput
+  labProgress?: Prisma.ModuleProblemProgressCreateNestedManyWithoutUserInput
+  labRatings?: Prisma.LabRatingCreateNestedManyWithoutUserInput
   ownedProblems?: Prisma.ProblemCreateNestedManyWithoutOwnerInput
   approvedProblems?: Prisma.ProblemCreateNestedManyWithoutApprovedByInput
 }
@@ -3347,6 +4587,11 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   studentProblemStats?: Prisma.StudentProblemStatsUncheckedCreateNestedManyWithoutStudentInput
   notificationRecipients?: Prisma.NotificationRecipientUncheckedCreateNestedManyWithoutUserInput
   examSessions?: Prisma.ExamSessionUncheckedCreateNestedManyWithoutUserInput
+  createdLabs?: Prisma.LabUncheckedCreateNestedManyWithoutCreatorInput
+  assignedLabs?: Prisma.LabTeacherUncheckedCreateNestedManyWithoutUserInput
+  addedLabTeachers?: Prisma.LabTeacherUncheckedCreateNestedManyWithoutAddedByInput
+  labProgress?: Prisma.ModuleProblemProgressUncheckedCreateNestedManyWithoutUserInput
+  labRatings?: Prisma.LabRatingUncheckedCreateNestedManyWithoutUserInput
   ownedProblems?: Prisma.ProblemUncheckedCreateNestedManyWithoutOwnerInput
   approvedProblems?: Prisma.ProblemUncheckedCreateNestedManyWithoutApprovedByInput
 }
@@ -3393,6 +4638,11 @@ export type UserUpdateWithoutNotificationsInput = {
   studentProblemStats?: Prisma.StudentProblemStatsUpdateManyWithoutStudentNestedInput
   notificationRecipients?: Prisma.NotificationRecipientUpdateManyWithoutUserNestedInput
   examSessions?: Prisma.ExamSessionUpdateManyWithoutUserNestedInput
+  createdLabs?: Prisma.LabUpdateManyWithoutCreatorNestedInput
+  assignedLabs?: Prisma.LabTeacherUpdateManyWithoutUserNestedInput
+  addedLabTeachers?: Prisma.LabTeacherUpdateManyWithoutAddedByNestedInput
+  labProgress?: Prisma.ModuleProblemProgressUpdateManyWithoutUserNestedInput
+  labRatings?: Prisma.LabRatingUpdateManyWithoutUserNestedInput
   ownedProblems?: Prisma.ProblemUpdateManyWithoutOwnerNestedInput
   approvedProblems?: Prisma.ProblemUpdateManyWithoutApprovedByNestedInput
 }
@@ -3423,6 +4673,11 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   studentProblemStats?: Prisma.StudentProblemStatsUncheckedUpdateManyWithoutStudentNestedInput
   notificationRecipients?: Prisma.NotificationRecipientUncheckedUpdateManyWithoutUserNestedInput
   examSessions?: Prisma.ExamSessionUncheckedUpdateManyWithoutUserNestedInput
+  createdLabs?: Prisma.LabUncheckedUpdateManyWithoutCreatorNestedInput
+  assignedLabs?: Prisma.LabTeacherUncheckedUpdateManyWithoutUserNestedInput
+  addedLabTeachers?: Prisma.LabTeacherUncheckedUpdateManyWithoutAddedByNestedInput
+  labProgress?: Prisma.ModuleProblemProgressUncheckedUpdateManyWithoutUserNestedInput
+  labRatings?: Prisma.LabRatingUncheckedUpdateManyWithoutUserNestedInput
   ownedProblems?: Prisma.ProblemUncheckedUpdateManyWithoutOwnerNestedInput
   approvedProblems?: Prisma.ProblemUncheckedUpdateManyWithoutApprovedByNestedInput
 }
@@ -3453,6 +4708,11 @@ export type UserCreateWithoutNotificationRecipientsInput = {
   studentProblemStats?: Prisma.StudentProblemStatsCreateNestedManyWithoutStudentInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutSenderInput
   examSessions?: Prisma.ExamSessionCreateNestedManyWithoutUserInput
+  createdLabs?: Prisma.LabCreateNestedManyWithoutCreatorInput
+  assignedLabs?: Prisma.LabTeacherCreateNestedManyWithoutUserInput
+  addedLabTeachers?: Prisma.LabTeacherCreateNestedManyWithoutAddedByInput
+  labProgress?: Prisma.ModuleProblemProgressCreateNestedManyWithoutUserInput
+  labRatings?: Prisma.LabRatingCreateNestedManyWithoutUserInput
   ownedProblems?: Prisma.ProblemCreateNestedManyWithoutOwnerInput
   approvedProblems?: Prisma.ProblemCreateNestedManyWithoutApprovedByInput
 }
@@ -3483,6 +4743,11 @@ export type UserUncheckedCreateWithoutNotificationRecipientsInput = {
   studentProblemStats?: Prisma.StudentProblemStatsUncheckedCreateNestedManyWithoutStudentInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutSenderInput
   examSessions?: Prisma.ExamSessionUncheckedCreateNestedManyWithoutUserInput
+  createdLabs?: Prisma.LabUncheckedCreateNestedManyWithoutCreatorInput
+  assignedLabs?: Prisma.LabTeacherUncheckedCreateNestedManyWithoutUserInput
+  addedLabTeachers?: Prisma.LabTeacherUncheckedCreateNestedManyWithoutAddedByInput
+  labProgress?: Prisma.ModuleProblemProgressUncheckedCreateNestedManyWithoutUserInput
+  labRatings?: Prisma.LabRatingUncheckedCreateNestedManyWithoutUserInput
   ownedProblems?: Prisma.ProblemUncheckedCreateNestedManyWithoutOwnerInput
   approvedProblems?: Prisma.ProblemUncheckedCreateNestedManyWithoutApprovedByInput
 }
@@ -3529,6 +4794,11 @@ export type UserUpdateWithoutNotificationRecipientsInput = {
   studentProblemStats?: Prisma.StudentProblemStatsUpdateManyWithoutStudentNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutSenderNestedInput
   examSessions?: Prisma.ExamSessionUpdateManyWithoutUserNestedInput
+  createdLabs?: Prisma.LabUpdateManyWithoutCreatorNestedInput
+  assignedLabs?: Prisma.LabTeacherUpdateManyWithoutUserNestedInput
+  addedLabTeachers?: Prisma.LabTeacherUpdateManyWithoutAddedByNestedInput
+  labProgress?: Prisma.ModuleProblemProgressUpdateManyWithoutUserNestedInput
+  labRatings?: Prisma.LabRatingUpdateManyWithoutUserNestedInput
   ownedProblems?: Prisma.ProblemUpdateManyWithoutOwnerNestedInput
   approvedProblems?: Prisma.ProblemUpdateManyWithoutApprovedByNestedInput
 }
@@ -3559,6 +4829,11 @@ export type UserUncheckedUpdateWithoutNotificationRecipientsInput = {
   studentProblemStats?: Prisma.StudentProblemStatsUncheckedUpdateManyWithoutStudentNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutSenderNestedInput
   examSessions?: Prisma.ExamSessionUncheckedUpdateManyWithoutUserNestedInput
+  createdLabs?: Prisma.LabUncheckedUpdateManyWithoutCreatorNestedInput
+  assignedLabs?: Prisma.LabTeacherUncheckedUpdateManyWithoutUserNestedInput
+  addedLabTeachers?: Prisma.LabTeacherUncheckedUpdateManyWithoutAddedByNestedInput
+  labProgress?: Prisma.ModuleProblemProgressUncheckedUpdateManyWithoutUserNestedInput
+  labRatings?: Prisma.LabRatingUncheckedUpdateManyWithoutUserNestedInput
   ownedProblems?: Prisma.ProblemUncheckedUpdateManyWithoutOwnerNestedInput
   approvedProblems?: Prisma.ProblemUncheckedUpdateManyWithoutApprovedByNestedInput
 }
@@ -3600,6 +4875,11 @@ export type UserUpdateWithoutGlobalRoleInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutSenderNestedInput
   notificationRecipients?: Prisma.NotificationRecipientUpdateManyWithoutUserNestedInput
   examSessions?: Prisma.ExamSessionUpdateManyWithoutUserNestedInput
+  createdLabs?: Prisma.LabUpdateManyWithoutCreatorNestedInput
+  assignedLabs?: Prisma.LabTeacherUpdateManyWithoutUserNestedInput
+  addedLabTeachers?: Prisma.LabTeacherUpdateManyWithoutAddedByNestedInput
+  labProgress?: Prisma.ModuleProblemProgressUpdateManyWithoutUserNestedInput
+  labRatings?: Prisma.LabRatingUpdateManyWithoutUserNestedInput
   ownedProblems?: Prisma.ProblemUpdateManyWithoutOwnerNestedInput
   approvedProblems?: Prisma.ProblemUpdateManyWithoutApprovedByNestedInput
 }
@@ -3630,6 +4910,11 @@ export type UserUncheckedUpdateWithoutGlobalRoleInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutSenderNestedInput
   notificationRecipients?: Prisma.NotificationRecipientUncheckedUpdateManyWithoutUserNestedInput
   examSessions?: Prisma.ExamSessionUncheckedUpdateManyWithoutUserNestedInput
+  createdLabs?: Prisma.LabUncheckedUpdateManyWithoutCreatorNestedInput
+  assignedLabs?: Prisma.LabTeacherUncheckedUpdateManyWithoutUserNestedInput
+  addedLabTeachers?: Prisma.LabTeacherUncheckedUpdateManyWithoutAddedByNestedInput
+  labProgress?: Prisma.ModuleProblemProgressUncheckedUpdateManyWithoutUserNestedInput
+  labRatings?: Prisma.LabRatingUncheckedUpdateManyWithoutUserNestedInput
   ownedProblems?: Prisma.ProblemUncheckedUpdateManyWithoutOwnerNestedInput
   approvedProblems?: Prisma.ProblemUncheckedUpdateManyWithoutApprovedByNestedInput
 }
@@ -3667,6 +4952,11 @@ export type UserCountOutputType = {
   notifications: number
   notificationRecipients: number
   examSessions: number
+  createdLabs: number
+  assignedLabs: number
+  addedLabTeachers: number
+  labProgress: number
+  labRatings: number
   ownedProblems: number
   approvedProblems: number
 }
@@ -3688,6 +4978,11 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   notifications?: boolean | UserCountOutputTypeCountNotificationsArgs
   notificationRecipients?: boolean | UserCountOutputTypeCountNotificationRecipientsArgs
   examSessions?: boolean | UserCountOutputTypeCountExamSessionsArgs
+  createdLabs?: boolean | UserCountOutputTypeCountCreatedLabsArgs
+  assignedLabs?: boolean | UserCountOutputTypeCountAssignedLabsArgs
+  addedLabTeachers?: boolean | UserCountOutputTypeCountAddedLabTeachersArgs
+  labProgress?: boolean | UserCountOutputTypeCountLabProgressArgs
+  labRatings?: boolean | UserCountOutputTypeCountLabRatingsArgs
   ownedProblems?: boolean | UserCountOutputTypeCountOwnedProblemsArgs
   approvedProblems?: boolean | UserCountOutputTypeCountApprovedProblemsArgs
 }
@@ -3817,6 +5112,41 @@ export type UserCountOutputTypeCountExamSessionsArgs<ExtArgs extends runtime.Typ
 /**
  * UserCountOutputType without action
  */
+export type UserCountOutputTypeCountCreatedLabsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.LabWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountAssignedLabsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.LabTeacherWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountAddedLabTeachersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.LabTeacherWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountLabProgressArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ModuleProblemProgressWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountLabRatingsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.LabRatingWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
 export type UserCountOutputTypeCountOwnedProblemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.ProblemWhereInput
 }
@@ -3857,6 +5187,11 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   notifications?: boolean | Prisma.User$notificationsArgs<ExtArgs>
   notificationRecipients?: boolean | Prisma.User$notificationRecipientsArgs<ExtArgs>
   examSessions?: boolean | Prisma.User$examSessionsArgs<ExtArgs>
+  createdLabs?: boolean | Prisma.User$createdLabsArgs<ExtArgs>
+  assignedLabs?: boolean | Prisma.User$assignedLabsArgs<ExtArgs>
+  addedLabTeachers?: boolean | Prisma.User$addedLabTeachersArgs<ExtArgs>
+  labProgress?: boolean | Prisma.User$labProgressArgs<ExtArgs>
+  labRatings?: boolean | Prisma.User$labRatingsArgs<ExtArgs>
   ownedProblems?: boolean | Prisma.User$ownedProblemsArgs<ExtArgs>
   approvedProblems?: boolean | Prisma.User$approvedProblemsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
@@ -3920,6 +5255,11 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   notifications?: boolean | Prisma.User$notificationsArgs<ExtArgs>
   notificationRecipients?: boolean | Prisma.User$notificationRecipientsArgs<ExtArgs>
   examSessions?: boolean | Prisma.User$examSessionsArgs<ExtArgs>
+  createdLabs?: boolean | Prisma.User$createdLabsArgs<ExtArgs>
+  assignedLabs?: boolean | Prisma.User$assignedLabsArgs<ExtArgs>
+  addedLabTeachers?: boolean | Prisma.User$addedLabTeachersArgs<ExtArgs>
+  labProgress?: boolean | Prisma.User$labProgressArgs<ExtArgs>
+  labRatings?: boolean | Prisma.User$labRatingsArgs<ExtArgs>
   ownedProblems?: boolean | Prisma.User$ownedProblemsArgs<ExtArgs>
   approvedProblems?: boolean | Prisma.User$approvedProblemsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
@@ -3952,6 +5292,11 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     notifications: Prisma.$NotificationPayload<ExtArgs>[]
     notificationRecipients: Prisma.$NotificationRecipientPayload<ExtArgs>[]
     examSessions: Prisma.$ExamSessionPayload<ExtArgs>[]
+    createdLabs: Prisma.$LabPayload<ExtArgs>[]
+    assignedLabs: Prisma.$LabTeacherPayload<ExtArgs>[]
+    addedLabTeachers: Prisma.$LabTeacherPayload<ExtArgs>[]
+    labProgress: Prisma.$ModuleProblemProgressPayload<ExtArgs>[]
+    labRatings: Prisma.$LabRatingPayload<ExtArgs>[]
     ownedProblems: Prisma.$ProblemPayload<ExtArgs>[]
     approvedProblems: Prisma.$ProblemPayload<ExtArgs>[]
   }
@@ -4377,6 +5722,11 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   notifications<T extends Prisma.User$notificationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   notificationRecipients<T extends Prisma.User$notificationRecipientsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$notificationRecipientsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationRecipientPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   examSessions<T extends Prisma.User$examSessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$examSessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ExamSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  createdLabs<T extends Prisma.User$createdLabsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$createdLabsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LabPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  assignedLabs<T extends Prisma.User$assignedLabsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$assignedLabsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LabTeacherPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  addedLabTeachers<T extends Prisma.User$addedLabTeachersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$addedLabTeachersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LabTeacherPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  labProgress<T extends Prisma.User$labProgressArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$labProgressArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ModuleProblemProgressPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  labRatings<T extends Prisma.User$labRatingsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$labRatingsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LabRatingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   ownedProblems<T extends Prisma.User$ownedProblemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$ownedProblemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProblemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   approvedProblems<T extends Prisma.User$approvedProblemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$approvedProblemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProblemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
@@ -5237,6 +6587,126 @@ export type User$examSessionsArgs<ExtArgs extends runtime.Types.Extensions.Inter
   take?: number
   skip?: number
   distinct?: Prisma.ExamSessionScalarFieldEnum | Prisma.ExamSessionScalarFieldEnum[]
+}
+
+/**
+ * User.createdLabs
+ */
+export type User$createdLabsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Lab
+   */
+  select?: Prisma.LabSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Lab
+   */
+  omit?: Prisma.LabOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.LabInclude<ExtArgs> | null
+  where?: Prisma.LabWhereInput
+  orderBy?: Prisma.LabOrderByWithRelationInput | Prisma.LabOrderByWithRelationInput[]
+  cursor?: Prisma.LabWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.LabScalarFieldEnum | Prisma.LabScalarFieldEnum[]
+}
+
+/**
+ * User.assignedLabs
+ */
+export type User$assignedLabsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the LabTeacher
+   */
+  select?: Prisma.LabTeacherSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the LabTeacher
+   */
+  omit?: Prisma.LabTeacherOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.LabTeacherInclude<ExtArgs> | null
+  where?: Prisma.LabTeacherWhereInput
+  orderBy?: Prisma.LabTeacherOrderByWithRelationInput | Prisma.LabTeacherOrderByWithRelationInput[]
+  cursor?: Prisma.LabTeacherWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.LabTeacherScalarFieldEnum | Prisma.LabTeacherScalarFieldEnum[]
+}
+
+/**
+ * User.addedLabTeachers
+ */
+export type User$addedLabTeachersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the LabTeacher
+   */
+  select?: Prisma.LabTeacherSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the LabTeacher
+   */
+  omit?: Prisma.LabTeacherOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.LabTeacherInclude<ExtArgs> | null
+  where?: Prisma.LabTeacherWhereInput
+  orderBy?: Prisma.LabTeacherOrderByWithRelationInput | Prisma.LabTeacherOrderByWithRelationInput[]
+  cursor?: Prisma.LabTeacherWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.LabTeacherScalarFieldEnum | Prisma.LabTeacherScalarFieldEnum[]
+}
+
+/**
+ * User.labProgress
+ */
+export type User$labProgressArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ModuleProblemProgress
+   */
+  select?: Prisma.ModuleProblemProgressSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ModuleProblemProgress
+   */
+  omit?: Prisma.ModuleProblemProgressOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ModuleProblemProgressInclude<ExtArgs> | null
+  where?: Prisma.ModuleProblemProgressWhereInput
+  orderBy?: Prisma.ModuleProblemProgressOrderByWithRelationInput | Prisma.ModuleProblemProgressOrderByWithRelationInput[]
+  cursor?: Prisma.ModuleProblemProgressWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ModuleProblemProgressScalarFieldEnum | Prisma.ModuleProblemProgressScalarFieldEnum[]
+}
+
+/**
+ * User.labRatings
+ */
+export type User$labRatingsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the LabRating
+   */
+  select?: Prisma.LabRatingSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the LabRating
+   */
+  omit?: Prisma.LabRatingOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.LabRatingInclude<ExtArgs> | null
+  where?: Prisma.LabRatingWhereInput
+  orderBy?: Prisma.LabRatingOrderByWithRelationInput | Prisma.LabRatingOrderByWithRelationInput[]
+  cursor?: Prisma.LabRatingWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.LabRatingScalarFieldEnum | Prisma.LabRatingScalarFieldEnum[]
 }
 
 /**

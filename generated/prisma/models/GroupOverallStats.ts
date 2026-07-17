@@ -684,14 +684,6 @@ export type GroupOverallStatsUncheckedUpdateOneWithoutGroupNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.GroupOverallStatsUpdateToOneWithWhereWithoutGroupInput, Prisma.GroupOverallStatsUpdateWithoutGroupInput>, Prisma.GroupOverallStatsUncheckedUpdateWithoutGroupInput>
 }
 
-export type FloatFieldUpdateOperationsInput = {
-  set?: number
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
-}
-
 export type GroupOverallStatsCreateWithoutGroupInput = {
   id?: string
   totalExams: number

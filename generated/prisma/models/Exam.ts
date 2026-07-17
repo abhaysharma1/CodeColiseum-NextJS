@@ -749,10 +749,12 @@ export type ExamCreateNestedOneWithoutAiconversationsInput = {
   connect?: Prisma.ExamWhereUniqueInput
 }
 
-export type ExamUpdateOneRequiredWithoutAiconversationsNestedInput = {
+export type ExamUpdateOneWithoutAiconversationsNestedInput = {
   create?: Prisma.XOR<Prisma.ExamCreateWithoutAiconversationsInput, Prisma.ExamUncheckedCreateWithoutAiconversationsInput>
   connectOrCreate?: Prisma.ExamCreateOrConnectWithoutAiconversationsInput
   upsert?: Prisma.ExamUpsertWithoutAiconversationsInput
+  disconnect?: Prisma.ExamWhereInput | boolean
+  delete?: Prisma.ExamWhereInput | boolean
   connect?: Prisma.ExamWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.ExamUpdateToOneWithWhereWithoutAiconversationsInput, Prisma.ExamUpdateWithoutAiconversationsInput>, Prisma.ExamUncheckedUpdateWithoutAiconversationsInput>
 }

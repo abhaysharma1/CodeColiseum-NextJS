@@ -497,6 +497,13 @@ export type EnumAIRoleWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumAIRoleFilter<$PrismaModel>
 }
 
+export type EnumLabVisibilityFilter<$PrismaModel = never> = {
+  equals?: $Enums.LabVisibility | Prisma.EnumLabVisibilityFieldRefInput<$PrismaModel>
+  in?: $Enums.LabVisibility[] | Prisma.ListEnumLabVisibilityFieldRefInput<$PrismaModel>
+  notIn?: $Enums.LabVisibility[] | Prisma.ListEnumLabVisibilityFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumLabVisibilityFilter<$PrismaModel> | $Enums.LabVisibility
+}
+
 export type FloatFilter<$PrismaModel = never> = {
   equals?: number | Prisma.FloatFieldRefInput<$PrismaModel>
   in?: number[] | Prisma.ListFloatFieldRefInput<$PrismaModel>
@@ -506,6 +513,23 @@ export type FloatFilter<$PrismaModel = never> = {
   gt?: number | Prisma.FloatFieldRefInput<$PrismaModel>
   gte?: number | Prisma.FloatFieldRefInput<$PrismaModel>
   not?: Prisma.NestedFloatFilter<$PrismaModel> | number
+}
+
+export type EnumproblemDifficultyNullableFilter<$PrismaModel = never> = {
+  equals?: $Enums.problemDifficulty | Prisma.EnumproblemDifficultyFieldRefInput<$PrismaModel> | null
+  in?: $Enums.problemDifficulty[] | Prisma.ListEnumproblemDifficultyFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.problemDifficulty[] | Prisma.ListEnumproblemDifficultyFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumproblemDifficultyNullableFilter<$PrismaModel> | $Enums.problemDifficulty | null
+}
+
+export type EnumLabVisibilityWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.LabVisibility | Prisma.EnumLabVisibilityFieldRefInput<$PrismaModel>
+  in?: $Enums.LabVisibility[] | Prisma.ListEnumLabVisibilityFieldRefInput<$PrismaModel>
+  notIn?: $Enums.LabVisibility[] | Prisma.ListEnumLabVisibilityFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumLabVisibilityWithAggregatesFilter<$PrismaModel> | $Enums.LabVisibility
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumLabVisibilityFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumLabVisibilityFilter<$PrismaModel>
 }
 
 export type FloatWithAggregatesFilter<$PrismaModel = never> = {
@@ -522,6 +546,16 @@ export type FloatWithAggregatesFilter<$PrismaModel = never> = {
   _sum?: Prisma.NestedFloatFilter<$PrismaModel>
   _min?: Prisma.NestedFloatFilter<$PrismaModel>
   _max?: Prisma.NestedFloatFilter<$PrismaModel>
+}
+
+export type EnumproblemDifficultyNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.problemDifficulty | Prisma.EnumproblemDifficultyFieldRefInput<$PrismaModel> | null
+  in?: $Enums.problemDifficulty[] | Prisma.ListEnumproblemDifficultyFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.problemDifficulty[] | Prisma.ListEnumproblemDifficultyFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumproblemDifficultyNullableWithAggregatesFilter<$PrismaModel> | $Enums.problemDifficulty | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumproblemDifficultyNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumproblemDifficultyNullableFilter<$PrismaModel>
 }
 
 export type EnumNotificationTypeFilter<$PrismaModel = never> = {
@@ -1016,6 +1050,30 @@ export type NestedEnumAIRoleWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumAIRoleFilter<$PrismaModel>
 }
 
+export type NestedEnumLabVisibilityFilter<$PrismaModel = never> = {
+  equals?: $Enums.LabVisibility | Prisma.EnumLabVisibilityFieldRefInput<$PrismaModel>
+  in?: $Enums.LabVisibility[] | Prisma.ListEnumLabVisibilityFieldRefInput<$PrismaModel>
+  notIn?: $Enums.LabVisibility[] | Prisma.ListEnumLabVisibilityFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumLabVisibilityFilter<$PrismaModel> | $Enums.LabVisibility
+}
+
+export type NestedEnumproblemDifficultyNullableFilter<$PrismaModel = never> = {
+  equals?: $Enums.problemDifficulty | Prisma.EnumproblemDifficultyFieldRefInput<$PrismaModel> | null
+  in?: $Enums.problemDifficulty[] | Prisma.ListEnumproblemDifficultyFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.problemDifficulty[] | Prisma.ListEnumproblemDifficultyFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumproblemDifficultyNullableFilter<$PrismaModel> | $Enums.problemDifficulty | null
+}
+
+export type NestedEnumLabVisibilityWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.LabVisibility | Prisma.EnumLabVisibilityFieldRefInput<$PrismaModel>
+  in?: $Enums.LabVisibility[] | Prisma.ListEnumLabVisibilityFieldRefInput<$PrismaModel>
+  notIn?: $Enums.LabVisibility[] | Prisma.ListEnumLabVisibilityFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumLabVisibilityWithAggregatesFilter<$PrismaModel> | $Enums.LabVisibility
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumLabVisibilityFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumLabVisibilityFilter<$PrismaModel>
+}
+
 export type NestedFloatWithAggregatesFilter<$PrismaModel = never> = {
   equals?: number | Prisma.FloatFieldRefInput<$PrismaModel>
   in?: number[] | Prisma.ListFloatFieldRefInput<$PrismaModel>
@@ -1030,6 +1088,16 @@ export type NestedFloatWithAggregatesFilter<$PrismaModel = never> = {
   _sum?: Prisma.NestedFloatFilter<$PrismaModel>
   _min?: Prisma.NestedFloatFilter<$PrismaModel>
   _max?: Prisma.NestedFloatFilter<$PrismaModel>
+}
+
+export type NestedEnumproblemDifficultyNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.problemDifficulty | Prisma.EnumproblemDifficultyFieldRefInput<$PrismaModel> | null
+  in?: $Enums.problemDifficulty[] | Prisma.ListEnumproblemDifficultyFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.problemDifficulty[] | Prisma.ListEnumproblemDifficultyFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumproblemDifficultyNullableWithAggregatesFilter<$PrismaModel> | $Enums.problemDifficulty | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumproblemDifficultyNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumproblemDifficultyNullableFilter<$PrismaModel>
 }
 
 export type NestedEnumNotificationTypeFilter<$PrismaModel = never> = {

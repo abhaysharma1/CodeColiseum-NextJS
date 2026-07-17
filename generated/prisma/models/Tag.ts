@@ -159,12 +159,14 @@ export type TagWhereInput = {
   id?: Prisma.StringFilter<"Tag"> | string
   name?: Prisma.StringFilter<"Tag"> | string
   problems?: Prisma.ProblemTagListRelationFilter
+  labs?: Prisma.LabTagListRelationFilter
 }
 
 export type TagOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   problems?: Prisma.ProblemTagOrderByRelationAggregateInput
+  labs?: Prisma.LabTagOrderByRelationAggregateInput
 }
 
 export type TagWhereUniqueInput = Prisma.AtLeast<{
@@ -174,6 +176,7 @@ export type TagWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.TagWhereInput[]
   NOT?: Prisma.TagWhereInput | Prisma.TagWhereInput[]
   problems?: Prisma.ProblemTagListRelationFilter
+  labs?: Prisma.LabTagListRelationFilter
 }, "id" | "name">
 
 export type TagOrderByWithAggregationInput = {
@@ -196,24 +199,28 @@ export type TagCreateInput = {
   id?: string
   name: string
   problems?: Prisma.ProblemTagCreateNestedManyWithoutTagInput
+  labs?: Prisma.LabTagCreateNestedManyWithoutTagInput
 }
 
 export type TagUncheckedCreateInput = {
   id?: string
   name: string
   problems?: Prisma.ProblemTagUncheckedCreateNestedManyWithoutTagInput
+  labs?: Prisma.LabTagUncheckedCreateNestedManyWithoutTagInput
 }
 
 export type TagUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   problems?: Prisma.ProblemTagUpdateManyWithoutTagNestedInput
+  labs?: Prisma.LabTagUpdateManyWithoutTagNestedInput
 }
 
 export type TagUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   problems?: Prisma.ProblemTagUncheckedUpdateManyWithoutTagNestedInput
+  labs?: Prisma.LabTagUncheckedUpdateManyWithoutTagNestedInput
 }
 
 export type TagCreateManyInput = {
@@ -265,14 +272,30 @@ export type TagUpdateOneRequiredWithoutProblemsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.TagUpdateToOneWithWhereWithoutProblemsInput, Prisma.TagUpdateWithoutProblemsInput>, Prisma.TagUncheckedUpdateWithoutProblemsInput>
 }
 
+export type TagCreateNestedOneWithoutLabsInput = {
+  create?: Prisma.XOR<Prisma.TagCreateWithoutLabsInput, Prisma.TagUncheckedCreateWithoutLabsInput>
+  connectOrCreate?: Prisma.TagCreateOrConnectWithoutLabsInput
+  connect?: Prisma.TagWhereUniqueInput
+}
+
+export type TagUpdateOneRequiredWithoutLabsNestedInput = {
+  create?: Prisma.XOR<Prisma.TagCreateWithoutLabsInput, Prisma.TagUncheckedCreateWithoutLabsInput>
+  connectOrCreate?: Prisma.TagCreateOrConnectWithoutLabsInput
+  upsert?: Prisma.TagUpsertWithoutLabsInput
+  connect?: Prisma.TagWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TagUpdateToOneWithWhereWithoutLabsInput, Prisma.TagUpdateWithoutLabsInput>, Prisma.TagUncheckedUpdateWithoutLabsInput>
+}
+
 export type TagCreateWithoutProblemsInput = {
   id?: string
   name: string
+  labs?: Prisma.LabTagCreateNestedManyWithoutTagInput
 }
 
 export type TagUncheckedCreateWithoutProblemsInput = {
   id?: string
   name: string
+  labs?: Prisma.LabTagUncheckedCreateNestedManyWithoutTagInput
 }
 
 export type TagCreateOrConnectWithoutProblemsInput = {
@@ -294,11 +317,53 @@ export type TagUpdateToOneWithWhereWithoutProblemsInput = {
 export type TagUpdateWithoutProblemsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  labs?: Prisma.LabTagUpdateManyWithoutTagNestedInput
 }
 
 export type TagUncheckedUpdateWithoutProblemsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  labs?: Prisma.LabTagUncheckedUpdateManyWithoutTagNestedInput
+}
+
+export type TagCreateWithoutLabsInput = {
+  id?: string
+  name: string
+  problems?: Prisma.ProblemTagCreateNestedManyWithoutTagInput
+}
+
+export type TagUncheckedCreateWithoutLabsInput = {
+  id?: string
+  name: string
+  problems?: Prisma.ProblemTagUncheckedCreateNestedManyWithoutTagInput
+}
+
+export type TagCreateOrConnectWithoutLabsInput = {
+  where: Prisma.TagWhereUniqueInput
+  create: Prisma.XOR<Prisma.TagCreateWithoutLabsInput, Prisma.TagUncheckedCreateWithoutLabsInput>
+}
+
+export type TagUpsertWithoutLabsInput = {
+  update: Prisma.XOR<Prisma.TagUpdateWithoutLabsInput, Prisma.TagUncheckedUpdateWithoutLabsInput>
+  create: Prisma.XOR<Prisma.TagCreateWithoutLabsInput, Prisma.TagUncheckedCreateWithoutLabsInput>
+  where?: Prisma.TagWhereInput
+}
+
+export type TagUpdateToOneWithWhereWithoutLabsInput = {
+  where?: Prisma.TagWhereInput
+  data: Prisma.XOR<Prisma.TagUpdateWithoutLabsInput, Prisma.TagUncheckedUpdateWithoutLabsInput>
+}
+
+export type TagUpdateWithoutLabsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  problems?: Prisma.ProblemTagUpdateManyWithoutTagNestedInput
+}
+
+export type TagUncheckedUpdateWithoutLabsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  problems?: Prisma.ProblemTagUncheckedUpdateManyWithoutTagNestedInput
 }
 
 
@@ -308,10 +373,12 @@ export type TagUncheckedUpdateWithoutProblemsInput = {
 
 export type TagCountOutputType = {
   problems: number
+  labs: number
 }
 
 export type TagCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   problems?: boolean | TagCountOutputTypeCountProblemsArgs
+  labs?: boolean | TagCountOutputTypeCountLabsArgs
 }
 
 /**
@@ -331,11 +398,19 @@ export type TagCountOutputTypeCountProblemsArgs<ExtArgs extends runtime.Types.Ex
   where?: Prisma.ProblemTagWhereInput
 }
 
+/**
+ * TagCountOutputType without action
+ */
+export type TagCountOutputTypeCountLabsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.LabTagWhereInput
+}
+
 
 export type TagSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
   problems?: boolean | Prisma.Tag$problemsArgs<ExtArgs>
+  labs?: boolean | Prisma.Tag$labsArgs<ExtArgs>
   _count?: boolean | Prisma.TagCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["tag"]>
 
@@ -357,6 +432,7 @@ export type TagSelectScalar = {
 export type TagOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name", ExtArgs["result"]["tag"]>
 export type TagInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   problems?: boolean | Prisma.Tag$problemsArgs<ExtArgs>
+  labs?: boolean | Prisma.Tag$labsArgs<ExtArgs>
   _count?: boolean | Prisma.TagCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type TagIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -366,6 +442,7 @@ export type $TagPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   name: "Tag"
   objects: {
     problems: Prisma.$ProblemTagPayload<ExtArgs>[]
+    labs: Prisma.$LabTagPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -765,6 +842,7 @@ readonly fields: TagFieldRefs;
 export interface Prisma__TagClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   problems<T extends Prisma.Tag$problemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tag$problemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProblemTagPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  labs<T extends Prisma.Tag$labsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tag$labsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LabTagPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1210,6 +1288,30 @@ export type Tag$problemsArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
   take?: number
   skip?: number
   distinct?: Prisma.ProblemTagScalarFieldEnum | Prisma.ProblemTagScalarFieldEnum[]
+}
+
+/**
+ * Tag.labs
+ */
+export type Tag$labsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the LabTag
+   */
+  select?: Prisma.LabTagSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the LabTag
+   */
+  omit?: Prisma.LabTagOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.LabTagInclude<ExtArgs> | null
+  where?: Prisma.LabTagWhereInput
+  orderBy?: Prisma.LabTagOrderByWithRelationInput | Prisma.LabTagOrderByWithRelationInput[]
+  cursor?: Prisma.LabTagWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.LabTagScalarFieldEnum | Prisma.LabTagScalarFieldEnum[]
 }
 
 /**

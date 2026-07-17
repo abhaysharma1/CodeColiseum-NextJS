@@ -178,6 +178,46 @@ export type AIMessage = Prisma.AIMessageModel
  */
 export type AIRateLimit = Prisma.AIRateLimitModel
 /**
+ * Model Lab
+ * 
+ */
+export type Lab = Prisma.LabModel
+/**
+ * Model LabTeacher
+ * 
+ */
+export type LabTeacher = Prisma.LabTeacherModel
+/**
+ * Model LabAssignment
+ * 
+ */
+export type LabAssignment = Prisma.LabAssignmentModel
+/**
+ * Model LabModule
+ * 
+ */
+export type LabModule = Prisma.LabModuleModel
+/**
+ * Model ModuleProblem
+ * 
+ */
+export type ModuleProblem = Prisma.ModuleProblemModel
+/**
+ * Model ModuleProblemProgress
+ * 
+ */
+export type ModuleProblemProgress = Prisma.ModuleProblemProgressModel
+/**
+ * Model LabRating
+ * 
+ */
+export type LabRating = Prisma.LabRatingModel
+/**
+ * Model LabTag
+ * 
+ */
+export type LabTag = Prisma.LabTagModel
+/**
  * Model GroupOverallStats
  * 
  */

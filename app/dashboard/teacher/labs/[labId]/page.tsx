@@ -17,6 +17,9 @@ import {
   Bot,
   UserPlus,
   UserMinus,
+  Globe,
+  BarChart3,
+  Copy,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -107,10 +110,44 @@ export default function TeacherLabDetailPage() {
                 <ArrowLeft className="h-5 w-5" />
               </Button>
               <div className="flex-1">
-                <h1 className="text-2xl font-bold">{lab?.title}</h1>
+                <div className="flex items-center gap-3">
+                  <h1 className="text-2xl font-bold">{lab?.title}</h1>
+                  {lab?.visibility === "PUBLIC" && (
+                    <Badge className="gap-1 bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400">
+                      <Globe className="h-3 w-3" />
+                      Public
+                    </Badge>
+                  )}
+                  {lab?.originalLabId && (
+                    <Badge variant="secondary" className="gap-1">
+                      <Copy className="h-3 w-3" />
+                      Duplicated
+                    </Badge>
+                  )}
+                </div>
                 <p className="text-sm text-muted-foreground">Lab Details</p>
               </div>
               <div className="flex items-center gap-2">
+                {isCreator && lab?.visibility === "PUBLIC" && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => router.push(`/dashboard/teacher/labs/${labId}/analytics`)}
+                  >
+                    <BarChart3 className="h-4 w-4 mr-1" />
+                    Analytics
+                  </Button>
+                )}
+                {isCreator && lab?.visibility !== "PUBLIC" && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => router.push(`/dashboard/teacher/labs/${labId}/analytics`)}
+                  >
+                    <BarChart3 className="h-4 w-4 mr-1" />
+                    Marketplace
+                  </Button>
+                )}
                 {isCreator && (
                   <Button variant="outline" size="sm" onClick={() => setEditMode(!editMode)}>
                     <Edit className="h-4 w-4 mr-1" />

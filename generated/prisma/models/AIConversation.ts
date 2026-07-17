@@ -40,6 +40,7 @@ export type AIConversationMinAggregateOutputType = {
   id: string | null
   studentId: string | null
   groupId: string | null
+  labId: string | null
   examId: string | null
   problemId: string | null
   messageCount: number | null
@@ -53,6 +54,7 @@ export type AIConversationMaxAggregateOutputType = {
   id: string | null
   studentId: string | null
   groupId: string | null
+  labId: string | null
   examId: string | null
   problemId: string | null
   messageCount: number | null
@@ -66,6 +68,7 @@ export type AIConversationCountAggregateOutputType = {
   id: number
   studentId: number
   groupId: number
+  labId: number
   examId: number
   problemId: number
   messageCount: number
@@ -91,6 +94,7 @@ export type AIConversationMinAggregateInputType = {
   id?: true
   studentId?: true
   groupId?: true
+  labId?: true
   examId?: true
   problemId?: true
   messageCount?: true
@@ -104,6 +108,7 @@ export type AIConversationMaxAggregateInputType = {
   id?: true
   studentId?: true
   groupId?: true
+  labId?: true
   examId?: true
   problemId?: true
   messageCount?: true
@@ -117,6 +122,7 @@ export type AIConversationCountAggregateInputType = {
   id?: true
   studentId?: true
   groupId?: true
+  labId?: true
   examId?: true
   problemId?: true
   messageCount?: true
@@ -216,8 +222,9 @@ export type AIConversationGroupByArgs<ExtArgs extends runtime.Types.Extensions.I
 export type AIConversationGroupByOutputType = {
   id: string
   studentId: string
-  groupId: string
-  examId: string
+  groupId: string | null
+  labId: string | null
+  examId: string | null
   problemId: string
   messageCount: number
   totalTokens: number
@@ -252,8 +259,9 @@ export type AIConversationWhereInput = {
   NOT?: Prisma.AIConversationWhereInput | Prisma.AIConversationWhereInput[]
   id?: Prisma.StringFilter<"AIConversation"> | string
   studentId?: Prisma.StringFilter<"AIConversation"> | string
-  groupId?: Prisma.StringFilter<"AIConversation"> | string
-  examId?: Prisma.StringFilter<"AIConversation"> | string
+  groupId?: Prisma.StringNullableFilter<"AIConversation"> | string | null
+  labId?: Prisma.StringNullableFilter<"AIConversation"> | string | null
+  examId?: Prisma.StringNullableFilter<"AIConversation"> | string | null
   problemId?: Prisma.StringFilter<"AIConversation"> | string
   messageCount?: Prisma.IntFilter<"AIConversation"> | number
   totalTokens?: Prisma.IntFilter<"AIConversation"> | number
@@ -261,8 +269,9 @@ export type AIConversationWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"AIConversation"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"AIConversation"> | Date | string
   student?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
-  group?: Prisma.XOR<Prisma.GroupScalarRelationFilter, Prisma.GroupWhereInput>
-  exam?: Prisma.XOR<Prisma.ExamScalarRelationFilter, Prisma.ExamWhereInput>
+  group?: Prisma.XOR<Prisma.GroupNullableScalarRelationFilter, Prisma.GroupWhereInput> | null
+  lab?: Prisma.XOR<Prisma.LabNullableScalarRelationFilter, Prisma.LabWhereInput> | null
+  exam?: Prisma.XOR<Prisma.ExamNullableScalarRelationFilter, Prisma.ExamWhereInput> | null
   problem?: Prisma.XOR<Prisma.ProblemScalarRelationFilter, Prisma.ProblemWhereInput>
   messages?: Prisma.AIMessageListRelationFilter
 }
@@ -270,8 +279,9 @@ export type AIConversationWhereInput = {
 export type AIConversationOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   studentId?: Prisma.SortOrder
-  groupId?: Prisma.SortOrder
-  examId?: Prisma.SortOrder
+  groupId?: Prisma.SortOrderInput | Prisma.SortOrder
+  labId?: Prisma.SortOrderInput | Prisma.SortOrder
+  examId?: Prisma.SortOrderInput | Prisma.SortOrder
   problemId?: Prisma.SortOrder
   messageCount?: Prisma.SortOrder
   totalTokens?: Prisma.SortOrder
@@ -280,6 +290,7 @@ export type AIConversationOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   student?: Prisma.UserOrderByWithRelationInput
   group?: Prisma.GroupOrderByWithRelationInput
+  lab?: Prisma.LabOrderByWithRelationInput
   exam?: Prisma.ExamOrderByWithRelationInput
   problem?: Prisma.ProblemOrderByWithRelationInput
   messages?: Prisma.AIMessageOrderByRelationAggregateInput
@@ -288,12 +299,14 @@ export type AIConversationOrderByWithRelationInput = {
 export type AIConversationWhereUniqueInput = Prisma.AtLeast<{
   id?: string
   studentId_examId_problemId?: Prisma.AIConversationStudentIdExamIdProblemIdCompoundUniqueInput
+  studentId_labId_problemId?: Prisma.AIConversationStudentIdLabIdProblemIdCompoundUniqueInput
   AND?: Prisma.AIConversationWhereInput | Prisma.AIConversationWhereInput[]
   OR?: Prisma.AIConversationWhereInput[]
   NOT?: Prisma.AIConversationWhereInput | Prisma.AIConversationWhereInput[]
   studentId?: Prisma.StringFilter<"AIConversation"> | string
-  groupId?: Prisma.StringFilter<"AIConversation"> | string
-  examId?: Prisma.StringFilter<"AIConversation"> | string
+  groupId?: Prisma.StringNullableFilter<"AIConversation"> | string | null
+  labId?: Prisma.StringNullableFilter<"AIConversation"> | string | null
+  examId?: Prisma.StringNullableFilter<"AIConversation"> | string | null
   problemId?: Prisma.StringFilter<"AIConversation"> | string
   messageCount?: Prisma.IntFilter<"AIConversation"> | number
   totalTokens?: Prisma.IntFilter<"AIConversation"> | number
@@ -301,17 +314,19 @@ export type AIConversationWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"AIConversation"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"AIConversation"> | Date | string
   student?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
-  group?: Prisma.XOR<Prisma.GroupScalarRelationFilter, Prisma.GroupWhereInput>
-  exam?: Prisma.XOR<Prisma.ExamScalarRelationFilter, Prisma.ExamWhereInput>
+  group?: Prisma.XOR<Prisma.GroupNullableScalarRelationFilter, Prisma.GroupWhereInput> | null
+  lab?: Prisma.XOR<Prisma.LabNullableScalarRelationFilter, Prisma.LabWhereInput> | null
+  exam?: Prisma.XOR<Prisma.ExamNullableScalarRelationFilter, Prisma.ExamWhereInput> | null
   problem?: Prisma.XOR<Prisma.ProblemScalarRelationFilter, Prisma.ProblemWhereInput>
   messages?: Prisma.AIMessageListRelationFilter
-}, "id" | "studentId_examId_problemId">
+}, "id" | "studentId_examId_problemId" | "studentId_labId_problemId">
 
 export type AIConversationOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   studentId?: Prisma.SortOrder
-  groupId?: Prisma.SortOrder
-  examId?: Prisma.SortOrder
+  groupId?: Prisma.SortOrderInput | Prisma.SortOrder
+  labId?: Prisma.SortOrderInput | Prisma.SortOrder
+  examId?: Prisma.SortOrderInput | Prisma.SortOrder
   problemId?: Prisma.SortOrder
   messageCount?: Prisma.SortOrder
   totalTokens?: Prisma.SortOrder
@@ -331,8 +346,9 @@ export type AIConversationScalarWhereWithAggregatesInput = {
   NOT?: Prisma.AIConversationScalarWhereWithAggregatesInput | Prisma.AIConversationScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"AIConversation"> | string
   studentId?: Prisma.StringWithAggregatesFilter<"AIConversation"> | string
-  groupId?: Prisma.StringWithAggregatesFilter<"AIConversation"> | string
-  examId?: Prisma.StringWithAggregatesFilter<"AIConversation"> | string
+  groupId?: Prisma.StringNullableWithAggregatesFilter<"AIConversation"> | string | null
+  labId?: Prisma.StringNullableWithAggregatesFilter<"AIConversation"> | string | null
+  examId?: Prisma.StringNullableWithAggregatesFilter<"AIConversation"> | string | null
   problemId?: Prisma.StringWithAggregatesFilter<"AIConversation"> | string
   messageCount?: Prisma.IntWithAggregatesFilter<"AIConversation"> | number
   totalTokens?: Prisma.IntWithAggregatesFilter<"AIConversation"> | number
@@ -349,8 +365,9 @@ export type AIConversationCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   student: Prisma.UserCreateNestedOneWithoutAiconversationsInput
-  group: Prisma.GroupCreateNestedOneWithoutAiconversationsInput
-  exam: Prisma.ExamCreateNestedOneWithoutAiconversationsInput
+  group?: Prisma.GroupCreateNestedOneWithoutAiconversationsInput
+  lab?: Prisma.LabCreateNestedOneWithoutAiconversationsInput
+  exam?: Prisma.ExamCreateNestedOneWithoutAiconversationsInput
   problem: Prisma.ProblemCreateNestedOneWithoutAiconversationsInput
   messages?: Prisma.AIMessageCreateNestedManyWithoutConversationInput
 }
@@ -358,8 +375,9 @@ export type AIConversationCreateInput = {
 export type AIConversationUncheckedCreateInput = {
   id?: string
   studentId: string
-  groupId: string
-  examId: string
+  groupId?: string | null
+  labId?: string | null
+  examId?: string | null
   problemId: string
   messageCount?: number
   totalTokens?: number
@@ -377,8 +395,9 @@ export type AIConversationUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   student?: Prisma.UserUpdateOneRequiredWithoutAiconversationsNestedInput
-  group?: Prisma.GroupUpdateOneRequiredWithoutAiconversationsNestedInput
-  exam?: Prisma.ExamUpdateOneRequiredWithoutAiconversationsNestedInput
+  group?: Prisma.GroupUpdateOneWithoutAiconversationsNestedInput
+  lab?: Prisma.LabUpdateOneWithoutAiconversationsNestedInput
+  exam?: Prisma.ExamUpdateOneWithoutAiconversationsNestedInput
   problem?: Prisma.ProblemUpdateOneRequiredWithoutAiconversationsNestedInput
   messages?: Prisma.AIMessageUpdateManyWithoutConversationNestedInput
 }
@@ -386,8 +405,9 @@ export type AIConversationUpdateInput = {
 export type AIConversationUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   studentId?: Prisma.StringFieldUpdateOperationsInput | string
-  groupId?: Prisma.StringFieldUpdateOperationsInput | string
-  examId?: Prisma.StringFieldUpdateOperationsInput | string
+  groupId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  labId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  examId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   problemId?: Prisma.StringFieldUpdateOperationsInput | string
   messageCount?: Prisma.IntFieldUpdateOperationsInput | number
   totalTokens?: Prisma.IntFieldUpdateOperationsInput | number
@@ -400,8 +420,9 @@ export type AIConversationUncheckedUpdateInput = {
 export type AIConversationCreateManyInput = {
   id?: string
   studentId: string
-  groupId: string
-  examId: string
+  groupId?: string | null
+  labId?: string | null
+  examId?: string | null
   problemId: string
   messageCount?: number
   totalTokens?: number
@@ -422,8 +443,9 @@ export type AIConversationUpdateManyMutationInput = {
 export type AIConversationUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   studentId?: Prisma.StringFieldUpdateOperationsInput | string
-  groupId?: Prisma.StringFieldUpdateOperationsInput | string
-  examId?: Prisma.StringFieldUpdateOperationsInput | string
+  groupId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  labId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  examId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   problemId?: Prisma.StringFieldUpdateOperationsInput | string
   messageCount?: Prisma.IntFieldUpdateOperationsInput | number
   totalTokens?: Prisma.IntFieldUpdateOperationsInput | number
@@ -448,10 +470,17 @@ export type AIConversationStudentIdExamIdProblemIdCompoundUniqueInput = {
   problemId: string
 }
 
+export type AIConversationStudentIdLabIdProblemIdCompoundUniqueInput = {
+  studentId: string
+  labId: string
+  problemId: string
+}
+
 export type AIConversationCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   studentId?: Prisma.SortOrder
   groupId?: Prisma.SortOrder
+  labId?: Prisma.SortOrder
   examId?: Prisma.SortOrder
   problemId?: Prisma.SortOrder
   messageCount?: Prisma.SortOrder
@@ -470,6 +499,7 @@ export type AIConversationMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   studentId?: Prisma.SortOrder
   groupId?: Prisma.SortOrder
+  labId?: Prisma.SortOrder
   examId?: Prisma.SortOrder
   problemId?: Prisma.SortOrder
   messageCount?: Prisma.SortOrder
@@ -483,6 +513,7 @@ export type AIConversationMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   studentId?: Prisma.SortOrder
   groupId?: Prisma.SortOrder
+  labId?: Prisma.SortOrder
   examId?: Prisma.SortOrder
   problemId?: Prisma.SortOrder
   messageCount?: Prisma.SortOrder
@@ -684,6 +715,48 @@ export type AIConversationUpdateOneRequiredWithoutMessagesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.AIConversationUpdateToOneWithWhereWithoutMessagesInput, Prisma.AIConversationUpdateWithoutMessagesInput>, Prisma.AIConversationUncheckedUpdateWithoutMessagesInput>
 }
 
+export type AIConversationCreateNestedManyWithoutLabInput = {
+  create?: Prisma.XOR<Prisma.AIConversationCreateWithoutLabInput, Prisma.AIConversationUncheckedCreateWithoutLabInput> | Prisma.AIConversationCreateWithoutLabInput[] | Prisma.AIConversationUncheckedCreateWithoutLabInput[]
+  connectOrCreate?: Prisma.AIConversationCreateOrConnectWithoutLabInput | Prisma.AIConversationCreateOrConnectWithoutLabInput[]
+  createMany?: Prisma.AIConversationCreateManyLabInputEnvelope
+  connect?: Prisma.AIConversationWhereUniqueInput | Prisma.AIConversationWhereUniqueInput[]
+}
+
+export type AIConversationUncheckedCreateNestedManyWithoutLabInput = {
+  create?: Prisma.XOR<Prisma.AIConversationCreateWithoutLabInput, Prisma.AIConversationUncheckedCreateWithoutLabInput> | Prisma.AIConversationCreateWithoutLabInput[] | Prisma.AIConversationUncheckedCreateWithoutLabInput[]
+  connectOrCreate?: Prisma.AIConversationCreateOrConnectWithoutLabInput | Prisma.AIConversationCreateOrConnectWithoutLabInput[]
+  createMany?: Prisma.AIConversationCreateManyLabInputEnvelope
+  connect?: Prisma.AIConversationWhereUniqueInput | Prisma.AIConversationWhereUniqueInput[]
+}
+
+export type AIConversationUpdateManyWithoutLabNestedInput = {
+  create?: Prisma.XOR<Prisma.AIConversationCreateWithoutLabInput, Prisma.AIConversationUncheckedCreateWithoutLabInput> | Prisma.AIConversationCreateWithoutLabInput[] | Prisma.AIConversationUncheckedCreateWithoutLabInput[]
+  connectOrCreate?: Prisma.AIConversationCreateOrConnectWithoutLabInput | Prisma.AIConversationCreateOrConnectWithoutLabInput[]
+  upsert?: Prisma.AIConversationUpsertWithWhereUniqueWithoutLabInput | Prisma.AIConversationUpsertWithWhereUniqueWithoutLabInput[]
+  createMany?: Prisma.AIConversationCreateManyLabInputEnvelope
+  set?: Prisma.AIConversationWhereUniqueInput | Prisma.AIConversationWhereUniqueInput[]
+  disconnect?: Prisma.AIConversationWhereUniqueInput | Prisma.AIConversationWhereUniqueInput[]
+  delete?: Prisma.AIConversationWhereUniqueInput | Prisma.AIConversationWhereUniqueInput[]
+  connect?: Prisma.AIConversationWhereUniqueInput | Prisma.AIConversationWhereUniqueInput[]
+  update?: Prisma.AIConversationUpdateWithWhereUniqueWithoutLabInput | Prisma.AIConversationUpdateWithWhereUniqueWithoutLabInput[]
+  updateMany?: Prisma.AIConversationUpdateManyWithWhereWithoutLabInput | Prisma.AIConversationUpdateManyWithWhereWithoutLabInput[]
+  deleteMany?: Prisma.AIConversationScalarWhereInput | Prisma.AIConversationScalarWhereInput[]
+}
+
+export type AIConversationUncheckedUpdateManyWithoutLabNestedInput = {
+  create?: Prisma.XOR<Prisma.AIConversationCreateWithoutLabInput, Prisma.AIConversationUncheckedCreateWithoutLabInput> | Prisma.AIConversationCreateWithoutLabInput[] | Prisma.AIConversationUncheckedCreateWithoutLabInput[]
+  connectOrCreate?: Prisma.AIConversationCreateOrConnectWithoutLabInput | Prisma.AIConversationCreateOrConnectWithoutLabInput[]
+  upsert?: Prisma.AIConversationUpsertWithWhereUniqueWithoutLabInput | Prisma.AIConversationUpsertWithWhereUniqueWithoutLabInput[]
+  createMany?: Prisma.AIConversationCreateManyLabInputEnvelope
+  set?: Prisma.AIConversationWhereUniqueInput | Prisma.AIConversationWhereUniqueInput[]
+  disconnect?: Prisma.AIConversationWhereUniqueInput | Prisma.AIConversationWhereUniqueInput[]
+  delete?: Prisma.AIConversationWhereUniqueInput | Prisma.AIConversationWhereUniqueInput[]
+  connect?: Prisma.AIConversationWhereUniqueInput | Prisma.AIConversationWhereUniqueInput[]
+  update?: Prisma.AIConversationUpdateWithWhereUniqueWithoutLabInput | Prisma.AIConversationUpdateWithWhereUniqueWithoutLabInput[]
+  updateMany?: Prisma.AIConversationUpdateManyWithWhereWithoutLabInput | Prisma.AIConversationUpdateManyWithWhereWithoutLabInput[]
+  deleteMany?: Prisma.AIConversationScalarWhereInput | Prisma.AIConversationScalarWhereInput[]
+}
+
 export type AIConversationCreateWithoutStudentInput = {
   id?: string
   messageCount?: number
@@ -691,16 +764,18 @@ export type AIConversationCreateWithoutStudentInput = {
   isClosed?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  group: Prisma.GroupCreateNestedOneWithoutAiconversationsInput
-  exam: Prisma.ExamCreateNestedOneWithoutAiconversationsInput
+  group?: Prisma.GroupCreateNestedOneWithoutAiconversationsInput
+  lab?: Prisma.LabCreateNestedOneWithoutAiconversationsInput
+  exam?: Prisma.ExamCreateNestedOneWithoutAiconversationsInput
   problem: Prisma.ProblemCreateNestedOneWithoutAiconversationsInput
   messages?: Prisma.AIMessageCreateNestedManyWithoutConversationInput
 }
 
 export type AIConversationUncheckedCreateWithoutStudentInput = {
   id?: string
-  groupId: string
-  examId: string
+  groupId?: string | null
+  labId?: string | null
+  examId?: string | null
   problemId: string
   messageCount?: number
   totalTokens?: number
@@ -742,8 +817,9 @@ export type AIConversationScalarWhereInput = {
   NOT?: Prisma.AIConversationScalarWhereInput | Prisma.AIConversationScalarWhereInput[]
   id?: Prisma.StringFilter<"AIConversation"> | string
   studentId?: Prisma.StringFilter<"AIConversation"> | string
-  groupId?: Prisma.StringFilter<"AIConversation"> | string
-  examId?: Prisma.StringFilter<"AIConversation"> | string
+  groupId?: Prisma.StringNullableFilter<"AIConversation"> | string | null
+  labId?: Prisma.StringNullableFilter<"AIConversation"> | string | null
+  examId?: Prisma.StringNullableFilter<"AIConversation"> | string | null
   problemId?: Prisma.StringFilter<"AIConversation"> | string
   messageCount?: Prisma.IntFilter<"AIConversation"> | number
   totalTokens?: Prisma.IntFilter<"AIConversation"> | number
@@ -760,16 +836,18 @@ export type AIConversationCreateWithoutProblemInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   student: Prisma.UserCreateNestedOneWithoutAiconversationsInput
-  group: Prisma.GroupCreateNestedOneWithoutAiconversationsInput
-  exam: Prisma.ExamCreateNestedOneWithoutAiconversationsInput
+  group?: Prisma.GroupCreateNestedOneWithoutAiconversationsInput
+  lab?: Prisma.LabCreateNestedOneWithoutAiconversationsInput
+  exam?: Prisma.ExamCreateNestedOneWithoutAiconversationsInput
   messages?: Prisma.AIMessageCreateNestedManyWithoutConversationInput
 }
 
 export type AIConversationUncheckedCreateWithoutProblemInput = {
   id?: string
   studentId: string
-  groupId: string
-  examId: string
+  groupId?: string | null
+  labId?: string | null
+  examId?: string | null
   messageCount?: number
   totalTokens?: number
   isClosed?: boolean
@@ -812,7 +890,8 @@ export type AIConversationCreateWithoutExamInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   student: Prisma.UserCreateNestedOneWithoutAiconversationsInput
-  group: Prisma.GroupCreateNestedOneWithoutAiconversationsInput
+  group?: Prisma.GroupCreateNestedOneWithoutAiconversationsInput
+  lab?: Prisma.LabCreateNestedOneWithoutAiconversationsInput
   problem: Prisma.ProblemCreateNestedOneWithoutAiconversationsInput
   messages?: Prisma.AIMessageCreateNestedManyWithoutConversationInput
 }
@@ -820,7 +899,8 @@ export type AIConversationCreateWithoutExamInput = {
 export type AIConversationUncheckedCreateWithoutExamInput = {
   id?: string
   studentId: string
-  groupId: string
+  groupId?: string | null
+  labId?: string | null
   problemId: string
   messageCount?: number
   totalTokens?: number
@@ -864,7 +944,8 @@ export type AIConversationCreateWithoutGroupInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   student: Prisma.UserCreateNestedOneWithoutAiconversationsInput
-  exam: Prisma.ExamCreateNestedOneWithoutAiconversationsInput
+  lab?: Prisma.LabCreateNestedOneWithoutAiconversationsInput
+  exam?: Prisma.ExamCreateNestedOneWithoutAiconversationsInput
   problem: Prisma.ProblemCreateNestedOneWithoutAiconversationsInput
   messages?: Prisma.AIMessageCreateNestedManyWithoutConversationInput
 }
@@ -872,7 +953,8 @@ export type AIConversationCreateWithoutGroupInput = {
 export type AIConversationUncheckedCreateWithoutGroupInput = {
   id?: string
   studentId: string
-  examId: string
+  labId?: string | null
+  examId?: string | null
   problemId: string
   messageCount?: number
   totalTokens?: number
@@ -916,16 +998,18 @@ export type AIConversationCreateWithoutMessagesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   student: Prisma.UserCreateNestedOneWithoutAiconversationsInput
-  group: Prisma.GroupCreateNestedOneWithoutAiconversationsInput
-  exam: Prisma.ExamCreateNestedOneWithoutAiconversationsInput
+  group?: Prisma.GroupCreateNestedOneWithoutAiconversationsInput
+  lab?: Prisma.LabCreateNestedOneWithoutAiconversationsInput
+  exam?: Prisma.ExamCreateNestedOneWithoutAiconversationsInput
   problem: Prisma.ProblemCreateNestedOneWithoutAiconversationsInput
 }
 
 export type AIConversationUncheckedCreateWithoutMessagesInput = {
   id?: string
   studentId: string
-  groupId: string
-  examId: string
+  groupId?: string | null
+  labId?: string | null
+  examId?: string | null
   problemId: string
   messageCount?: number
   totalTokens?: number
@@ -958,16 +1042,18 @@ export type AIConversationUpdateWithoutMessagesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   student?: Prisma.UserUpdateOneRequiredWithoutAiconversationsNestedInput
-  group?: Prisma.GroupUpdateOneRequiredWithoutAiconversationsNestedInput
-  exam?: Prisma.ExamUpdateOneRequiredWithoutAiconversationsNestedInput
+  group?: Prisma.GroupUpdateOneWithoutAiconversationsNestedInput
+  lab?: Prisma.LabUpdateOneWithoutAiconversationsNestedInput
+  exam?: Prisma.ExamUpdateOneWithoutAiconversationsNestedInput
   problem?: Prisma.ProblemUpdateOneRequiredWithoutAiconversationsNestedInput
 }
 
 export type AIConversationUncheckedUpdateWithoutMessagesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   studentId?: Prisma.StringFieldUpdateOperationsInput | string
-  groupId?: Prisma.StringFieldUpdateOperationsInput | string
-  examId?: Prisma.StringFieldUpdateOperationsInput | string
+  groupId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  labId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  examId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   problemId?: Prisma.StringFieldUpdateOperationsInput | string
   messageCount?: Prisma.IntFieldUpdateOperationsInput | number
   totalTokens?: Prisma.IntFieldUpdateOperationsInput | number
@@ -976,10 +1062,65 @@ export type AIConversationUncheckedUpdateWithoutMessagesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
+export type AIConversationCreateWithoutLabInput = {
+  id?: string
+  messageCount?: number
+  totalTokens?: number
+  isClosed?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  student: Prisma.UserCreateNestedOneWithoutAiconversationsInput
+  group?: Prisma.GroupCreateNestedOneWithoutAiconversationsInput
+  exam?: Prisma.ExamCreateNestedOneWithoutAiconversationsInput
+  problem: Prisma.ProblemCreateNestedOneWithoutAiconversationsInput
+  messages?: Prisma.AIMessageCreateNestedManyWithoutConversationInput
+}
+
+export type AIConversationUncheckedCreateWithoutLabInput = {
+  id?: string
+  studentId: string
+  groupId?: string | null
+  examId?: string | null
+  problemId: string
+  messageCount?: number
+  totalTokens?: number
+  isClosed?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  messages?: Prisma.AIMessageUncheckedCreateNestedManyWithoutConversationInput
+}
+
+export type AIConversationCreateOrConnectWithoutLabInput = {
+  where: Prisma.AIConversationWhereUniqueInput
+  create: Prisma.XOR<Prisma.AIConversationCreateWithoutLabInput, Prisma.AIConversationUncheckedCreateWithoutLabInput>
+}
+
+export type AIConversationCreateManyLabInputEnvelope = {
+  data: Prisma.AIConversationCreateManyLabInput | Prisma.AIConversationCreateManyLabInput[]
+  skipDuplicates?: boolean
+}
+
+export type AIConversationUpsertWithWhereUniqueWithoutLabInput = {
+  where: Prisma.AIConversationWhereUniqueInput
+  update: Prisma.XOR<Prisma.AIConversationUpdateWithoutLabInput, Prisma.AIConversationUncheckedUpdateWithoutLabInput>
+  create: Prisma.XOR<Prisma.AIConversationCreateWithoutLabInput, Prisma.AIConversationUncheckedCreateWithoutLabInput>
+}
+
+export type AIConversationUpdateWithWhereUniqueWithoutLabInput = {
+  where: Prisma.AIConversationWhereUniqueInput
+  data: Prisma.XOR<Prisma.AIConversationUpdateWithoutLabInput, Prisma.AIConversationUncheckedUpdateWithoutLabInput>
+}
+
+export type AIConversationUpdateManyWithWhereWithoutLabInput = {
+  where: Prisma.AIConversationScalarWhereInput
+  data: Prisma.XOR<Prisma.AIConversationUpdateManyMutationInput, Prisma.AIConversationUncheckedUpdateManyWithoutLabInput>
+}
+
 export type AIConversationCreateManyStudentInput = {
   id?: string
-  groupId: string
-  examId: string
+  groupId?: string | null
+  labId?: string | null
+  examId?: string | null
   problemId: string
   messageCount?: number
   totalTokens?: number
@@ -995,16 +1136,18 @@ export type AIConversationUpdateWithoutStudentInput = {
   isClosed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  group?: Prisma.GroupUpdateOneRequiredWithoutAiconversationsNestedInput
-  exam?: Prisma.ExamUpdateOneRequiredWithoutAiconversationsNestedInput
+  group?: Prisma.GroupUpdateOneWithoutAiconversationsNestedInput
+  lab?: Prisma.LabUpdateOneWithoutAiconversationsNestedInput
+  exam?: Prisma.ExamUpdateOneWithoutAiconversationsNestedInput
   problem?: Prisma.ProblemUpdateOneRequiredWithoutAiconversationsNestedInput
   messages?: Prisma.AIMessageUpdateManyWithoutConversationNestedInput
 }
 
 export type AIConversationUncheckedUpdateWithoutStudentInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  groupId?: Prisma.StringFieldUpdateOperationsInput | string
-  examId?: Prisma.StringFieldUpdateOperationsInput | string
+  groupId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  labId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  examId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   problemId?: Prisma.StringFieldUpdateOperationsInput | string
   messageCount?: Prisma.IntFieldUpdateOperationsInput | number
   totalTokens?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1016,8 +1159,9 @@ export type AIConversationUncheckedUpdateWithoutStudentInput = {
 
 export type AIConversationUncheckedUpdateManyWithoutStudentInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  groupId?: Prisma.StringFieldUpdateOperationsInput | string
-  examId?: Prisma.StringFieldUpdateOperationsInput | string
+  groupId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  labId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  examId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   problemId?: Prisma.StringFieldUpdateOperationsInput | string
   messageCount?: Prisma.IntFieldUpdateOperationsInput | number
   totalTokens?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1029,8 +1173,9 @@ export type AIConversationUncheckedUpdateManyWithoutStudentInput = {
 export type AIConversationCreateManyProblemInput = {
   id?: string
   studentId: string
-  groupId: string
-  examId: string
+  groupId?: string | null
+  labId?: string | null
+  examId?: string | null
   messageCount?: number
   totalTokens?: number
   isClosed?: boolean
@@ -1046,16 +1191,18 @@ export type AIConversationUpdateWithoutProblemInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   student?: Prisma.UserUpdateOneRequiredWithoutAiconversationsNestedInput
-  group?: Prisma.GroupUpdateOneRequiredWithoutAiconversationsNestedInput
-  exam?: Prisma.ExamUpdateOneRequiredWithoutAiconversationsNestedInput
+  group?: Prisma.GroupUpdateOneWithoutAiconversationsNestedInput
+  lab?: Prisma.LabUpdateOneWithoutAiconversationsNestedInput
+  exam?: Prisma.ExamUpdateOneWithoutAiconversationsNestedInput
   messages?: Prisma.AIMessageUpdateManyWithoutConversationNestedInput
 }
 
 export type AIConversationUncheckedUpdateWithoutProblemInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   studentId?: Prisma.StringFieldUpdateOperationsInput | string
-  groupId?: Prisma.StringFieldUpdateOperationsInput | string
-  examId?: Prisma.StringFieldUpdateOperationsInput | string
+  groupId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  labId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  examId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   messageCount?: Prisma.IntFieldUpdateOperationsInput | number
   totalTokens?: Prisma.IntFieldUpdateOperationsInput | number
   isClosed?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1067,8 +1214,9 @@ export type AIConversationUncheckedUpdateWithoutProblemInput = {
 export type AIConversationUncheckedUpdateManyWithoutProblemInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   studentId?: Prisma.StringFieldUpdateOperationsInput | string
-  groupId?: Prisma.StringFieldUpdateOperationsInput | string
-  examId?: Prisma.StringFieldUpdateOperationsInput | string
+  groupId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  labId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  examId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   messageCount?: Prisma.IntFieldUpdateOperationsInput | number
   totalTokens?: Prisma.IntFieldUpdateOperationsInput | number
   isClosed?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1079,7 +1227,8 @@ export type AIConversationUncheckedUpdateManyWithoutProblemInput = {
 export type AIConversationCreateManyExamInput = {
   id?: string
   studentId: string
-  groupId: string
+  groupId?: string | null
+  labId?: string | null
   problemId: string
   messageCount?: number
   totalTokens?: number
@@ -1096,7 +1245,8 @@ export type AIConversationUpdateWithoutExamInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   student?: Prisma.UserUpdateOneRequiredWithoutAiconversationsNestedInput
-  group?: Prisma.GroupUpdateOneRequiredWithoutAiconversationsNestedInput
+  group?: Prisma.GroupUpdateOneWithoutAiconversationsNestedInput
+  lab?: Prisma.LabUpdateOneWithoutAiconversationsNestedInput
   problem?: Prisma.ProblemUpdateOneRequiredWithoutAiconversationsNestedInput
   messages?: Prisma.AIMessageUpdateManyWithoutConversationNestedInput
 }
@@ -1104,7 +1254,8 @@ export type AIConversationUpdateWithoutExamInput = {
 export type AIConversationUncheckedUpdateWithoutExamInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   studentId?: Prisma.StringFieldUpdateOperationsInput | string
-  groupId?: Prisma.StringFieldUpdateOperationsInput | string
+  groupId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  labId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   problemId?: Prisma.StringFieldUpdateOperationsInput | string
   messageCount?: Prisma.IntFieldUpdateOperationsInput | number
   totalTokens?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1117,7 +1268,8 @@ export type AIConversationUncheckedUpdateWithoutExamInput = {
 export type AIConversationUncheckedUpdateManyWithoutExamInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   studentId?: Prisma.StringFieldUpdateOperationsInput | string
-  groupId?: Prisma.StringFieldUpdateOperationsInput | string
+  groupId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  labId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   problemId?: Prisma.StringFieldUpdateOperationsInput | string
   messageCount?: Prisma.IntFieldUpdateOperationsInput | number
   totalTokens?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1129,7 +1281,8 @@ export type AIConversationUncheckedUpdateManyWithoutExamInput = {
 export type AIConversationCreateManyGroupInput = {
   id?: string
   studentId: string
-  examId: string
+  labId?: string | null
+  examId?: string | null
   problemId: string
   messageCount?: number
   totalTokens?: number
@@ -1146,7 +1299,8 @@ export type AIConversationUpdateWithoutGroupInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   student?: Prisma.UserUpdateOneRequiredWithoutAiconversationsNestedInput
-  exam?: Prisma.ExamUpdateOneRequiredWithoutAiconversationsNestedInput
+  lab?: Prisma.LabUpdateOneWithoutAiconversationsNestedInput
+  exam?: Prisma.ExamUpdateOneWithoutAiconversationsNestedInput
   problem?: Prisma.ProblemUpdateOneRequiredWithoutAiconversationsNestedInput
   messages?: Prisma.AIMessageUpdateManyWithoutConversationNestedInput
 }
@@ -1154,7 +1308,8 @@ export type AIConversationUpdateWithoutGroupInput = {
 export type AIConversationUncheckedUpdateWithoutGroupInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   studentId?: Prisma.StringFieldUpdateOperationsInput | string
-  examId?: Prisma.StringFieldUpdateOperationsInput | string
+  labId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  examId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   problemId?: Prisma.StringFieldUpdateOperationsInput | string
   messageCount?: Prisma.IntFieldUpdateOperationsInput | number
   totalTokens?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1167,7 +1322,62 @@ export type AIConversationUncheckedUpdateWithoutGroupInput = {
 export type AIConversationUncheckedUpdateManyWithoutGroupInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   studentId?: Prisma.StringFieldUpdateOperationsInput | string
-  examId?: Prisma.StringFieldUpdateOperationsInput | string
+  labId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  examId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  problemId?: Prisma.StringFieldUpdateOperationsInput | string
+  messageCount?: Prisma.IntFieldUpdateOperationsInput | number
+  totalTokens?: Prisma.IntFieldUpdateOperationsInput | number
+  isClosed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type AIConversationCreateManyLabInput = {
+  id?: string
+  studentId: string
+  groupId?: string | null
+  examId?: string | null
+  problemId: string
+  messageCount?: number
+  totalTokens?: number
+  isClosed?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type AIConversationUpdateWithoutLabInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  messageCount?: Prisma.IntFieldUpdateOperationsInput | number
+  totalTokens?: Prisma.IntFieldUpdateOperationsInput | number
+  isClosed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  student?: Prisma.UserUpdateOneRequiredWithoutAiconversationsNestedInput
+  group?: Prisma.GroupUpdateOneWithoutAiconversationsNestedInput
+  exam?: Prisma.ExamUpdateOneWithoutAiconversationsNestedInput
+  problem?: Prisma.ProblemUpdateOneRequiredWithoutAiconversationsNestedInput
+  messages?: Prisma.AIMessageUpdateManyWithoutConversationNestedInput
+}
+
+export type AIConversationUncheckedUpdateWithoutLabInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  studentId?: Prisma.StringFieldUpdateOperationsInput | string
+  groupId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  examId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  problemId?: Prisma.StringFieldUpdateOperationsInput | string
+  messageCount?: Prisma.IntFieldUpdateOperationsInput | number
+  totalTokens?: Prisma.IntFieldUpdateOperationsInput | number
+  isClosed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  messages?: Prisma.AIMessageUncheckedUpdateManyWithoutConversationNestedInput
+}
+
+export type AIConversationUncheckedUpdateManyWithoutLabInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  studentId?: Prisma.StringFieldUpdateOperationsInput | string
+  groupId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  examId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   problemId?: Prisma.StringFieldUpdateOperationsInput | string
   messageCount?: Prisma.IntFieldUpdateOperationsInput | number
   totalTokens?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1211,6 +1421,7 @@ export type AIConversationSelect<ExtArgs extends runtime.Types.Extensions.Intern
   id?: boolean
   studentId?: boolean
   groupId?: boolean
+  labId?: boolean
   examId?: boolean
   problemId?: boolean
   messageCount?: boolean
@@ -1219,8 +1430,9 @@ export type AIConversationSelect<ExtArgs extends runtime.Types.Extensions.Intern
   createdAt?: boolean
   updatedAt?: boolean
   student?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  group?: boolean | Prisma.GroupDefaultArgs<ExtArgs>
-  exam?: boolean | Prisma.ExamDefaultArgs<ExtArgs>
+  group?: boolean | Prisma.AIConversation$groupArgs<ExtArgs>
+  lab?: boolean | Prisma.AIConversation$labArgs<ExtArgs>
+  exam?: boolean | Prisma.AIConversation$examArgs<ExtArgs>
   problem?: boolean | Prisma.ProblemDefaultArgs<ExtArgs>
   messages?: boolean | Prisma.AIConversation$messagesArgs<ExtArgs>
   _count?: boolean | Prisma.AIConversationCountOutputTypeDefaultArgs<ExtArgs>
@@ -1230,6 +1442,7 @@ export type AIConversationSelectCreateManyAndReturn<ExtArgs extends runtime.Type
   id?: boolean
   studentId?: boolean
   groupId?: boolean
+  labId?: boolean
   examId?: boolean
   problemId?: boolean
   messageCount?: boolean
@@ -1238,8 +1451,9 @@ export type AIConversationSelectCreateManyAndReturn<ExtArgs extends runtime.Type
   createdAt?: boolean
   updatedAt?: boolean
   student?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  group?: boolean | Prisma.GroupDefaultArgs<ExtArgs>
-  exam?: boolean | Prisma.ExamDefaultArgs<ExtArgs>
+  group?: boolean | Prisma.AIConversation$groupArgs<ExtArgs>
+  lab?: boolean | Prisma.AIConversation$labArgs<ExtArgs>
+  exam?: boolean | Prisma.AIConversation$examArgs<ExtArgs>
   problem?: boolean | Prisma.ProblemDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["aIConversation"]>
 
@@ -1247,6 +1461,7 @@ export type AIConversationSelectUpdateManyAndReturn<ExtArgs extends runtime.Type
   id?: boolean
   studentId?: boolean
   groupId?: boolean
+  labId?: boolean
   examId?: boolean
   problemId?: boolean
   messageCount?: boolean
@@ -1255,8 +1470,9 @@ export type AIConversationSelectUpdateManyAndReturn<ExtArgs extends runtime.Type
   createdAt?: boolean
   updatedAt?: boolean
   student?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  group?: boolean | Prisma.GroupDefaultArgs<ExtArgs>
-  exam?: boolean | Prisma.ExamDefaultArgs<ExtArgs>
+  group?: boolean | Prisma.AIConversation$groupArgs<ExtArgs>
+  lab?: boolean | Prisma.AIConversation$labArgs<ExtArgs>
+  exam?: boolean | Prisma.AIConversation$examArgs<ExtArgs>
   problem?: boolean | Prisma.ProblemDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["aIConversation"]>
 
@@ -1264,6 +1480,7 @@ export type AIConversationSelectScalar = {
   id?: boolean
   studentId?: boolean
   groupId?: boolean
+  labId?: boolean
   examId?: boolean
   problemId?: boolean
   messageCount?: boolean
@@ -1273,25 +1490,28 @@ export type AIConversationSelectScalar = {
   updatedAt?: boolean
 }
 
-export type AIConversationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "studentId" | "groupId" | "examId" | "problemId" | "messageCount" | "totalTokens" | "isClosed" | "createdAt" | "updatedAt", ExtArgs["result"]["aIConversation"]>
+export type AIConversationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "studentId" | "groupId" | "labId" | "examId" | "problemId" | "messageCount" | "totalTokens" | "isClosed" | "createdAt" | "updatedAt", ExtArgs["result"]["aIConversation"]>
 export type AIConversationInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   student?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  group?: boolean | Prisma.GroupDefaultArgs<ExtArgs>
-  exam?: boolean | Prisma.ExamDefaultArgs<ExtArgs>
+  group?: boolean | Prisma.AIConversation$groupArgs<ExtArgs>
+  lab?: boolean | Prisma.AIConversation$labArgs<ExtArgs>
+  exam?: boolean | Prisma.AIConversation$examArgs<ExtArgs>
   problem?: boolean | Prisma.ProblemDefaultArgs<ExtArgs>
   messages?: boolean | Prisma.AIConversation$messagesArgs<ExtArgs>
   _count?: boolean | Prisma.AIConversationCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type AIConversationIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   student?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  group?: boolean | Prisma.GroupDefaultArgs<ExtArgs>
-  exam?: boolean | Prisma.ExamDefaultArgs<ExtArgs>
+  group?: boolean | Prisma.AIConversation$groupArgs<ExtArgs>
+  lab?: boolean | Prisma.AIConversation$labArgs<ExtArgs>
+  exam?: boolean | Prisma.AIConversation$examArgs<ExtArgs>
   problem?: boolean | Prisma.ProblemDefaultArgs<ExtArgs>
 }
 export type AIConversationIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   student?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  group?: boolean | Prisma.GroupDefaultArgs<ExtArgs>
-  exam?: boolean | Prisma.ExamDefaultArgs<ExtArgs>
+  group?: boolean | Prisma.AIConversation$groupArgs<ExtArgs>
+  lab?: boolean | Prisma.AIConversation$labArgs<ExtArgs>
+  exam?: boolean | Prisma.AIConversation$examArgs<ExtArgs>
   problem?: boolean | Prisma.ProblemDefaultArgs<ExtArgs>
 }
 
@@ -1299,16 +1519,18 @@ export type $AIConversationPayload<ExtArgs extends runtime.Types.Extensions.Inte
   name: "AIConversation"
   objects: {
     student: Prisma.$UserPayload<ExtArgs>
-    group: Prisma.$GroupPayload<ExtArgs>
-    exam: Prisma.$ExamPayload<ExtArgs>
+    group: Prisma.$GroupPayload<ExtArgs> | null
+    lab: Prisma.$LabPayload<ExtArgs> | null
+    exam: Prisma.$ExamPayload<ExtArgs> | null
     problem: Prisma.$ProblemPayload<ExtArgs>
     messages: Prisma.$AIMessagePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     studentId: string
-    groupId: string
-    examId: string
+    groupId: string | null
+    labId: string | null
+    examId: string | null
     problemId: string
     messageCount: number
     totalTokens: number
@@ -1710,8 +1932,9 @@ readonly fields: AIConversationFieldRefs;
 export interface Prisma__AIConversationClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   student<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  group<T extends Prisma.GroupDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.GroupDefaultArgs<ExtArgs>>): Prisma.Prisma__GroupClient<runtime.Types.Result.GetResult<Prisma.$GroupPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  exam<T extends Prisma.ExamDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ExamDefaultArgs<ExtArgs>>): Prisma.Prisma__ExamClient<runtime.Types.Result.GetResult<Prisma.$ExamPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  group<T extends Prisma.AIConversation$groupArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AIConversation$groupArgs<ExtArgs>>): Prisma.Prisma__GroupClient<runtime.Types.Result.GetResult<Prisma.$GroupPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  lab<T extends Prisma.AIConversation$labArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AIConversation$labArgs<ExtArgs>>): Prisma.Prisma__LabClient<runtime.Types.Result.GetResult<Prisma.$LabPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  exam<T extends Prisma.AIConversation$examArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AIConversation$examArgs<ExtArgs>>): Prisma.Prisma__ExamClient<runtime.Types.Result.GetResult<Prisma.$ExamPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   problem<T extends Prisma.ProblemDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ProblemDefaultArgs<ExtArgs>>): Prisma.Prisma__ProblemClient<runtime.Types.Result.GetResult<Prisma.$ProblemPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   messages<T extends Prisma.AIConversation$messagesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AIConversation$messagesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AIMessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
@@ -1746,6 +1969,7 @@ export interface AIConversationFieldRefs {
   readonly id: Prisma.FieldRef<"AIConversation", 'String'>
   readonly studentId: Prisma.FieldRef<"AIConversation", 'String'>
   readonly groupId: Prisma.FieldRef<"AIConversation", 'String'>
+  readonly labId: Prisma.FieldRef<"AIConversation", 'String'>
   readonly examId: Prisma.FieldRef<"AIConversation", 'String'>
   readonly problemId: Prisma.FieldRef<"AIConversation", 'String'>
   readonly messageCount: Prisma.FieldRef<"AIConversation", 'Int'>
@@ -2151,6 +2375,63 @@ export type AIConversationDeleteManyArgs<ExtArgs extends runtime.Types.Extension
    * Limit how many AIConversations to delete.
    */
   limit?: number
+}
+
+/**
+ * AIConversation.group
+ */
+export type AIConversation$groupArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Group
+   */
+  select?: Prisma.GroupSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Group
+   */
+  omit?: Prisma.GroupOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.GroupInclude<ExtArgs> | null
+  where?: Prisma.GroupWhereInput
+}
+
+/**
+ * AIConversation.lab
+ */
+export type AIConversation$labArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Lab
+   */
+  select?: Prisma.LabSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Lab
+   */
+  omit?: Prisma.LabOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.LabInclude<ExtArgs> | null
+  where?: Prisma.LabWhereInput
+}
+
+/**
+ * AIConversation.exam
+ */
+export type AIConversation$examArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Exam
+   */
+  select?: Prisma.ExamSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Exam
+   */
+  omit?: Prisma.ExamOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ExamInclude<ExtArgs> | null
+  where?: Prisma.ExamWhereInput
 }
 
 /**

@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/sidebar";
 import { usePermission } from "@/hooks/usePermission";
 import { useRouter } from "next/navigation";
-import { MdLibraryBooks, MdOutlineSpaceDashboard, MdCreate } from "react-icons/md";
+import { MdLibraryBooks, MdOutlineSpaceDashboard, MdCreate, MdStore } from "react-icons/md";
 import { PiStudentBold } from "react-icons/pi";
 import { IoAnalytics } from "react-icons/io5";
 import { BookOpen, FlaskConical, Megaphone } from "lucide-react";
@@ -66,6 +66,21 @@ export function NavMain({ page }: { page: string }) {
               <SidebarMenuButton tooltip={"Labs"}>
                 <FlaskConical />
                 <span>Labs</span>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          )}
+          {canViewGroups && (
+            <SidebarMenuItem
+              className={
+                page == "MARKETPLACE"
+                  ? "bg-primary text-primary-foreground rounded-md"
+                  : ""
+              }
+              onClick={() => router.push("/dashboard/teacher/marketplace")}
+            >
+              <SidebarMenuButton tooltip={"Marketplace"}>
+                <MdStore />
+                <span>Marketplace</span>
               </SidebarMenuButton>
             </SidebarMenuItem>
           )}

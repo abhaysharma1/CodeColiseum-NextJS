@@ -21,6 +21,8 @@ import {
   SearchX,
   X,
   Bot,
+  Globe,
+  Copy,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -91,9 +93,16 @@ function LabCard({
         <CardHeader className="pb-3">
           <div className="flex items-start justify-between gap-4">
             <div className="flex-1 min-w-0">
-              <CardTitle className="text-base font-semibold truncate">
-                {lab.title}
-              </CardTitle>
+              <div className="flex items-center gap-2">
+                <CardTitle className="text-base font-semibold truncate">
+                  {lab.title}
+                </CardTitle>
+                {lab.visibility === "PUBLIC" && (
+                  <Badge variant="secondary" className="text-[10px] px-1 py-0 h-4 gap-0.5 shrink-0">
+                    <Globe className="h-2.5 w-2.5" />
+                  </Badge>
+                )}
+              </div>
               <CardDescription className="mt-0.5">
                 Created {formatRelativeDate(lab.createdAt)}
               </CardDescription>
@@ -115,6 +124,11 @@ function LabCard({
                 <DropdownMenuItem asChild>
                   <Link href={`/dashboard/teacher/labs/${lab.id}?edit=true`}>
                     Edit
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href={`/dashboard/teacher/labs/${lab.id}/analytics`}>
+                    Analytics
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
@@ -158,6 +172,12 @@ function LabCard({
               <Calendar className="h-4 w-4 shrink-0" />
               <span>{formatRelativeDate(lab.createdAt)}</span>
             </div>
+            {(lab.duplicateCount ?? 0) > 0 && (
+              <div className="flex items-center gap-1.5 text-muted-foreground">
+                <Copy className="h-4 w-4 shrink-0" />
+                <span>{lab.duplicateCount}</span>
+              </div>
+            )}
           </div>
           {lab.description && (
             <p className="mt-3 text-sm text-muted-foreground line-clamp-2 leading-relaxed">

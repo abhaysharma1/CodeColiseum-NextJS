@@ -329,6 +329,7 @@ export type ProblemWhereInput = {
   airateLimits?: Prisma.AIRateLimitListRelationFilter
   groupProblemStats?: Prisma.GroupProblemStatsListRelationFilter
   studentProblemStats?: Prisma.StudentProblemStatsListRelationFilter
+  moduleProblems?: Prisma.ModuleProblemListRelationFilter
 }
 
 export type ProblemOrderByWithRelationInput = {
@@ -366,6 +367,7 @@ export type ProblemOrderByWithRelationInput = {
   airateLimits?: Prisma.AIRateLimitOrderByRelationAggregateInput
   groupProblemStats?: Prisma.GroupProblemStatsOrderByRelationAggregateInput
   studentProblemStats?: Prisma.StudentProblemStatsOrderByRelationAggregateInput
+  moduleProblems?: Prisma.ModuleProblemOrderByRelationAggregateInput
 }
 
 export type ProblemWhereUniqueInput = Prisma.AtLeast<{
@@ -406,6 +408,7 @@ export type ProblemWhereUniqueInput = Prisma.AtLeast<{
   airateLimits?: Prisma.AIRateLimitListRelationFilter
   groupProblemStats?: Prisma.GroupProblemStatsListRelationFilter
   studentProblemStats?: Prisma.StudentProblemStatsListRelationFilter
+  moduleProblems?: Prisma.ModuleProblemListRelationFilter
 }, "id" | "number">
 
 export type ProblemOrderByWithAggregationInput = {
@@ -489,6 +492,7 @@ export type ProblemCreateInput = {
   airateLimits?: Prisma.AIRateLimitCreateNestedManyWithoutProblemInput
   groupProblemStats?: Prisma.GroupProblemStatsCreateNestedManyWithoutProblemInput
   studentProblemStats?: Prisma.StudentProblemStatsCreateNestedManyWithoutProblemInput
+  moduleProblems?: Prisma.ModuleProblemCreateNestedManyWithoutProblemInput
 }
 
 export type ProblemUncheckedCreateInput = {
@@ -524,6 +528,7 @@ export type ProblemUncheckedCreateInput = {
   airateLimits?: Prisma.AIRateLimitUncheckedCreateNestedManyWithoutProblemInput
   groupProblemStats?: Prisma.GroupProblemStatsUncheckedCreateNestedManyWithoutProblemInput
   studentProblemStats?: Prisma.StudentProblemStatsUncheckedCreateNestedManyWithoutProblemInput
+  moduleProblems?: Prisma.ModuleProblemUncheckedCreateNestedManyWithoutProblemInput
 }
 
 export type ProblemUpdateInput = {
@@ -559,6 +564,7 @@ export type ProblemUpdateInput = {
   airateLimits?: Prisma.AIRateLimitUpdateManyWithoutProblemNestedInput
   groupProblemStats?: Prisma.GroupProblemStatsUpdateManyWithoutProblemNestedInput
   studentProblemStats?: Prisma.StudentProblemStatsUpdateManyWithoutProblemNestedInput
+  moduleProblems?: Prisma.ModuleProblemUpdateManyWithoutProblemNestedInput
 }
 
 export type ProblemUncheckedUpdateInput = {
@@ -594,6 +600,7 @@ export type ProblemUncheckedUpdateInput = {
   airateLimits?: Prisma.AIRateLimitUncheckedUpdateManyWithoutProblemNestedInput
   groupProblemStats?: Prisma.GroupProblemStatsUncheckedUpdateManyWithoutProblemNestedInput
   studentProblemStats?: Prisma.StudentProblemStatsUncheckedUpdateManyWithoutProblemNestedInput
+  moduleProblems?: Prisma.ModuleProblemUncheckedUpdateManyWithoutProblemNestedInput
 }
 
 export type ProblemCreateManyInput = {
@@ -1027,6 +1034,20 @@ export type ProblemUpdateOneRequiredWithoutAirateLimitsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.ProblemUpdateToOneWithWhereWithoutAirateLimitsInput, Prisma.ProblemUpdateWithoutAirateLimitsInput>, Prisma.ProblemUncheckedUpdateWithoutAirateLimitsInput>
 }
 
+export type ProblemCreateNestedOneWithoutModuleProblemsInput = {
+  create?: Prisma.XOR<Prisma.ProblemCreateWithoutModuleProblemsInput, Prisma.ProblemUncheckedCreateWithoutModuleProblemsInput>
+  connectOrCreate?: Prisma.ProblemCreateOrConnectWithoutModuleProblemsInput
+  connect?: Prisma.ProblemWhereUniqueInput
+}
+
+export type ProblemUpdateOneRequiredWithoutModuleProblemsNestedInput = {
+  create?: Prisma.XOR<Prisma.ProblemCreateWithoutModuleProblemsInput, Prisma.ProblemUncheckedCreateWithoutModuleProblemsInput>
+  connectOrCreate?: Prisma.ProblemCreateOrConnectWithoutModuleProblemsInput
+  upsert?: Prisma.ProblemUpsertWithoutModuleProblemsInput
+  connect?: Prisma.ProblemWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ProblemUpdateToOneWithWhereWithoutModuleProblemsInput, Prisma.ProblemUpdateWithoutModuleProblemsInput>, Prisma.ProblemUncheckedUpdateWithoutModuleProblemsInput>
+}
+
 export type ProblemCreateNestedOneWithoutGroupProblemStatsInput = {
   create?: Prisma.XOR<Prisma.ProblemCreateWithoutGroupProblemStatsInput, Prisma.ProblemUncheckedCreateWithoutGroupProblemStatsInput>
   connectOrCreate?: Prisma.ProblemCreateOrConnectWithoutGroupProblemStatsInput
@@ -1087,6 +1108,7 @@ export type ProblemCreateWithoutOwnerInput = {
   airateLimits?: Prisma.AIRateLimitCreateNestedManyWithoutProblemInput
   groupProblemStats?: Prisma.GroupProblemStatsCreateNestedManyWithoutProblemInput
   studentProblemStats?: Prisma.StudentProblemStatsCreateNestedManyWithoutProblemInput
+  moduleProblems?: Prisma.ModuleProblemCreateNestedManyWithoutProblemInput
 }
 
 export type ProblemUncheckedCreateWithoutOwnerInput = {
@@ -1121,6 +1143,7 @@ export type ProblemUncheckedCreateWithoutOwnerInput = {
   airateLimits?: Prisma.AIRateLimitUncheckedCreateNestedManyWithoutProblemInput
   groupProblemStats?: Prisma.GroupProblemStatsUncheckedCreateNestedManyWithoutProblemInput
   studentProblemStats?: Prisma.StudentProblemStatsUncheckedCreateNestedManyWithoutProblemInput
+  moduleProblems?: Prisma.ModuleProblemUncheckedCreateNestedManyWithoutProblemInput
 }
 
 export type ProblemCreateOrConnectWithoutOwnerInput = {
@@ -1165,6 +1188,7 @@ export type ProblemCreateWithoutApprovedByInput = {
   airateLimits?: Prisma.AIRateLimitCreateNestedManyWithoutProblemInput
   groupProblemStats?: Prisma.GroupProblemStatsCreateNestedManyWithoutProblemInput
   studentProblemStats?: Prisma.StudentProblemStatsCreateNestedManyWithoutProblemInput
+  moduleProblems?: Prisma.ModuleProblemCreateNestedManyWithoutProblemInput
 }
 
 export type ProblemUncheckedCreateWithoutApprovedByInput = {
@@ -1199,6 +1223,7 @@ export type ProblemUncheckedCreateWithoutApprovedByInput = {
   airateLimits?: Prisma.AIRateLimitUncheckedCreateNestedManyWithoutProblemInput
   groupProblemStats?: Prisma.GroupProblemStatsUncheckedCreateNestedManyWithoutProblemInput
   studentProblemStats?: Prisma.StudentProblemStatsUncheckedCreateNestedManyWithoutProblemInput
+  moduleProblems?: Prisma.ModuleProblemUncheckedCreateNestedManyWithoutProblemInput
 }
 
 export type ProblemCreateOrConnectWithoutApprovedByInput = {
@@ -1298,6 +1323,7 @@ export type ProblemCreateWithoutTestCaseInput = {
   airateLimits?: Prisma.AIRateLimitCreateNestedManyWithoutProblemInput
   groupProblemStats?: Prisma.GroupProblemStatsCreateNestedManyWithoutProblemInput
   studentProblemStats?: Prisma.StudentProblemStatsCreateNestedManyWithoutProblemInput
+  moduleProblems?: Prisma.ModuleProblemCreateNestedManyWithoutProblemInput
 }
 
 export type ProblemUncheckedCreateWithoutTestCaseInput = {
@@ -1332,6 +1358,7 @@ export type ProblemUncheckedCreateWithoutTestCaseInput = {
   airateLimits?: Prisma.AIRateLimitUncheckedCreateNestedManyWithoutProblemInput
   groupProblemStats?: Prisma.GroupProblemStatsUncheckedCreateNestedManyWithoutProblemInput
   studentProblemStats?: Prisma.StudentProblemStatsUncheckedCreateNestedManyWithoutProblemInput
+  moduleProblems?: Prisma.ModuleProblemUncheckedCreateNestedManyWithoutProblemInput
 }
 
 export type ProblemCreateOrConnectWithoutTestCaseInput = {
@@ -1382,6 +1409,7 @@ export type ProblemUpdateWithoutTestCaseInput = {
   airateLimits?: Prisma.AIRateLimitUpdateManyWithoutProblemNestedInput
   groupProblemStats?: Prisma.GroupProblemStatsUpdateManyWithoutProblemNestedInput
   studentProblemStats?: Prisma.StudentProblemStatsUpdateManyWithoutProblemNestedInput
+  moduleProblems?: Prisma.ModuleProblemUpdateManyWithoutProblemNestedInput
 }
 
 export type ProblemUncheckedUpdateWithoutTestCaseInput = {
@@ -1416,6 +1444,7 @@ export type ProblemUncheckedUpdateWithoutTestCaseInput = {
   airateLimits?: Prisma.AIRateLimitUncheckedUpdateManyWithoutProblemNestedInput
   groupProblemStats?: Prisma.GroupProblemStatsUncheckedUpdateManyWithoutProblemNestedInput
   studentProblemStats?: Prisma.StudentProblemStatsUncheckedUpdateManyWithoutProblemNestedInput
+  moduleProblems?: Prisma.ModuleProblemUncheckedUpdateManyWithoutProblemNestedInput
 }
 
 export type ProblemCreateWithoutComplexityTestingCasesInput = {
@@ -1450,6 +1479,7 @@ export type ProblemCreateWithoutComplexityTestingCasesInput = {
   airateLimits?: Prisma.AIRateLimitCreateNestedManyWithoutProblemInput
   groupProblemStats?: Prisma.GroupProblemStatsCreateNestedManyWithoutProblemInput
   studentProblemStats?: Prisma.StudentProblemStatsCreateNestedManyWithoutProblemInput
+  moduleProblems?: Prisma.ModuleProblemCreateNestedManyWithoutProblemInput
 }
 
 export type ProblemUncheckedCreateWithoutComplexityTestingCasesInput = {
@@ -1484,6 +1514,7 @@ export type ProblemUncheckedCreateWithoutComplexityTestingCasesInput = {
   airateLimits?: Prisma.AIRateLimitUncheckedCreateNestedManyWithoutProblemInput
   groupProblemStats?: Prisma.GroupProblemStatsUncheckedCreateNestedManyWithoutProblemInput
   studentProblemStats?: Prisma.StudentProblemStatsUncheckedCreateNestedManyWithoutProblemInput
+  moduleProblems?: Prisma.ModuleProblemUncheckedCreateNestedManyWithoutProblemInput
 }
 
 export type ProblemCreateOrConnectWithoutComplexityTestingCasesInput = {
@@ -1534,6 +1565,7 @@ export type ProblemUpdateWithoutComplexityTestingCasesInput = {
   airateLimits?: Prisma.AIRateLimitUpdateManyWithoutProblemNestedInput
   groupProblemStats?: Prisma.GroupProblemStatsUpdateManyWithoutProblemNestedInput
   studentProblemStats?: Prisma.StudentProblemStatsUpdateManyWithoutProblemNestedInput
+  moduleProblems?: Prisma.ModuleProblemUpdateManyWithoutProblemNestedInput
 }
 
 export type ProblemUncheckedUpdateWithoutComplexityTestingCasesInput = {
@@ -1568,6 +1600,7 @@ export type ProblemUncheckedUpdateWithoutComplexityTestingCasesInput = {
   airateLimits?: Prisma.AIRateLimitUncheckedUpdateManyWithoutProblemNestedInput
   groupProblemStats?: Prisma.GroupProblemStatsUncheckedUpdateManyWithoutProblemNestedInput
   studentProblemStats?: Prisma.StudentProblemStatsUncheckedUpdateManyWithoutProblemNestedInput
+  moduleProblems?: Prisma.ModuleProblemUncheckedUpdateManyWithoutProblemNestedInput
 }
 
 export type ProblemCreateWithoutDriverCodeInput = {
@@ -1602,6 +1635,7 @@ export type ProblemCreateWithoutDriverCodeInput = {
   airateLimits?: Prisma.AIRateLimitCreateNestedManyWithoutProblemInput
   groupProblemStats?: Prisma.GroupProblemStatsCreateNestedManyWithoutProblemInput
   studentProblemStats?: Prisma.StudentProblemStatsCreateNestedManyWithoutProblemInput
+  moduleProblems?: Prisma.ModuleProblemCreateNestedManyWithoutProblemInput
 }
 
 export type ProblemUncheckedCreateWithoutDriverCodeInput = {
@@ -1636,6 +1670,7 @@ export type ProblemUncheckedCreateWithoutDriverCodeInput = {
   airateLimits?: Prisma.AIRateLimitUncheckedCreateNestedManyWithoutProblemInput
   groupProblemStats?: Prisma.GroupProblemStatsUncheckedCreateNestedManyWithoutProblemInput
   studentProblemStats?: Prisma.StudentProblemStatsUncheckedCreateNestedManyWithoutProblemInput
+  moduleProblems?: Prisma.ModuleProblemUncheckedCreateNestedManyWithoutProblemInput
 }
 
 export type ProblemCreateOrConnectWithoutDriverCodeInput = {
@@ -1686,6 +1721,7 @@ export type ProblemUpdateWithoutDriverCodeInput = {
   airateLimits?: Prisma.AIRateLimitUpdateManyWithoutProblemNestedInput
   groupProblemStats?: Prisma.GroupProblemStatsUpdateManyWithoutProblemNestedInput
   studentProblemStats?: Prisma.StudentProblemStatsUpdateManyWithoutProblemNestedInput
+  moduleProblems?: Prisma.ModuleProblemUpdateManyWithoutProblemNestedInput
 }
 
 export type ProblemUncheckedUpdateWithoutDriverCodeInput = {
@@ -1720,6 +1756,7 @@ export type ProblemUncheckedUpdateWithoutDriverCodeInput = {
   airateLimits?: Prisma.AIRateLimitUncheckedUpdateManyWithoutProblemNestedInput
   groupProblemStats?: Prisma.GroupProblemStatsUncheckedUpdateManyWithoutProblemNestedInput
   studentProblemStats?: Prisma.StudentProblemStatsUncheckedUpdateManyWithoutProblemNestedInput
+  moduleProblems?: Prisma.ModuleProblemUncheckedUpdateManyWithoutProblemNestedInput
 }
 
 export type ProblemCreateWithoutReferenceSolutionsInput = {
@@ -1754,6 +1791,7 @@ export type ProblemCreateWithoutReferenceSolutionsInput = {
   airateLimits?: Prisma.AIRateLimitCreateNestedManyWithoutProblemInput
   groupProblemStats?: Prisma.GroupProblemStatsCreateNestedManyWithoutProblemInput
   studentProblemStats?: Prisma.StudentProblemStatsCreateNestedManyWithoutProblemInput
+  moduleProblems?: Prisma.ModuleProblemCreateNestedManyWithoutProblemInput
 }
 
 export type ProblemUncheckedCreateWithoutReferenceSolutionsInput = {
@@ -1788,6 +1826,7 @@ export type ProblemUncheckedCreateWithoutReferenceSolutionsInput = {
   airateLimits?: Prisma.AIRateLimitUncheckedCreateNestedManyWithoutProblemInput
   groupProblemStats?: Prisma.GroupProblemStatsUncheckedCreateNestedManyWithoutProblemInput
   studentProblemStats?: Prisma.StudentProblemStatsUncheckedCreateNestedManyWithoutProblemInput
+  moduleProblems?: Prisma.ModuleProblemUncheckedCreateNestedManyWithoutProblemInput
 }
 
 export type ProblemCreateOrConnectWithoutReferenceSolutionsInput = {
@@ -1838,6 +1877,7 @@ export type ProblemUpdateWithoutReferenceSolutionsInput = {
   airateLimits?: Prisma.AIRateLimitUpdateManyWithoutProblemNestedInput
   groupProblemStats?: Prisma.GroupProblemStatsUpdateManyWithoutProblemNestedInput
   studentProblemStats?: Prisma.StudentProblemStatsUpdateManyWithoutProblemNestedInput
+  moduleProblems?: Prisma.ModuleProblemUpdateManyWithoutProblemNestedInput
 }
 
 export type ProblemUncheckedUpdateWithoutReferenceSolutionsInput = {
@@ -1872,6 +1912,7 @@ export type ProblemUncheckedUpdateWithoutReferenceSolutionsInput = {
   airateLimits?: Prisma.AIRateLimitUncheckedUpdateManyWithoutProblemNestedInput
   groupProblemStats?: Prisma.GroupProblemStatsUncheckedUpdateManyWithoutProblemNestedInput
   studentProblemStats?: Prisma.StudentProblemStatsUncheckedUpdateManyWithoutProblemNestedInput
+  moduleProblems?: Prisma.ModuleProblemUncheckedUpdateManyWithoutProblemNestedInput
 }
 
 export type ProblemCreateWithoutRunTestCaseInput = {
@@ -1906,6 +1947,7 @@ export type ProblemCreateWithoutRunTestCaseInput = {
   airateLimits?: Prisma.AIRateLimitCreateNestedManyWithoutProblemInput
   groupProblemStats?: Prisma.GroupProblemStatsCreateNestedManyWithoutProblemInput
   studentProblemStats?: Prisma.StudentProblemStatsCreateNestedManyWithoutProblemInput
+  moduleProblems?: Prisma.ModuleProblemCreateNestedManyWithoutProblemInput
 }
 
 export type ProblemUncheckedCreateWithoutRunTestCaseInput = {
@@ -1940,6 +1982,7 @@ export type ProblemUncheckedCreateWithoutRunTestCaseInput = {
   airateLimits?: Prisma.AIRateLimitUncheckedCreateNestedManyWithoutProblemInput
   groupProblemStats?: Prisma.GroupProblemStatsUncheckedCreateNestedManyWithoutProblemInput
   studentProblemStats?: Prisma.StudentProblemStatsUncheckedCreateNestedManyWithoutProblemInput
+  moduleProblems?: Prisma.ModuleProblemUncheckedCreateNestedManyWithoutProblemInput
 }
 
 export type ProblemCreateOrConnectWithoutRunTestCaseInput = {
@@ -1990,6 +2033,7 @@ export type ProblemUpdateWithoutRunTestCaseInput = {
   airateLimits?: Prisma.AIRateLimitUpdateManyWithoutProblemNestedInput
   groupProblemStats?: Prisma.GroupProblemStatsUpdateManyWithoutProblemNestedInput
   studentProblemStats?: Prisma.StudentProblemStatsUpdateManyWithoutProblemNestedInput
+  moduleProblems?: Prisma.ModuleProblemUpdateManyWithoutProblemNestedInput
 }
 
 export type ProblemUncheckedUpdateWithoutRunTestCaseInput = {
@@ -2024,6 +2068,7 @@ export type ProblemUncheckedUpdateWithoutRunTestCaseInput = {
   airateLimits?: Prisma.AIRateLimitUncheckedUpdateManyWithoutProblemNestedInput
   groupProblemStats?: Prisma.GroupProblemStatsUncheckedUpdateManyWithoutProblemNestedInput
   studentProblemStats?: Prisma.StudentProblemStatsUncheckedUpdateManyWithoutProblemNestedInput
+  moduleProblems?: Prisma.ModuleProblemUncheckedUpdateManyWithoutProblemNestedInput
 }
 
 export type ProblemCreateWithoutSelfSubmissionsInput = {
@@ -2058,6 +2103,7 @@ export type ProblemCreateWithoutSelfSubmissionsInput = {
   airateLimits?: Prisma.AIRateLimitCreateNestedManyWithoutProblemInput
   groupProblemStats?: Prisma.GroupProblemStatsCreateNestedManyWithoutProblemInput
   studentProblemStats?: Prisma.StudentProblemStatsCreateNestedManyWithoutProblemInput
+  moduleProblems?: Prisma.ModuleProblemCreateNestedManyWithoutProblemInput
 }
 
 export type ProblemUncheckedCreateWithoutSelfSubmissionsInput = {
@@ -2092,6 +2138,7 @@ export type ProblemUncheckedCreateWithoutSelfSubmissionsInput = {
   airateLimits?: Prisma.AIRateLimitUncheckedCreateNestedManyWithoutProblemInput
   groupProblemStats?: Prisma.GroupProblemStatsUncheckedCreateNestedManyWithoutProblemInput
   studentProblemStats?: Prisma.StudentProblemStatsUncheckedCreateNestedManyWithoutProblemInput
+  moduleProblems?: Prisma.ModuleProblemUncheckedCreateNestedManyWithoutProblemInput
 }
 
 export type ProblemCreateOrConnectWithoutSelfSubmissionsInput = {
@@ -2142,6 +2189,7 @@ export type ProblemUpdateWithoutSelfSubmissionsInput = {
   airateLimits?: Prisma.AIRateLimitUpdateManyWithoutProblemNestedInput
   groupProblemStats?: Prisma.GroupProblemStatsUpdateManyWithoutProblemNestedInput
   studentProblemStats?: Prisma.StudentProblemStatsUpdateManyWithoutProblemNestedInput
+  moduleProblems?: Prisma.ModuleProblemUpdateManyWithoutProblemNestedInput
 }
 
 export type ProblemUncheckedUpdateWithoutSelfSubmissionsInput = {
@@ -2176,6 +2224,7 @@ export type ProblemUncheckedUpdateWithoutSelfSubmissionsInput = {
   airateLimits?: Prisma.AIRateLimitUncheckedUpdateManyWithoutProblemNestedInput
   groupProblemStats?: Prisma.GroupProblemStatsUncheckedUpdateManyWithoutProblemNestedInput
   studentProblemStats?: Prisma.StudentProblemStatsUncheckedUpdateManyWithoutProblemNestedInput
+  moduleProblems?: Prisma.ModuleProblemUncheckedUpdateManyWithoutProblemNestedInput
 }
 
 export type ProblemCreateWithoutPerformanceConstraintsInput = {
@@ -2210,6 +2259,7 @@ export type ProblemCreateWithoutPerformanceConstraintsInput = {
   airateLimits?: Prisma.AIRateLimitCreateNestedManyWithoutProblemInput
   groupProblemStats?: Prisma.GroupProblemStatsCreateNestedManyWithoutProblemInput
   studentProblemStats?: Prisma.StudentProblemStatsCreateNestedManyWithoutProblemInput
+  moduleProblems?: Prisma.ModuleProblemCreateNestedManyWithoutProblemInput
 }
 
 export type ProblemUncheckedCreateWithoutPerformanceConstraintsInput = {
@@ -2244,6 +2294,7 @@ export type ProblemUncheckedCreateWithoutPerformanceConstraintsInput = {
   airateLimits?: Prisma.AIRateLimitUncheckedCreateNestedManyWithoutProblemInput
   groupProblemStats?: Prisma.GroupProblemStatsUncheckedCreateNestedManyWithoutProblemInput
   studentProblemStats?: Prisma.StudentProblemStatsUncheckedCreateNestedManyWithoutProblemInput
+  moduleProblems?: Prisma.ModuleProblemUncheckedCreateNestedManyWithoutProblemInput
 }
 
 export type ProblemCreateOrConnectWithoutPerformanceConstraintsInput = {
@@ -2294,6 +2345,7 @@ export type ProblemUpdateWithoutPerformanceConstraintsInput = {
   airateLimits?: Prisma.AIRateLimitUpdateManyWithoutProblemNestedInput
   groupProblemStats?: Prisma.GroupProblemStatsUpdateManyWithoutProblemNestedInput
   studentProblemStats?: Prisma.StudentProblemStatsUpdateManyWithoutProblemNestedInput
+  moduleProblems?: Prisma.ModuleProblemUpdateManyWithoutProblemNestedInput
 }
 
 export type ProblemUncheckedUpdateWithoutPerformanceConstraintsInput = {
@@ -2328,6 +2380,7 @@ export type ProblemUncheckedUpdateWithoutPerformanceConstraintsInput = {
   airateLimits?: Prisma.AIRateLimitUncheckedUpdateManyWithoutProblemNestedInput
   groupProblemStats?: Prisma.GroupProblemStatsUncheckedUpdateManyWithoutProblemNestedInput
   studentProblemStats?: Prisma.StudentProblemStatsUncheckedUpdateManyWithoutProblemNestedInput
+  moduleProblems?: Prisma.ModuleProblemUncheckedUpdateManyWithoutProblemNestedInput
 }
 
 export type ProblemCreateWithoutPerformanceTestCasesInput = {
@@ -2362,6 +2415,7 @@ export type ProblemCreateWithoutPerformanceTestCasesInput = {
   airateLimits?: Prisma.AIRateLimitCreateNestedManyWithoutProblemInput
   groupProblemStats?: Prisma.GroupProblemStatsCreateNestedManyWithoutProblemInput
   studentProblemStats?: Prisma.StudentProblemStatsCreateNestedManyWithoutProblemInput
+  moduleProblems?: Prisma.ModuleProblemCreateNestedManyWithoutProblemInput
 }
 
 export type ProblemUncheckedCreateWithoutPerformanceTestCasesInput = {
@@ -2396,6 +2450,7 @@ export type ProblemUncheckedCreateWithoutPerformanceTestCasesInput = {
   airateLimits?: Prisma.AIRateLimitUncheckedCreateNestedManyWithoutProblemInput
   groupProblemStats?: Prisma.GroupProblemStatsUncheckedCreateNestedManyWithoutProblemInput
   studentProblemStats?: Prisma.StudentProblemStatsUncheckedCreateNestedManyWithoutProblemInput
+  moduleProblems?: Prisma.ModuleProblemUncheckedCreateNestedManyWithoutProblemInput
 }
 
 export type ProblemCreateOrConnectWithoutPerformanceTestCasesInput = {
@@ -2446,6 +2501,7 @@ export type ProblemUpdateWithoutPerformanceTestCasesInput = {
   airateLimits?: Prisma.AIRateLimitUpdateManyWithoutProblemNestedInput
   groupProblemStats?: Prisma.GroupProblemStatsUpdateManyWithoutProblemNestedInput
   studentProblemStats?: Prisma.StudentProblemStatsUpdateManyWithoutProblemNestedInput
+  moduleProblems?: Prisma.ModuleProblemUpdateManyWithoutProblemNestedInput
 }
 
 export type ProblemUncheckedUpdateWithoutPerformanceTestCasesInput = {
@@ -2480,6 +2536,7 @@ export type ProblemUncheckedUpdateWithoutPerformanceTestCasesInput = {
   airateLimits?: Prisma.AIRateLimitUncheckedUpdateManyWithoutProblemNestedInput
   groupProblemStats?: Prisma.GroupProblemStatsUncheckedUpdateManyWithoutProblemNestedInput
   studentProblemStats?: Prisma.StudentProblemStatsUncheckedUpdateManyWithoutProblemNestedInput
+  moduleProblems?: Prisma.ModuleProblemUncheckedUpdateManyWithoutProblemNestedInput
 }
 
 export type ProblemCreateWithoutExamProblemsInput = {
@@ -2514,6 +2571,7 @@ export type ProblemCreateWithoutExamProblemsInput = {
   airateLimits?: Prisma.AIRateLimitCreateNestedManyWithoutProblemInput
   groupProblemStats?: Prisma.GroupProblemStatsCreateNestedManyWithoutProblemInput
   studentProblemStats?: Prisma.StudentProblemStatsCreateNestedManyWithoutProblemInput
+  moduleProblems?: Prisma.ModuleProblemCreateNestedManyWithoutProblemInput
 }
 
 export type ProblemUncheckedCreateWithoutExamProblemsInput = {
@@ -2548,6 +2606,7 @@ export type ProblemUncheckedCreateWithoutExamProblemsInput = {
   airateLimits?: Prisma.AIRateLimitUncheckedCreateNestedManyWithoutProblemInput
   groupProblemStats?: Prisma.GroupProblemStatsUncheckedCreateNestedManyWithoutProblemInput
   studentProblemStats?: Prisma.StudentProblemStatsUncheckedCreateNestedManyWithoutProblemInput
+  moduleProblems?: Prisma.ModuleProblemUncheckedCreateNestedManyWithoutProblemInput
 }
 
 export type ProblemCreateOrConnectWithoutExamProblemsInput = {
@@ -2598,6 +2657,7 @@ export type ProblemUpdateWithoutExamProblemsInput = {
   airateLimits?: Prisma.AIRateLimitUpdateManyWithoutProblemNestedInput
   groupProblemStats?: Prisma.GroupProblemStatsUpdateManyWithoutProblemNestedInput
   studentProblemStats?: Prisma.StudentProblemStatsUpdateManyWithoutProblemNestedInput
+  moduleProblems?: Prisma.ModuleProblemUpdateManyWithoutProblemNestedInput
 }
 
 export type ProblemUncheckedUpdateWithoutExamProblemsInput = {
@@ -2632,6 +2692,7 @@ export type ProblemUncheckedUpdateWithoutExamProblemsInput = {
   airateLimits?: Prisma.AIRateLimitUncheckedUpdateManyWithoutProblemNestedInput
   groupProblemStats?: Prisma.GroupProblemStatsUncheckedUpdateManyWithoutProblemNestedInput
   studentProblemStats?: Prisma.StudentProblemStatsUncheckedUpdateManyWithoutProblemNestedInput
+  moduleProblems?: Prisma.ModuleProblemUncheckedUpdateManyWithoutProblemNestedInput
 }
 
 export type ProblemCreateWithoutSubmissionsInput = {
@@ -2666,6 +2727,7 @@ export type ProblemCreateWithoutSubmissionsInput = {
   airateLimits?: Prisma.AIRateLimitCreateNestedManyWithoutProblemInput
   groupProblemStats?: Prisma.GroupProblemStatsCreateNestedManyWithoutProblemInput
   studentProblemStats?: Prisma.StudentProblemStatsCreateNestedManyWithoutProblemInput
+  moduleProblems?: Prisma.ModuleProblemCreateNestedManyWithoutProblemInput
 }
 
 export type ProblemUncheckedCreateWithoutSubmissionsInput = {
@@ -2700,6 +2762,7 @@ export type ProblemUncheckedCreateWithoutSubmissionsInput = {
   airateLimits?: Prisma.AIRateLimitUncheckedCreateNestedManyWithoutProblemInput
   groupProblemStats?: Prisma.GroupProblemStatsUncheckedCreateNestedManyWithoutProblemInput
   studentProblemStats?: Prisma.StudentProblemStatsUncheckedCreateNestedManyWithoutProblemInput
+  moduleProblems?: Prisma.ModuleProblemUncheckedCreateNestedManyWithoutProblemInput
 }
 
 export type ProblemCreateOrConnectWithoutSubmissionsInput = {
@@ -2750,6 +2813,7 @@ export type ProblemUpdateWithoutSubmissionsInput = {
   airateLimits?: Prisma.AIRateLimitUpdateManyWithoutProblemNestedInput
   groupProblemStats?: Prisma.GroupProblemStatsUpdateManyWithoutProblemNestedInput
   studentProblemStats?: Prisma.StudentProblemStatsUpdateManyWithoutProblemNestedInput
+  moduleProblems?: Prisma.ModuleProblemUpdateManyWithoutProblemNestedInput
 }
 
 export type ProblemUncheckedUpdateWithoutSubmissionsInput = {
@@ -2784,6 +2848,7 @@ export type ProblemUncheckedUpdateWithoutSubmissionsInput = {
   airateLimits?: Prisma.AIRateLimitUncheckedUpdateManyWithoutProblemNestedInput
   groupProblemStats?: Prisma.GroupProblemStatsUncheckedUpdateManyWithoutProblemNestedInput
   studentProblemStats?: Prisma.StudentProblemStatsUncheckedUpdateManyWithoutProblemNestedInput
+  moduleProblems?: Prisma.ModuleProblemUncheckedUpdateManyWithoutProblemNestedInput
 }
 
 export type ProblemCreateWithoutTagsInput = {
@@ -2818,6 +2883,7 @@ export type ProblemCreateWithoutTagsInput = {
   airateLimits?: Prisma.AIRateLimitCreateNestedManyWithoutProblemInput
   groupProblemStats?: Prisma.GroupProblemStatsCreateNestedManyWithoutProblemInput
   studentProblemStats?: Prisma.StudentProblemStatsCreateNestedManyWithoutProblemInput
+  moduleProblems?: Prisma.ModuleProblemCreateNestedManyWithoutProblemInput
 }
 
 export type ProblemUncheckedCreateWithoutTagsInput = {
@@ -2852,6 +2918,7 @@ export type ProblemUncheckedCreateWithoutTagsInput = {
   airateLimits?: Prisma.AIRateLimitUncheckedCreateNestedManyWithoutProblemInput
   groupProblemStats?: Prisma.GroupProblemStatsUncheckedCreateNestedManyWithoutProblemInput
   studentProblemStats?: Prisma.StudentProblemStatsUncheckedCreateNestedManyWithoutProblemInput
+  moduleProblems?: Prisma.ModuleProblemUncheckedCreateNestedManyWithoutProblemInput
 }
 
 export type ProblemCreateOrConnectWithoutTagsInput = {
@@ -2902,6 +2969,7 @@ export type ProblemUpdateWithoutTagsInput = {
   airateLimits?: Prisma.AIRateLimitUpdateManyWithoutProblemNestedInput
   groupProblemStats?: Prisma.GroupProblemStatsUpdateManyWithoutProblemNestedInput
   studentProblemStats?: Prisma.StudentProblemStatsUpdateManyWithoutProblemNestedInput
+  moduleProblems?: Prisma.ModuleProblemUpdateManyWithoutProblemNestedInput
 }
 
 export type ProblemUncheckedUpdateWithoutTagsInput = {
@@ -2936,6 +3004,7 @@ export type ProblemUncheckedUpdateWithoutTagsInput = {
   airateLimits?: Prisma.AIRateLimitUncheckedUpdateManyWithoutProblemNestedInput
   groupProblemStats?: Prisma.GroupProblemStatsUncheckedUpdateManyWithoutProblemNestedInput
   studentProblemStats?: Prisma.StudentProblemStatsUncheckedUpdateManyWithoutProblemNestedInput
+  moduleProblems?: Prisma.ModuleProblemUncheckedUpdateManyWithoutProblemNestedInput
 }
 
 export type ProblemCreateWithoutAiconversationsInput = {
@@ -2970,6 +3039,7 @@ export type ProblemCreateWithoutAiconversationsInput = {
   airateLimits?: Prisma.AIRateLimitCreateNestedManyWithoutProblemInput
   groupProblemStats?: Prisma.GroupProblemStatsCreateNestedManyWithoutProblemInput
   studentProblemStats?: Prisma.StudentProblemStatsCreateNestedManyWithoutProblemInput
+  moduleProblems?: Prisma.ModuleProblemCreateNestedManyWithoutProblemInput
 }
 
 export type ProblemUncheckedCreateWithoutAiconversationsInput = {
@@ -3004,6 +3074,7 @@ export type ProblemUncheckedCreateWithoutAiconversationsInput = {
   airateLimits?: Prisma.AIRateLimitUncheckedCreateNestedManyWithoutProblemInput
   groupProblemStats?: Prisma.GroupProblemStatsUncheckedCreateNestedManyWithoutProblemInput
   studentProblemStats?: Prisma.StudentProblemStatsUncheckedCreateNestedManyWithoutProblemInput
+  moduleProblems?: Prisma.ModuleProblemUncheckedCreateNestedManyWithoutProblemInput
 }
 
 export type ProblemCreateOrConnectWithoutAiconversationsInput = {
@@ -3054,6 +3125,7 @@ export type ProblemUpdateWithoutAiconversationsInput = {
   airateLimits?: Prisma.AIRateLimitUpdateManyWithoutProblemNestedInput
   groupProblemStats?: Prisma.GroupProblemStatsUpdateManyWithoutProblemNestedInput
   studentProblemStats?: Prisma.StudentProblemStatsUpdateManyWithoutProblemNestedInput
+  moduleProblems?: Prisma.ModuleProblemUpdateManyWithoutProblemNestedInput
 }
 
 export type ProblemUncheckedUpdateWithoutAiconversationsInput = {
@@ -3088,6 +3160,7 @@ export type ProblemUncheckedUpdateWithoutAiconversationsInput = {
   airateLimits?: Prisma.AIRateLimitUncheckedUpdateManyWithoutProblemNestedInput
   groupProblemStats?: Prisma.GroupProblemStatsUncheckedUpdateManyWithoutProblemNestedInput
   studentProblemStats?: Prisma.StudentProblemStatsUncheckedUpdateManyWithoutProblemNestedInput
+  moduleProblems?: Prisma.ModuleProblemUncheckedUpdateManyWithoutProblemNestedInput
 }
 
 export type ProblemCreateWithoutAirateLimitsInput = {
@@ -3122,6 +3195,7 @@ export type ProblemCreateWithoutAirateLimitsInput = {
   aiconversations?: Prisma.AIConversationCreateNestedManyWithoutProblemInput
   groupProblemStats?: Prisma.GroupProblemStatsCreateNestedManyWithoutProblemInput
   studentProblemStats?: Prisma.StudentProblemStatsCreateNestedManyWithoutProblemInput
+  moduleProblems?: Prisma.ModuleProblemCreateNestedManyWithoutProblemInput
 }
 
 export type ProblemUncheckedCreateWithoutAirateLimitsInput = {
@@ -3156,6 +3230,7 @@ export type ProblemUncheckedCreateWithoutAirateLimitsInput = {
   aiconversations?: Prisma.AIConversationUncheckedCreateNestedManyWithoutProblemInput
   groupProblemStats?: Prisma.GroupProblemStatsUncheckedCreateNestedManyWithoutProblemInput
   studentProblemStats?: Prisma.StudentProblemStatsUncheckedCreateNestedManyWithoutProblemInput
+  moduleProblems?: Prisma.ModuleProblemUncheckedCreateNestedManyWithoutProblemInput
 }
 
 export type ProblemCreateOrConnectWithoutAirateLimitsInput = {
@@ -3206,6 +3281,7 @@ export type ProblemUpdateWithoutAirateLimitsInput = {
   aiconversations?: Prisma.AIConversationUpdateManyWithoutProblemNestedInput
   groupProblemStats?: Prisma.GroupProblemStatsUpdateManyWithoutProblemNestedInput
   studentProblemStats?: Prisma.StudentProblemStatsUpdateManyWithoutProblemNestedInput
+  moduleProblems?: Prisma.ModuleProblemUpdateManyWithoutProblemNestedInput
 }
 
 export type ProblemUncheckedUpdateWithoutAirateLimitsInput = {
@@ -3238,6 +3314,163 @@ export type ProblemUncheckedUpdateWithoutAirateLimitsInput = {
   performanceConstraints?: Prisma.PerformanceConstraintsUncheckedUpdateOneWithoutProblemNestedInput
   performanceTestCases?: Prisma.PerformanceTestCaseUncheckedUpdateManyWithoutProblemNestedInput
   aiconversations?: Prisma.AIConversationUncheckedUpdateManyWithoutProblemNestedInput
+  groupProblemStats?: Prisma.GroupProblemStatsUncheckedUpdateManyWithoutProblemNestedInput
+  studentProblemStats?: Prisma.StudentProblemStatsUncheckedUpdateManyWithoutProblemNestedInput
+  moduleProblems?: Prisma.ModuleProblemUncheckedUpdateManyWithoutProblemNestedInput
+}
+
+export type ProblemCreateWithoutModuleProblemsInput = {
+  id?: string
+  number: number
+  title: string
+  description: string
+  difficulty: $Enums.problemDifficulty
+  source?: string
+  isPublished?: boolean
+  hidden?: boolean
+  ownerType?: $Enums.ProblemOwnerType
+  visibility?: $Enums.ProblemVisibility
+  approvalStatus?: $Enums.ProblemApprovalStatus
+  approvedAt?: Date | string | null
+  rejectionReason?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  owner?: Prisma.UserCreateNestedOneWithoutOwnedProblemsInput
+  approvedBy?: Prisma.UserCreateNestedOneWithoutApprovedProblemsInput
+  examProblems?: Prisma.ExamProblemCreateNestedManyWithoutProblemInput
+  tags?: Prisma.ProblemTagCreateNestedManyWithoutProblemInput
+  testCase?: Prisma.TestCaseCreateNestedOneWithoutProblemInput
+  runTestCase?: Prisma.RunTestCaseCreateNestedOneWithoutProblemInput
+  selfSubmissions?: Prisma.selfSubmissionCreateNestedManyWithoutProblemInput
+  submissions?: Prisma.SubmissionCreateNestedManyWithoutProblemInput
+  complexityTestingCases?: Prisma.complexityTestingCasesCreateNestedOneWithoutProblemInput
+  driverCode?: Prisma.driverCodeCreateNestedManyWithoutProblemInput
+  referenceSolutions?: Prisma.referenceSolutionCreateNestedManyWithoutProblemInput
+  performanceConstraints?: Prisma.PerformanceConstraintsCreateNestedOneWithoutProblemInput
+  performanceTestCases?: Prisma.PerformanceTestCaseCreateNestedManyWithoutProblemInput
+  aiconversations?: Prisma.AIConversationCreateNestedManyWithoutProblemInput
+  airateLimits?: Prisma.AIRateLimitCreateNestedManyWithoutProblemInput
+  groupProblemStats?: Prisma.GroupProblemStatsCreateNestedManyWithoutProblemInput
+  studentProblemStats?: Prisma.StudentProblemStatsCreateNestedManyWithoutProblemInput
+}
+
+export type ProblemUncheckedCreateWithoutModuleProblemsInput = {
+  id?: string
+  number: number
+  title: string
+  description: string
+  difficulty: $Enums.problemDifficulty
+  source?: string
+  isPublished?: boolean
+  hidden?: boolean
+  ownerType?: $Enums.ProblemOwnerType
+  ownerId?: string | null
+  visibility?: $Enums.ProblemVisibility
+  approvalStatus?: $Enums.ProblemApprovalStatus
+  approvedById?: string | null
+  approvedAt?: Date | string | null
+  rejectionReason?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  examProblems?: Prisma.ExamProblemUncheckedCreateNestedManyWithoutProblemInput
+  tags?: Prisma.ProblemTagUncheckedCreateNestedManyWithoutProblemInput
+  testCase?: Prisma.TestCaseUncheckedCreateNestedOneWithoutProblemInput
+  runTestCase?: Prisma.RunTestCaseUncheckedCreateNestedOneWithoutProblemInput
+  selfSubmissions?: Prisma.selfSubmissionUncheckedCreateNestedManyWithoutProblemInput
+  submissions?: Prisma.SubmissionUncheckedCreateNestedManyWithoutProblemInput
+  complexityTestingCases?: Prisma.complexityTestingCasesUncheckedCreateNestedOneWithoutProblemInput
+  driverCode?: Prisma.driverCodeUncheckedCreateNestedManyWithoutProblemInput
+  referenceSolutions?: Prisma.referenceSolutionUncheckedCreateNestedManyWithoutProblemInput
+  performanceConstraints?: Prisma.PerformanceConstraintsUncheckedCreateNestedOneWithoutProblemInput
+  performanceTestCases?: Prisma.PerformanceTestCaseUncheckedCreateNestedManyWithoutProblemInput
+  aiconversations?: Prisma.AIConversationUncheckedCreateNestedManyWithoutProblemInput
+  airateLimits?: Prisma.AIRateLimitUncheckedCreateNestedManyWithoutProblemInput
+  groupProblemStats?: Prisma.GroupProblemStatsUncheckedCreateNestedManyWithoutProblemInput
+  studentProblemStats?: Prisma.StudentProblemStatsUncheckedCreateNestedManyWithoutProblemInput
+}
+
+export type ProblemCreateOrConnectWithoutModuleProblemsInput = {
+  where: Prisma.ProblemWhereUniqueInput
+  create: Prisma.XOR<Prisma.ProblemCreateWithoutModuleProblemsInput, Prisma.ProblemUncheckedCreateWithoutModuleProblemsInput>
+}
+
+export type ProblemUpsertWithoutModuleProblemsInput = {
+  update: Prisma.XOR<Prisma.ProblemUpdateWithoutModuleProblemsInput, Prisma.ProblemUncheckedUpdateWithoutModuleProblemsInput>
+  create: Prisma.XOR<Prisma.ProblemCreateWithoutModuleProblemsInput, Prisma.ProblemUncheckedCreateWithoutModuleProblemsInput>
+  where?: Prisma.ProblemWhereInput
+}
+
+export type ProblemUpdateToOneWithWhereWithoutModuleProblemsInput = {
+  where?: Prisma.ProblemWhereInput
+  data: Prisma.XOR<Prisma.ProblemUpdateWithoutModuleProblemsInput, Prisma.ProblemUncheckedUpdateWithoutModuleProblemsInput>
+}
+
+export type ProblemUpdateWithoutModuleProblemsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  number?: Prisma.IntFieldUpdateOperationsInput | number
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  difficulty?: Prisma.EnumproblemDifficultyFieldUpdateOperationsInput | $Enums.problemDifficulty
+  source?: Prisma.StringFieldUpdateOperationsInput | string
+  isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  ownerType?: Prisma.EnumProblemOwnerTypeFieldUpdateOperationsInput | $Enums.ProblemOwnerType
+  visibility?: Prisma.EnumProblemVisibilityFieldUpdateOperationsInput | $Enums.ProblemVisibility
+  approvalStatus?: Prisma.EnumProblemApprovalStatusFieldUpdateOperationsInput | $Enums.ProblemApprovalStatus
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  owner?: Prisma.UserUpdateOneWithoutOwnedProblemsNestedInput
+  approvedBy?: Prisma.UserUpdateOneWithoutApprovedProblemsNestedInput
+  examProblems?: Prisma.ExamProblemUpdateManyWithoutProblemNestedInput
+  tags?: Prisma.ProblemTagUpdateManyWithoutProblemNestedInput
+  testCase?: Prisma.TestCaseUpdateOneWithoutProblemNestedInput
+  runTestCase?: Prisma.RunTestCaseUpdateOneWithoutProblemNestedInput
+  selfSubmissions?: Prisma.selfSubmissionUpdateManyWithoutProblemNestedInput
+  submissions?: Prisma.SubmissionUpdateManyWithoutProblemNestedInput
+  complexityTestingCases?: Prisma.complexityTestingCasesUpdateOneWithoutProblemNestedInput
+  driverCode?: Prisma.driverCodeUpdateManyWithoutProblemNestedInput
+  referenceSolutions?: Prisma.referenceSolutionUpdateManyWithoutProblemNestedInput
+  performanceConstraints?: Prisma.PerformanceConstraintsUpdateOneWithoutProblemNestedInput
+  performanceTestCases?: Prisma.PerformanceTestCaseUpdateManyWithoutProblemNestedInput
+  aiconversations?: Prisma.AIConversationUpdateManyWithoutProblemNestedInput
+  airateLimits?: Prisma.AIRateLimitUpdateManyWithoutProblemNestedInput
+  groupProblemStats?: Prisma.GroupProblemStatsUpdateManyWithoutProblemNestedInput
+  studentProblemStats?: Prisma.StudentProblemStatsUpdateManyWithoutProblemNestedInput
+}
+
+export type ProblemUncheckedUpdateWithoutModuleProblemsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  number?: Prisma.IntFieldUpdateOperationsInput | number
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  difficulty?: Prisma.EnumproblemDifficultyFieldUpdateOperationsInput | $Enums.problemDifficulty
+  source?: Prisma.StringFieldUpdateOperationsInput | string
+  isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  ownerType?: Prisma.EnumProblemOwnerTypeFieldUpdateOperationsInput | $Enums.ProblemOwnerType
+  ownerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  visibility?: Prisma.EnumProblemVisibilityFieldUpdateOperationsInput | $Enums.ProblemVisibility
+  approvalStatus?: Prisma.EnumProblemApprovalStatusFieldUpdateOperationsInput | $Enums.ProblemApprovalStatus
+  approvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  examProblems?: Prisma.ExamProblemUncheckedUpdateManyWithoutProblemNestedInput
+  tags?: Prisma.ProblemTagUncheckedUpdateManyWithoutProblemNestedInput
+  testCase?: Prisma.TestCaseUncheckedUpdateOneWithoutProblemNestedInput
+  runTestCase?: Prisma.RunTestCaseUncheckedUpdateOneWithoutProblemNestedInput
+  selfSubmissions?: Prisma.selfSubmissionUncheckedUpdateManyWithoutProblemNestedInput
+  submissions?: Prisma.SubmissionUncheckedUpdateManyWithoutProblemNestedInput
+  complexityTestingCases?: Prisma.complexityTestingCasesUncheckedUpdateOneWithoutProblemNestedInput
+  driverCode?: Prisma.driverCodeUncheckedUpdateManyWithoutProblemNestedInput
+  referenceSolutions?: Prisma.referenceSolutionUncheckedUpdateManyWithoutProblemNestedInput
+  performanceConstraints?: Prisma.PerformanceConstraintsUncheckedUpdateOneWithoutProblemNestedInput
+  performanceTestCases?: Prisma.PerformanceTestCaseUncheckedUpdateManyWithoutProblemNestedInput
+  aiconversations?: Prisma.AIConversationUncheckedUpdateManyWithoutProblemNestedInput
+  airateLimits?: Prisma.AIRateLimitUncheckedUpdateManyWithoutProblemNestedInput
   groupProblemStats?: Prisma.GroupProblemStatsUncheckedUpdateManyWithoutProblemNestedInput
   studentProblemStats?: Prisma.StudentProblemStatsUncheckedUpdateManyWithoutProblemNestedInput
 }
@@ -3274,6 +3507,7 @@ export type ProblemCreateWithoutGroupProblemStatsInput = {
   aiconversations?: Prisma.AIConversationCreateNestedManyWithoutProblemInput
   airateLimits?: Prisma.AIRateLimitCreateNestedManyWithoutProblemInput
   studentProblemStats?: Prisma.StudentProblemStatsCreateNestedManyWithoutProblemInput
+  moduleProblems?: Prisma.ModuleProblemCreateNestedManyWithoutProblemInput
 }
 
 export type ProblemUncheckedCreateWithoutGroupProblemStatsInput = {
@@ -3308,6 +3542,7 @@ export type ProblemUncheckedCreateWithoutGroupProblemStatsInput = {
   aiconversations?: Prisma.AIConversationUncheckedCreateNestedManyWithoutProblemInput
   airateLimits?: Prisma.AIRateLimitUncheckedCreateNestedManyWithoutProblemInput
   studentProblemStats?: Prisma.StudentProblemStatsUncheckedCreateNestedManyWithoutProblemInput
+  moduleProblems?: Prisma.ModuleProblemUncheckedCreateNestedManyWithoutProblemInput
 }
 
 export type ProblemCreateOrConnectWithoutGroupProblemStatsInput = {
@@ -3358,6 +3593,7 @@ export type ProblemUpdateWithoutGroupProblemStatsInput = {
   aiconversations?: Prisma.AIConversationUpdateManyWithoutProblemNestedInput
   airateLimits?: Prisma.AIRateLimitUpdateManyWithoutProblemNestedInput
   studentProblemStats?: Prisma.StudentProblemStatsUpdateManyWithoutProblemNestedInput
+  moduleProblems?: Prisma.ModuleProblemUpdateManyWithoutProblemNestedInput
 }
 
 export type ProblemUncheckedUpdateWithoutGroupProblemStatsInput = {
@@ -3392,6 +3628,7 @@ export type ProblemUncheckedUpdateWithoutGroupProblemStatsInput = {
   aiconversations?: Prisma.AIConversationUncheckedUpdateManyWithoutProblemNestedInput
   airateLimits?: Prisma.AIRateLimitUncheckedUpdateManyWithoutProblemNestedInput
   studentProblemStats?: Prisma.StudentProblemStatsUncheckedUpdateManyWithoutProblemNestedInput
+  moduleProblems?: Prisma.ModuleProblemUncheckedUpdateManyWithoutProblemNestedInput
 }
 
 export type ProblemCreateWithoutStudentProblemStatsInput = {
@@ -3426,6 +3663,7 @@ export type ProblemCreateWithoutStudentProblemStatsInput = {
   aiconversations?: Prisma.AIConversationCreateNestedManyWithoutProblemInput
   airateLimits?: Prisma.AIRateLimitCreateNestedManyWithoutProblemInput
   groupProblemStats?: Prisma.GroupProblemStatsCreateNestedManyWithoutProblemInput
+  moduleProblems?: Prisma.ModuleProblemCreateNestedManyWithoutProblemInput
 }
 
 export type ProblemUncheckedCreateWithoutStudentProblemStatsInput = {
@@ -3460,6 +3698,7 @@ export type ProblemUncheckedCreateWithoutStudentProblemStatsInput = {
   aiconversations?: Prisma.AIConversationUncheckedCreateNestedManyWithoutProblemInput
   airateLimits?: Prisma.AIRateLimitUncheckedCreateNestedManyWithoutProblemInput
   groupProblemStats?: Prisma.GroupProblemStatsUncheckedCreateNestedManyWithoutProblemInput
+  moduleProblems?: Prisma.ModuleProblemUncheckedCreateNestedManyWithoutProblemInput
 }
 
 export type ProblemCreateOrConnectWithoutStudentProblemStatsInput = {
@@ -3510,6 +3749,7 @@ export type ProblemUpdateWithoutStudentProblemStatsInput = {
   aiconversations?: Prisma.AIConversationUpdateManyWithoutProblemNestedInput
   airateLimits?: Prisma.AIRateLimitUpdateManyWithoutProblemNestedInput
   groupProblemStats?: Prisma.GroupProblemStatsUpdateManyWithoutProblemNestedInput
+  moduleProblems?: Prisma.ModuleProblemUpdateManyWithoutProblemNestedInput
 }
 
 export type ProblemUncheckedUpdateWithoutStudentProblemStatsInput = {
@@ -3544,6 +3784,7 @@ export type ProblemUncheckedUpdateWithoutStudentProblemStatsInput = {
   aiconversations?: Prisma.AIConversationUncheckedUpdateManyWithoutProblemNestedInput
   airateLimits?: Prisma.AIRateLimitUncheckedUpdateManyWithoutProblemNestedInput
   groupProblemStats?: Prisma.GroupProblemStatsUncheckedUpdateManyWithoutProblemNestedInput
+  moduleProblems?: Prisma.ModuleProblemUncheckedUpdateManyWithoutProblemNestedInput
 }
 
 export type ProblemCreateManyOwnerInput = {
@@ -3616,6 +3857,7 @@ export type ProblemUpdateWithoutOwnerInput = {
   airateLimits?: Prisma.AIRateLimitUpdateManyWithoutProblemNestedInput
   groupProblemStats?: Prisma.GroupProblemStatsUpdateManyWithoutProblemNestedInput
   studentProblemStats?: Prisma.StudentProblemStatsUpdateManyWithoutProblemNestedInput
+  moduleProblems?: Prisma.ModuleProblemUpdateManyWithoutProblemNestedInput
 }
 
 export type ProblemUncheckedUpdateWithoutOwnerInput = {
@@ -3650,6 +3892,7 @@ export type ProblemUncheckedUpdateWithoutOwnerInput = {
   airateLimits?: Prisma.AIRateLimitUncheckedUpdateManyWithoutProblemNestedInput
   groupProblemStats?: Prisma.GroupProblemStatsUncheckedUpdateManyWithoutProblemNestedInput
   studentProblemStats?: Prisma.StudentProblemStatsUncheckedUpdateManyWithoutProblemNestedInput
+  moduleProblems?: Prisma.ModuleProblemUncheckedUpdateManyWithoutProblemNestedInput
 }
 
 export type ProblemUncheckedUpdateManyWithoutOwnerInput = {
@@ -3703,6 +3946,7 @@ export type ProblemUpdateWithoutApprovedByInput = {
   airateLimits?: Prisma.AIRateLimitUpdateManyWithoutProblemNestedInput
   groupProblemStats?: Prisma.GroupProblemStatsUpdateManyWithoutProblemNestedInput
   studentProblemStats?: Prisma.StudentProblemStatsUpdateManyWithoutProblemNestedInput
+  moduleProblems?: Prisma.ModuleProblemUpdateManyWithoutProblemNestedInput
 }
 
 export type ProblemUncheckedUpdateWithoutApprovedByInput = {
@@ -3737,6 +3981,7 @@ export type ProblemUncheckedUpdateWithoutApprovedByInput = {
   airateLimits?: Prisma.AIRateLimitUncheckedUpdateManyWithoutProblemNestedInput
   groupProblemStats?: Prisma.GroupProblemStatsUncheckedUpdateManyWithoutProblemNestedInput
   studentProblemStats?: Prisma.StudentProblemStatsUncheckedUpdateManyWithoutProblemNestedInput
+  moduleProblems?: Prisma.ModuleProblemUncheckedUpdateManyWithoutProblemNestedInput
 }
 
 export type ProblemUncheckedUpdateManyWithoutApprovedByInput = {
@@ -3775,6 +4020,7 @@ export type ProblemCountOutputType = {
   airateLimits: number
   groupProblemStats: number
   studentProblemStats: number
+  moduleProblems: number
 }
 
 export type ProblemCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -3789,6 +4035,7 @@ export type ProblemCountOutputTypeSelect<ExtArgs extends runtime.Types.Extension
   airateLimits?: boolean | ProblemCountOutputTypeCountAirateLimitsArgs
   groupProblemStats?: boolean | ProblemCountOutputTypeCountGroupProblemStatsArgs
   studentProblemStats?: boolean | ProblemCountOutputTypeCountStudentProblemStatsArgs
+  moduleProblems?: boolean | ProblemCountOutputTypeCountModuleProblemsArgs
 }
 
 /**
@@ -3878,6 +4125,13 @@ export type ProblemCountOutputTypeCountStudentProblemStatsArgs<ExtArgs extends r
   where?: Prisma.StudentProblemStatsWhereInput
 }
 
+/**
+ * ProblemCountOutputType without action
+ */
+export type ProblemCountOutputTypeCountModuleProblemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ModuleProblemWhereInput
+}
+
 
 export type ProblemSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -3914,6 +4168,7 @@ export type ProblemSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   airateLimits?: boolean | Prisma.Problem$airateLimitsArgs<ExtArgs>
   groupProblemStats?: boolean | Prisma.Problem$groupProblemStatsArgs<ExtArgs>
   studentProblemStats?: boolean | Prisma.Problem$studentProblemStatsArgs<ExtArgs>
+  moduleProblems?: boolean | Prisma.Problem$moduleProblemsArgs<ExtArgs>
   _count?: boolean | Prisma.ProblemCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["problem"]>
 
@@ -4000,6 +4255,7 @@ export type ProblemInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs
   airateLimits?: boolean | Prisma.Problem$airateLimitsArgs<ExtArgs>
   groupProblemStats?: boolean | Prisma.Problem$groupProblemStatsArgs<ExtArgs>
   studentProblemStats?: boolean | Prisma.Problem$studentProblemStatsArgs<ExtArgs>
+  moduleProblems?: boolean | Prisma.Problem$moduleProblemsArgs<ExtArgs>
   _count?: boolean | Prisma.ProblemCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ProblemIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -4031,6 +4287,7 @@ export type $ProblemPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     airateLimits: Prisma.$AIRateLimitPayload<ExtArgs>[]
     groupProblemStats: Prisma.$GroupProblemStatsPayload<ExtArgs>[]
     studentProblemStats: Prisma.$StudentProblemStatsPayload<ExtArgs>[]
+    moduleProblems: Prisma.$ModuleProblemPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -4461,6 +4718,7 @@ export interface Prisma__ProblemClient<T, Null = never, ExtArgs extends runtime.
   airateLimits<T extends Prisma.Problem$airateLimitsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Problem$airateLimitsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AIRateLimitPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   groupProblemStats<T extends Prisma.Problem$groupProblemStatsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Problem$groupProblemStatsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$GroupProblemStatsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   studentProblemStats<T extends Prisma.Problem$studentProblemStatsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Problem$studentProblemStatsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$StudentProblemStatsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  moduleProblems<T extends Prisma.Problem$moduleProblemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Problem$moduleProblemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ModuleProblemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -5283,6 +5541,30 @@ export type Problem$studentProblemStatsArgs<ExtArgs extends runtime.Types.Extens
   take?: number
   skip?: number
   distinct?: Prisma.StudentProblemStatsScalarFieldEnum | Prisma.StudentProblemStatsScalarFieldEnum[]
+}
+
+/**
+ * Problem.moduleProblems
+ */
+export type Problem$moduleProblemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ModuleProblem
+   */
+  select?: Prisma.ModuleProblemSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ModuleProblem
+   */
+  omit?: Prisma.ModuleProblemOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ModuleProblemInclude<ExtArgs> | null
+  where?: Prisma.ModuleProblemWhereInput
+  orderBy?: Prisma.ModuleProblemOrderByWithRelationInput | Prisma.ModuleProblemOrderByWithRelationInput[]
+  cursor?: Prisma.ModuleProblemWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ModuleProblemScalarFieldEnum | Prisma.ModuleProblemScalarFieldEnum[]
 }
 
 /**

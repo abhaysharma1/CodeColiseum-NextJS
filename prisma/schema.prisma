@@ -42,6 +42,12 @@ model User {
   notificationRecipients NotificationRecipient[]
   examSessions           ExamSession[]
 
+  createdLabs        Lab[]              @relation("CreatedLabs")
+  assignedLabs       LabTeacher[]       @relation("TeacherAssignedLabs")
+  addedLabTeachers   LabTeacher[]       @relation("AddedLabTeacher")
+  labProgress        ModuleProblemProgress[]
+  labRatings         LabRating[]
+
   ownedProblems    Problem[] @relation("OwnedProblems")
   approvedProblems Problem[] @relation("ApprovedProblems")
 
@@ -137,6 +143,7 @@ model Problem {
   airateLimits           AIRateLimit[]
   groupProblemStats      GroupProblemStats[]
   studentProblemStats    StudentProblemStats[]
+  moduleProblems         ModuleProblem[]
 
   @@index([id, number, title])
   @@index([ownerType])
@@ -524,6 +531,7 @@ model Group {
   groupProblemStats   GroupProblemStats[]
   studentProblemStats StudentProblemStats[]
   groupExamAnalytics  GroupExamAnalytics[]
+  labAssignments      LabAssignment[]
 
   @@index([creatorId])
 }
@@ -603,6 +611,7 @@ model Tag {
   id       String       @id @default(uuid())
   name     String       @unique
   problems ProblemTag[]
+  labs     LabTag[]
 }
 
 model ProblemTag {
@@ -621,8 +630,9 @@ model AIConversation {
   id String @id @default(cuid())
 
   studentId String
-  groupId   String
-  examId    String
+  groupId   String?
+  labId     String?
+  examId    String?
   problemId String
 
   messageCount Int @default(0)
@@ -634,13 +644,15 @@ model AIConversation {
   updatedAt DateTime @updatedAt
 
   student User    @relation(fields: [studentId], references: [id], onDelete: Cascade)
-  group   Group   @relation(fields: [groupId], references: [id], onDelete: Cascade)
-  exam    Exam    @relation(fields: [examId], references: [id], onDelete: Cascade)
+  group   Group?  @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  lab     Lab?    @relation(fields: [labId], references: [id], onDelete: Cascade)
+  exam    Exam?   @relation(fields: [examId], references: [id], onDelete: Cascade)
   problem Problem @relation(fields: [problemId], references: [id], onDelete: Cascade)
 
   messages AIMessage[]
 
   @@unique([studentId, examId, problemId])
+  @@unique([studentId, labId, problemId])
 }
 
 model AIMessage {
@@ -676,6 +688,181 @@ model AIRateLimit {
   problem Problem @relation(fields: [problemId], references: [id], onDelete: Cascade)
 
   @@unique([studentId, problemId])
+}
+
+enum LabVisibility {
+  PRIVATE
+  PUBLIC
+}
+
+model Lab {
+  id          String   @id @default(uuid())
+  title       String
+  description String?
+
+  creatorId String
+  creator   User   @relation("CreatedLabs", fields: [creatorId], references: [id], onDelete: Cascade)
+
+  aiEnabled           Boolean @default(false)
+  aiMaxMessages       Int?
+  aiMaxTokens         Int?
+
+  // Marketplace fields
+  visibility          LabVisibility      @default(PRIVATE)
+  originalLabId       String?
+  originalLab         Lab?               @relation("LabDuplications", fields: [originalLabId], references: [id], onDelete: SetNull)
+  duplications        Lab[]              @relation("LabDuplications")
+  publishedAt         DateTime?
+  duplicateCount      Int                @default(0)
+  isArchived          Boolean            @default(false)
+  averageRating       Float              @default(0)
+  ratingCount         Int                @default(0)
+  difficulty          problemDifficulty?
+  subject             String?
+  programmingLanguage String?
+  estimatedDuration   Int?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  assignments LabAssignment[]
+  modules     LabModule[]
+  teachers    LabTeacher[]
+  aiconversations AIConversation[]
+  ratings     LabRating[]
+  tags        LabTag[]
+
+  @@index([creatorId])
+  @@index([visibility, isArchived])
+  @@index([originalLabId])
+}
+
+model LabTeacher {
+  id        String   @id @default(uuid())
+  labId     String
+  userId    String
+  addedAt   DateTime @default(now())
+  addedById String
+
+  lab     Lab    @relation(fields: [labId], references: [id], onDelete: Cascade)
+  user    User   @relation("TeacherAssignedLabs", fields: [userId], references: [id], onDelete: Cascade)
+  addedBy User   @relation("AddedLabTeacher", fields: [addedById], references: [id])
+
+  @@unique([labId, userId])
+  @@index([labId])
+  @@index([userId])
+  @@index([addedById])
+}
+
+model LabAssignment {
+  id    String   @id @default(uuid())
+  labId String
+  lab   Lab      @relation(fields: [labId], references: [id], onDelete: Cascade)
+
+  groupId String
+  group   Group  @relation(fields: [groupId], references: [id], onDelete: Cascade)
+
+  assignedAt DateTime @default(now())
+
+  @@unique([labId, groupId])
+  @@index([labId])
+  @@index([groupId])
+}
+
+model LabModule {
+  id        String  @id @default(uuid())
+  title     String
+  description String?
+
+  labId String
+  lab   Lab   @relation(fields: [labId], references: [id], onDelete: Cascade)
+
+  weekNumber       Int
+  orderIndex       Int?
+  unlockAt         DateTime?
+  dueAt            DateTime?
+  assessmentExamId String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  problems ModuleProblem[]
+
+  @@unique([labId, weekNumber])
+  @@index([labId])
+}
+
+model ModuleProblem {
+  id        String @id @default(uuid())
+  moduleId  String
+  module    LabModule @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+
+  problemId String
+  problem   Problem   @relation(fields: [problemId], references: [id], onDelete: Cascade)
+
+  orderIndex Int?
+
+  isUnlocked    Boolean   @default(false)
+  availableFrom DateTime?
+  availableUntil DateTime?
+
+  createdAt DateTime @default(now())
+
+  progress ModuleProblemProgress[]
+
+  @@unique([moduleId, problemId])
+  @@index([moduleId])
+  @@index([problemId])
+}
+
+model ModuleProblemProgress {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  moduleProblemId String
+  moduleProblem   ModuleProblem @relation(fields: [moduleProblemId], references: [id], onDelete: Cascade)
+
+  attemptCount       Int       @default(0)
+  isSolved           Boolean   @default(false)
+  solvedAt           DateTime?
+  latestSubmissionId String?
+  bestSubmissionId   String?
+  lastAttemptAt      DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, moduleProblemId])
+  @@index([userId])
+  @@index([moduleProblemId])
+}
+
+model LabRating {
+  id        String   @id @default(uuid())
+  labId     String
+  userId    String
+  score     Int
+  review    String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  lab  Lab  @relation(fields: [labId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([labId, userId])
+  @@index([labId])
+  @@index([userId])
+}
+
+model LabTag {
+  labId String
+  tagId String
+
+  lab Lab @relation(fields: [labId], references: [id], onDelete: Cascade)
+  tag Tag @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([labId, tagId])
 }
 
 // Stats Tables

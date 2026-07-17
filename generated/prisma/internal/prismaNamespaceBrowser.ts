@@ -83,6 +83,14 @@ export const ModelName = {
   AIConversation: 'AIConversation',
   AIMessage: 'AIMessage',
   AIRateLimit: 'AIRateLimit',
+  Lab: 'Lab',
+  LabTeacher: 'LabTeacher',
+  LabAssignment: 'LabAssignment',
+  LabModule: 'LabModule',
+  ModuleProblem: 'ModuleProblem',
+  ModuleProblemProgress: 'ModuleProblemProgress',
+  LabRating: 'LabRating',
+  LabTag: 'LabTag',
   GroupOverallStats: 'GroupOverallStats',
   StudentOverallStats: 'StudentOverallStats',
   GroupProblemStats: 'GroupProblemStats',
@@ -500,6 +508,7 @@ export const AIConversationScalarFieldEnum = {
   id: 'id',
   studentId: 'studentId',
   groupId: 'groupId',
+  labId: 'labId',
   examId: 'examId',
   problemId: 'problemId',
   messageCount: 'messageCount',
@@ -533,6 +542,122 @@ export const AIRateLimitScalarFieldEnum = {
 } as const
 
 export type AIRateLimitScalarFieldEnum = (typeof AIRateLimitScalarFieldEnum)[keyof typeof AIRateLimitScalarFieldEnum]
+
+
+export const LabScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  description: 'description',
+  creatorId: 'creatorId',
+  aiEnabled: 'aiEnabled',
+  aiMaxMessages: 'aiMaxMessages',
+  aiMaxTokens: 'aiMaxTokens',
+  visibility: 'visibility',
+  originalLabId: 'originalLabId',
+  publishedAt: 'publishedAt',
+  duplicateCount: 'duplicateCount',
+  isArchived: 'isArchived',
+  averageRating: 'averageRating',
+  ratingCount: 'ratingCount',
+  difficulty: 'difficulty',
+  subject: 'subject',
+  programmingLanguage: 'programmingLanguage',
+  estimatedDuration: 'estimatedDuration',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type LabScalarFieldEnum = (typeof LabScalarFieldEnum)[keyof typeof LabScalarFieldEnum]
+
+
+export const LabTeacherScalarFieldEnum = {
+  id: 'id',
+  labId: 'labId',
+  userId: 'userId',
+  addedAt: 'addedAt',
+  addedById: 'addedById'
+} as const
+
+export type LabTeacherScalarFieldEnum = (typeof LabTeacherScalarFieldEnum)[keyof typeof LabTeacherScalarFieldEnum]
+
+
+export const LabAssignmentScalarFieldEnum = {
+  id: 'id',
+  labId: 'labId',
+  groupId: 'groupId',
+  assignedAt: 'assignedAt'
+} as const
+
+export type LabAssignmentScalarFieldEnum = (typeof LabAssignmentScalarFieldEnum)[keyof typeof LabAssignmentScalarFieldEnum]
+
+
+export const LabModuleScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  description: 'description',
+  labId: 'labId',
+  weekNumber: 'weekNumber',
+  orderIndex: 'orderIndex',
+  unlockAt: 'unlockAt',
+  dueAt: 'dueAt',
+  assessmentExamId: 'assessmentExamId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type LabModuleScalarFieldEnum = (typeof LabModuleScalarFieldEnum)[keyof typeof LabModuleScalarFieldEnum]
+
+
+export const ModuleProblemScalarFieldEnum = {
+  id: 'id',
+  moduleId: 'moduleId',
+  problemId: 'problemId',
+  orderIndex: 'orderIndex',
+  isUnlocked: 'isUnlocked',
+  availableFrom: 'availableFrom',
+  availableUntil: 'availableUntil',
+  createdAt: 'createdAt'
+} as const
+
+export type ModuleProblemScalarFieldEnum = (typeof ModuleProblemScalarFieldEnum)[keyof typeof ModuleProblemScalarFieldEnum]
+
+
+export const ModuleProblemProgressScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  moduleProblemId: 'moduleProblemId',
+  attemptCount: 'attemptCount',
+  isSolved: 'isSolved',
+  solvedAt: 'solvedAt',
+  latestSubmissionId: 'latestSubmissionId',
+  bestSubmissionId: 'bestSubmissionId',
+  lastAttemptAt: 'lastAttemptAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ModuleProblemProgressScalarFieldEnum = (typeof ModuleProblemProgressScalarFieldEnum)[keyof typeof ModuleProblemProgressScalarFieldEnum]
+
+
+export const LabRatingScalarFieldEnum = {
+  id: 'id',
+  labId: 'labId',
+  userId: 'userId',
+  score: 'score',
+  review: 'review',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type LabRatingScalarFieldEnum = (typeof LabRatingScalarFieldEnum)[keyof typeof LabRatingScalarFieldEnum]
+
+
+export const LabTagScalarFieldEnum = {
+  labId: 'labId',
+  tagId: 'tagId'
+} as const
+
+export type LabTagScalarFieldEnum = (typeof LabTagScalarFieldEnum)[keyof typeof LabTagScalarFieldEnum]
 
 
 export const GroupOverallStatsScalarFieldEnum = {
