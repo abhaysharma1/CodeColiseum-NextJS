@@ -329,7 +329,7 @@ function AddProblemsDialog({
       }
       hoverOpenTimeoutRef.current = setTimeout(() => {
         setHoveredProblemId(problemId);
-      }, 300);
+      }, 600);
     },
     [],
   );

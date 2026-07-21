@@ -237,14 +237,12 @@ export default function TeacherLabDetailPage() {
                     <CardHeader>
                       <CardTitle className="text-base flex items-center gap-2">
                         <Users className="h-4 w-4" />
-                        Assigned Groups
+                        Assigned Group
                       </CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <div className="flex flex-wrap gap-2">
-                        {assignedGroups.map((g) => (
-                          <Badge key={g.groupId} variant="secondary">{g.groupName}</Badge>
-                        ))}
+                      <div className="rounded-md border p-2">
+                        <p className="text-sm font-medium truncate">{assignedGroups[0].groupName}</p>
                       </div>
                     </CardContent>
                   </Card>
@@ -622,10 +620,12 @@ function AssignGroupsCard({
 }) {
   const [open, setOpen] = useState(false);
   const [groups, setGroups] = useState<GroupOption[]>([]);
-  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);
   const [assigning, setAssigning] = useState(false);
+  const [unassigning, setUnassigning] = useState(false);
+  const assignedGroup = assignedGroups[0] ?? null;
 
   useEffect(() => {
     if (!open) return;
@@ -639,8 +639,9 @@ function AssignGroupsCard({
           id: g.id,
           name: g.name,
         }));
-        const assignedIds = new Set(assignedGroups.map((g) => g.groupId));
-        setGroups(allGroups.filter((g) => !assignedIds.has(g.id)));
+        const assignedId = assignedGroup?.groupId;
+        setGroups(allGroups.filter((g) => g.id !== assignedId));
+        setSelectedId(null);
       } catch {
         setGroups([]);
       } finally {
@@ -648,30 +649,24 @@ function AssignGroupsCard({
       }
     };
     fetchGroups();
-  }, [open]);
+  }, [open, assignedGroup?.groupId]);
 
   const filteredGroups = groups.filter((g) =>
     g.name.toLowerCase().includes(search.toLowerCase())
   );
 
-  const toggleGroup = (id: string) => {
-    setSelectedIds((prev) =>
-      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
-    );
-  };
-
   const handleAssign = async () => {
-    if (!selectedIds.length) return;
+    if (!selectedId) return;
     try {
       setAssigning(true);
       await axios.post(
         `${getBackendURL()}/teacher/labs/${labId}/assign`,
-        { groupIds: selectedIds },
+        { groupId: selectedId },
         { withCredentials: true }
       );
-      toast.success("Lab assigned to groups");
+      toast.success("Lab assigned to group");
       setOpen(false);
-      setSelectedIds([]);
+      setSelectedId(null);
       onAssigned();
     } catch (err: any) {
       toast.error(err?.response?.data?.message || "Failed to assign");
@@ -680,38 +675,61 @@ function AssignGroupsCard({
     }
   };
 
+  const handleUnassign = async () => {
+    try {
+      setUnassigning(true);
+      await axios.delete(
+        `${getBackendURL()}/teacher/labs/${labId}/assign`,
+        { withCredentials: true }
+      );
+      toast.success("Lab unassigned");
+      onAssigned();
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message || "Failed to unassign");
+    } finally {
+      setUnassigning(false);
+    }
+  };
+
   return (
     <Card>
       <CardHeader>
         <CardTitle className="text-base flex items-center gap-2">
           <Users className="h-4 w-4" />
-          Assigned Groups
+          Assigned Group
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-3">
-        {assignedGroups.length === 0 ? (
-          <p className="text-sm text-muted-foreground">Not assigned to any groups</p>
-        ) : (
-          <div className="flex flex-wrap gap-2">
-            {assignedGroups.map((g) => (
-              <Badge key={g.groupId} variant="secondary">
-                {g.groupName}
-              </Badge>
-            ))}
+        {assignedGroup ? (
+          <div className="flex items-center justify-between gap-2 rounded-md border p-2">
+            <div className="min-w-0 flex-1">
+              <p className="text-sm font-medium truncate">{assignedGroup.groupName}</p>
+            </div>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-7 w-7 shrink-0 text-destructive"
+              onClick={handleUnassign}
+              disabled={unassigning}
+            >
+              <UserMinus className="h-3.5 w-3.5" />
+            </Button>
           </div>
+        ) : (
+          <p className="text-sm text-muted-foreground">Not assigned to any group</p>
         )}
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
             <Button variant="outline" size="sm" className="w-full">
               <Plus className="h-4 w-4 mr-1" />
-              Assign to Groups
+              {assignedGroup ? "Change Group" : "Assign to Group"}
             </Button>
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
               <DialogTitle>Assign Lab</DialogTitle>
               <DialogDescription>
-                Select groups to assign this lab to
+                Select a group to assign this lab to
               </DialogDescription>
             </DialogHeader>
             <div className="space-y-4">
@@ -731,26 +749,26 @@ function AssignGroupsCard({
                   </div>
                 ) : filteredGroups.length === 0 ? (
                   <p className="text-sm text-muted-foreground text-center py-4">
-                    {search ? "No groups match your search" : "No unassigned groups available"}
+                    {search ? "No groups match your search" : "No groups available"}
                   </p>
                 ) : (
                   filteredGroups.map((g) => (
                     <div
                       key={g.id}
                       className={`flex items-center gap-3 p-2 rounded-md cursor-pointer hover:bg-accent ${
-                        selectedIds.includes(g.id) ? "bg-accent" : ""
+                        selectedId === g.id ? "bg-accent" : ""
                       }`}
-                      onClick={() => toggleGroup(g.id)}
+                      onClick={() => setSelectedId(g.id)}
                     >
                       <div
-                        className={`w-4 h-4 rounded border flex items-center justify-center ${
-                          selectedIds.includes(g.id)
+                        className={`w-4 h-4 rounded-full border flex items-center justify-center ${
+                          selectedId === g.id
                             ? "bg-primary border-primary"
                             : "border-input"
                         }`}
                       >
-                        {selectedIds.includes(g.id) && (
-                          <span className="text-primary-foreground text-xs">✓</span>
+                        {selectedId === g.id && (
+                          <div className="w-2 h-2 rounded-full bg-primary-foreground" />
                         )}
                       </div>
                       <span className="text-sm">{g.name}</span>
@@ -763,8 +781,8 @@ function AssignGroupsCard({
               <Button variant="outline" onClick={() => setOpen(false)}>
                 Cancel
               </Button>
-              <Button onClick={handleAssign} disabled={!selectedIds.length || assigning}>
-                {assigning ? "Assigning..." : `Assign (${selectedIds.length})`}
+              <Button onClick={handleAssign} disabled={!selectedId || assigning}>
+                {assigning ? "Assigning..." : "Assign"}
               </Button>
             </DialogFooter>
           </DialogContent>

@@ -90,7 +90,7 @@ function Page({ params }: { params: Promise<{ "exam-id": string }> }) {
   const [endTime, setEndTime] = React.useState<string | undefined>(undefined);
 
   const [examDetails, setExamDetails] = useState<Exam | undefined>();
-  const [selectedGroups, setSelectedGroups] = useState<Group[] | undefined>([]);
+  const [selectedGroup, setSelectedGroup] = useState<Group | undefined>();
 
   const [selectedProblemsId, setSelectedProblemsId] = useState<
     string[] | undefined
@@ -98,8 +98,6 @@ function Page({ params }: { params: Promise<{ "exam-id": string }> }) {
 
   const [isLoading, setLoading] = useState(false);
   const [loadingGroups, setLoadingGroups] = useState(false);
-
-  const [searchedGroup, setSearchedGroup] = useState<Group | undefined>();
 
   const [savingDraft, startSavingDraftTransition] = useTransition();
   const [publishingTest, startPublishingTestTransition] = useTransition();
@@ -111,29 +109,8 @@ function Page({ params }: { params: Promise<{ "exam-id": string }> }) {
     setExamDetails((prev) => (prev ? { ...prev, [name]: value } : prev));
   };
 
-  const deleteGroup = (id: string) => {
-    setSelectedGroups((prev) => prev?.filter((grp) => grp.id != id));
-  };
-
-  const addGroupToSelected = () => {
-    if (!searchedGroup || !searchedGroup.id) {
-      toast.error("Please Select a Group to add");
-      return;
-    }
-    const finding = selectedGroups?.find(
-      (item) => item.id === searchedGroup.id
-    );
-
-    if (finding) {
-      toast.error("Group Already Added");
-      return;
-    }
-
-    setSelectedGroups((prev) =>
-      prev ? [...prev, searchedGroup] : [searchedGroup]
-    );
-
-    setSearchedGroup(undefined);
+  const clearSelectedGroup = () => {
+    setSelectedGroup(undefined);
   };
 
   const saveDraftFunc = async () => {
@@ -158,14 +135,14 @@ function Page({ params }: { params: Promise<{ "exam-id": string }> }) {
       endDate: combinedEndDateTime,
     };
 
-    if (updatedExamDetails && selectedGroups && selectedProblemsId) {
+    if (updatedExamDetails && selectedGroup && selectedProblemsId) {
       try {
         const domain = getBackendURL();
         const res = await axios.post(
           `${domain}/teacher/exam/savedraft`,
           {
             updatedExamDetails,
-            selectedGroups,
+            selectedGroups: selectedGroup,
             selectedProblemsId,
           },
           {
@@ -206,14 +183,14 @@ function Page({ params }: { params: Promise<{ "exam-id": string }> }) {
       endDate: combinedEndDateTime,
     };
 
-    if (updatedExamDetails && selectedGroups && selectedProblemsId) {
+    if (updatedExamDetails && selectedGroup && selectedProblemsId) {
       try {
         const domain = getBackendURL();
         const res = await axios.post(
           `${domain}/teacher/exam/publishexam`,
           {
             updatedExamDetails,
-            selectedGroups,
+            selectedGroups: selectedGroup,
             selectedProblemsId,
           },
           {
@@ -297,7 +274,8 @@ function Page({ params }: { params: Promise<{ "exam-id": string }> }) {
         },
         withCredentials: true,
       });
-      setSelectedGroups(res.data as Group[]);
+      const groups = res.data as Group[];
+      setSelectedGroup(groups.length > 0 ? groups[0] : undefined);
     }
 
     async function fetchSelectedProblems() {
@@ -552,72 +530,58 @@ function Page({ params }: { params: Promise<{ "exam-id": string }> }) {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Users className="h-5 w-5" />
-                  Allowed Groups
+                  Allowed Group
                 </CardTitle>
                 <CardDescription>
-                  Select which groups can access this test
+                  Select the group that can access this test
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="flex gap-3">
+                <div>
                   {groups ? (
-                    <div className="flex-1">
-                      <AutoCompleteSearchBar
-                        groups={groups}
-                        setSearchedGroup={setSearchedGroup}
-                      />
-                    </div>
+                    <AutoCompleteSearchBar
+                      groups={groups}
+                      setSearchedGroup={() => {}}
+                      onSelect={(group) => setSelectedGroup(group)}
+                    />
                   ) : (
-                    <div className="flex-1">
-                      <div className="h-10 animate-pulse bg-muted rounded-md" />
-                    </div>
+                    <div className="h-10 animate-pulse bg-muted rounded-md" />
                   )}
-                  <Button
-                    variant="secondary"
-                    onClick={addGroupToSelected}
-                    disabled={!searchedGroup}
-                  >
-                    Add Group
-                  </Button>
                 </div>
 
-                {selectedGroups && selectedGroups.length > 0 && (
+                {selectedGroup && (
                   <div className="space-y-2">
                     <Separator />
-                    <div className="grid gap-2 max-h-[300px] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-muted scrollbar-track-transparent">
-                      {selectedGroups.map((group) => (
-                        <Card key={group.id} className="border-muted">
-                          <CardContent className="flex items-center justify-between p-4">
-                            <div className="flex items-center gap-3 min-w-0 flex-1">
-                              <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-primary/10">
-                                <Users className="h-5 w-5 text-primary" />
-                              </div>
-                              <div className="min-w-0 flex-1">
-                                <p className="font-medium truncate">
-                                  {group.name}
-                                </p>
-                                <p className="text-sm text-muted-foreground flex gap-3">
-                                  {group.noOfMembers} members
-                                  {group.aiEnabled && (
-                                    <Badge variant={"secondary"}>
-                                      <Bot /> AI Enabled
-                                    </Badge>
-                                  )}
-                                </p>
-                              </div>
-                            </div>
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              onClick={() => deleteGroup(group.id)}
-                              className="text-destructive hover:text-destructive flex-shrink-0 ml-2"
-                            >
-                              <Trash2 className="h-4 w-4" />
-                            </Button>
-                          </CardContent>
-                        </Card>
-                      ))}
-                    </div>
+                    <Card className="border-muted">
+                      <CardContent className="flex items-center justify-between p-4">
+                        <div className="flex items-center gap-3 min-w-0 flex-1">
+                          <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-primary/10">
+                            <Users className="h-5 w-5 text-primary" />
+                          </div>
+                          <div className="min-w-0 flex-1">
+                            <p className="font-medium truncate">
+                              {selectedGroup.name}
+                            </p>
+                            <p className="text-sm text-muted-foreground flex gap-3">
+                              {selectedGroup.noOfMembers} members
+                              {selectedGroup.aiEnabled && (
+                                <Badge variant={"secondary"}>
+                                  <Bot /> AI Enabled
+                                </Badge>
+                              )}
+                            </p>
+                          </div>
+                        </div>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={clearSelectedGroup}
+                          className="text-destructive hover:text-destructive flex-shrink-0 ml-2"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </CardContent>
+                    </Card>
                   </div>
                 )}
               </CardContent>

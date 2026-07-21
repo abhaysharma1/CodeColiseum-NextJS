@@ -17,11 +17,13 @@ interface Group {
 interface AutoCompleteSearchBarProps {
   groups: Group[];
   setSearchedGroup: React.Dispatch<React.SetStateAction<Group | undefined>>;
+  onSelect?: (group: Group) => void;
 }
 
 export default function AutoCompleteSearchBar({
   groups,
   setSearchedGroup,
+  onSelect,
 }: AutoCompleteSearchBarProps) {
   const [searchValue, setSearchValue] = React.useState<string>("");
   const [isLoading, setIsLoading] = React.useState(false);
@@ -124,6 +126,8 @@ export default function AutoCompleteSearchBar({
                     value={group}
                     onClick={() => {
                       setSearchedGroup(group);
+                      onSelect?.(group);
+                      setSearchValue("");
                     }}
                   >
                     <div className="flex w-full flex-col gap-1">
