@@ -44,6 +44,7 @@ import {
   CloudUpload,
   Download,
   GraduationCap,
+  Mail,
   Upload,
   Users,
   X,
@@ -178,6 +179,36 @@ async function parseTeacherFile(
       "Employee ID": String(r["Employee ID"] ?? "").trim(),
       Department: String(r.Department ?? "").trim(),
     });
+  }
+  return { rows, errors };
+}
+
+// ── Send Credentials ──
+
+interface CredentialsRow {
+  Email: string;
+  Password: string;
+}
+
+async function parseCredentialsFile(
+  file: File,
+): Promise<{ rows: CredentialsRow[]; errors: string[] }> {
+  const text = await file.text();
+  const lines = text.trim().split("\n");
+  const rows: CredentialsRow[] = [];
+  const errors: string[] = [];
+
+  for (let i = 1; i < lines.length; i++) {
+    const line = lines[i].trim();
+    if (!line) continue;
+    const parts = line.split(",");
+    const email = (parts[0] ?? "").trim().toLowerCase();
+    const password = (parts[1] ?? "").trim();
+    if (!email || !password) {
+      errors.push(`Row ${i + 1}: missing Email or Password`);
+      continue;
+    }
+    rows.push({ Email: email, Password: password });
   }
   return { rows, errors };
 }
@@ -446,6 +477,75 @@ export default function BulkSignupsPage() {
   const [tchUpFilename, setTchUpFilename] = useState("teacher_passwords");
   const [tchUpLoading, setTchUpLoading] = useState(false);
   const [tchUpKey, setTchUpKey] = useState("");
+
+  // ── Send Credentials state ──
+  const [credColl, setCredColl] = useState(false);
+  const [credFile, setCredFile] = useState<File | null>(null);
+  const [credRows, setCredRows] = useState<CredentialsRow[]>([]);
+  const [credErrs, setCredErrs] = useState<string[]>([]);
+  const [credLoading, setCredLoading] = useState(false);
+  interface CredResponse {
+    success: boolean;
+    results: Array<{ email: string; name: string; result: "sent" | "error"; message?: string }>;
+    summary: { sent: number; failed: number; total: number };
+  }
+  const [credRes, setCredRes] = useState<CredResponse | null>(null);
+
+  const onCredDrop = useCallback(async (a: File[]) => {
+    const f = a[0];
+    if (!f) return;
+    if (!/\.csv$/i.test(f.name)) {
+      toast.error("Only .csv files are accepted.");
+      return;
+    }
+    setCredFile(f);
+    setCredRes(null);
+    const { rows, errors } = await parseCredentialsFile(f);
+    setCredRows(rows);
+    setCredErrs(errors);
+    if (errors.length) toast.error(`${errors.length} row(s) will be skipped.`);
+  }, []);
+
+  const credDrop = useDropzone({
+    onDrop: onCredDrop,
+    accept: { "text/csv": [".csv"] },
+    maxFiles: 1,
+    multiple: false,
+  });
+
+  const handleCredSubmit = async () => {
+    if (!credFile) return void toast.error("Select a CSV file first.");
+    if (!credRows.length) return void toast.error("No valid rows.");
+    setCredLoading(true);
+    setCredRes(null);
+    try {
+      const fd = new FormData();
+      fd.append("file", credFile);
+      const r = await axios.post<CredResponse>(
+        `${getBackendURL()}/admin/send-credentials-email`,
+        fd,
+        { withCredentials: true },
+      );
+      setCredRes(r.data);
+      toast.success(
+        `${r.data.summary.sent} sent, ${r.data.summary.failed} failed.`,
+      );
+    } catch (e: any) {
+      toast.error(e?.response?.data?.error ?? "Request failed.");
+    } finally {
+      setCredLoading(false);
+    }
+  };
+
+  const resetCred = () => {
+    setCredFile(null);
+    setCredRows([]);
+    setCredErrs([]);
+    setCredRes(null);
+  };
+
+  const credSent = credRes?.results?.filter((r) => r.result === "sent") ?? [];
+  const credFailed = credRes?.results?.filter((r) => r.result === "error") ?? [];
 
   // ── Shared combobox renderers ──
 
@@ -973,6 +1073,139 @@ export default function BulkSignupsPage() {
                   </DialogFooter>
                 </DialogContent>
               </Dialog>
+            </CardContent>
+          </CollapsibleContent>
+        </Card>
+      </Collapsible>
+
+      {/* ── Send Credentials ── */}
+      <Collapsible open={credColl} onOpenChange={setCredColl}>
+        <Card>
+          <CollapsibleTrigger asChild>
+            <CardHeader className="cursor-pointer hover:bg-muted/50 transition-colors">
+              <CardTitle className="text-base flex items-center gap-2">
+                <Mail className="h-4 w-4" />
+                Send Credentials
+                {credColl ? (
+                  <ChevronDown className="h-4 w-4 ml-auto" />
+                ) : (
+                  <ChevronRight className="h-4 w-4 ml-auto" />
+                )}
+              </CardTitle>
+            </CardHeader>
+          </CollapsibleTrigger>
+          <CollapsibleContent>
+            <CardContent className="space-y-4">
+              <p className="text-xs text-muted-foreground">
+                Upload a CSV file with columns <strong>Email,Password</strong> to send
+                each user a personalized email with their login credentials.
+              </p>
+
+              {dropZone(credDrop.getRootProps, credDrop.getInputProps, credDrop.isDragActive, credFile?.name ?? null, resetCred)}
+
+              {parseErrorsBlock(credErrs)}
+
+              {credRows.length > 0 && (
+                <div className="space-y-2">
+                  <span className="text-xs font-medium text-muted-foreground">
+                    Preview — {credRows.length} user(s)
+                  </span>
+                  <div className="overflow-x-auto rounded-md border">
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead className="w-10 text-xs">#</TableHead>
+                          <TableHead className={headerClass}>Email</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {credRows.slice(0, 50).map((r, i) => (
+                          <TableRow key={i}>
+                            <TableCell className={cellClass + " text-muted-foreground"}>{i + 1}</TableCell>
+                            <TableCell className={cellClass + " font-medium"}>{r.Email}</TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </div>
+                  {credRows.length > 50 && (
+                    <p className="text-xs text-muted-foreground">Showing first 50 of {credRows.length} rows.</p>
+                  )}
+                </div>
+              )}
+
+              <div className="flex gap-2">
+                <Button
+                  onClick={handleCredSubmit}
+                  disabled={credLoading || credRows.length === 0}
+                  className="flex-1"
+                  size="sm"
+                >
+                  {credLoading
+                    ? "Sending emails..."
+                    : `Send Emails to ${credRows.length} User${credRows.length !== 1 ? "s" : ""}`}
+                </Button>
+                {credRes && (
+                  <Button variant="outline" size="sm" onClick={resetCred}>
+                    Upload Another File
+                  </Button>
+                )}
+              </div>
+
+              {credRes && (credSent.length > 0 || credFailed.length > 0) && (
+                <div className="grid grid-cols-2 gap-4">
+                  <Card>
+                    <CardContent className="pt-4 space-y-2">
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs font-semibold">Sent</span>
+                        <Badge variant="secondary" className={badgeClass}>
+                          {credSent.length}
+                        </Badge>
+                      </div>
+                      <div className="max-h-40 overflow-y-auto space-y-0.5">
+                        {credSent.length === 0 ? (
+                          <p className="text-xs text-muted-foreground">None</p>
+                        ) : (
+                          credSent.map((r, i) => (
+                            <p
+                              key={i}
+                              className="font-mono text-[11px] text-muted-foreground truncate"
+                            >
+                              {r.email}
+                            </p>
+                          ))
+                        )}
+                      </div>
+                    </CardContent>
+                  </Card>
+                  <Card>
+                    <CardContent className="pt-4 space-y-2">
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs font-semibold">Failed</span>
+                        <Badge variant="destructive" className={badgeClass}>
+                          {credFailed.length}
+                        </Badge>
+                      </div>
+                      <div className="max-h-40 overflow-y-auto space-y-0.5">
+                        {credFailed.length === 0 ? (
+                          <p className="text-xs text-muted-foreground">None</p>
+                        ) : (
+                          credFailed.map((r, i) => (
+                            <div key={i}>
+                              <p className="font-mono text-[11px] text-muted-foreground truncate">
+                                {r.email}
+                              </p>
+                              {r.message && (
+                                <p className="text-[10px] text-destructive">{r.message}</p>
+                              )}
+                            </div>
+                          ))
+                        )}
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+              )}
             </CardContent>
           </CollapsibleContent>
         </Card>
