@@ -3,15 +3,7 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  Combobox,
-  ComboboxContent,
-  ComboboxEmpty,
-  ComboboxInput,
-  ComboboxItem,
-  ComboboxList,
-  useComboboxAnchor,
-} from "@/components/ui/combobox";
+import { Input } from "@/components/ui/input";
 import { getBackendURL } from "@/utils/utilities";
 import axios from "axios";
 import { Building2, Plus } from "lucide-react";
@@ -28,7 +20,6 @@ export default function SmallAdditionsPage() {
   const [collegeName, setCollegeName] = useState("");
   const [adding, setAdding] = useState(false);
   const [loading, setLoading] = useState(true);
-  const collegeAnchor = useComboboxAnchor();
 
   const loadColleges = useCallback(async () => {
     try {
@@ -90,28 +81,12 @@ export default function SmallAdditionsPage() {
         </CardHeader>
         <CardContent className="space-y-3">
           <div className="flex gap-2">
-            <div ref={collegeAnchor} className="flex-1">
-              <Combobox
-                value={collegeName}
-                onValueChange={(v) => setCollegeName(v ?? "")}
-              >
-                <ComboboxInput
-                  placeholder="Enter college name or select existing"
-                  showTrigger
-                  className="w-full h-9 text-sm"
-                />
-                <ComboboxContent anchor={collegeAnchor.current}>
-                  <ComboboxList>
-                    {colleges.map((c) => (
-                      <ComboboxItem key={c.id} value={c.name}>
-                        {c.name}
-                      </ComboboxItem>
-                    ))}
-                    <ComboboxEmpty>No colleges found</ComboboxEmpty>
-                  </ComboboxList>
-                </ComboboxContent>
-              </Combobox>
-            </div>
+            <Input
+              value={collegeName}
+              onChange={(e) => setCollegeName(e.target.value)}
+              placeholder="Enter college name"
+              className="flex-1"
+            />
             <Button
               onClick={handleAddCollege}
               disabled={adding || !collegeName.trim()}
