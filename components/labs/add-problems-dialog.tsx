@@ -39,6 +39,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { getBackendURL } from "@/utils/utilities";
+import { ProblemDescriptionPanel } from "@/components/labs/problem-description-panel";
 
 interface ProblemTag {
   tag: { name: string };
@@ -73,10 +74,14 @@ const ProblemRow = React.memo(function ProblemRow({
   problem,
   isSelected,
   onToggle,
+  onMouseEnter,
+  onMouseLeave,
 }: {
   problem: ProblemOption;
   isSelected: boolean;
   onToggle: (id: string) => void;
+  onMouseEnter?: (e: React.MouseEvent<HTMLDivElement>) => void;
+  onMouseLeave?: (e: React.MouseEvent<HTMLDivElement>) => void;
 }) {
   return (
     <div
@@ -88,6 +93,8 @@ const ProblemRow = React.memo(function ProblemRow({
       role="option"
       aria-selected={isSelected}
       tabIndex={0}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
       onKeyDown={(e) => {
         if (e.key === "Enter" || e.key === " ") {
           e.preventDefault();
@@ -167,8 +174,10 @@ function AddProblemsDialog({
   const [adding, setAdding] = useState(false);
   const [tags, setTags] = useState<{ id: string; name: string }[]>([]);
   const [tagSearch, setTagSearch] = useState("");
+  const [hoveredProblemId, setHoveredProblemId] = useState<string | null>(null);
 
   const parentRef = useRef<HTMLDivElement>(null);
+  const hoverOpenTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const filteredProblems = useMemo(() => {
     let result = problems;
@@ -281,10 +290,17 @@ function AddProblemsDialog({
     setSortBy("newest");
     setSelectedIds(new Set());
     setTagSearch("");
+    setHoveredProblemId(null);
     setLoading(true);
     fetchProblems();
     fetchTags();
   }, [open, fetchProblems, fetchTags]);
+
+  useEffect(() => {
+    return () => {
+      if (hoverOpenTimeoutRef.current) clearTimeout(hoverOpenTimeoutRef.current);
+    };
+  }, []);
 
   useEffect(() => {
     if (!open) return;
@@ -304,6 +320,25 @@ function AddProblemsDialog({
       }
       return next;
     });
+  }, []);
+
+  const handleRowMouseEnter = useCallback(
+    (problemId: string) => {
+      if (hoverOpenTimeoutRef.current) {
+        clearTimeout(hoverOpenTimeoutRef.current);
+      }
+      hoverOpenTimeoutRef.current = setTimeout(() => {
+        setHoveredProblemId(problemId);
+      }, 300);
+    },
+    [],
+  );
+
+  const handleRowMouseLeave = useCallback(() => {
+    if (hoverOpenTimeoutRef.current) {
+      clearTimeout(hoverOpenTimeoutRef.current);
+      hoverOpenTimeoutRef.current = null;
+    }
   }, []);
 
   const handleAdd = async () => {
@@ -341,10 +376,10 @@ function AddProblemsDialog({
     );
   };
 
-  return (
+    return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
-        className="sm:max-w-[1100px] sm:h-[90vh] flex flex-col p-0 gap-0"
+        className="sm:max-w-[1200px] sm:h-[95vh] flex flex-col p-0 gap-0"
         showCloseButton={false}
       >
         <div className="flex items-center justify-between px-6 pt-6 pb-3">
@@ -499,6 +534,7 @@ function AddProblemsDialog({
         </div>
 
         <div className="flex-1 flex flex-col md:flex-row min-h-0 px-6 gap-4">
+          <ProblemDescriptionPanel problemId={hoveredProblemId} />
           <div className="flex-1 flex flex-col min-h-0">
             <div className="flex items-center justify-between mb-2">
               <span className="text-sm font-medium text-muted-foreground">
@@ -508,7 +544,6 @@ function AddProblemsDialog({
             <div
               ref={parentRef}
               className="flex-1 overflow-auto border rounded-md"
-              style={{ maxHeight: "calc(90vh - 280px)" }}
               role="listbox"
               aria-label="Available problems"
               aria-multiselectable="true"
@@ -550,6 +585,10 @@ function AddProblemsDialog({
                           problem={problem}
                           isSelected={selectedIds.has(problem.id)}
                           onToggle={toggleId}
+                          onMouseEnter={() =>
+                            handleRowMouseEnter(problem.id)
+                          }
+                          onMouseLeave={handleRowMouseLeave}
                         />
                       </div>
                     );
