@@ -18,6 +18,17 @@ import {
   useComboboxAnchor,
 } from "@/components/ui/combobox";
 import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+  DialogClose,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
   Table,
   TableBody,
   TableCell,
@@ -30,6 +41,7 @@ import axios from "axios";
 import {
   ChevronDown,
   ChevronRight,
+  CloudUpload,
   Download,
   GraduationCap,
   Upload,
@@ -215,6 +227,28 @@ export default function BulkSignupsPage() {
     loadColleges();
   }, [loadColleges]);
 
+  const handleUploadS3 = async (
+    csvContent: string,
+    filename: string,
+    setLoading: (v: boolean) => void,
+    setKey: (v: string) => void,
+  ) => {
+    setLoading(true);
+    try {
+      await axios.post(
+        `${getBackendURL()}/admin/bulk-signup/upload-csv`,
+        { csvContent, filename },
+        { withCredentials: true },
+      );
+      toast.success("Uploaded to S3 successfully.");
+      setKey(filename);
+    } catch (e: any) {
+      toast.error(e?.response?.data?.error ?? "Upload to S3 failed.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   // ── Student state ──
   const [stdColl, setStdColl] = useState(true);
   const [stdFile, setStdFile] = useState<File | null>(null);
@@ -309,6 +343,11 @@ export default function BulkSignupsPage() {
   const stdCreated = stdRes?.results?.filter((r) => r.result === "created") ?? [];
   const stdFailed = stdRes?.results?.filter((r) => r.result === "error") ?? [];
 
+  const [stdUpDialogOpen, setStdUpDialogOpen] = useState(false);
+  const [stdUpFilename, setStdUpFilename] = useState("student_passwords");
+  const [stdUpLoading, setStdUpLoading] = useState(false);
+  const [stdUpKey, setStdUpKey] = useState("");
+
   // ── Teacher state ──
   const [tchColl, setTchColl] = useState(false);
   const [tchFile, setTchFile] = useState<File | null>(null);
@@ -402,6 +441,11 @@ export default function BulkSignupsPage() {
 
   const tchCreated = tchRes?.results?.filter((r) => r.result === "created") ?? [];
   const tchFailed = tchRes?.results?.filter((r) => r.result === "error") ?? [];
+
+  const [tchUpDialogOpen, setTchUpDialogOpen] = useState(false);
+  const [tchUpFilename, setTchUpFilename] = useState("teacher_passwords");
+  const [tchUpLoading, setTchUpLoading] = useState(false);
+  const [tchUpKey, setTchUpKey] = useState("");
 
   // ── Shared combobox renderers ──
 
@@ -711,6 +755,63 @@ export default function BulkSignupsPage() {
               </div>
 
               {resultsBlock(stdCreated, stdFailed, dlStdPw)}
+
+              {stdRes?.passwordsCsv && (
+                <div className="flex justify-end">
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                    onClick={() => {
+                      setStdUpFilename("student_passwords");
+                      setStdUpDialogOpen(true);
+                    }}
+                    disabled={!!stdUpKey}
+                  >
+                    <CloudUpload className="h-3 w-3 mr-1" />
+                    {stdUpKey ? "Uploaded to S3" : "Upload to S3"}
+                  </Button>
+                </div>
+              )}
+
+              <Dialog open={stdUpDialogOpen} onOpenChange={setStdUpDialogOpen}>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Upload Passwords to S3</DialogTitle>
+                    <DialogDescription>
+                      Choose a file name for the passwords CSV.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <div className="space-y-2">
+                    <Label htmlFor="std-up-filename">File name</Label>
+                    <Input
+                      id="std-up-filename"
+                      value={stdUpFilename}
+                      onChange={(e) => setStdUpFilename(e.target.value)}
+                      placeholder="student_passwords"
+                    />
+                  </div>
+                  <DialogFooter>
+                    <DialogClose asChild>
+                      <Button variant="outline" size="sm">Cancel</Button>
+                    </DialogClose>
+                    <Button
+                      size="sm"
+                      disabled={stdUpLoading || !stdUpFilename.trim()}
+                      onClick={() => {
+                        handleUploadS3(
+                          stdRes!.passwordsCsv,
+                          stdUpFilename.trim() || "student_passwords",
+                          setStdUpLoading,
+                          setStdUpKey,
+                        );
+                        setStdUpDialogOpen(false);
+                      }}
+                    >
+                      {stdUpLoading ? "Uploading..." : "Upload"}
+                    </Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
             </CardContent>
           </CollapsibleContent>
         </Card>
@@ -815,6 +916,63 @@ export default function BulkSignupsPage() {
               </div>
 
               {resultsBlock(tchCreated, tchFailed, dlTchPw)}
+
+              {tchRes?.passwordsCsv && (
+                <div className="flex justify-end">
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                    onClick={() => {
+                      setTchUpFilename("teacher_passwords");
+                      setTchUpDialogOpen(true);
+                    }}
+                    disabled={!!tchUpKey}
+                  >
+                    <CloudUpload className="h-3 w-3 mr-1" />
+                    {tchUpKey ? "Uploaded to S3" : "Upload to S3"}
+                  </Button>
+                </div>
+              )}
+
+              <Dialog open={tchUpDialogOpen} onOpenChange={setTchUpDialogOpen}>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Upload Passwords to S3</DialogTitle>
+                    <DialogDescription>
+                      Choose a file name for the passwords CSV.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <div className="space-y-2">
+                    <Label htmlFor="tch-up-filename">File name</Label>
+                    <Input
+                      id="tch-up-filename"
+                      value={tchUpFilename}
+                      onChange={(e) => setTchUpFilename(e.target.value)}
+                      placeholder="teacher_passwords"
+                    />
+                  </div>
+                  <DialogFooter>
+                    <DialogClose asChild>
+                      <Button variant="outline" size="sm">Cancel</Button>
+                    </DialogClose>
+                    <Button
+                      size="sm"
+                      disabled={tchUpLoading || !tchUpFilename.trim()}
+                      onClick={() => {
+                        handleUploadS3(
+                          tchRes!.passwordsCsv,
+                          tchUpFilename.trim() || "teacher_passwords",
+                          setTchUpLoading,
+                          setTchUpKey,
+                        );
+                        setTchUpDialogOpen(false);
+                      }}
+                    >
+                      {tchUpLoading ? "Uploading..." : "Upload"}
+                    </Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
             </CardContent>
           </CollapsibleContent>
         </Card>
