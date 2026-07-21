@@ -1,5 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getBackendURL } from "./utils/utilities";
+import { jwtVerify } from "jose";
+import { verifyExamHash } from "./utils/sebUtils";
+
+const secret = new TextEncoder().encode(process.env.BETTER_AUTH_SECRET);
 
 const RBAC_ROLE_DESTINATIONS: Record<string, string> = {
   role_platform_admin: "/admin/dashboard",
@@ -16,8 +20,10 @@ const DASHBOARD_ROLE_PREFIXES: Record<string, string> = {
 export async function proxy(req: NextRequest) {
   const pathname = req.nextUrl.pathname;
 
-  const backendApiUrl = getBackendURL();
-  const backendOrigin = new URL(backendApiUrl).origin;
+  const backendDomain =
+    process.env.NODE_ENV != "development"
+      ? getBackendURL()
+      : "http://localhost:5000";
 
   const cspHeader = `
     default-src 'self';
@@ -25,7 +31,7 @@ export async function proxy(req: NextRequest) {
     style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net;
     img-src 'self' blob: data: https:;
     font-src 'self' data: https://cdn.jsdelivr.net;
-    connect-src 'self' https://github.com https://api.github.com ${backendOrigin};
+    connect-src 'self' https://github.com https://api.github.com ${backendDomain};
     frame-src 'self' https://github.com;
     worker-src 'self' blob:;
   `.replace(/\s{2,}/g, " ");
@@ -43,23 +49,26 @@ export async function proxy(req: NextRequest) {
     return response;
   }
 
-  const sessionUrl = `${backendApiUrl}/auth/get-session`;
+  // `__Secure-` prefixed cookies are never sent over HTTP (RFC requirement).
+  // In development on localhost the non-secure name is used instead.
+  const token =
+    process.env.NODE_ENV === "development"
+      ? req.cookies.get("better-auth.session_data")?.value
+      : req.cookies.get("__Secure-better-auth.session_data")?.value ||
+        req.cookies.get("better-auth.session_data")?.value;
+
+  if (!token) {
+    return NextResponse.redirect(new URL("/login", req.url));
+  }
 
   try {
-    const sessionRes = await fetch(sessionUrl, {
-      headers: { cookie: req.headers.get("cookie") || "" },
-    });
+    const { payload }: any = await jwtVerify(token, secret);
 
-    if (!sessionRes.ok) {
+    const user = payload.user;
+
+    if (!user || !user.id) {
       return NextResponse.redirect(new URL("/login", req.url));
     }
-
-    const sessionData = await sessionRes.json();
-    if (!sessionData?.user) {
-      return NextResponse.redirect(new URL("/login", req.url));
-    }
-
-    const user = sessionData.user;
 
     if (!user.isOnboarded) {
       return NextResponse.redirect(new URL("/onboarding", req.url));
@@ -72,6 +81,8 @@ export async function proxy(req: NextRequest) {
       ? DASHBOARD_ROLE_PREFIXES[user.globalRoleId]
       : undefined;
 
+    // Redirect users to their own dashboard area if they open a dashboard route
+    // that belongs to a different role.
     if (
       destination &&
       allowedPrefix &&
@@ -83,12 +94,13 @@ export async function proxy(req: NextRequest) {
       return NextResponse.redirect(new URL(destination, req.url));
     }
 
+    // Redirect /dashboard to role-specific page based on globalRoleId.
     if (pathname === "/dashboard" && destination) {
       return NextResponse.redirect(new URL(destination, req.url));
     }
 
     return response;
-  } catch {
+  } catch (error) {
     return NextResponse.redirect(new URL("/login", req.url));
   }
 }
