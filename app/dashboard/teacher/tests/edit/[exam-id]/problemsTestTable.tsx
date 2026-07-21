@@ -78,35 +78,43 @@ function ProblemsTestTable({
   };
 
   const fetchProblems = async (reset = false) => {
-    setLoadingProblems(true);
-    const response = await axios.get(`${backendDomain}/problems/getproblems`, {
-      params: {
-        searchValue,
-        tags,
-        difficulty,
-        take: 10,
-        skip: (page - 1) * 10,
-      },
-      withCredentials: true,
-    });
+    try {
+      setLoadingProblems(true);
 
-    const data: problemData[] = response.data as problemData[];
+      const currentPage = reset ? 1 : page;
+      const response = await axios.get(`${backendDomain}/problems/getproblems`, {
+        params: {
+          searchValue,
+          tags: tags?.name,
+          difficulty,
+          take: 10,
+          skip: (currentPage - 1) * 10,
+        },
+        withCredentials: true,
+      });
 
-    if (data.length < 10) {
-      setHasMore(false);
-    } else {
-      setHasMore(true);
-      setPage((prev) => prev + 1);
+      const data: problemData[] = response.data as problemData[];
+
+      if (data.length < 10) {
+        setHasMore(false);
+      } else {
+        setHasMore(true);
+        setPage(reset ? 2 : (prev) => prev + 1);
+      }
+
+      setProblemData((prev) => (reset ? data : [...prev, ...data]));
+    } catch (error) {
+      if (typeof error === "string") {
+        toast.error(error);
+      }
+      console.log(error);
+    } finally {
+      setLoadingProblems(false);
     }
-
-    setProblemData((prev) => (reset ? data : [...prev, ...data]));
-
-    setLoadingProblems(false);
   };
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setPage(1);
       fetchProblems(true);
     }, 500);
 

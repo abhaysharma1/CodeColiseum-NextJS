@@ -21,6 +21,7 @@ interface descriptionData {
   difficulty: string;
   description: string;
   title: string;
+  tags?: { tag: { id: string; name: string } }[];
 }
 
 function DetailsBlock({
@@ -150,6 +151,15 @@ function DetailsBlock({
                   {data[0]?.difficulty.at(0)?.toUpperCase() +
                     data[0]?.difficulty.slice(1)?.toLowerCase()}
                 </div>
+                {data[0]?.tags && data[0].tags.length > 0 && (
+                  <div className="flex flex-wrap gap-1.5 mt-2">
+                    {data[0].tags.map((t) => (
+                      <span key={t.tag.id} className="px-2 py-0.5 bg-secondary/50 text-xs rounded-full text-muted-foreground">
+                        {t.tag.name}
+                      </span>
+                    ))}
+                  </div>
+                )}
                 <div className="mt-5">
                   <div className="markdown-wrapper text-foreground mb-6">
                     <Markdown

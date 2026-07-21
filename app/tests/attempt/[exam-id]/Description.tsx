@@ -263,6 +263,15 @@ function Description({
                   {descriptionData?.difficulty.at(0)?.toUpperCase() +
                     descriptionData?.difficulty.slice(1)?.toLowerCase()}
                 </div>
+                {(descriptionData as any)?.tags && (descriptionData as any).tags.length > 0 && (
+                  <div className="flex flex-wrap gap-1.5 mt-2">
+                    {(descriptionData as any).tags.map((t: any) => (
+                      <span key={t.tag.id} className="px-2 py-0.5 bg-secondary/50 text-xs rounded-full text-muted-foreground">
+                        {t.tag.name}
+                      </span>
+                    ))}
+                  </div>
+                )}
                 <div className="mt-5">
                   <div className={`markdown-wrapper text-foreground mb-6 `}>
                     <Markdown remarkPlugins={[remarkGfm]}>

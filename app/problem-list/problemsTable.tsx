@@ -64,15 +64,16 @@ function ProblemsTable() {
     try {
       setLoadingProblems(true);
 
+      const currentPage = reset ? 1 : page;
       const response = await axios.get(
         `${getBackendURL()}/problems/getproblems`,
         {
           params: {
             searchValue,
-            tags,
+            tags: tags?.name,
             difficulty,
             take: 20,
-            skip: (page - 1) * 10,
+            skip: (currentPage - 1) * 10,
             withDescription: false,
           },
           withCredentials: true,
@@ -85,12 +86,11 @@ function ProblemsTable() {
         setHasMore(false);
       } else {
         setHasMore(true);
-        setPage((prev) => prev + 1);
+        setPage(reset ? 2 : (prev) => prev + 1);
       }
 
       setProblemData((prev) => {
         if (reset) return data;
-        // Remove duplicates based on a unique property, e.g., 'id'
         const existingIds = new Set(prev.map((item) => item.id));
         const newData = data.filter((item) => !existingIds.has(item.id));
         return [...prev, ...newData];
@@ -128,7 +128,6 @@ function ProblemsTable() {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setPage(1);
       fetchProblems(true);
     }, 500);
 

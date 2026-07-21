@@ -19,6 +19,7 @@ on:
       - "package.json"
       - "package-lock.json"
       - "Dockerfile"
+      - "proxy.ts"
 
 jobs:
   deploy:

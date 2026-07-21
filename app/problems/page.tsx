@@ -49,6 +49,7 @@ interface descriptionData {
   difficulty: string;
   description: string;
   title: string;
+  tags?: { tag: { id: string; name: string } }[];
 }
 
 export type aiReviewResult = {
