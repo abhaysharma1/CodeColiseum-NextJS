@@ -2,6 +2,7 @@
 
 import {
   IconDotsVertical,
+  IconLock,
   IconLogout,
   IconUserCircle,
 } from "@tabler/icons-react";
@@ -30,12 +31,13 @@ import { useAuth } from "@/context/authcontext";
 import { Switch } from "./ui/switch";
 import { toast } from "sonner";
 import { useTheme } from "next-themes";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { MdDarkMode } from "react-icons/md";
 import { FaSun, FaThemeco } from "react-icons/fa";
 import { Palette } from "lucide-react";
 import { ThemeName, THEMES } from "@/themes";
 import { useCustomTheme } from "@/hooks/use-custom-theme";
+import { ChangePasswordDialog } from "@/components/change-password-dialog";
 
 export function NavUser({}: {
   user: {
@@ -50,6 +52,8 @@ export function NavUser({}: {
   const { theme, setTheme } = useTheme();
 
   const { selected, setThemeName } = useCustomTheme();
+
+  const [showChangePassword, setShowChangePassword] = useState(false);
 
   const logoutcust = () => {
     toast.loading("Logging Out");
@@ -71,6 +75,7 @@ export function NavUser({}: {
   // }, [theme]);
 
   return (
+    <>
     <SidebarMenu>
       <SidebarMenuItem>
         <DropdownMenu>
@@ -155,6 +160,11 @@ export function NavUser({}: {
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={() => setShowChangePassword(true)}>
+              <IconLock />
+              Change Password
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
             <DropdownMenuItem onClick={logoutcust}>
               <IconLogout />
               Log out
@@ -163,5 +173,10 @@ export function NavUser({}: {
         </DropdownMenu>
       </SidebarMenuItem>
     </SidebarMenu>
+      <ChangePasswordDialog
+        open={showChangePassword}
+        onOpenChange={setShowChangePassword}
+      />
+    </>
   );
 }
