@@ -30,7 +30,7 @@ import {
 import { useAuth } from "@/context/authcontext";
 import { Switch } from "./ui/switch";
 import { toast } from "sonner";
-import { useTheme } from "next-themes";
+import { useTheme } from "@teispace/next-themes";
 import { useEffect, useState } from "react";
 import { MdDarkMode } from "react-icons/md";
 import { FaSun, FaThemeco } from "react-icons/fa";

@@ -1,7 +1,7 @@
 "use client";
 
 import Editor from "@monaco-editor/react";
-import { useTheme } from "next-themes";
+import { useTheme } from "@teispace/next-themes";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { getBackendURL } from "@/utils/utilities";

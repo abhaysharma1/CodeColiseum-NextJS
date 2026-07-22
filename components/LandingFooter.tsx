@@ -153,7 +153,7 @@ export default function LandingFooter() {
         <div className="flex flex-col md:flex-row justify-between items-center gap-3 pt-6 text-xs text-stone-500">
           <span>© 2026 CodeColiseum. All rights reserved.</span>
           <span className="inline-flex items-center gap-1.5">
-            Built with <Heart size={12} className="text-orange-600 fill-orange-600" /> by Abhay Sharma &amp; Atulya Rounak
+            {"Built with "}<Heart size={12} className="text-orange-600 fill-orange-600" />{" by Abhay Sharma & Atulya Rounak"}
           </span>
           <button
             onClick={scrollToTop}

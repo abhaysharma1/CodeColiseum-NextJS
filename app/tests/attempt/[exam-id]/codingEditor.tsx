@@ -1,7 +1,7 @@
 "use client";
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import Editor, { OnMount } from "@monaco-editor/react";
-import { useTheme } from "next-themes";
+import { useTheme } from "@teispace/next-themes";
 import { Spinner } from "@/components/ui/shadcn-io/spinner";
 import { Button } from "@/components/ui/button";
 import { IoMdSettings } from "react-icons/io";

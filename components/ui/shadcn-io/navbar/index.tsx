@@ -19,7 +19,7 @@ import { useAuth } from "@/context/authcontext";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Image from "next/image";
-import { useTheme } from "next-themes";
+import { useTheme } from "@teispace/next-themes";
 
 // Simple logo component for the navbar
 const Logo = (props: React.SVGAttributes<SVGElement>) => {

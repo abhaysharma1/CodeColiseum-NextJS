@@ -15,7 +15,7 @@ import {
 } from "@tabler/icons-react";
 import { usePathname, useRouter } from "next/navigation";
 import { ReactNode } from "react";
-import { useTheme } from "next-themes";
+import { useTheme } from "@teispace/next-themes";
 import { useCustomTheme } from "@/hooks/use-custom-theme";
 import { ThemeName, THEMES } from "@/themes";
 import {

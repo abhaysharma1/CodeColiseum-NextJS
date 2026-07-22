@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useTheme } from "next-themes";
+import { useTheme } from "@teispace/next-themes";
 import { THEMES, ThemeName } from "@/themes";
 import { applyThemeObject } from "@/lib/theme-engine";
 

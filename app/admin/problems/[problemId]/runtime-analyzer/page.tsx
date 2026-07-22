@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import axios from "axios";
 import Editor from "@monaco-editor/react";
-import { useTheme } from "next-themes";
+import { useTheme } from "@teispace/next-themes";
 import { getBackendURL } from "@/utils/utilities";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
