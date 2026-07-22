@@ -80,12 +80,12 @@ interface BulkResponse {
 
 // ── Student ──
 
-const STUDENT_HEADERS = ["Name", "Email", "Roll Number", "Branch", "Semester"];
+const STUDENT_HEADERS = ["Name", "Email", "Roll Number", "Branch", "Semester", "Batch"];
 
 function downloadStudentTemplate() {
   const ws = XLSX.utils.aoa_to_sheet([
     STUDENT_HEADERS,
-    ["John Doe", "john@example.com", "CS2024001", "Computer Science", "3"],
+    ["John Doe", "john@example.com", "CS2024001", "Computer Science", "3", "2024-2028"],
   ]);
   ws["!cols"] = STUDENT_HEADERS.map(() => ({ wch: 20 }));
   const wb = XLSX.utils.book_new();
@@ -99,6 +99,7 @@ interface StudentRow {
   "Roll Number": string;
   Branch: string;
   Semester: string;
+  Batch: string;
 }
 
 async function parseStudentFile(
@@ -127,6 +128,7 @@ async function parseStudentFile(
       "Roll Number": roll,
       Branch: String(r.Branch ?? "").trim(),
       Semester: String(r.Semester ?? "").trim(),
+      Batch: String(r.Batch ?? "").trim(),
     });
   }
   return { rows, errors };
@@ -814,6 +816,7 @@ export default function BulkSignupsPage() {
                           <TableHead className={headerClass}>Roll Number</TableHead>
                           <TableHead className={headerClass}>Branch</TableHead>
                           <TableHead className={headerClass}>Semester</TableHead>
+                          <TableHead className={headerClass}>Batch</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
@@ -825,6 +828,7 @@ export default function BulkSignupsPage() {
                             <TableCell className={cellClass}>{r["Roll Number"]}</TableCell>
                             <TableCell className={cellClass}>{r.Branch || "—"}</TableCell>
                             <TableCell className={cellClass}>{r.Semester || "—"}</TableCell>
+                            <TableCell className={cellClass}>{r.Batch || "—"}</TableCell>
                           </TableRow>
                         ))}
                       </TableBody>
