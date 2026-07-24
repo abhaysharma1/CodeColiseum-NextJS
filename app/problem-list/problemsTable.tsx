@@ -261,48 +261,53 @@ function ProblemsTable() {
                     </TableCell>
                   </TableRow>
                 ) : (
-                  problemData?.map((problem) => (
-                    <Link
-                      key={problem.id}
-                      href={`/problems?id=${problem.id}`}
-                      className="contents"
-                    >
+                  problemData?.map((problem) => {
+                    const href = `/problems?id=${problem.id}`;
+
+                    return (
                       <TableRow
-                        className="group cursor-pointer hover:bg-muted/50 transition-all duration-200 active:bg-muted"
-                        // onClick={() =>
-                        //   router.push(`/problems?id=${problem.id}`)
-                        // }
-                        tabIndex={0}
-                        // onKeyDown={(e) => {
-                        //   if (e.key === "Enter" || e.key === " ") {
-                        //     e.preventDefault();
-                        //     router.push(`/problems?id=${problem.id}`);
-                        //   }
-                        // }}
+                        key={problem.id}
+                        className="group hover:bg-muted/50 transition-all duration-200 active:bg-muted h-9 border-0"
                       >
-                        <TableCell className="font-medium text-muted-foreground group-hover:text-foreground transition-colors">
-                          {problem.number}
-                        </TableCell>
-                        <TableCell className="font-medium">
-                          {problem.title}
-                        </TableCell>
-                        <TableCell className="text-center">
-                          <Badge
-                            variant={getDifficultyVariant(problem.difficulty)}
+                        <TableCell className="p-0 font-medium text-muted-foreground group-hover:text-foreground transition-colors">
+                          <Link
+                            href={href}
+                            className="flex items-center  w-full h-10 px-2"
                           >
-                            {problem.difficulty}
-                          </Badge>
+                            {problem.number}
+                          </Link>
                         </TableCell>
-                        <TableCell>
-                          <div className="flex flex-wrap gap-1">
+
+                        <TableCell className="p-0 font-medium">
+                          <Link
+                            href={href}
+                            className="flex items-center h-8 w-full "
+                          >
+                            {problem.title}
+                          </Link>
+                        </TableCell>
+
+                        <TableCell className="p-0 text-center ">
+                          <Link
+                            href={href}
+                            className="flex  w-full items-center h-8 justify-center "
+                          >
+                            <Badge
+                              variant={getDifficultyVariant(problem.difficulty)}
+                            >
+                              {problem.difficulty}
+                            </Badge>
+                          </Link>
+                        </TableCell>
+
+                        <TableCell className="p-0">
+                          <div className="flex  flex-wrap h-8 items-center gap-1 ">
                             {problem?.tags?.map((item) => (
                               <Badge
                                 key={item.tag.name}
                                 variant="outline"
                                 className="cursor-pointer hover:bg-accent transition-colors"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  e.preventDefault();
+                                onClick={() => {
                                   setSearchValue(item.tag.name);
                                   setPage(1);
                                 }}
@@ -314,8 +319,8 @@ function ProblemsTable() {
                           </div>
                         </TableCell>
                       </TableRow>
-                    </Link>
-                  ))
+                    );
+                  })
                 )}
               </TableBody>
             </Table>

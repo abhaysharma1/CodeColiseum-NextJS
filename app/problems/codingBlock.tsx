@@ -196,12 +196,11 @@ function CodingBlock({
 
   useEffect(() => {
     setThemeList(availableThemes);
-    getTemplateCode();
   }, []);
 
   useEffect(() => {
     getTemplateCode();
-  }, [language]);
+  }, [questionId, language]);
 
   // Auto-save code to localStorage
 
