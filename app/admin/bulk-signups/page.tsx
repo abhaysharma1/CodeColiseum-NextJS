@@ -52,8 +52,6 @@ import {
 import { useCallback, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { toast } from "sonner";
-import * as XLSX from "xlsx";
-
 interface College {
   id: string;
   name: string;
@@ -82,7 +80,8 @@ interface BulkResponse {
 
 const STUDENT_HEADERS = ["Name", "Email", "Roll Number", "Branch", "Semester", "Batch"];
 
-function downloadStudentTemplate() {
+async function downloadStudentTemplate() {
+  const XLSX = await import("xlsx");
   const ws = XLSX.utils.aoa_to_sheet([
     STUDENT_HEADERS,
     ["John Doe", "john@example.com", "CS2024001", "Computer Science", "3", "2024-2028"],
@@ -106,6 +105,7 @@ async function parseStudentFile(
   file: File,
 ): Promise<{ rows: StudentRow[]; errors: string[] }> {
   const buf = await file.arrayBuffer();
+  const XLSX = await import("xlsx");
   const wb = XLSX.read(buf, { type: "array" });
   const raw: Record<string, unknown>[] = XLSX.utils.sheet_to_json(
     wb.Sheets[wb.SheetNames[0]],
@@ -138,7 +138,8 @@ async function parseStudentFile(
 
 const TEACHER_HEADERS = ["Name", "Email", "Employee ID", "Department"];
 
-function downloadTeacherTemplate() {
+async function downloadTeacherTemplate() {
+  const XLSX = await import("xlsx");
   const ws = XLSX.utils.aoa_to_sheet([
     TEACHER_HEADERS,
     ["Jane Smith", "jane@college.edu", "EMP001", "Computer Science"],
@@ -160,6 +161,7 @@ async function parseTeacherFile(
   file: File,
 ): Promise<{ rows: TeacherRow[]; errors: string[] }> {
   const buf = await file.arrayBuffer();
+  const XLSX = await import("xlsx");
   const wb = XLSX.read(buf, { type: "array" });
   const raw: Record<string, unknown>[] = XLSX.utils.sheet_to_json(
     wb.Sheets[wb.SheetNames[0]],

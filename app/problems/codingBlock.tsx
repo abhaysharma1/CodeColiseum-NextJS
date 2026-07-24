@@ -1,7 +1,10 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import Editor, { OnMount } from "@monaco-editor/react";
+import dynamic from "next/dynamic";
+import type { OnMount } from "@monaco-editor/react";
 import { useTheme } from "@teispace/next-themes";
+
+const Editor = dynamic(() => import("@monaco-editor/react"), { ssr: false });
 import { Spinner } from "@/components/ui/shadcn-io/spinner";
 import { Button } from "@/components/ui/button";
 import { IoMdSettings } from "react-icons/io";

@@ -1,7 +1,9 @@
 "use client";
 
-import Editor from "@monaco-editor/react";
+import dynamic from "next/dynamic";
 import { useTheme } from "@teispace/next-themes";
+
+const Editor = dynamic(() => import("@monaco-editor/react"), { ssr: false });
 import { Card } from "@/components/ui/card";
 import { DriverCodeByLanguage, LanguageId } from "./types";
 import { Code2, Settings2, FileOutput, Info } from "lucide-react";

@@ -2,11 +2,21 @@ import "dotenv/config";
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // output: "standalone",
+  output: "standalone",
   poweredByHeader: false,
   compress: true,
   productionBrowserSourceMaps: false,
   reactCompiler: true,
+  experimental: {
+    optimizePackageImports: [
+      "lucide-react",
+      "@tabler/icons-react",
+      "recharts",
+      "date-fns",
+      "radix-ui",
+      "react-icons",
+    ],
+  },
   async redirects() {
     return [
       {
