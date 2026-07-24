@@ -15,6 +15,7 @@ import {
   Edit,
   Trash2,
   Bot,
+  Shield,
   UserPlus,
   UserMinus,
   Globe,
@@ -287,6 +288,13 @@ function OverviewCard({ lab }: { lab: any }) {
                 : "—"}
             </p>
           </div>
+          <div className="space-y-1">
+            <p className="text-sm text-muted-foreground">Safe Exam Browser</p>
+            <Badge variant={lab?.sebEnabled ? "default" : "outline"}>
+              <Shield className="h-3 w-3 mr-1" />
+              {lab?.sebEnabled ? "Enabled" : "Disabled"}
+            </Badge>
+          </div>
         </div>
       </CardContent>
     </Card>
@@ -307,6 +315,7 @@ function EditLabCard({
   const [aiEnabled, setAiEnabled] = useState(lab?.aiEnabled ?? false);
   const [aiMaxMessages, setAiMaxMessages] = useState(lab?.aiMaxMessages ?? 20);
   const [aiMaxTokens, setAiMaxTokens] = useState(lab?.aiMaxTokens ?? 2000);
+  const [sebEnabled, setSebEnabled] = useState(lab?.sebEnabled ?? false);
   const [saving, setSaving] = useState(false);
 
   const handleSave = async () => {
@@ -321,6 +330,7 @@ function EditLabCard({
           aiEnabled,
           aiMaxMessages: aiEnabled ? aiMaxMessages : undefined,
           aiMaxTokens: aiEnabled ? aiMaxTokens : undefined,
+          sebEnabled,
         },
         { withCredentials: true }
       );
@@ -403,6 +413,29 @@ function EditLabCard({
               </div>
             </div>
           </div>
+        </div>
+
+        <div className="space-y-2">
+          <Label className="flex items-center gap-2">
+            <Shield className="h-4 w-4" /> Safe Exam Browser
+          </Label>
+          <RadioGroup
+            value={sebEnabled ? "enable" : "disable"}
+            onValueChange={(v) => setSebEnabled(v === "enable")}
+            className="flex gap-4"
+          >
+            <div className="flex items-center gap-2">
+              <RadioGroupItem value="enable" id="edit-seb-enable" className="cursor-pointer" />
+              <Label htmlFor="edit-seb-enable" className="cursor-pointer">Enable</Label>
+            </div>
+            <div className="flex items-center gap-2">
+              <RadioGroupItem value="disable" id="edit-seb-disable" className="cursor-pointer" />
+              <Label htmlFor="edit-seb-disable" className="cursor-pointer">Disable</Label>
+            </div>
+          </RadioGroup>
+          <p className="text-xs text-muted-foreground">
+            Safe Exam Browser provides a secure testing environment by limiting access to other applications and websites during lab work.
+          </p>
         </div>
 
         <Button onClick={handleSave} disabled={saving}>

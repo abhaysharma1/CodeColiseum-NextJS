@@ -552,6 +552,7 @@ export const LabScalarFieldEnum = {
   aiEnabled: 'aiEnabled',
   aiMaxMessages: 'aiMaxMessages',
   aiMaxTokens: 'aiMaxTokens',
+  sebEnabled: 'sebEnabled',
   visibility: 'visibility',
   originalLabId: 'originalLabId',
   publishedAt: 'publishedAt',

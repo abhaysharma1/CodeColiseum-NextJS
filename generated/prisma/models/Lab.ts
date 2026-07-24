@@ -52,6 +52,7 @@ export type LabMinAggregateOutputType = {
   aiEnabled: boolean | null
   aiMaxMessages: number | null
   aiMaxTokens: number | null
+  sebEnabled: boolean | null
   visibility: $Enums.LabVisibility | null
   originalLabId: string | null
   publishedAt: Date | null
@@ -75,6 +76,7 @@ export type LabMaxAggregateOutputType = {
   aiEnabled: boolean | null
   aiMaxMessages: number | null
   aiMaxTokens: number | null
+  sebEnabled: boolean | null
   visibility: $Enums.LabVisibility | null
   originalLabId: string | null
   publishedAt: Date | null
@@ -98,6 +100,7 @@ export type LabCountAggregateOutputType = {
   aiEnabled: number
   aiMaxMessages: number
   aiMaxTokens: number
+  sebEnabled: number
   visibility: number
   originalLabId: number
   publishedAt: number
@@ -141,6 +144,7 @@ export type LabMinAggregateInputType = {
   aiEnabled?: true
   aiMaxMessages?: true
   aiMaxTokens?: true
+  sebEnabled?: true
   visibility?: true
   originalLabId?: true
   publishedAt?: true
@@ -164,6 +168,7 @@ export type LabMaxAggregateInputType = {
   aiEnabled?: true
   aiMaxMessages?: true
   aiMaxTokens?: true
+  sebEnabled?: true
   visibility?: true
   originalLabId?: true
   publishedAt?: true
@@ -187,6 +192,7 @@ export type LabCountAggregateInputType = {
   aiEnabled?: true
   aiMaxMessages?: true
   aiMaxTokens?: true
+  sebEnabled?: true
   visibility?: true
   originalLabId?: true
   publishedAt?: true
@@ -297,6 +303,7 @@ export type LabGroupByOutputType = {
   aiEnabled: boolean
   aiMaxMessages: number | null
   aiMaxTokens: number | null
+  sebEnabled: boolean
   visibility: $Enums.LabVisibility
   originalLabId: string | null
   publishedAt: Date | null
@@ -343,6 +350,7 @@ export type LabWhereInput = {
   aiEnabled?: Prisma.BoolFilter<"Lab"> | boolean
   aiMaxMessages?: Prisma.IntNullableFilter<"Lab"> | number | null
   aiMaxTokens?: Prisma.IntNullableFilter<"Lab"> | number | null
+  sebEnabled?: Prisma.BoolFilter<"Lab"> | boolean
   visibility?: Prisma.EnumLabVisibilityFilter<"Lab"> | $Enums.LabVisibility
   originalLabId?: Prisma.StringNullableFilter<"Lab"> | string | null
   publishedAt?: Prisma.DateTimeNullableFilter<"Lab"> | Date | string | null
@@ -375,6 +383,7 @@ export type LabOrderByWithRelationInput = {
   aiEnabled?: Prisma.SortOrder
   aiMaxMessages?: Prisma.SortOrderInput | Prisma.SortOrder
   aiMaxTokens?: Prisma.SortOrderInput | Prisma.SortOrder
+  sebEnabled?: Prisma.SortOrder
   visibility?: Prisma.SortOrder
   originalLabId?: Prisma.SortOrderInput | Prisma.SortOrder
   publishedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -410,6 +419,7 @@ export type LabWhereUniqueInput = Prisma.AtLeast<{
   aiEnabled?: Prisma.BoolFilter<"Lab"> | boolean
   aiMaxMessages?: Prisma.IntNullableFilter<"Lab"> | number | null
   aiMaxTokens?: Prisma.IntNullableFilter<"Lab"> | number | null
+  sebEnabled?: Prisma.BoolFilter<"Lab"> | boolean
   visibility?: Prisma.EnumLabVisibilityFilter<"Lab"> | $Enums.LabVisibility
   originalLabId?: Prisma.StringNullableFilter<"Lab"> | string | null
   publishedAt?: Prisma.DateTimeNullableFilter<"Lab"> | Date | string | null
@@ -442,6 +452,7 @@ export type LabOrderByWithAggregationInput = {
   aiEnabled?: Prisma.SortOrder
   aiMaxMessages?: Prisma.SortOrderInput | Prisma.SortOrder
   aiMaxTokens?: Prisma.SortOrderInput | Prisma.SortOrder
+  sebEnabled?: Prisma.SortOrder
   visibility?: Prisma.SortOrder
   originalLabId?: Prisma.SortOrderInput | Prisma.SortOrder
   publishedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -473,6 +484,7 @@ export type LabScalarWhereWithAggregatesInput = {
   aiEnabled?: Prisma.BoolWithAggregatesFilter<"Lab"> | boolean
   aiMaxMessages?: Prisma.IntNullableWithAggregatesFilter<"Lab"> | number | null
   aiMaxTokens?: Prisma.IntNullableWithAggregatesFilter<"Lab"> | number | null
+  sebEnabled?: Prisma.BoolWithAggregatesFilter<"Lab"> | boolean
   visibility?: Prisma.EnumLabVisibilityWithAggregatesFilter<"Lab"> | $Enums.LabVisibility
   originalLabId?: Prisma.StringNullableWithAggregatesFilter<"Lab"> | string | null
   publishedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Lab"> | Date | string | null
@@ -495,6 +507,7 @@ export type LabCreateInput = {
   aiEnabled?: boolean
   aiMaxMessages?: number | null
   aiMaxTokens?: number | null
+  sebEnabled?: boolean
   visibility?: $Enums.LabVisibility
   publishedAt?: Date | string | null
   duplicateCount?: number
@@ -526,6 +539,7 @@ export type LabUncheckedCreateInput = {
   aiEnabled?: boolean
   aiMaxMessages?: number | null
   aiMaxTokens?: number | null
+  sebEnabled?: boolean
   visibility?: $Enums.LabVisibility
   originalLabId?: string | null
   publishedAt?: Date | string | null
@@ -555,6 +569,7 @@ export type LabUpdateInput = {
   aiEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   aiMaxMessages?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   aiMaxTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  sebEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   visibility?: Prisma.EnumLabVisibilityFieldUpdateOperationsInput | $Enums.LabVisibility
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   duplicateCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -586,6 +601,7 @@ export type LabUncheckedUpdateInput = {
   aiEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   aiMaxMessages?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   aiMaxTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  sebEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   visibility?: Prisma.EnumLabVisibilityFieldUpdateOperationsInput | $Enums.LabVisibility
   originalLabId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -616,6 +632,7 @@ export type LabCreateManyInput = {
   aiEnabled?: boolean
   aiMaxMessages?: number | null
   aiMaxTokens?: number | null
+  sebEnabled?: boolean
   visibility?: $Enums.LabVisibility
   originalLabId?: string | null
   publishedAt?: Date | string | null
@@ -638,6 +655,7 @@ export type LabUpdateManyMutationInput = {
   aiEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   aiMaxMessages?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   aiMaxTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  sebEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   visibility?: Prisma.EnumLabVisibilityFieldUpdateOperationsInput | $Enums.LabVisibility
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   duplicateCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -660,6 +678,7 @@ export type LabUncheckedUpdateManyInput = {
   aiEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   aiMaxMessages?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   aiMaxTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  sebEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   visibility?: Prisma.EnumLabVisibilityFieldUpdateOperationsInput | $Enums.LabVisibility
   originalLabId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -698,6 +717,7 @@ export type LabCountOrderByAggregateInput = {
   aiEnabled?: Prisma.SortOrder
   aiMaxMessages?: Prisma.SortOrder
   aiMaxTokens?: Prisma.SortOrder
+  sebEnabled?: Prisma.SortOrder
   visibility?: Prisma.SortOrder
   originalLabId?: Prisma.SortOrder
   publishedAt?: Prisma.SortOrder
@@ -730,6 +750,7 @@ export type LabMaxOrderByAggregateInput = {
   aiEnabled?: Prisma.SortOrder
   aiMaxMessages?: Prisma.SortOrder
   aiMaxTokens?: Prisma.SortOrder
+  sebEnabled?: Prisma.SortOrder
   visibility?: Prisma.SortOrder
   originalLabId?: Prisma.SortOrder
   publishedAt?: Prisma.SortOrder
@@ -753,6 +774,7 @@ export type LabMinOrderByAggregateInput = {
   aiEnabled?: Prisma.SortOrder
   aiMaxMessages?: Prisma.SortOrder
   aiMaxTokens?: Prisma.SortOrder
+  sebEnabled?: Prisma.SortOrder
   visibility?: Prisma.SortOrder
   originalLabId?: Prisma.SortOrder
   publishedAt?: Prisma.SortOrder
@@ -991,6 +1013,7 @@ export type LabCreateWithoutCreatorInput = {
   aiEnabled?: boolean
   aiMaxMessages?: number | null
   aiMaxTokens?: number | null
+  sebEnabled?: boolean
   visibility?: $Enums.LabVisibility
   publishedAt?: Date | string | null
   duplicateCount?: number
@@ -1020,6 +1043,7 @@ export type LabUncheckedCreateWithoutCreatorInput = {
   aiEnabled?: boolean
   aiMaxMessages?: number | null
   aiMaxTokens?: number | null
+  sebEnabled?: boolean
   visibility?: $Enums.LabVisibility
   originalLabId?: string | null
   publishedAt?: Date | string | null
@@ -1079,6 +1103,7 @@ export type LabScalarWhereInput = {
   aiEnabled?: Prisma.BoolFilter<"Lab"> | boolean
   aiMaxMessages?: Prisma.IntNullableFilter<"Lab"> | number | null
   aiMaxTokens?: Prisma.IntNullableFilter<"Lab"> | number | null
+  sebEnabled?: Prisma.BoolFilter<"Lab"> | boolean
   visibility?: Prisma.EnumLabVisibilityFilter<"Lab"> | $Enums.LabVisibility
   originalLabId?: Prisma.StringNullableFilter<"Lab"> | string | null
   publishedAt?: Prisma.DateTimeNullableFilter<"Lab"> | Date | string | null
@@ -1101,6 +1126,7 @@ export type LabCreateWithoutAiconversationsInput = {
   aiEnabled?: boolean
   aiMaxMessages?: number | null
   aiMaxTokens?: number | null
+  sebEnabled?: boolean
   visibility?: $Enums.LabVisibility
   publishedAt?: Date | string | null
   duplicateCount?: number
@@ -1131,6 +1157,7 @@ export type LabUncheckedCreateWithoutAiconversationsInput = {
   aiEnabled?: boolean
   aiMaxMessages?: number | null
   aiMaxTokens?: number | null
+  sebEnabled?: boolean
   visibility?: $Enums.LabVisibility
   originalLabId?: string | null
   publishedAt?: Date | string | null
@@ -1175,6 +1202,7 @@ export type LabUpdateWithoutAiconversationsInput = {
   aiEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   aiMaxMessages?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   aiMaxTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  sebEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   visibility?: Prisma.EnumLabVisibilityFieldUpdateOperationsInput | $Enums.LabVisibility
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   duplicateCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1205,6 +1233,7 @@ export type LabUncheckedUpdateWithoutAiconversationsInput = {
   aiEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   aiMaxMessages?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   aiMaxTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  sebEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   visibility?: Prisma.EnumLabVisibilityFieldUpdateOperationsInput | $Enums.LabVisibility
   originalLabId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1233,6 +1262,7 @@ export type LabCreateWithoutDuplicationsInput = {
   aiEnabled?: boolean
   aiMaxMessages?: number | null
   aiMaxTokens?: number | null
+  sebEnabled?: boolean
   visibility?: $Enums.LabVisibility
   publishedAt?: Date | string | null
   duplicateCount?: number
@@ -1263,6 +1293,7 @@ export type LabUncheckedCreateWithoutDuplicationsInput = {
   aiEnabled?: boolean
   aiMaxMessages?: number | null
   aiMaxTokens?: number | null
+  sebEnabled?: boolean
   visibility?: $Enums.LabVisibility
   originalLabId?: string | null
   publishedAt?: Date | string | null
@@ -1296,6 +1327,7 @@ export type LabCreateWithoutOriginalLabInput = {
   aiEnabled?: boolean
   aiMaxMessages?: number | null
   aiMaxTokens?: number | null
+  sebEnabled?: boolean
   visibility?: $Enums.LabVisibility
   publishedAt?: Date | string | null
   duplicateCount?: number
@@ -1326,6 +1358,7 @@ export type LabUncheckedCreateWithoutOriginalLabInput = {
   aiEnabled?: boolean
   aiMaxMessages?: number | null
   aiMaxTokens?: number | null
+  sebEnabled?: boolean
   visibility?: $Enums.LabVisibility
   publishedAt?: Date | string | null
   duplicateCount?: number
@@ -1375,6 +1408,7 @@ export type LabUpdateWithoutDuplicationsInput = {
   aiEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   aiMaxMessages?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   aiMaxTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  sebEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   visibility?: Prisma.EnumLabVisibilityFieldUpdateOperationsInput | $Enums.LabVisibility
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   duplicateCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1405,6 +1439,7 @@ export type LabUncheckedUpdateWithoutDuplicationsInput = {
   aiEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   aiMaxMessages?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   aiMaxTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  sebEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   visibility?: Prisma.EnumLabVisibilityFieldUpdateOperationsInput | $Enums.LabVisibility
   originalLabId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1449,6 +1484,7 @@ export type LabCreateWithoutTeachersInput = {
   aiEnabled?: boolean
   aiMaxMessages?: number | null
   aiMaxTokens?: number | null
+  sebEnabled?: boolean
   visibility?: $Enums.LabVisibility
   publishedAt?: Date | string | null
   duplicateCount?: number
@@ -1479,6 +1515,7 @@ export type LabUncheckedCreateWithoutTeachersInput = {
   aiEnabled?: boolean
   aiMaxMessages?: number | null
   aiMaxTokens?: number | null
+  sebEnabled?: boolean
   visibility?: $Enums.LabVisibility
   originalLabId?: string | null
   publishedAt?: Date | string | null
@@ -1523,6 +1560,7 @@ export type LabUpdateWithoutTeachersInput = {
   aiEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   aiMaxMessages?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   aiMaxTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  sebEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   visibility?: Prisma.EnumLabVisibilityFieldUpdateOperationsInput | $Enums.LabVisibility
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   duplicateCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1553,6 +1591,7 @@ export type LabUncheckedUpdateWithoutTeachersInput = {
   aiEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   aiMaxMessages?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   aiMaxTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  sebEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   visibility?: Prisma.EnumLabVisibilityFieldUpdateOperationsInput | $Enums.LabVisibility
   originalLabId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1581,6 +1620,7 @@ export type LabCreateWithoutAssignmentsInput = {
   aiEnabled?: boolean
   aiMaxMessages?: number | null
   aiMaxTokens?: number | null
+  sebEnabled?: boolean
   visibility?: $Enums.LabVisibility
   publishedAt?: Date | string | null
   duplicateCount?: number
@@ -1611,6 +1651,7 @@ export type LabUncheckedCreateWithoutAssignmentsInput = {
   aiEnabled?: boolean
   aiMaxMessages?: number | null
   aiMaxTokens?: number | null
+  sebEnabled?: boolean
   visibility?: $Enums.LabVisibility
   originalLabId?: string | null
   publishedAt?: Date | string | null
@@ -1655,6 +1696,7 @@ export type LabUpdateWithoutAssignmentsInput = {
   aiEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   aiMaxMessages?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   aiMaxTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  sebEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   visibility?: Prisma.EnumLabVisibilityFieldUpdateOperationsInput | $Enums.LabVisibility
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   duplicateCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1685,6 +1727,7 @@ export type LabUncheckedUpdateWithoutAssignmentsInput = {
   aiEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   aiMaxMessages?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   aiMaxTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  sebEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   visibility?: Prisma.EnumLabVisibilityFieldUpdateOperationsInput | $Enums.LabVisibility
   originalLabId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1713,6 +1756,7 @@ export type LabCreateWithoutModulesInput = {
   aiEnabled?: boolean
   aiMaxMessages?: number | null
   aiMaxTokens?: number | null
+  sebEnabled?: boolean
   visibility?: $Enums.LabVisibility
   publishedAt?: Date | string | null
   duplicateCount?: number
@@ -1743,6 +1787,7 @@ export type LabUncheckedCreateWithoutModulesInput = {
   aiEnabled?: boolean
   aiMaxMessages?: number | null
   aiMaxTokens?: number | null
+  sebEnabled?: boolean
   visibility?: $Enums.LabVisibility
   originalLabId?: string | null
   publishedAt?: Date | string | null
@@ -1787,6 +1832,7 @@ export type LabUpdateWithoutModulesInput = {
   aiEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   aiMaxMessages?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   aiMaxTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  sebEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   visibility?: Prisma.EnumLabVisibilityFieldUpdateOperationsInput | $Enums.LabVisibility
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   duplicateCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1817,6 +1863,7 @@ export type LabUncheckedUpdateWithoutModulesInput = {
   aiEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   aiMaxMessages?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   aiMaxTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  sebEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   visibility?: Prisma.EnumLabVisibilityFieldUpdateOperationsInput | $Enums.LabVisibility
   originalLabId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1845,6 +1892,7 @@ export type LabCreateWithoutRatingsInput = {
   aiEnabled?: boolean
   aiMaxMessages?: number | null
   aiMaxTokens?: number | null
+  sebEnabled?: boolean
   visibility?: $Enums.LabVisibility
   publishedAt?: Date | string | null
   duplicateCount?: number
@@ -1875,6 +1923,7 @@ export type LabUncheckedCreateWithoutRatingsInput = {
   aiEnabled?: boolean
   aiMaxMessages?: number | null
   aiMaxTokens?: number | null
+  sebEnabled?: boolean
   visibility?: $Enums.LabVisibility
   originalLabId?: string | null
   publishedAt?: Date | string | null
@@ -1919,6 +1968,7 @@ export type LabUpdateWithoutRatingsInput = {
   aiEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   aiMaxMessages?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   aiMaxTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  sebEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   visibility?: Prisma.EnumLabVisibilityFieldUpdateOperationsInput | $Enums.LabVisibility
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   duplicateCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1949,6 +1999,7 @@ export type LabUncheckedUpdateWithoutRatingsInput = {
   aiEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   aiMaxMessages?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   aiMaxTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  sebEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   visibility?: Prisma.EnumLabVisibilityFieldUpdateOperationsInput | $Enums.LabVisibility
   originalLabId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1977,6 +2028,7 @@ export type LabCreateWithoutTagsInput = {
   aiEnabled?: boolean
   aiMaxMessages?: number | null
   aiMaxTokens?: number | null
+  sebEnabled?: boolean
   visibility?: $Enums.LabVisibility
   publishedAt?: Date | string | null
   duplicateCount?: number
@@ -2007,6 +2059,7 @@ export type LabUncheckedCreateWithoutTagsInput = {
   aiEnabled?: boolean
   aiMaxMessages?: number | null
   aiMaxTokens?: number | null
+  sebEnabled?: boolean
   visibility?: $Enums.LabVisibility
   originalLabId?: string | null
   publishedAt?: Date | string | null
@@ -2051,6 +2104,7 @@ export type LabUpdateWithoutTagsInput = {
   aiEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   aiMaxMessages?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   aiMaxTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  sebEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   visibility?: Prisma.EnumLabVisibilityFieldUpdateOperationsInput | $Enums.LabVisibility
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   duplicateCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -2081,6 +2135,7 @@ export type LabUncheckedUpdateWithoutTagsInput = {
   aiEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   aiMaxMessages?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   aiMaxTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  sebEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   visibility?: Prisma.EnumLabVisibilityFieldUpdateOperationsInput | $Enums.LabVisibility
   originalLabId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2109,6 +2164,7 @@ export type LabCreateManyCreatorInput = {
   aiEnabled?: boolean
   aiMaxMessages?: number | null
   aiMaxTokens?: number | null
+  sebEnabled?: boolean
   visibility?: $Enums.LabVisibility
   originalLabId?: string | null
   publishedAt?: Date | string | null
@@ -2131,6 +2187,7 @@ export type LabUpdateWithoutCreatorInput = {
   aiEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   aiMaxMessages?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   aiMaxTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  sebEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   visibility?: Prisma.EnumLabVisibilityFieldUpdateOperationsInput | $Enums.LabVisibility
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   duplicateCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -2160,6 +2217,7 @@ export type LabUncheckedUpdateWithoutCreatorInput = {
   aiEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   aiMaxMessages?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   aiMaxTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  sebEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   visibility?: Prisma.EnumLabVisibilityFieldUpdateOperationsInput | $Enums.LabVisibility
   originalLabId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2189,6 +2247,7 @@ export type LabUncheckedUpdateManyWithoutCreatorInput = {
   aiEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   aiMaxMessages?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   aiMaxTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  sebEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   visibility?: Prisma.EnumLabVisibilityFieldUpdateOperationsInput | $Enums.LabVisibility
   originalLabId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2212,6 +2271,7 @@ export type LabCreateManyOriginalLabInput = {
   aiEnabled?: boolean
   aiMaxMessages?: number | null
   aiMaxTokens?: number | null
+  sebEnabled?: boolean
   visibility?: $Enums.LabVisibility
   publishedAt?: Date | string | null
   duplicateCount?: number
@@ -2233,6 +2293,7 @@ export type LabUpdateWithoutOriginalLabInput = {
   aiEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   aiMaxMessages?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   aiMaxTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  sebEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   visibility?: Prisma.EnumLabVisibilityFieldUpdateOperationsInput | $Enums.LabVisibility
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   duplicateCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -2263,6 +2324,7 @@ export type LabUncheckedUpdateWithoutOriginalLabInput = {
   aiEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   aiMaxMessages?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   aiMaxTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  sebEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   visibility?: Prisma.EnumLabVisibilityFieldUpdateOperationsInput | $Enums.LabVisibility
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   duplicateCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -2292,6 +2354,7 @@ export type LabUncheckedUpdateManyWithoutOriginalLabInput = {
   aiEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   aiMaxMessages?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   aiMaxTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  sebEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   visibility?: Prisma.EnumLabVisibilityFieldUpdateOperationsInput | $Enums.LabVisibility
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   duplicateCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -2399,6 +2462,7 @@ export type LabSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = ru
   aiEnabled?: boolean
   aiMaxMessages?: boolean
   aiMaxTokens?: boolean
+  sebEnabled?: boolean
   visibility?: boolean
   originalLabId?: boolean
   publishedAt?: boolean
@@ -2432,6 +2496,7 @@ export type LabSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extension
   aiEnabled?: boolean
   aiMaxMessages?: boolean
   aiMaxTokens?: boolean
+  sebEnabled?: boolean
   visibility?: boolean
   originalLabId?: boolean
   publishedAt?: boolean
@@ -2457,6 +2522,7 @@ export type LabSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extension
   aiEnabled?: boolean
   aiMaxMessages?: boolean
   aiMaxTokens?: boolean
+  sebEnabled?: boolean
   visibility?: boolean
   originalLabId?: boolean
   publishedAt?: boolean
@@ -2482,6 +2548,7 @@ export type LabSelectScalar = {
   aiEnabled?: boolean
   aiMaxMessages?: boolean
   aiMaxTokens?: boolean
+  sebEnabled?: boolean
   visibility?: boolean
   originalLabId?: boolean
   publishedAt?: boolean
@@ -2497,7 +2564,7 @@ export type LabSelectScalar = {
   updatedAt?: boolean
 }
 
-export type LabOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "description" | "creatorId" | "aiEnabled" | "aiMaxMessages" | "aiMaxTokens" | "visibility" | "originalLabId" | "publishedAt" | "duplicateCount" | "isArchived" | "averageRating" | "ratingCount" | "difficulty" | "subject" | "programmingLanguage" | "estimatedDuration" | "createdAt" | "updatedAt", ExtArgs["result"]["lab"]>
+export type LabOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "description" | "creatorId" | "aiEnabled" | "aiMaxMessages" | "aiMaxTokens" | "sebEnabled" | "visibility" | "originalLabId" | "publishedAt" | "duplicateCount" | "isArchived" | "averageRating" | "ratingCount" | "difficulty" | "subject" | "programmingLanguage" | "estimatedDuration" | "createdAt" | "updatedAt", ExtArgs["result"]["lab"]>
 export type LabInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   creator?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   originalLab?: boolean | Prisma.Lab$originalLabArgs<ExtArgs>
@@ -2540,6 +2607,7 @@ export type $LabPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
     aiEnabled: boolean
     aiMaxMessages: number | null
     aiMaxTokens: number | null
+    sebEnabled: boolean
     visibility: $Enums.LabVisibility
     originalLabId: string | null
     publishedAt: Date | null
@@ -2992,6 +3060,7 @@ export interface LabFieldRefs {
   readonly aiEnabled: Prisma.FieldRef<"Lab", 'Boolean'>
   readonly aiMaxMessages: Prisma.FieldRef<"Lab", 'Int'>
   readonly aiMaxTokens: Prisma.FieldRef<"Lab", 'Int'>
+  readonly sebEnabled: Prisma.FieldRef<"Lab", 'Boolean'>
   readonly visibility: Prisma.FieldRef<"Lab", 'LabVisibility'>
   readonly originalLabId: Prisma.FieldRef<"Lab", 'String'>
   readonly publishedAt: Prisma.FieldRef<"Lab", 'DateTime'>

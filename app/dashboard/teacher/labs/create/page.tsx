@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { toast } from "sonner";
-import { ArrowLeft, Bot } from "lucide-react";
+import { ArrowLeft, Bot, Shield } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -28,6 +28,7 @@ export default function CreateLabPage() {
   const [aiEnabled, setAiEnabled] = useState(false);
   const [aiMaxMessages, setAiMaxMessages] = useState(20);
   const [aiMaxTokens, setAiMaxTokens] = useState(2000);
+  const [sebEnabled, setSebEnabled] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -46,6 +47,7 @@ export default function CreateLabPage() {
           aiEnabled,
           aiMaxMessages: aiEnabled ? aiMaxMessages : undefined,
           aiMaxTokens: aiEnabled ? aiMaxTokens : undefined,
+          sebEnabled,
         },
         { withCredentials: true }
       );
@@ -167,6 +169,29 @@ export default function CreateLabPage() {
                         </div>
                       </div>
                     </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label className="flex items-center gap-2">
+                      <Shield className="h-4 w-4" /> Safe Exam Browser
+                    </Label>
+                    <RadioGroup
+                      value={sebEnabled ? "enable" : "disable"}
+                      onValueChange={(v) => setSebEnabled(v === "enable")}
+                      className="flex gap-4"
+                    >
+                      <div className="flex items-center gap-2">
+                        <RadioGroupItem value="enable" id="lab-seb-enable" className="cursor-pointer" />
+                        <Label htmlFor="lab-seb-enable" className="cursor-pointer">Enable</Label>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <RadioGroupItem value="disable" id="lab-seb-disable" className="cursor-pointer" />
+                        <Label htmlFor="lab-seb-disable" className="cursor-pointer">Disable</Label>
+                      </div>
+                    </RadioGroup>
+                    <p className="text-xs text-muted-foreground">
+                      Safe Exam Browser provides a secure testing environment by limiting access to other applications and websites during lab work.
+                    </p>
                   </div>
 
                   <div className="flex items-center gap-3">

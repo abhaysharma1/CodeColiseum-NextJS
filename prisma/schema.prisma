@@ -706,6 +706,7 @@ model Lab {
   aiEnabled           Boolean @default(false)
   aiMaxMessages       Int?
   aiMaxTokens         Int?
+  sebEnabled          Boolean @default(false)
 
   // Marketplace fields
   visibility          LabVisibility      @default(PRIVATE)

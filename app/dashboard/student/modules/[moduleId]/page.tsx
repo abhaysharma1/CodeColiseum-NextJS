@@ -4,7 +4,7 @@ import { useParams, useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import axios from "axios";
 import { toast } from "sonner";
-import { ArrowLeft, FlaskConical, BookOpen, Calendar, Clock, CheckCircle2, AlertCircle, Circle, Lock, Unlock, CalendarX } from "lucide-react";
+import { ArrowLeft, FlaskConical, BookOpen, Calendar, Clock, CheckCircle2, AlertCircle, Circle, Lock, Unlock, CalendarX, ShieldAlert } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -20,6 +20,8 @@ import { Spinner } from "@/components/ui/shadcn-io/spinner";
 import { ProgressCard } from "@/components/labs/progress-card";
 import { AssessmentCard } from "@/components/labs/assessment-card";
 import { getBackendURL } from "@/utils/utilities";
+import { useIsSEB } from "@/hooks/useIsSEB";
+import { launchSEB } from "@/lib/utils";
 
 type AccessStatus = "LOCKED" | "AVAILABLE" | "NOT_YET_AVAILABLE" | "EXPIRED";
 
@@ -52,6 +54,7 @@ interface ModuleData {
   unlockAt: string;
   dueAt: string | null;
   assessmentExamId: string | null;
+  sebEnabled?: boolean;
 }
 
 interface AssessmentData {
@@ -116,6 +119,7 @@ const accessBadgeConfig: Record<AccessStatus, { icon: any; label: string; classN
 export default function StudentModuleViewPage() {
   const { moduleId } = useParams<{ moduleId: string }>();
   const router = useRouter();
+  const isSecureBrowser = useIsSEB();
   const [data, setData] = useState<ModuleProblemsData | null>(null);
   const [assessmentData, setAssessmentData] = useState<AssessmentData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -212,20 +216,42 @@ export default function StudentModuleViewPage() {
               </div>
             </motion.div>
 
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
-              className="flex items-center gap-2"
-            >
-              <BookOpen className="h-5 w-5 text-muted-foreground" />
-              <h2 className="text-lg font-semibold">Problems</h2>
-              <span className="text-sm text-muted-foreground">
-                ({data.completedProblems}/{data.totalProblems} solved)
-              </span>
-            </motion.div>
+            {data.module.sebEnabled && !isSecureBrowser && (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+              >
+                <Card className="border-destructive/50 bg-destructive/5">
+                  <CardContent className="flex flex-col items-center justify-center py-8 gap-3">
+                    <ShieldAlert className="h-12 w-12 text-destructive" />
+                    <h3 className="text-lg font-semibold">Safe Exam Browser Required</h3>
+                    <p className="text-sm text-muted-foreground text-center max-w-md">
+                      This lab requires Safe Exam Browser to be running. Please launch SEB to access module problems and assessments.
+                    </p>
+                    <Button variant="default" onClick={launchSEB}>
+                      Launch SEB
+                    </Button>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            )}
 
-            {data.problems.length === 0 ? (
+            {(!data.module.sebEnabled || isSecureBrowser) && (
+              <>
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.1 }}
+                  className="flex items-center gap-2"
+                >
+                  <BookOpen className="h-5 w-5 text-muted-foreground" />
+                  <h2 className="text-lg font-semibold">Problems</h2>
+                  <span className="text-sm text-muted-foreground">
+                    ({data.completedProblems}/{data.totalProblems} solved)
+                  </span>
+                </motion.div>
+
+                {data.problems.length === 0 ? (
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -355,6 +381,7 @@ export default function StudentModuleViewPage() {
                 />
               </motion.div>
             )}
+          </>)}
           </div>
         </div>
       </div>

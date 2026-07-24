@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { ArrowLeft, Layers } from "lucide-react";
+import { ArrowLeft, Layers, ShieldAlert } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -12,10 +12,13 @@ import { Badge } from "@/components/ui/badge";
 import { ProgressCard } from "@/components/labs/progress-card";
 import { ModuleCard } from "@/components/labs/module-card";
 import { useStudentMyLab } from "@/hooks/use-labs";
+import { useIsSEB } from "@/hooks/useIsSEB";
+import { launchSEB } from "@/lib/utils";
 
 export default function StudentLabDetailPage() {
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
+  const isSecureBrowser = useIsSEB();
   const { data: lab, loading } = useStudentMyLab(id);
 
   if (loading) {
@@ -30,6 +33,8 @@ export default function StudentLabDetailPage() {
   }
 
   if (!lab) return null;
+
+  const sebRequired = lab.sebEnabled && !isSecureBrowser;
 
   const totalCompleted = lab.modules.reduce((s, m) => s + m.completedProblems, 0);
   const totalProblems = lab.modules.reduce((s, m) => s + m.totalProblems, 0);
@@ -53,12 +58,18 @@ export default function StudentLabDetailPage() {
                 <ArrowLeft className="h-5 w-5" />
               </Button>
               <div className="flex-1">
-                <div className="flex items-center gap-3">
-                  <h1 className="text-2xl font-bold tracking-tight">{lab.title}</h1>
-                  <Badge variant="secondary" className="text-xs">
-                    {completedModules}/{lab.modules.length} modules done
-                  </Badge>
-                </div>
+                  <div className="flex items-center gap-3">
+                    <h1 className="text-2xl font-bold tracking-tight">{lab.title}</h1>
+                    <Badge variant="secondary" className="text-xs">
+                      {completedModules}/{lab.modules.length} modules done
+                    </Badge>
+                    {lab.sebEnabled && (
+                      <Badge variant={isSecureBrowser ? "default" : "destructive"} className="text-xs gap-1">
+                        <ShieldAlert className="h-3 w-3" />
+                        {isSecureBrowser ? "SEB Active" : "SEB Required"}
+                      </Badge>
+                    )}
+                  </div>
                 {lab.description && (
                   <p className="text-sm text-muted-foreground leading-relaxed mt-0.5">
                     {lab.description}
@@ -76,21 +87,43 @@ export default function StudentLabDetailPage() {
               </div>
             </motion.div>
 
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
-            >
-              <div className="flex items-center gap-2 mb-1">
-                <Layers className="h-5 w-5 text-muted-foreground" />
-                <h2 className="text-lg font-semibold">Modules</h2>
-                <span className="text-sm text-muted-foreground">
-                  ({lab.modules.length} module{lab.modules.length !== 1 ? "s" : ""})
-                </span>
-              </div>
-            </motion.div>
+            {sebRequired && (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+              >
+                <Card className="border-destructive/50 bg-destructive/5">
+                  <CardContent className="flex flex-col items-center justify-center py-8 gap-3">
+                    <ShieldAlert className="h-12 w-12 text-destructive" />
+                    <h3 className="text-lg font-semibold">Safe Exam Browser Required</h3>
+                    <p className="text-sm text-muted-foreground text-center max-w-md">
+                      This lab requires Safe Exam Browser to be running. Please launch SEB to access lab modules and problems.
+                    </p>
+                    <Button variant="default" onClick={launchSEB}>
+                      Launch SEB
+                    </Button>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            )}
 
-            {sortedModules.length === 0 ? (
+            {!sebRequired && (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 }}
+              >
+                <div className="flex items-center gap-2 mb-1">
+                  <Layers className="h-5 w-5 text-muted-foreground" />
+                  <h2 className="text-lg font-semibold">Modules</h2>
+                  <span className="text-sm text-muted-foreground">
+                    ({lab.modules.length} module{lab.modules.length !== 1 ? "s" : ""})
+                  </span>
+                </div>
+              </motion.div>
+            )}
+
+            {!sebRequired && sortedModules.length === 0 ? (
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -103,7 +136,7 @@ export default function StudentLabDetailPage() {
                   </CardContent>
                 </Card>
               </motion.div>
-            ) : (
+            ) : !sebRequired ? (
               <div className="space-y-1">
                 {sortedModules.map((mod, i) => (
                   <ModuleCard
@@ -124,7 +157,7 @@ export default function StudentLabDetailPage() {
                   />
                 ))}
               </div>
-            )}
+            ) : null}
           </div>
         </div>
       </div>

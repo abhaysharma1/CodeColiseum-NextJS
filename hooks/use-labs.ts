@@ -117,6 +117,7 @@ export interface StudentLab {
   id: string;
   title: string;
   description: string | null;
+  sebEnabled: boolean;
   modulesCount: number;
   modules: StudentModule[];
 }
