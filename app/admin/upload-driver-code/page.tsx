@@ -6,14 +6,6 @@ import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
-  Combobox,
-  ComboboxContent,
-  ComboboxEmpty,
-  ComboboxInput,
-  ComboboxItem,
-  ComboboxList,
-} from "@/components/ui/combobox";
-import {
   Dropzone,
   DropzoneContent,
   DropzoneEmptyState,
@@ -40,13 +32,10 @@ interface UploadResult {
 }
 
 function Page() {
-  const [availableProblems, setAvailableProblems] = useState<AdminProblem[]>(
-    []
-  );
-  const [selectedProblemId, setSelectedProblemId] = useState<
-    string | undefined
-  >();
+  const [problems, setProblems] = useState<AdminProblem[]>([]);
+  const [loadingProblems, setLoadingProblems] = useState(false);
   const [searchValue, setSearchValue] = useState("");
+  const [problem, setProblem] = useState<AdminProblem | null>(null);
   const [files, setFiles] = useState<File[] | undefined>();
   const [results, setResults] = useState<UploadResult[] | undefined>();
   const [uploading, setUploading] = useState(false);
@@ -65,33 +54,34 @@ function Page() {
   { "language": "java",   "label": "Java",        "languageId": 4 }
 ]`;
 
-  const selectedProblem = availableProblems.find(
-    (p) => p.id === selectedProblemId
-  );
-
-  const fetchProblems = async () => {
-    try {
-      const res = await axios.get(`${getBackendURL()}/admin/problems`, {
-        withCredentials: true,
-      });
-      setAvailableProblems((res.data as any)?.problems ?? []);
-    } catch (error) {
-      if (typeof error === "string") {
-        toast.error(error);
-      }
-    }
-  };
-
   useEffect(() => {
-    fetchProblems();
-  }, []);
-
-  const filteredProblems = availableProblems.filter((p) =>
-    p.title.toLowerCase().includes(searchValue.toLowerCase())
-  );
+    if (!searchValue.trim()) {
+      setProblems([]);
+      return;
+    }
+    let cancelled = false;
+    const handle = setTimeout(async () => {
+      try {
+        setLoadingProblems(true);
+        const res = await axios.get(`${getBackendURL()}/admin/problems`, {
+          params: { searchValue: searchValue.trim(), take: 10, skip: 0 },
+          withCredentials: true,
+        });
+        if (!cancelled) setProblems((res.data as any)?.problems ?? []);
+      } catch (error) {
+        if (!cancelled && typeof error === "string") toast.error(error);
+      } finally {
+        if (!cancelled) setLoadingProblems(false);
+      }
+    }, 400);
+    return () => {
+      cancelled = true;
+      clearTimeout(handle);
+    };
+  }, [searchValue]);
 
   const uploadDriverCodeFunc = async () => {
-    if (!selectedProblemId || !selectedProblem) {
+    if (!problem) {
       toast.error("Please select a problem");
       return;
     }
@@ -133,7 +123,7 @@ function Page() {
       try {
         const res = await axios.post(
           `${getBackendURL()}/admin/driver-code`,
-          { problemId: selectedProblem.id, ...json },
+          { problemId: problem.id, ...json },
           { withCredentials: true }
         );
         const language =
@@ -188,62 +178,57 @@ function Page() {
                 </p>
                 <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
                   <div className="flex-1">
-                    <Combobox
-                      value={selectedProblemId || ""}
-                      onValueChange={(val) => {
-                        setSelectedProblemId(val || undefined);
-                        const p = availableProblems.find(
-                          (x) => x.id === val
-                        );
-                        if (p)
-                          setSearchValue(`#${p.number} ${p.title}`);
+                    <Input
+                      type="text"
+                      value={searchValue}
+                      onChange={(e) => {
+                        setSearchValue(e.target.value);
+                        setProblem(null);
                       }}
-                    >
-                      <ComboboxInput
-                        placeholder="Search problems"
-                        className="w-full"
-                        value={searchValue}
-                        onChange={(e) => {
-                          setSearchValue(e.target.value);
-                          if (selectedProblemId)
-                            setSelectedProblemId(undefined);
-                        }}
-                        showTrigger
-                      />
-                      <ComboboxContent>
-                        <ComboboxList>
-                          {filteredProblems.length === 0 ? (
-                            <ComboboxEmpty>
-                              No problems found.
-                            </ComboboxEmpty>
-                          ) : (
-                            filteredProblems.map((p) => (
-                              <ComboboxItem key={p.id} value={p.id}>
-                                #{p.number} — {p.title}
-                              </ComboboxItem>
-                            ))
-                          )}
-                        </ComboboxList>
-                      </ComboboxContent>
-                    </Combobox>
+                      placeholder="Search by title or ID"
+                    />
                   </div>
                   <Button
                     variant="outline"
                     size="sm"
                     onClick={() => {
-                      setSelectedProblemId(undefined);
+                      setProblem(null);
                       setSearchValue("");
                     }}
                   >
                     Clear
                   </Button>
                 </div>
-                {selectedProblem && (
+                {loadingProblems && (
+                  <p className="text-xs text-muted-foreground">Loading problems...</p>
+                )}
+                {!loadingProblems && problems.length > 0 && (
+                  <ul className="max-h-48 overflow-y-auto rounded-md border bg-background text-sm">
+                    {problems.map((p) => (
+                      <li
+                        key={p.id}
+                        className="cursor-pointer border-b px-3 py-2 last:border-b-0 hover:bg-muted/70"
+                        onClick={() => {
+                          setProblem(p);
+                          setSearchValue(`#${p.number} ${p.title}`);
+                        }}
+                      >
+                        <span className="font-medium">
+                          #{p.number} {p.title}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+                {searchValue && !loadingProblems && problems.length === 0 && (
+                  <p className="text-xs text-muted-foreground">No problems found.</p>
+                )}
+                {problem && (
                   <Card className="border-primary/20 bg-primary/5">
                     <CardContent className="py-2">
                       <p className="text-sm font-medium">
-                        Selected: #{selectedProblem.number} —{" "}
-                        {selectedProblem.title}
+                        Selected: #{problem.number} —{" "}
+                        {problem.title}
                       </p>
                     </CardContent>
                   </Card>
