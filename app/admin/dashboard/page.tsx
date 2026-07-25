@@ -9,7 +9,8 @@ import {
 import { useAuth } from "@/context/authcontext";
 import axios from "axios";
 import { getBackendURL } from "@/utils/utilities";
-import { AlertCircle, UploadIcon } from "lucide-react";
+import { AlertCircle, FileText, UploadIcon } from "lucide-react";
+import { MarkdownRenderer } from "@/components/ui/markdown-renderer";
 import { uploadProblemsSchema } from "@/utils/upload-problem-schema";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
@@ -40,6 +41,10 @@ function Page() {
   const [validationErrors, setValidationErrors] = useState<
     { path: string; message: string }[] | null
   >(null);
+  const [parsedProblems, setParsedProblems] = useState<
+    { title: string; description: string; difficulty?: string }[] | null
+  >(null);
+  const [selectedProblemIndex, setSelectedProblemIndex] = useState(0);
 
   const { logout } = useAuth();
 
@@ -197,11 +202,43 @@ function Page() {
     }
   };
 
-  const handleDrop = (files: File[]) => {
-    setFiles(files);
+  const handleDrop = async (dropped: File[]) => {
+    setFiles(dropped);
     setValidationErrors(null);
     setDidPassValidation(false);
     setValidationResponse(undefined);
+
+    if (dropped.length === 0) {
+      setParsedProblems(null);
+      return;
+    }
+
+    try {
+      const text = await dropped[0].text();
+      const json = JSON.parse(text);
+
+      const zodResult = uploadProblemsSchema.safeParse(json);
+      if (!zodResult.success) {
+        const flat = zodResult.error.issues.map((issue) => ({
+          path: issue.path.length > 0 ? issue.path.join(".") : "(root)",
+          message: issue.message,
+        }));
+        setValidationErrors(flat);
+        setParsedProblems(null);
+      } else if (Array.isArray(json)) {
+        const extracted = json.map((p: any) => ({
+          title: typeof p.title === "string" ? p.title : "Untitled",
+          description:
+            typeof p.description === "string" ? p.description : "",
+          difficulty:
+            typeof p.difficulty === "string" ? p.difficulty : undefined,
+        }));
+        setParsedProblems(extracted);
+        setSelectedProblemIndex(0);
+      }
+    } catch {
+      setParsedProblems(null);
+    }
   };
 
   return (
@@ -288,6 +325,8 @@ function Page() {
                     setValidationResponse(undefined);
                     setResponse(undefined);
                     setValidationErrors(null);
+                    setParsedProblems(null);
+                    setSelectedProblemIndex(0);
                     setLoading(false);
                     setValidating(false);
                   }}
@@ -421,22 +460,75 @@ function Page() {
 
           <Card>
             <CardContent className="space-y-4 pt-6">
-              <div className="space-y-1">
-                <p className="text-sm font-medium leading-none">
-                  Example problems JSON
-                </p>
-                <p className="text-xs text-muted-foreground">
-                  Use this as a reference for how to structure your problems
-                  file.
-                </p>
-              </div>
-              <SyntaxHighlighter
-                language="json"
-                style={atomDark}
-                className="max-h-80 overflow-auto rounded-md border border-border text-xs"
-              >
-                {exampleTemplate}
-              </SyntaxHighlighter>
+              {parsedProblems && parsedProblems.length > 0 ? (
+                <>
+                  <div className="space-y-1">
+                    <p className="text-sm font-medium leading-none">
+                      Description Preview
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      Select a problem to preview its description rendered in
+                      markdown.
+                    </p>
+                  </div>
+
+                  <div className="max-h-40 overflow-y-auto rounded-md border">
+                    {parsedProblems.map((p, i) => (
+                      <button
+                        key={i}
+                        type="button"
+                        onClick={() => setSelectedProblemIndex(i)}
+                        className={`w-full border-b px-3 py-2 text-left text-sm last:border-b-0 ${
+                          i === selectedProblemIndex
+                            ? "bg-muted font-medium"
+                            : "hover:bg-muted/50"
+                        }`}
+                      >
+                        {p.title}
+                        {p.difficulty && (
+                          <span className="ml-2 text-[11px] text-muted-foreground">
+                            ({p.difficulty})
+                          </span>
+                        )}
+                      </button>
+                    ))}
+                  </div>
+
+                  <div className="prose-sm max-w-none max-h-96 min-h-[120px] overflow-y-auto rounded-md border bg-muted/20 p-4">
+                    {parsedProblems[selectedProblemIndex]?.description ? (
+                      <MarkdownRenderer>
+                        {parsedProblems[selectedProblemIndex].description}
+                      </MarkdownRenderer>
+                    ) : (
+                      <div className="flex flex-col items-center justify-center gap-2 pt-8 text-center">
+                        <FileText className="h-5 w-5 text-muted-foreground/50" />
+                        <p className="text-sm text-muted-foreground/60">
+                          No description provided
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="space-y-1">
+                    <p className="text-sm font-medium leading-none">
+                      Example problems JSON
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      Use this as a reference for how to structure your
+                      problems file.
+                    </p>
+                  </div>
+                  <SyntaxHighlighter
+                    language="json"
+                    style={atomDark}
+                    className="max-h-80 overflow-auto rounded-md border border-border text-xs"
+                  >
+                    {exampleTemplate}
+                  </SyntaxHighlighter>
+                </>
+              )}
             </CardContent>
           </Card>
         </div>
