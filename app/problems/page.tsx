@@ -50,6 +50,13 @@ interface descriptionData {
   description: string;
   title: string;
   tags?: { tag: { id: string; name: string } }[];
+  performanceConstraints?: {
+    cppTimeLimitMs: number;
+    javaTimeLimitMs: number;
+    pythonTimeLimitMs: number;
+    jsTimeLimitMs: number;
+    memoryLimitMB: number;
+  } | null;
 }
 
 export type aiReviewResult = {

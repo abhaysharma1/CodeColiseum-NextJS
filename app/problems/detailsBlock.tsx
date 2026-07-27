@@ -22,6 +22,13 @@ interface descriptionData {
   description: string;
   title: string;
   tags?: { tag: { id: string; name: string } }[];
+  performanceConstraints?: {
+    cppTimeLimitMs: number;
+    javaTimeLimitMs: number;
+    pythonTimeLimitMs: number;
+    jsTimeLimitMs: number;
+    memoryLimitMB: number;
+  } | null;
 }
 
 function DetailsBlock({
@@ -174,7 +181,7 @@ function DetailsBlock({
             )}
           </TabsContent>
           <TabsContent value="testcases">
-            <TestCases questionId={data[0]?.id} />
+            <TestCases questionId={data[0]?.id} constraints={data[0]?.performanceConstraints ?? null} />
           </TabsContent>
           <TabsContent value="testcasesrun">
             <TestCaseRunBlock results={runTestCaseResults} />
