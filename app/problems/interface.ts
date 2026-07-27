@@ -113,11 +113,18 @@ export type ProblemSubmissionItem = {
   language: string;
   sourceCode: string;
   noOfPassedCases: number;
+  totalTestcases: number;
+  status: ExecutionStatusType;
+  executionTime?: number;
+  memory?: number;
   createdAt: Date;
 };
 
 export type GetProblemSubmissionsResponse = {
   submissions: ProblemSubmissionItem[];
+  total: number;
+  skip: number;
+  take: number;
 };
 
 export interface JudgeResponse {
