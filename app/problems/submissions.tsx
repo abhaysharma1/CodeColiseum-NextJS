@@ -315,7 +315,7 @@ export function Submissions({
                         <span className="font-medium tabular-nums text-foreground">
                           {submission.memory}
                         </span>
-                        <span>MB</span>
+                        <span>KB</span>
                       </div>
                     )}
                 </div>
