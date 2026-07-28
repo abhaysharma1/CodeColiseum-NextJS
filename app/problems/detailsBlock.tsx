@@ -35,6 +35,7 @@ function DetailsBlock({
   data,
   loadingDetails,
   runTestCaseResults,
+  runError,
   submitTestCaseResults,
   tabPage,
   setTabPage,
@@ -53,6 +54,7 @@ function DetailsBlock({
   data: descriptionData[];
   loadingDetails: boolean;
   runTestCaseResults: runTestCaseType | undefined;
+  runError: string | undefined;
   submitTestCaseResults: SubmissionResult | undefined;
   tabPage: string;
   setTabPage: (data: string) => void;
@@ -184,7 +186,7 @@ function DetailsBlock({
             <TestCases questionId={data[0]?.id} constraints={data[0]?.performanceConstraints ?? null} />
           </TabsContent>
           <TabsContent value="testcasesrun">
-            <TestCaseRunBlock results={runTestCaseResults} />
+            <TestCaseRunBlock results={runTestCaseResults} runError={runError} />
           </TabsContent>
           <TabsContent value="submitcode">
             <SubmitCode results={submitTestCaseResults} />

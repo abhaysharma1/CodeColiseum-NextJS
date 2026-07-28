@@ -13,10 +13,28 @@ const normalizeOutput = (value?: string | null) =>
 
 function TestCaseRunBlock({
   results,
+  runError,
 }: {
   results: runTestCaseType | undefined;
+  runError?: string | undefined;
 }) {
   if (!results) {
+    if (runError) {
+      return (
+        <div className="p-4">
+          <Card className="border-red-500/50">
+            <CardHeader>
+              <CardTitle className="text-destructive">Execution Error</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <pre className="whitespace-pre-wrap text-sm bg-destructive/5 p-3 rounded-md overflow-x-auto">
+                {runError}
+              </pre>
+            </CardContent>
+          </Card>
+        </div>
+      );
+    }
     return <div className="p-4">Please Run Your Code to See Results</div>;
   }
 

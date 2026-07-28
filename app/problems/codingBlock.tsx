@@ -153,6 +153,7 @@ interface CodingBlockProps {
   mode?: ProblemPageMode;
   questionId: string;
   setRunTestCaseResults: (results: runTestCaseType | undefined) => void;
+  setRunError: (error: string | undefined) => void;
   setSubmitTestCaseResults: (data: SubmissionResult | undefined) => void;
   setTabPage: (data: string) => void;
   setSubmissionRefetch: (data: boolean) => void;
@@ -169,6 +170,7 @@ function CodingBlock({
   mode,
   questionId,
   setRunTestCaseResults,
+  setRunError,
   setSubmitTestCaseResults,
   setTabPage,
   setSubmissionRefetch,
@@ -277,6 +279,7 @@ function CodingBlock({
 
     setTabPage("testcasesrun");
     setRunTestCaseResults(undefined);
+    setRunError(undefined);
 
     const languageId = getLanguageId(language) ?? defaultRuntimeLanguageId;
 
@@ -299,9 +302,9 @@ function CodingBlock({
       setRunTestCaseResults(response.data as runTestCaseType);
       console.log(response);
     } catch (error: any) {
-      if (typeof error.message == "string") {
-        toast.error(error.message);
-      }
+      const message = error?.response?.data?.message || error?.message || "Failed to run code";
+      setRunError(message);
+      toast.error(message);
       console.log(error);
     } finally {
       setRunning(false);

@@ -64,6 +64,7 @@ function Page({ params }: { params: Promise<{ "exam-id": string }> }) {
   const [submittingResults, setSubmittingResults] = useState<
     SubmitCodeResponse | undefined
   >();
+  const [runError, setRunError] = useState<string | undefined>();
   const [currentTab, setCurrentTab] = useState("description");
 
   const remainingTime = useRemainingTime(examAttempt?.expiresAt);
@@ -351,6 +352,8 @@ function Page({ params }: { params: Promise<{ "exam-id": string }> }) {
     try {
       setRunning(true);
       setCurrentTab("runresults");
+      setRunError(undefined);
+      setRunningResults(undefined);
       const languageId = getLanguageId(language) ?? defaultRuntimeLanguageId;
 
       const sentData = {
@@ -375,7 +378,9 @@ function Page({ params }: { params: Promise<{ "exam-id": string }> }) {
         setSebMessage(getErrorMessage(error));
         return;
       }
-      toast.error(error?.message ?? "Failed to run code");
+      const message = getErrorMessage(error) ?? "Failed to run code";
+      setRunError(message);
+      toast.error(message);
       console.log(error);
     } finally {
       setRunning(false);
@@ -584,6 +589,7 @@ function Page({ params }: { params: Promise<{ "exam-id": string }> }) {
                 descriptionData={descriptionData}
                 testcases={testCases}
                 runningResults={runningResults}
+                runError={runError}
                 attemptId={examAttempt?.id}
                 problemId={
                   examProblems && currProblem

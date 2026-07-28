@@ -84,6 +84,7 @@ function Description({
   descriptionData,
   testcases,
   runningResults,
+  runError,
   attemptId,
   problemId,
   submittingResults,
@@ -98,6 +99,7 @@ function Description({
   descriptionData: Problem | undefined;
   testcases: RunTestCase | undefined;
   runningResults: runTestCaseType | undefined;
+  runError: string | undefined;
   attemptId: string | undefined;
   problemId: string | undefined;
   submittingResults: any;
@@ -331,7 +333,22 @@ function Description({
           <TabsContent value="runresults" className="my-4 mx-1">
             <div className="">
               {!runningResults ? (
-                <div>Please Run your code to see results</div>
+                runError ? (
+                  <div className="p-4">
+                    <Card className="border-red-500/50">
+                      <CardHeader>
+                        <CardTitle className="text-destructive">Execution Error</CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <pre className="whitespace-pre-wrap text-sm bg-destructive/5 p-3 rounded-md overflow-x-auto">
+                          {runError}
+                        </pre>
+                      </CardContent>
+                    </Card>
+                  </div>
+                ) : (
+                  <div>Please Run your code to see results</div>
+                )
               ) : (
                 runningResults?.responses.map((item, index) => (
                   <div

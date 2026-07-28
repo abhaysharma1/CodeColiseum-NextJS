@@ -247,6 +247,7 @@ function QuestionSolvingPageContent({
   const [runTestCaseResults, setRunTestCaseResults] = useState<
     runTestCaseType | undefined
   >();
+  const [runError, setRunError] = useState<string | undefined>();
   const [submitTestCaseResults, setSubmitTestCaseResults] = useState<
     SubmissionResult | undefined
   >();
@@ -496,6 +497,7 @@ function QuestionSolvingPageContent({
                   data={descriptionData || []}
                   loadingDetails={loadingDetails}
                   runTestCaseResults={runTestCaseResults}
+                  runError={runError}
                   submitTestCaseResults={submitTestCaseResults}
                   submissionRefetch={submissionRefetch}
                   setSubmissionRefetch={setSubmissionRefetch}
@@ -518,6 +520,7 @@ function QuestionSolvingPageContent({
                   mode={mode}
                   questionId={id ?? ""}
                   setRunTestCaseResults={setRunTestCaseResults}
+                  setRunError={setRunError}
                   setSubmitTestCaseResults={setSubmitTestCaseResults}
                   setTabPage={setTabPage}
                   setSubmissionRefetch={setSubmissionRefetch}
