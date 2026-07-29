@@ -186,35 +186,33 @@ function TestCases({
   return (
     <div className="mt-7 flex flex-col h-full">
       <div className=" flex flex-col h-full">
-        {constraints && (
-          <div className="rounded-lg border bg-card p-4 mb-4">
-            <div className="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-2">
-              Constraints
+        <div className="rounded-lg border bg-card p-4 mb-4">
+          <div className="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-2">
+            Constraints
+          </div>
+          <div className="flex items-start gap-6">
+            <div className="space-y-1">
+              {languageTimeLimits.map(({ label, ms }) => (
+                <div key={label} className="flex items-center gap-2 text-sm">
+                  <Clock className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
+                  <span className="text-muted-foreground min-w-[4rem]">
+                    {label}
+                  </span>
+                  <span className="font-mono tabular-nums">
+                    {(ms / 1000).toFixed(1)}s
+                  </span>
+                </div>
+              ))}
             </div>
-            <div className="flex items-start gap-6">
-              <div className="space-y-1">
-                {languageTimeLimits.map(({ label, ms }) => (
-                  <div key={label} className="flex items-center gap-2 text-sm">
-                    <Clock className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
-                    <span className="text-muted-foreground min-w-[4rem]">
-                      {label}
-                    </span>
-                    <span className="font-mono tabular-nums">
-                      {(ms / 1000).toFixed(1)}s
-                    </span>
-                  </div>
-                ))}
-              </div>
-              <div className="flex items-center gap-2 text-sm pt-0.5">
-                <HardDrive className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
-                <span className="text-muted-foreground">Memory</span>
-                <span className="font-mono tabular-nums">
-                  {constraints.memoryLimitMB} MB
-                </span>
-              </div>
+            <div className="flex items-center gap-2 text-sm pt-0.5">
+              <HardDrive className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
+              <span className="text-muted-foreground">Memory</span>
+              <span className="font-mono tabular-nums">
+                {constraints?.memoryLimitMB ?? 256} MB
+              </span>
             </div>
           </div>
-        )}
+        </div>
         {loading ? (
           <div className="w-full flex flex-col justify-center items-center">
             <Spinner variant="ring" />
