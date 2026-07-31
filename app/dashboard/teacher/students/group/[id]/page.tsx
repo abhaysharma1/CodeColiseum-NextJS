@@ -55,6 +55,7 @@ import {
   Link2,
   MessageSquare,
   Coins,
+  Trash2,
   ArrowLeft,
   Trophy,
   BarChart3,
@@ -116,6 +117,9 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
   const [editedAiMaxMessages, setEditedAiMaxMessages] = useState(20);
   const [editedAiMaxTokens, setEditedAiMaxTokens] = useState(2000);
   const [savingGroup, setSavingGroup] = useState(false);
+
+  const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
+  const [deletingGroup, setDeletingGroup] = useState(false);
 
   const [searchValue, setSearchValue] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
@@ -380,6 +384,41 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
       console.log(error);
     } finally {
       setSavingGroup(false);
+    }
+  };
+
+  const handleDeleteGroup = async () => {
+    if (!groupData?.id) {
+      toast.error("Group not loaded");
+      return;
+    }
+
+    try {
+      setDeletingGroup(true);
+
+      await axios.post(
+        `${getBackendURL()}/teacher/deletegroup`,
+        {
+          groupId: groupData.id,
+        },
+        {
+          withCredentials: true,
+        }
+      );
+
+      toast.success("Group deleted successfully");
+      router.push("/dashboard/teacher/students");
+    } catch (error: any) {
+      const message =
+        error?.response?.data?.error ||
+        (typeof error?.message === "string"
+          ? error.message
+          : "Failed to delete group");
+      toast.error(message);
+      console.log(error);
+    } finally {
+      setDeletingGroup(false);
+      setConfirmDeleteOpen(false);
     }
   };
 
@@ -1152,6 +1191,28 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
                     {savingGroup ? "Saving..." : "Save Changes"}
                   </Button>
                 </div>
+
+                <div className="border-t pt-6 space-y-2">
+                  <h3 className="text-sm font-semibold text-destructive flex items-center gap-2">
+                    <Trash2 className="h-4 w-4" />
+                    Danger Zone
+                  </h3>
+                  <div className="flex items-center justify-between gap-4">
+                    <div>
+                      <p className="text-sm font-medium">Delete this group</p>
+                      <p className="text-xs text-muted-foreground">
+                        Permanently remove the group, its members, and unlink all assigned exams and labs.
+                      </p>
+                    </div>
+                    <Button
+                      variant="destructive"
+                      className="cursor-pointer shrink-0"
+                      onClick={() => setConfirmDeleteOpen(true)}
+                    >
+                      Delete Group
+                    </Button>
+                  </div>
+                </div>
               </CardContent>
             </Card>
           </TabsContent>
@@ -1430,6 +1491,52 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
               }}
             >
               {removingMemberId ? "Removing..." : "Remove"}
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Delete Group Confirmation Dialog */}
+      <Dialog
+        open={confirmDeleteOpen}
+        onOpenChange={(open) => {
+          setConfirmDeleteOpen(open);
+          if (!open) {
+            setDeletingGroup(false);
+          }
+        }}
+      >
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <AlertCircle className="h-5 w-5 text-destructive" />
+              Delete Group
+            </DialogTitle>
+            <DialogDescription>
+              Are you sure you want to delete{" "}
+              <span className="font-semibold">{groupData?.name}</span>? This
+              action cannot be undone. All members will lose access to exams and
+              resources tied to this group, and assigned exams and labs will be
+              unlinked.
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="mt-6 flex justify-end gap-3">
+            <Button
+              variant="outline"
+              className="cursor-pointer"
+              onClick={() => setConfirmDeleteOpen(false)}
+              disabled={deletingGroup}
+            >
+              Cancel
+            </Button>
+            <Button
+              variant="destructive"
+              className="cursor-pointer"
+              disabled={deletingGroup}
+              onClick={() => void handleDeleteGroup()}
+            >
+              {deletingGroup ? "Deleting..." : "Delete Group"}
             </Button>
           </div>
         </DialogContent>

@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { getBackendURL } from "@/utils/utilities";
 import Link from "next/link";
@@ -14,6 +14,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import {
   Users,
@@ -29,6 +30,8 @@ import {
   ArrowUpDown,
   ChevronLeft,
   ChevronRight,
+  Trash2,
+  AlertCircle,
 } from "lucide-react";
 
 interface StudentGroupCard {
@@ -127,6 +130,10 @@ export default function StudentGroupsView() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const domain = getBackendURL();
+  const queryClient = useQueryClient();
+
+  const [confirmDeleteGroup, setConfirmDeleteGroup] = useState<StudentGroupCard | null>(null);
+  const [deletingGroup, setDeletingGroup] = useState(false);
 
   const page = parseInt(searchParams.get("page") || "1", 10);
   const search = searchParams.get("search") || "";
@@ -185,6 +192,39 @@ export default function StudentGroupsView() {
     refetchGroups();
     toast.success("Groups refreshed");
   }, [refetchGroups]);
+
+  const handleDeleteGroup = async () => {
+    if (!confirmDeleteGroup) return;
+
+    try {
+      setDeletingGroup(true);
+
+      await axios.post(
+        `${domain}/teacher/deletegroup`,
+        {
+          groupId: confirmDeleteGroup.id,
+        },
+        {
+          withCredentials: true,
+        }
+      );
+
+      toast.success("Group deleted successfully");
+      setConfirmDeleteGroup(null);
+      refetchGroups();
+      queryClient.invalidateQueries({ queryKey: ["teacher-student-groups-stats"] });
+    } catch (error: any) {
+      const message =
+        error?.response?.data?.error ||
+        (typeof error?.message === "string"
+          ? error.message
+          : "Failed to delete group");
+      toast.error(message);
+      console.log(error);
+    } finally {
+      setDeletingGroup(false);
+    }
+  };
 
   const groups = groupsData?.groups ?? [];
   const pagination = groupsData?.pagination;
@@ -337,9 +377,20 @@ export default function StudentGroupsView() {
                 className="overflow-hidden transition-all duration-300 hover:shadow-lg hover:border-primary/30 hover:-translate-y-0.5"
               >
                 <CardHeader className="pb-3">
-                  <CardTitle className="text-lg font-semibold leading-tight truncate">
-                    {group.name}
-                  </CardTitle>
+                  <div className="flex items-start justify-between gap-2">
+                    <CardTitle className="text-lg font-semibold leading-tight truncate">
+                      {group.name}
+                    </CardTitle>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-8 w-8 text-muted-foreground hover:text-destructive shrink-0 cursor-pointer"
+                      title="Delete group"
+                      onClick={() => setConfirmDeleteGroup(group)}
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
                   {group.description && (
                     <CardDescription className="text-sm line-clamp-2">
                       {group.description}
@@ -461,6 +512,49 @@ export default function StudentGroupsView() {
           )}
         </>
       )}
+
+      {/* Delete Group Confirmation Dialog */}
+      <Dialog
+        open={!!confirmDeleteGroup}
+        onOpenChange={(open) => {
+          if (!open) setConfirmDeleteGroup(null);
+        }}
+      >
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <AlertCircle className="h-5 w-5 text-destructive" />
+              Delete Group
+            </DialogTitle>
+            <DialogDescription>
+              Are you sure you want to delete{" "}
+              <span className="font-semibold">{confirmDeleteGroup?.name}</span>?
+              This action cannot be undone. All members will lose access to
+              exams and resources tied to this group, and assigned exams and
+              labs will be unlinked.
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="flex justify-end gap-3 pt-2">
+            <Button
+              variant="outline"
+              className="cursor-pointer"
+              onClick={() => setConfirmDeleteGroup(null)}
+              disabled={deletingGroup}
+            >
+              Cancel
+            </Button>
+            <Button
+              variant="destructive"
+              className="cursor-pointer"
+              disabled={deletingGroup}
+              onClick={() => void handleDeleteGroup()}
+            >
+              {deletingGroup ? "Deleting..." : "Delete Group"}
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
