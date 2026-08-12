@@ -29,6 +29,7 @@ interface LabData {
   id: string;
   title: string;
   description: string | null;
+  creatorName: string;
   modulesCount: number;
   modules: ModuleInfo[];
 }
@@ -218,6 +219,7 @@ export default function StudentLabsPage() {
                       key={lab.id}
                       title={lab.title}
                       description={lab.description}
+                      creatorName={lab.creatorName}
                       modulesCount={lab.modulesCount}
                       createdAt={new Date().toISOString()}
                       completionPercentage={avgPct}

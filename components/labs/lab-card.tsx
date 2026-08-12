@@ -1,11 +1,12 @@
 "use client";
 import { motion } from "framer-motion";
-import { Calendar, Clock, Layers, Trophy } from "lucide-react";
+import { Calendar, Clock, Layers, Trophy, User } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 
 interface LabCardProps {
   title: string;
   description: string | null;
+  creatorName?: string;
   modulesCount: number;
   assignedGroupsCount?: number;
   createdAt: string;
@@ -57,6 +58,7 @@ function DonutRing({ percentage, size = 48 }: { percentage: number; size?: numbe
 export function LabCard({
   title,
   description,
+  creatorName,
   modulesCount,
   assignedGroupsCount,
   createdAt,
@@ -92,6 +94,12 @@ export function LabCard({
               {description && (
                 <p className="text-sm text-muted-foreground line-clamp-2 mt-0.5 leading-relaxed">
                   {description}
+                </p>
+              )}
+              {creatorName && (
+                <p className="flex items-center gap-1.5 text-xs text-muted-foreground mt-1.5">
+                  <User className="h-3.5 w-3.5" />
+                  <span className="truncate">{creatorName}</span>
                 </p>
               )}
             </div>
