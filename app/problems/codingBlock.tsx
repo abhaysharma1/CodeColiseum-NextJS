@@ -26,7 +26,11 @@ import axios from "axios";
 import { getLanguageId } from "@/utils/getLanguageId";
 import { supportedLanguages } from "@/utils/languageCatalog";
 import { MdFormatAlignLeft } from "react-icons/md";
-import { runTestCaseType, SubmissionResult, ProblemPageMode } from "./interface";
+import {
+  runTestCaseType,
+  SubmissionResult,
+  ProblemPageMode,
+} from "./interface";
 
 // Static theme imports
 import Active4DTheme from "@/utils/themes/Active4D.json";
@@ -201,21 +205,74 @@ function CodingBlock({
   }, []);
 
   useEffect(() => {
+    let cancelled = false;
+
+    const getTemplateCode = async () => {
+      try {
+        const currentQuestionId = questionId;
+        const currentLanguage = language;
+
+        const res = await axios.post(
+          `${getBackendURL()}/problems/gettemplatecode`,
+          {
+            languageId: getLanguageId(currentLanguage),
+            problemId: currentQuestionId,
+          },
+          { withCredentials: true }
+        );
+
+        if (cancelled) return;
+
+        const { template } = res.data as {
+          template: string;
+          languageId: number;
+        };
+
+        setTemplateCode(template);
+
+        const storageKey = `code_${currentQuestionId}_${currentLanguage}`;
+        const savedData = localStorage.getItem(storageKey);
+
+        if (!savedData) {
+          setCode(template);
+          return;
+        }
+
+        const { savedCode, savedLanguage } = JSON.parse(savedData);
+
+        if (savedLanguage === currentLanguage) {
+          setCode(savedCode);
+        } else {
+          setCode(template);
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
     getTemplateCode();
+
+    return () => {
+      cancelled = true;
+    };
   }, [questionId, language]);
 
-  // Auto-save code to localStorage
-
+  // Auto-save code
   useEffect(() => {
-    if (code && code !== "//Example Code" && typeof language === "string") {
-      const storageKey = `code_${questionId}_${language}`;
-      const toBeSaved = JSON.stringify({
+    if (!code || code === "//Example Code" || typeof language !== "string") {
+      return;
+    }
+
+    const storageKey = `code_${questionId}_${language}`;
+
+    localStorage.setItem(
+      storageKey,
+      JSON.stringify({
         savedCode: code,
         savedLanguage: language,
-      });
-      localStorage.setItem(storageKey, toBeSaved);
-    }
-  }, [code, questionId]);
+      })
+    );
+  }, [code, language]);
 
   useEffect(() => {
     const loadTheme = (themeName: string) => {
@@ -302,7 +359,10 @@ function CodingBlock({
       setRunTestCaseResults(response.data as runTestCaseType);
       console.log(response);
     } catch (error: any) {
-      const message = error?.response?.data?.message || error?.message || "Failed to run code";
+      const message =
+        error?.response?.data?.message ||
+        error?.message ||
+        "Failed to run code";
       setRunError(message);
       toast.error(message);
       console.log(error);
@@ -383,37 +443,6 @@ function CodingBlock({
     }
   };
 
-  const getTemplateCode = async () => {
-    const res = await axios.post(
-      `${getBackendURL()}/problems/gettemplatecode`,
-      {
-        languageId: getLanguageId(language),
-        problemId: questionId,
-      },
-      { withCredentials: true }
-    );
-
-    const { template, languageId } = res.data as {
-      template: string;
-      languageId: number;
-    };
-
-    setTemplateCode(template);
-
-    const storageKey = `code_${questionId}_${language}`;
-    const savedData = localStorage.getItem(storageKey);
-    if (!savedData) {
-      setCode(template);
-      return;
-    }
-
-    const { savedCode, savedLanguage } = JSON.parse(savedData);
-
-    if (savedLanguage === language) {
-      setCode(savedCode);
-    }
-  };
-
   const resetCode = async () => {
     if (templateCode) {
       setCode(templateCode);
@@ -426,7 +455,7 @@ function CodingBlock({
       const response = await axios.post(
         `${getBackendURL()}/tools/format`,
         { language, code },
-        { withCredentials: true },
+        { withCredentials: true }
       );
       const result = response.data as {
         success: boolean;
@@ -440,9 +469,7 @@ function CodingBlock({
         toast.error(result.error || "Formatting failed");
       }
     } catch (error: any) {
-      toast.error(
-        error?.response?.data?.error || "Formatting failed",
-      );
+      toast.error(error?.response?.data?.error || "Formatting failed");
     } finally {
       setFormatting(false);
     }
@@ -458,7 +485,6 @@ function CodingBlock({
           onFocus={() => setEditorInFocus(true)}
           onBlur={() => setEditorInFocus(false)}
         >
-
           <div className="flex-1 min-h-0">
             <Editor
               height="100%"
@@ -587,7 +613,9 @@ function CodingBlock({
                 variant="outline"
                 className="h-8.5"
                 onClick={onFormat}
-                disabled={formatting || submitting || running || performingAiReview}
+                disabled={
+                  formatting || submitting || running || performingAiReview
+                }
               >
                 <MdFormatAlignLeft className="mr-1" />
                 {formatting ? "Formatting..." : "Format"}
