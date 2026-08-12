@@ -81,15 +81,9 @@ export default function LandingHeader() {
             <>
               <Link
                 href="/login"
-                className="text-sm font-medium text-stone-600 transition-colors hover:text-orange-800"
-              >
-                Log in
-              </Link>
-              <Link
-                href="/signup"
                 className="group inline-flex items-center gap-1.5 rounded-lg bg-orange-700 px-6 py-2.5 text-sm font-semibold text-white shadow-lg shadow-orange-700/20 transition-all hover:brightness-110 active:scale-95"
               >
-                Sign Up
+                Log in
                 <ArrowRight
                   size={15}
                   className="transition-transform duration-200 group-hover:translate-x-0.5"

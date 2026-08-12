@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import type { OnMount } from "@monaco-editor/react";
 import { useTheme } from "@teispace/next-themes";
@@ -204,10 +204,13 @@ function CodingBlock({
     setThemeList(availableThemes);
   }, []);
 
+  const isSyncingRef = useRef(false);
+
   useEffect(() => {
     let cancelled = false;
 
     const getTemplateCode = async () => {
+      isSyncingRef.current = true; // block auto-save immediately, synchronously
       try {
         const currentQuestionId = questionId;
         const currentLanguage = language;
@@ -227,7 +230,6 @@ function CodingBlock({
           template: string;
           languageId: number;
         };
-
         setTemplateCode(template);
 
         const storageKey = `code_${currentQuestionId}_${currentLanguage}`;
@@ -235,18 +237,14 @@ function CodingBlock({
 
         if (!savedData) {
           setCode(template);
-          return;
-        }
-
-        const { savedCode, savedLanguage } = JSON.parse(savedData);
-
-        if (savedLanguage === currentLanguage) {
-          setCode(savedCode);
         } else {
-          setCode(template);
+          const { savedCode, savedLanguage } = JSON.parse(savedData);
+          setCode(savedLanguage === currentLanguage ? savedCode : template);
         }
       } catch (err) {
         console.error(err);
+      } finally {
+        if (!cancelled) isSyncingRef.current = false;
       }
     };
 
@@ -259,18 +257,14 @@ function CodingBlock({
 
   // Auto-save code
   useEffect(() => {
-    if (!code || code === "//Example Code" || typeof language !== "string") {
+    if (isSyncingRef.current) return; // skip saves triggered by the load, not the user
+    if (!code || code === "//Example Code" || typeof language !== "string")
       return;
-    }
 
     const storageKey = `code_${questionId}_${language}`;
-
     localStorage.setItem(
       storageKey,
-      JSON.stringify({
-        savedCode: code,
-        savedLanguage: language,
-      })
+      JSON.stringify({ savedCode: code, savedLanguage: language })
     );
   }, [code, language]);
 
