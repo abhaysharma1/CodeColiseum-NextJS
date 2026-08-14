@@ -121,12 +121,12 @@ export function LoginForm({ className, setShowVerifyBox, ...props }: props) {
         <div className="grid gap-3">
           <div className="flex items-center">
             <Label htmlFor="password">Password</Label>
-            {/* <a
-                href="#"
-                className="ml-auto text-sm underline-offset-4 hover:underline"
-              >
-                Forgot your password?
-              </a> */}
+            <a
+              href="/forgot-password"
+              className="ml-auto text-sm underline-offset-4 hover:underline"
+            >
+              Forgot your password?
+            </a>
           </div>
           <Input
             id="password"
@@ -140,7 +140,7 @@ export function LoginForm({ className, setShowVerifyBox, ...props }: props) {
           Login
         </Button>
       </div>
-      <div>
+      {/* <div>
         <div className="text-center text-sm">
           Don&apos;t have an account?{" "}
           <a href="/signup" className="underline underline-offset-4">
@@ -156,7 +156,7 @@ export function LoginForm({ className, setShowVerifyBox, ...props }: props) {
           </button>
           <h1>Your Email</h1>
         </div>
-      </div>
+      </div> */}
     </form>
   );
 }
