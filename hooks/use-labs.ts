@@ -133,6 +133,11 @@ export interface SubmissionSummary {
   createdAt: string;
 }
 
+export interface SubmissionDetail extends SubmissionSummary {
+  sourceCode: string;
+  stderr: string | null;
+}
+
 export interface StudentModuleAttemptProblem {
   moduleProblemId: string;
   problemId: string;
@@ -143,7 +148,10 @@ export interface StudentModuleAttemptProblem {
   isSolved: boolean;
   solvedAt: string | null;
   lastAttemptAt: string | null;
-  bestSubmission: SubmissionSummary | null;
+  latestSubmissionId: string | null;
+  bestSubmissionId: string | null;
+  bestSubmission: SubmissionDetail | null;
+  latestSubmission: SubmissionDetail | null;
 }
 
 export interface StudentModuleAttempts {

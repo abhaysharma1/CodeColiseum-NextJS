@@ -37,6 +37,7 @@ import {
   useStudentProblemSubmissions,
   useTeacherStudentProgress,
   type SortOrder,
+  type SubmissionDetail,
   type StudentModuleAttemptProblem,
   type StudentProgress,
   type StudentProgressSortBy,
@@ -415,6 +416,24 @@ function StudentAttemptDetails({
                 </div>
               </AccordionTrigger>
               <AccordionContent>
+                {(problem.bestSubmission || problem.latestSubmission) && (
+                  <div className="space-y-2 pb-3">
+                    {problem.bestSubmission && (
+                      <SubmissionCard
+                        label="Best submission"
+                        submission={problem.bestSubmission}
+                      />
+                    )}
+                    {problem.latestSubmission &&
+                      problem.latestSubmission.id !==
+                        problem.bestSubmission?.id && (
+                        <SubmissionCard
+                          label="Latest submission"
+                          submission={problem.latestSubmission}
+                        />
+                      )}
+                  </div>
+                )}
                 <ProblemSubmissions
                   moduleId={moduleId}
                   studentId={studentId}
@@ -522,6 +541,53 @@ function ProblemSubmissions({
           )}
         </div>
       ))}
+    </div>
+  );
+}
+
+function SubmissionCard({
+  label,
+  submission,
+}: {
+  label: string;
+  submission: SubmissionDetail;
+}) {
+  const [showCode, setShowCode] = useState(false);
+  return (
+    <div className="rounded-lg border bg-background p-3">
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <div className="flex items-center gap-2">
+          <span className="text-xs font-medium">{label}</span>
+          <SubmissionStatusBadge status={submission.status} />
+          <span className="text-xs text-muted-foreground tabular-nums">
+            {submission.passedTestcases}/{submission.totalTestcases} test
+            {submission.totalTestcases !== 1 ? "s" : ""} passed
+          </span>
+        </div>
+        <div className="flex items-center gap-2 text-xs text-muted-foreground">
+          <span className="uppercase">{submission.language}</span>
+          {submission.executionTime != null && (
+            <span className="tabular-nums">{submission.executionTime}s</span>
+          )}
+          {submission.memory != null && (
+            <span className="tabular-nums">{submission.memory} MB</span>
+          )}
+          <span>{new Date(submission.createdAt).toLocaleString()}</span>
+          <Button
+            variant="ghost"
+            size="sm"
+            className="h-7 px-2 text-xs"
+            onClick={() => setShowCode((cur) => !cur)}
+          >
+            {showCode ? "Hide code" : "View code"}
+          </Button>
+        </div>
+      </div>
+      {showCode && (
+        <pre className="mt-3 max-h-72 overflow-auto rounded-md bg-muted p-3 text-xs font-mono whitespace-pre-wrap break-all">
+          {submission.sourceCode || "(no source code saved)"}
+        </pre>
+      )}
     </div>
   );
 }
