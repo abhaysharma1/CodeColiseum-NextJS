@@ -8,7 +8,8 @@ import Link from "next/link";
 import Image from "next/image";
 import React, { useState } from "react";
 import { toast } from "sonner";
-import { authClient } from "@/lib/auth-client";
+import axios from "axios";
+import { getBackendURL } from "@/utils/utilities";
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState("");
@@ -18,24 +19,33 @@ export default function ForgotPasswordPage() {
     event.preventDefault();
 
     setLoading(true);
-    toast.loading("Sending Reset Link...");
+    toast.loading("Checking Account...");
 
-    const { error } = await authClient.requestPasswordReset({
-      email,
-      redirectTo: `${window.location.origin}/reset-password`,
-    });
+    try {
+      await axios.post(
+        `${getBackendURL()}/public-auth/request-password-reset`,
+        { email },
+        { withCredentials: true },
+      );
 
-    toast.dismiss();
-    setLoading(false);
+      toast.dismiss();
+      setLoading(false);
+      toast.success("Password reset email sent. Check your inbox.");
+    } catch (error: any) {
+      toast.dismiss();
+      setLoading(false);
 
-    if (error) {
-      toast.error(error.message ?? "Couldn't send reset link");
-      return;
+      if (error?.response?.status === 404) {
+        toast.error("No account found with this email address");
+        return;
+      }
+
+      toast.error(
+        error?.response?.data?.message ??
+          error?.response?.data?.error ??
+          "Couldn't send reset email",
+      );
     }
-
-    toast.success(
-      "If an account exists for this email, a password reset link has been sent.",
-    );
   };
 
   return (
