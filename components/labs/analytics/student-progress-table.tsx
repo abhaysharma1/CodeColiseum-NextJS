@@ -34,11 +34,9 @@ import {
 import { cn } from "@/lib/utils";
 import {
   useStudentModuleAttempts,
-  useStudentProblemSubmissions,
   useTeacherStudentProgress,
   type SortOrder,
   type SubmissionDetail,
-  type StudentModuleAttemptProblem,
   type StudentProgress,
   type StudentProgressSortBy,
 } from "@/hooks/use-labs";
@@ -329,11 +327,6 @@ function StudentAttemptDetails({
   studentName: string;
 }) {
   const { data, loading } = useStudentModuleAttempts(moduleId, studentId, true);
-  const [openProblems, setOpenProblems] = useState<string[]>([]);
-
-  useEffect(() => {
-    setOpenProblems([]);
-  }, [studentId]);
 
   if (loading) {
     return (
@@ -371,11 +364,7 @@ function StudentAttemptDetails({
           No problems in this module
         </p>
       ) : (
-        <Accordion
-          type="multiple"
-          value={openProblems}
-          onValueChange={setOpenProblems}
-        >
+        <Accordion type="multiple">
           {data.problems.map((problem) => (
             <AccordionItem
               key={problem.moduleProblemId}
@@ -416,131 +405,26 @@ function StudentAttemptDetails({
                 </div>
               </AccordionTrigger>
               <AccordionContent>
-                {(problem.bestSubmission || problem.latestSubmission) && (
-                  <div className="space-y-2 pb-3">
-                    {problem.bestSubmission && (
-                      <SubmissionCard
-                        label="Best submission"
-                        submission={problem.bestSubmission}
-                      />
-                    )}
-                    {problem.latestSubmission &&
-                      problem.latestSubmission.id !==
-                        problem.bestSubmission?.id && (
-                        <SubmissionCard
-                          label="Latest submission"
-                          submission={problem.latestSubmission}
-                        />
-                      )}
-                  </div>
+                {problem.bestSubmission ? (
+                  <SubmissionCard
+                    label="Best submission"
+                    submission={problem.bestSubmission}
+                  />
+                ) : problem.latestSubmission ? (
+                  <SubmissionCard
+                    label="Latest submission"
+                    submission={problem.latestSubmission}
+                  />
+                ) : (
+                  <p className="py-2 text-xs text-muted-foreground">
+                    No submissions for this problem
+                  </p>
                 )}
-                <ProblemSubmissions
-                  moduleId={moduleId}
-                  studentId={studentId}
-                  problem={problem}
-                  open={openProblems.includes(problem.moduleProblemId)}
-                />
               </AccordionContent>
             </AccordionItem>
           ))}
         </Accordion>
       )}
-    </div>
-  );
-}
-
-function ProblemSubmissions({
-  moduleId,
-  studentId,
-  problem,
-  open,
-}: {
-  moduleId: string;
-  studentId: string;
-  problem: StudentModuleAttemptProblem;
-  open: boolean;
-}) {
-  const { data, loading } = useStudentProblemSubmissions(
-    moduleId,
-    studentId,
-    problem.moduleProblemId,
-    open,
-  );
-  const [showCodeId, setShowCodeId] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (!open) setShowCodeId(null);
-  }, [open]);
-
-  if (loading) {
-    return (
-      <div className="space-y-2 py-2">
-        {[1, 2].map((i) => (
-          <Skeleton key={i} className="h-12 w-full" />
-        ))}
-      </div>
-    );
-  }
-
-  if (!data) {
-    return (
-      <p className="py-2 text-xs text-muted-foreground">
-        Failed to load submissions
-      </p>
-    );
-  }
-
-  if (data.submissions.length === 0) {
-    return (
-      <p className="py-2 text-xs text-muted-foreground">
-        No submissions for this problem
-      </p>
-    );
-  }
-
-  return (
-    <div className="space-y-2 py-2">
-      {data.submissions.map((s, idx) => (
-        <div key={s.id} className="rounded-lg border bg-background p-3">
-          <div className="flex flex-wrap items-center justify-between gap-2">
-            <div className="flex items-center gap-2">
-              <span className="text-xs text-muted-foreground tabular-nums">
-                #{idx + 1}
-              </span>
-              <SubmissionStatusBadge status={s.status} />
-              <span className="text-xs text-muted-foreground tabular-nums">
-                {s.passedTestcases}/{s.totalTestcases} test
-                {s.totalTestcases !== 1 ? "s" : ""} passed
-              </span>
-            </div>
-            <div className="flex items-center gap-2 text-xs text-muted-foreground">
-              <span className="uppercase">{s.language}</span>
-              {s.executionTime != null && (
-                <span className="tabular-nums">{s.executionTime}s</span>
-              )}
-              {s.memory != null && (
-                <span className="tabular-nums">{s.memory} MB</span>
-              )}
-              <span>{new Date(s.createdAt).toLocaleString()}</span>
-              <Button
-                variant="ghost"
-                size="sm"
-                className="h-7 px-2 text-xs"
-                onClick={() =>
-                  setShowCodeId((cur) => (cur === s.id ? null : s.id))
-                }
-              >
-                {showCodeId === s.id ? "Hide code" : "View code"}
-              </Button>
-            </div>
-          </div>
-          {showCodeId === s.id && (
-            <pre className="mt-3 max-h-72 overflow-auto rounded-md bg-muted p-3 text-xs font-mono whitespace-pre-wrap break-all">
-              {s.sourceCode || "(no source code saved)"}
-            </pre>
-          )}
-        </div>
-      ))}
     </div>
   );
 }
