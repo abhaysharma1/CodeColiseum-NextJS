@@ -454,7 +454,7 @@ function SubmissionCard({
             <span className="tabular-nums">{submission.executionTime}ms</span>
           )}
           {submission.memory != null && (
-            <span className="tabular-nums">{submission.memory/1024} MB</span>
+            <span className="tabular-nums">{(submission.memory/1024).toFixed(2)} MB</span>
           )}
           <span>{new Date(submission.createdAt).toLocaleString()}</span>
           <Button
