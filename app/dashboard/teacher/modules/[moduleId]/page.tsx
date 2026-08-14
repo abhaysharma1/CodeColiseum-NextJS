@@ -61,13 +61,11 @@ import { AssessmentCard } from "@/components/labs/assessment-card";
 import { OverviewCards } from "@/components/labs/analytics/overview-cards";
 import { ProblemAnalyticsTable } from "@/components/labs/analytics/problem-analytics-table";
 import { StudentProgressTable } from "@/components/labs/analytics/student-progress-table";
-import { StudentDrawer } from "@/components/labs/analytics/student-drawer";
 import {
   useTeacherModule,
   useTeacherModuleProblems,
   useTeacherAssessment,
   useTeacherAssessmentResults,
-  useTeacherStudentProgress,
   useTeacherProblemAnalytics,
   useTeacherModuleProblemAccess,
   useUpdateModuleProblemAccess,
@@ -111,8 +109,6 @@ export default function TeacherModuleDetailPage() {
   } = useTeacherAssessment(moduleId);
   const { data: assessmentResults, loading: resultsLoading } =
     useTeacherAssessmentResults(moduleId, selectedGroupId || undefined);
-  const { data: studentProgress, loading: studentLoading } =
-    useTeacherStudentProgress(moduleId, selectedGroupId || undefined);
   const { data: problemAnalytics, loading: analyticsLoading } =
     useTeacherProblemAnalytics(moduleId, selectedGroupId || undefined);
 
@@ -121,11 +117,6 @@ export default function TeacherModuleDetailPage() {
   const isCreator = mod?.labCreatorId === currentUser?.id;
   const [editMode, setEditMode] = useState(searchParams.get("edit") === "true");
   const [attachExamOpen, setAttachExamOpen] = useState(false);
-  const [studentDrawerOpen, setStudentDrawerOpen] = useState(false);
-  const [selectedStudent, setSelectedStudent] = useState<{
-    id: string;
-    name: string;
-  } | null>(null);
 
   if (modLoading) {
     return (
@@ -360,19 +351,6 @@ export default function TeacherModuleDetailPage() {
                   resultsLoading={resultsLoading}
                   problemAnalytics={problemAnalytics}
                   analyticsLoading={analyticsLoading}
-                  studentProgress={studentProgress}
-                  studentLoading={studentLoading}
-                  onViewStudent={(studentId) => {
-                    const student = studentProgress.find(
-                      (s) => s.studentId === studentId
-                    );
-                    setSelectedStudent(
-                      student
-                        ? { id: studentId, name: student.studentName }
-                        : null
-                    );
-                    setStudentDrawerOpen(true);
-                  }}
                 />
               </TabsContent>
             </Tabs>
@@ -829,9 +807,6 @@ function AnalyticsTab({
   resultsLoading,
   problemAnalytics,
   analyticsLoading,
-  studentProgress,
-  studentLoading,
-  onViewStudent,
 }: {
   moduleId: string;
   groups: { groupId: string; groupName: string }[];
@@ -842,9 +817,6 @@ function AnalyticsTab({
   resultsLoading: boolean;
   problemAnalytics: any[];
   analyticsLoading: boolean;
-  studentProgress: any[];
-  studentLoading: boolean;
-  onViewStudent: (studentId: string) => void;
 }) {
   const [exporting, setExporting] = useState(false);
 
@@ -944,18 +916,18 @@ function AnalyticsTab({
       <Card>
         <CardHeader>
           <CardTitle className="text-base">Student Progress</CardTitle>
-          <CardDescription>Per-student completion status</CardDescription>
+          <CardDescription>
+            Per-student completion status. Expand a row for per-question
+            attempt and submission details.
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <StudentProgressTable
-            data={studentProgress}
-            loading={studentLoading}
-            onViewStudent={onViewStudent}
+            moduleId={moduleId}
+            groupId={selectedGroupId || undefined}
           />
         </CardContent>
       </Card>
-
-      <StudentDrawer open={false} onClose={() => {}} studentName="" />
     </>
   );
 }

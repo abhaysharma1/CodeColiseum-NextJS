@@ -103,6 +103,70 @@ export interface StudentProgress {
   completionPercentage: number;
 }
 
+export interface StudentProgressPagination {
+  take: number;
+  skip: number;
+  total: number;
+  pages: number;
+}
+
+export interface StudentProgressListResponse {
+  data: StudentProgress[];
+  pagination: StudentProgressPagination;
+}
+
+export type StudentProgressSortBy =
+  | "name"
+  | "solvedProblems"
+  | "completionPercentage";
+
+export type SortOrder = "asc" | "desc";
+
+export interface SubmissionSummary {
+  id: string;
+  status: string;
+  passedTestcases: number;
+  totalTestcases: number;
+  language: string;
+  executionTime: number | null;
+  memory: number | null;
+  createdAt: string;
+}
+
+export interface StudentModuleAttemptProblem {
+  moduleProblemId: string;
+  problemId: string;
+  problemNumber: number;
+  problemTitle: string;
+  difficulty: string;
+  attemptCount: number;
+  isSolved: boolean;
+  solvedAt: string | null;
+  lastAttemptAt: string | null;
+  bestSubmission: SubmissionSummary | null;
+}
+
+export interface StudentModuleAttempts {
+  studentId: string;
+  studentName: string;
+  totalProblems: number;
+  solvedProblems: number;
+  problems: StudentModuleAttemptProblem[];
+}
+
+export interface StudentProblemSubmission extends SubmissionSummary {
+  sourceCode: string;
+  stderr: string | null;
+}
+
+export interface StudentProblemSubmissions {
+  problemId: string;
+  problemNumber: number;
+  problemTitle: string;
+  total: number;
+  submissions: StudentProblemSubmission[];
+}
+
 export interface ProblemAnalytics {
   problemId: string;
   problemNumber: number;
@@ -470,8 +534,19 @@ export function useTeacherAssessmentResults(moduleId: string, groupId?: string) 
   return { data, loading, refetch: fetch };
 }
 
-export function useTeacherStudentProgress(moduleId: string, groupId?: string) {
+export function useTeacherStudentProgress(
+  moduleId: string,
+  groupId?: string,
+  take = 20,
+  skip = 0,
+  search = "",
+  sortBy: StudentProgressSortBy = "name",
+  sortOrder: SortOrder = "asc",
+) {
   const [data, setData] = useState<StudentProgress[]>([]);
+  const [pagination, setPagination] = useState<StudentProgressPagination | null>(
+    null,
+  );
   const [loading, setLoading] = useState(false);
 
   const fetch = useCallback(async () => {
@@ -481,21 +556,94 @@ export function useTeacherStudentProgress(moduleId: string, groupId?: string) {
       const res = await axios.get(
         `${getBackendURL()}/teacher/modules/${moduleId}/student-progress`,
         {
-          params: groupId ? { groupId } : undefined,
+          params: {
+            ...(groupId ? { groupId } : {}),
+            take,
+            skip,
+            search: search || undefined,
+            sortBy,
+            sortOrder,
+          },
           withCredentials: true,
-        }
+        },
       );
-      setData(res.data as StudentProgress[]);
+      const result = res.data as StudentProgressListResponse;
+      setData(result.data);
+      setPagination(result.pagination);
     } catch {
       setData([]);
+      setPagination(null);
     } finally {
       setLoading(false);
     }
-  }, [moduleId, groupId]);
+  }, [moduleId, groupId, take, skip, search, sortBy, sortOrder]);
 
   useEffect(() => {
     fetch();
   }, [fetch]);
+
+  return { data, pagination, loading, refetch: fetch };
+}
+
+export function useStudentModuleAttempts(
+  moduleId: string,
+  studentId: string,
+  enabled: boolean,
+) {
+  const [data, setData] = useState<StudentModuleAttempts | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  const fetch = useCallback(async () => {
+    if (!moduleId || !studentId) return;
+    try {
+      setLoading(true);
+      const res = await axios.get(
+        `${getBackendURL()}/teacher/modules/${moduleId}/student-attempts/${studentId}`,
+        { withCredentials: true },
+      );
+      setData(res.data as StudentModuleAttempts);
+    } catch {
+      setData(null);
+    } finally {
+      setLoading(false);
+    }
+  }, [moduleId, studentId]);
+
+  useEffect(() => {
+    if (enabled) fetch();
+  }, [enabled, fetch]);
+
+  return { data, loading, refetch: fetch };
+}
+
+export function useStudentProblemSubmissions(
+  moduleId: string,
+  studentId: string,
+  moduleProblemId: string,
+  enabled: boolean,
+) {
+  const [data, setData] = useState<StudentProblemSubmissions | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  const fetch = useCallback(async () => {
+    if (!moduleId || !studentId || !moduleProblemId) return;
+    try {
+      setLoading(true);
+      const res = await axios.get(
+        `${getBackendURL()}/teacher/modules/${moduleId}/student-attempts/${studentId}/problems/${moduleProblemId}/submissions`,
+        { withCredentials: true },
+      );
+      setData(res.data as StudentProblemSubmissions);
+    } catch {
+      setData(null);
+    } finally {
+      setLoading(false);
+    }
+  }, [moduleId, studentId, moduleProblemId]);
+
+  useEffect(() => {
+    if (enabled) fetch();
+  }, [enabled, fetch]);
 
   return { data, loading, refetch: fetch };
 }
