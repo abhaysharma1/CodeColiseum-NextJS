@@ -451,10 +451,10 @@ function SubmissionCard({
         <div className="flex items-center gap-2 text-xs text-muted-foreground">
           <span className="uppercase">{submission.language}</span>
           {submission.executionTime != null && (
-            <span className="tabular-nums">{submission.executionTime}s</span>
+            <span className="tabular-nums">{submission.executionTime}ms</span>
           )}
           {submission.memory != null && (
-            <span className="tabular-nums">{submission.memory} MB</span>
+            <span className="tabular-nums">{submission.memory/1024} MB</span>
           )}
           <span>{new Date(submission.createdAt).toLocaleString()}</span>
           <Button
