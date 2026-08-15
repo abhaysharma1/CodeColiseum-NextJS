@@ -275,20 +275,19 @@ function QuestionSolvingPageContent({
   const [labId, setLabId] = useState<string>("");
 
   const {
-    data: descriptionData = [],
+    data: descriptionData,
     isLoading: loadingDetails,
     error: problemError,
   } = useQuery({
     queryKey: ["problem", id],
     queryFn: async () => {
       const response = await axios.get(
-        `${getBackendURL()}/problems/getproblems`,
+        `${getBackendURL()}/problems/${id}`,
         {
-          params: { searchValue: id, withDescription: true },
           withCredentials: true,
         }
       );
-      return response.data as descriptionData[];
+      return response.data as descriptionData;
     },
     enabled: !!id,
     retry: false,
@@ -494,7 +493,7 @@ function QuestionSolvingPageContent({
                 <DetailsBlock
                   tabPage={tabPage}
                   setTabPage={setTabPage}
-                  data={descriptionData || []}
+                  data={descriptionData}
                   loadingDetails={loadingDetails}
                   runTestCaseResults={runTestCaseResults}
                   runError={runError}

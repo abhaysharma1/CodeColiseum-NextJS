@@ -246,7 +246,6 @@ function AddProblemsDialog({
         params: {
           take: 200,
           skip: 0,
-          withDescription: false,
         },
         withCredentials: true,
       });

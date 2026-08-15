@@ -43,7 +43,6 @@ export interface problemData {
   id: string;
   number: number;
   title: string;
-  description: string;
   difficulty: string;
   tags: ProblemTag[];
 }
@@ -74,7 +73,6 @@ function ProblemsTable() {
             difficulty,
             take: 20,
             skip: (currentPage - 1) * 10,
-            withDescription: false,
           },
           withCredentials: true,
         }

@@ -51,7 +51,7 @@ function DetailsBlock({
   code,
   language,
 }: {
-  data: descriptionData[];
+  data: descriptionData | undefined;
   loadingDetails: boolean;
   runTestCaseResults: runTestCaseType | undefined;
   runError: string | undefined;
@@ -142,27 +142,29 @@ function DetailsBlock({
             ) : (
               <div className="text-foreground ">
                 <div className="text-3xl font-bold mb-3">
-                  {data[0]?.number}
+                  {data?.number}
                   {". "}
-                  {data[0]?.title}
+                  {data?.title}
                 </div>
                 <div
                   className="w-fit px-2 py-0.5 flex bg-accent text-center rounded-xl text-xs"
                   style={{
                     color:
-                      data[0].difficulty.toLowerCase() === "hard"
+                      data?.difficulty?.toLowerCase() === "hard"
                         ? "red"
-                        : data[0].difficulty.toLowerCase() === "medium"
+                        : data?.difficulty?.toLowerCase() === "medium"
                           ? "orange"
                           : "green",
                   }}
                 >
-                  {data[0]?.difficulty.at(0)?.toUpperCase() +
-                    data[0]?.difficulty.slice(1)?.toLowerCase()}
+                  {data?.difficulty
+                    ? data.difficulty.at(0)?.toUpperCase() +
+                      data.difficulty.slice(1)?.toLowerCase()
+                    : ""}
                 </div>
-                {data[0]?.tags && data[0].tags.length > 0 && (
+                {data?.tags && data.tags.length > 0 && (
                   <div className="flex flex-wrap gap-1.5 mt-2">
-                    {data[0].tags.map((t) => (
+                    {data.tags.map((t) => (
                       <span key={t.tag.id} className="px-2 py-0.5 bg-secondary/50 text-xs rounded-full text-muted-foreground">
                         {t.tag.name}
                       </span>
@@ -175,7 +177,7 @@ function DetailsBlock({
                       remarkPlugins={[remarkGfm]}
                       rehypePlugins={[rehypeHighlight]}
                     >
-                      {data[0]?.description}
+                      {data?.description}
                     </Markdown>
                   </div>
                 </div>
@@ -183,7 +185,7 @@ function DetailsBlock({
             )}
           </TabsContent>
           <TabsContent value="testcases">
-            <TestCases questionId={data[0]?.id} constraints={data[0]?.performanceConstraints ?? null} />
+            <TestCases questionId={data?.id ?? ""} constraints={data?.performanceConstraints ?? null} />
           </TabsContent>
           <TabsContent value="testcasesrun">
             <TestCaseRunBlock results={runTestCaseResults} runError={runError} />
@@ -193,7 +195,7 @@ function DetailsBlock({
           </TabsContent>
           <TabsContent value="submissions">
             <Submissions
-              problemId={data[0]?.id}
+              problemId={data?.id}
               submissionRefetch={submissionRefetch}
               setSubmissionRefetch={setSubmissionRefetch}
               submissions={submissions}

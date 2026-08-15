@@ -41,7 +41,6 @@ export interface problemData {
   id: string;
   number: number;
   title: string;
-  description: string;
   difficulty: string;
   tags: ProblemTag[];
 }
